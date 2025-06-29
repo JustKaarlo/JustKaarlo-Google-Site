@@ -10,7 +10,8 @@ HTML &amp; other resources for my Google Site.
 &nbsp;&nbsp; • [Empire.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Empire.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Empire.html`  
 &nbsp;&nbsp; • [Napoleon.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Napoleon.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Napoleon.html`  
 &nbsp;&nbsp; • [Thrones.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Thrones.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Thrones.html`  
-&nbsp;• [ReadyOrNot.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/ReadyOrNot.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/ReadyOrNot.html`
+&nbsp;• [ReadyOrNot.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/ReadyOrNot.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/ReadyOrNot.html`
+&nbsp;• [EldenRing.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/EldenRing.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/EldenRing.html`
 
 ## EMBED for Google Sites
 ### `OPTION 1`
