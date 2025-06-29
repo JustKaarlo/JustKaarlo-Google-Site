@@ -46,7 +46,7 @@
     const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
 
     async function listFiles() {
-      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink)`;
+      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
       const res = await fetch(url);
       const data = await res.json();
 
@@ -63,7 +63,16 @@
         const link = document.createElement("a");
         link.href = file.webViewLink;
         link.target = "_blank";
-        link.textContent = `${file.name} (${file.mimeType})`;
+        const icon = document.createElement("img");
+        icon.src = file.iconLink;
+        icon.alt = "";
+        icon.style.height = "20px";
+        icon.style.verticalAlign = "middle";
+        icon.style.marginRight = "8px";
+        
+        link.textContent = ""; // Clear existing text
+        link.appendChild(icon);
+        link.appendChild(document.createTextNode(file.name));
         li.appendChild(link);
         list.appendChild(li);
       });
