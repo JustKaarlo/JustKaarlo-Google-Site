@@ -1,19 +1,6 @@
 # Google-Site
 HTML &amp; other resources for my Google Site.  
 
-## Site Links  
-• [index.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/)  
-&nbsp; • **Total War**  
-&nbsp;&nbsp; • [Shogun2.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Shogun2.html)  - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Shogun2.html`  
-&nbsp;&nbsp; • [Attila.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Attila.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Attila.html`  
-&nbsp;&nbsp; • [RomeII.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/RomeII.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/RomeII.html`  
-&nbsp;&nbsp; • [Empire.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Empire.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Empire.html`  
-&nbsp;&nbsp; • [Napoleon.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Napoleon.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Napoleon.html`  
-&nbsp;&nbsp; • [Thrones.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Thrones.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Thrones.html`  
-&nbsp;• [ReadyOrNot.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/ReadyOrNot.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/ReadyOrNot.html`  
-&nbsp;• [EldenRing.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/EldenRing.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/EldenRing.html`  
-&nbsp;• [FiveM.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/FiveM.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/FiveM.html`  
-
 ## EMBED for Google Sites
 ### `OPTION 1`
 ```html
