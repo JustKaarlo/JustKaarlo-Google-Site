@@ -88,17 +88,6 @@
   <div class="card">
     <div class="logo">SADOT</div>
 
-    <div class="form-row">
-      <div class="form-group">
-        <label>Case No#</label>
-        <input type="text" placeholder="0000">
-      </div>
-      <div class="form-group">
-        <label>Date Submitted</label>
-        <input type="date">
-      </div>
-    </div>
-
     <div class="section-title">VEHICLE INFORMATION</div>
     <div class="form-row">
       <div class="form-group">
@@ -125,11 +114,14 @@
     <div class="form-group wide">
       <label>Condition of Vehicle</label>
       <select>
-        <option value="">-- Select Condition --</option>
-        <option>Good</option>
-        <option>Damaged</option>
-        <option>Burned</option>
-        <option>Stripped</option>
+        <option value="">  Select Condition  </option>
+        <option>ILLEGALLY MODIFIED</option>
+        <option>ABANDONED</option>
+        <option>NON-FUNCTIONAL</option>
+        <option>SEVERE DAMAGED</option>
+        <option>MODERATE DAMAGED</option>
+        <option>MINOR DAMAGED</option>
+        <option>FULLY-OPERATIONAL</option>
       </select>
     </div>
 
@@ -142,15 +134,21 @@
       <div class="form-group">
         <label>Requested By</label>
         <select>
-          <option value="">-- Select --</option>
-          <option>Police</option>
-          <option>City</option>
-          <option>Owner</option>
+          <option value="">  Select  </option>
+          <option>LEO</option>
+          <option>DISPATCH</option>
+          <option>SELF-INITIATED</option>
         </select>
       </div>
       <div class="form-group">
         <label>Taken To</label>
-        <input type="text">
+        <select>
+          <option value="">  Select  </option>
+          <option>IMPOUND LOT</option>
+          <option>POLICE IMPOUND</option>
+          <option>JUNKYARD</option>
+          <option>MECHAINC</option>
+        </select>
       </div>
     </div>
 
@@ -162,11 +160,17 @@
       <div class="form-group">
         <label>Reason for Tow</label>
         <select>
-          <option value="">-- Select Reason --</option>
-          <option>Illegal Parking</option>
-          <option>Accident</option>
-          <option>Abandoned</option>
-          <option>Breakdown</option>
+          <option value="">  Select Reason  </option>
+          <option>ILLEGALLY PARKED ABANDONED</option>
+          <option>DRIVER ARRESTED</option>
+          <option>UNREGISTERED OR EXPIRED TAGS</option>
+          <option>INVOLVED IN A CRIME SCENE</option>
+          <option>BLOCKING DRIVEWAY</option>
+          <option>BLOCKING FIRE HYDRANT</option>
+          <option>TRAFFIC ACCIDENT</option>
+          <option>STOLEN VEHICLE RECOVERY</option>
+          <option>REQUESTED BY OWNER</option>
+          <option>LEO REQUEST</option>
         </select>
       </div>
     </div>
