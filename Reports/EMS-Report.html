@@ -68,12 +68,14 @@
     input[type="date"],
     input[type="time"],
     input[type="datetime-local"],
-    textarea {
+    textarea,
+    select {
       padding: 6px 10px;
       border: 1px solid #aaa;
       border-radius: 6px;
       font-size: 14px;
       background: #f9f9f9;
+      font-family: 'Rubik', sans-serif;
     }
 
     textarea {
@@ -258,8 +260,8 @@
 
   <script>
     function resetForm() {
-      const inputs = document.querySelectorAll('input, textarea');
-      inputs.forEach(el => {
+      const elements = document.querySelectorAll('input, textarea, select');
+      elements.forEach(el => {
         if (el.type === 'checkbox') el.checked = false;
         else el.value = '';
       });
