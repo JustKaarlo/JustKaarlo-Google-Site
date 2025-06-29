@@ -3,145 +3,164 @@
 <head>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: white;
-      color: black;
-      padding: 20px;
-      max-width: 700px;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f7f7f7;
+      padding: 30px;
+      max-width: 800px;
       margin: auto;
+      color: #333;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      padding: 25px;
     }
 
     .logo {
       text-align: center;
-      font-size: 40px;
+      font-size: 36px;
       font-weight: bold;
       color: #d60000;
-      margin-bottom: 10px;
-    }
-
-    .logo::before {
-      content: "";
-      display: block;
-      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Saint_Lucia_-_Location_Map_%282013%29_-_LCA_-_UNOCHA.svg/1200px-Saint_Lucia_-_Location_Map_%282013%29_-_LCA_-_UNOCHA.svg.png') no-repeat center;
-      background-size: 60px;
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 10px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 10px 0;
-    }
-
-    td, th {
-      border: 1px solid #aaa;
-      padding: 8px;
-      text-align: center;
-      background-color: #f2f2f2;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 6px;
-      font-size: 14px;
+      margin-bottom: 30px;
     }
 
     .section-title {
+      font-size: 18px;
       font-weight: bold;
-      font-size: 16px;
       text-align: center;
-      margin: 20px 0 5px;
+      margin: 20px 0 10px;
+      color: #111;
     }
 
-    button {
-      background-color: #d60000;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin-top: 20px;
-      font-size: 16px;
-      cursor: pointer;
-      display: block;
+    .form-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 150px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #fff;
+    }
+
+    .wide {
       width: 100%;
     }
 
+    button {
+      width: 100%;
+      background-color: #d60000;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
     button:hover {
-      background-color: #a00000;
+      background-color: #a30000;
     }
   </style>
 </head>
 <body>
-  <div class="logo">SADOT</div>
+  <div class="card">
+    <div class="logo">SADOT</div>
 
-  <table>
-    <tr>
-      <th>CASE NO#</th>
-      <th>DATE SUBMITTED</th>
-    </tr>
-    <tr>
-      <td><input type="text" placeholder="0000"></td>
-      <td><input type="date"></td>
-    </tr>
-  </table>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Case No#</label>
+        <input type="text" placeholder="0000">
+      </div>
+      <div class="form-group">
+        <label>Date Submitted</label>
+        <input type="date">
+      </div>
+    </div>
 
-  <div class="section-title">VEHICLE INFORMATION</div>
-  <table>
-    <tr>
-      <th>REGISTERED OWNER</th>
-      <th>MAKE & MODEL</th>
-      <th>COLOR</th>
-      <th>TAG NO.</th>
-    </tr>
-    <tr>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text"></td>
-      <td><input type="text" placeholder="00000000"></td>
-    </tr>
-    <tr>
-      <th colspan="4">CONDITION OF VEHICLE</th>
-    </tr>
-    <tr>
-      <td colspan="4">
-        <select>
-          <option value="">-- Select Condition --</option>
-          <option>Good</option>
-          <option>Damaged</option>
-          <option>Burned</option>
-          <option>Stripped</option>
-        </select>
-      </td>
-    </tr>
-  </table>
+    <div class="section-title">VEHICLE INFORMATION</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Registered Owner</label>
+        <input type="text">
+      </div>
+      <div class="form-group">
+        <label>Make & Model</label>
+        <input type="text">
+      </div>
+    </div>
 
-  <div class="section-title">TOW DETAILS</div>
-  <table>
-    <tr>
-      <th>TIME & DATE</th>
-      <th>REQUESTED BY</th>
-      <th>TAKEN TO</th>
-    </tr>
-    <tr>
-      <td><input type="datetime-local"></td>
-      <td>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Color</label>
+        <input type="text">
+      </div>
+      <div class="form-group">
+        <label>Tag No.</label>
+        <input type="text" placeholder="00000000">
+      </div>
+    </div>
+
+    <div class="form-group wide">
+      <label>Condition of Vehicle</label>
+      <select>
+        <option value="">-- Select Condition --</option>
+        <option>Good</option>
+        <option>Damaged</option>
+        <option>Burned</option>
+        <option>Stripped</option>
+      </select>
+    </div>
+
+    <div class="section-title">TOW DETAILS</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Time & Date</label>
+        <input type="datetime-local">
+      </div>
+      <div class="form-group">
+        <label>Requested By</label>
         <select>
           <option value="">-- Select --</option>
           <option>Police</option>
           <option>City</option>
           <option>Owner</option>
         </select>
-      </td>
-      <td><input type="text"></td>
-    </tr>
-    <tr>
-      <th>LOCATION</th>
-      <th colspan="2">REASON FOR TOW</th>
-    </tr>
-    <tr>
-      <td><input type="text"></td>
-      <td colspan="2">
+      </div>
+      <div class="form-group">
+        <label>Taken To</label>
+        <input type="text">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Location</label>
+        <input type="text">
+      </div>
+      <div class="form-group">
+        <label>Reason for Tow</label>
         <select>
           <option value="">-- Select Reason --</option>
           <option>Illegal Parking</option>
@@ -149,17 +168,16 @@
           <option>Abandoned</option>
           <option>Breakdown</option>
         </select>
-      </td>
-    </tr>
-  </table>
+      </div>
+    </div>
 
-  <button onclick="resetForm()">Submit</button>
+    <button onclick="resetForm()">Submit</button>
+  </div>
 
   <script>
     function resetForm() {
       const inputs = document.querySelectorAll('input, select');
       inputs.forEach(input => input.value = '');
-      alert("Form submitted and reset!");
     }
   </script>
 </body>
