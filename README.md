@@ -2,9 +2,9 @@
 HTML &amp; other resources for my Google Site.  
 
 ## Site Links  
-[Home](https://justkaarlo.github.io/JustKaarlo-Google-Site/)
-- **Total War**
-  - [Shogun2.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Shogun2.html)
+• [index.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/)  
+&nbsp; • **Total War**  
+&nbsp;&nbsp; • [Shogun2.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Shogun2.html)
 
 ## EMBED for Google Sites
 ### `OPTION 1`
