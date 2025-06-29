@@ -21,19 +21,25 @@
       padding: 25px;
     }
 
-    .logo {
+    .header {
       text-align: center;
       margin-bottom: 20px;
     }
 
-    .logo-title {
-      font-size: 20px;
-      font-weight: bold;
+    .header img {
+      width: 80px;
+      margin-bottom: 10px;
     }
 
-    .sub-header {
+    .header h2 {
+      margin: 5px 0 0;
+      font-size: 20px;
+    }
+
+    .header p {
+      margin: 0;
       font-size: 14px;
-      color: #444;
+      color: #555;
     }
 
     .section-title {
@@ -82,38 +88,35 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 10px;
+      margin-top: 10px;
     }
 
-    th, td {
-      border: 1px solid #888;
-      padding: 8px;
+    table th,
+    table td {
+      border: 1px solid #999;
+      padding: 6px 8px;
       text-align: center;
       font-size: 14px;
     }
 
-    th {
-      background: #ddd;
-    }
-
-    .btn {
-      background-color: #2d5e88;
+    .add-button {
+      background-color: #2e5a88;
       color: white;
       border: none;
-      padding: 10px 16px;
-      border-radius: 6px;
+      padding: 8px 14px;
       font-size: 14px;
+      border-radius: 5px;
       cursor: pointer;
-      margin-bottom: 15px;
+      margin-top: 10px;
     }
 
-    .btn:hover {
-      background-color: #1b3f5a;
+    .add-button:hover {
+      background-color: #1b3c5d;
     }
 
-    button[type="submit"] {
+    button {
       width: 100%;
-      background-color: #2d5e88;
+      background-color: #2e5a88;
       color: white;
       border: none;
       padding: 12px;
@@ -124,16 +127,16 @@
       transition: background 0.3s ease;
     }
 
-    button[type="submit"]:hover {
-      background-color: #1b3f5a;
+    button:hover {
+      background-color: #1b3c5d;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="logo">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Seal_of_California.svg/200px-Seal_of_California.svg.png" alt="Logo" width="80">
-      <div class="logo-title">San Andreas Department of Corrections and Rehabilitation</div>
+    <div class="header">
+      <img src="https://i.imgur.com/G5FUTlL.png" alt="DOC Logo">
+      <h2>San Andreas<br>Department of Corrections and Rehabilitation</h2>
     </div>
 
     <div class="row">
@@ -160,8 +163,7 @@
     </div>
 
     <div class="section-title">SUSPECT(S) INFORMATION</div>
-
-    <table id="suspect-table">
+    <table id="suspectTable">
       <thead>
         <tr>
           <th>NO#</th>
@@ -179,7 +181,7 @@
         </tr>
       </tbody>
     </table>
-    <button class="btn" onclick="addSuspectRow()">+ Add Suspect</button>
+    <button class="add-button" onclick="addSuspect()">+ Add Suspect</button>
 
     <div class="section-title">CUSTODY TRANSFER</div>
     <div class="row">
@@ -193,37 +195,32 @@
       </div>
     </div>
 
-    <button type="submit" onclick="resetForm()">Submit</button>
+    <button onclick="resetForm()">Submit</button>
   </div>
 
   <script>
     let suspectCount = 1;
-    function addSuspectRow() {
+    function addSuspect() {
       suspectCount++;
-      const tbody = document.getElementById('suspect-table').querySelector('tbody');
-      const row = document.createElement('tr');
+      const table = document.getElementById("suspectTable").getElementsByTagName("tbody")[0];
+      const row = table.insertRow();
       row.innerHTML = `
         <td>${suspectCount}-#</td>
         <td><input type="text"></td>
         <td><input type="text"></td>
         <td><input type="date"></td>
       `;
-      tbody.appendChild(row);
     }
 
     function resetForm() {
-      const inputs = document.querySelectorAll('input');
-      inputs.forEach(input => input.type === 'checkbox' ? input.checked = false : input.value = '');
-      
-      const tbody = document.getElementById('suspect-table').querySelector('tbody');
-      tbody.innerHTML = `
-        <tr>
-          <td>1-#</td>
-          <td><input type="text"></td>
-          <td><input type="text"></td>
-          <td><input type="date"></td>
-        </tr>
-      `;
+      document.querySelectorAll('input').forEach(el => {
+        if (el.type === 'checkbox') el.checked = false;
+        else if (!el.hasAttribute('readonly')) el.value = '';
+      });
+      const tbody = document.getElementById("suspectTable").getElementsByTagName("tbody")[0];
+      while (tbody.rows.length > 1) {
+        tbody.deleteRow(-1);
+      }
       suspectCount = 1;
     }
   </script>
