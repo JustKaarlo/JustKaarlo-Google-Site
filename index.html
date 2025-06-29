@@ -2,72 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Custom Drive Folder Viewer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <title>Link Buttons</title>
   <style>
     body {
-      margin: 0;
-      padding: 20px;
-      background: transparent;
-      font-family: 'Rubik', sans-serif;
+      font-family: Rubik, sans-serif;
+      background-color: #222;
       color: white;
+      text-align: center;
+      padding: 50px;
     }
-    h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      margin: 8px 0;
-      padding: 6px 12px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
-    }
-    a {
+
+    .link-button {
+      display: inline-block;
+      background-color: #1a73e8;
       color: white;
+      border: none;
+      padding: 12px 24px;
+      margin: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
       text-decoration: none;
     }
-    a:hover {
-      text-decoration: underline;
+
+    .link-button:hover {
+      background-color: #1669c1;
     }
   </style>
 </head>
 <body>
-  <h1>📂 My Google Drive Folder</h1>
-  <ul id="fileList">Loading...</ul>
 
-  <script>
-    const folderId = "1QAOW3qPeIHWinvsQmECyfccTZjavI7mA";
-    const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
+  <h1>Links</h1>
+  <a href="https://justkaarlo.github.io/JustKaarlo-Google-Site/Shogun2.html" target="_blank" class="link-button">Total War SHOGUN 2</a>
+  <a href="https://www.youtube.com" target="_blank" class="link-button">YouTube</a>
+  <a href="https://www.github.com" target="_blank" class="link-button">GitHub</a>
 
-    async function listFiles() {
-      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink)`;
-      const res = await fetch(url);
-      const data = await res.json();
-
-      const list = document.getElementById("fileList");
-      list.innerHTML = "";
-
-      if (!data.files || data.files.length === 0) {
-        list.innerHTML = "<li>No files found.</li>";
-        return;
-      }
-
-      data.files.forEach(file => {
-        const li = document.createElement("li");
-        const link = document.createElement("a");
-        link.href = file.webViewLink;
-        link.target = "_blank";
-        link.textContent = `${file.name} (${file.mimeType})`;
-        li.appendChild(link);
-        list.appendChild(li);
-      });
-    }
-
-    listFiles();
-  </script>
 </body>
 </html>
