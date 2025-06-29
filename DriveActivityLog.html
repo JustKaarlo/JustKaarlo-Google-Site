@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Sheet Display</title>
+  <style>
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      padding: 20px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    td, th {
+      border: 1px solid #ccc;
+      padding: 8px;
+    }
+    th {
+      background-color: #1a73e8;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sheet Data</h1>
+  <table id="dataTable"></table>
+
+  <script>
+    fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTDrcH4uAC4I1wugay-7N4_HAmZcyH-tiy54KRB2_skvOwbNOEFA8bSV9nwnpCgIiGfeWPR4LZiKoG-/pub?output=csv')
+      .then(res => res.text())
+      .then(csv => {
+        const rows = csv.trim().split('\n').map(row => row.split(','));
+        const table = document.getElementById('dataTable');
+
+        rows.forEach((row, rowIndex) => {
+          const tr = document.createElement('tr');
+          row.forEach(cell => {
+            const td = document.createElement(rowIndex === 0 ? 'th' : 'td');
+            td.textContent = cell;
+            tr.appendChild(td);
+          });
+          table.appendChild(tr);
+        });
+      });
+  </script>
+</body>
+</html>
