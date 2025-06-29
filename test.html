@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: white;
+      color: black;
+      padding: 20px;
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 40px;
+      font-weight: bold;
+      color: #d60000;
+      margin-bottom: 10px;
+    }
+
+    .logo::before {
+      content: "";
+      display: block;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Saint_Lucia_-_Location_Map_%282013%29_-_LCA_-_UNOCHA.svg/1200px-Saint_Lucia_-_Location_Map_%282013%29_-_LCA_-_UNOCHA.svg.png') no-repeat center;
+      background-size: 60px;
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0;
+    }
+
+    td, th {
+      border: 1px solid #aaa;
+      padding: 8px;
+      text-align: center;
+      background-color: #f2f2f2;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 6px;
+      font-size: 14px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      font-size: 16px;
+      text-align: center;
+      margin: 20px 0 5px;
+    }
+
+    button {
+      background-color: #d60000;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      display: block;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #a00000;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">SADOT</div>
+
+  <table>
+    <tr>
+      <th>CASE NO#</th>
+      <th>DATE SUBMITTED</th>
+    </tr>
+    <tr>
+      <td><input type="text" placeholder="0000"></td>
+      <td><input type="date"></td>
+    </tr>
+  </table>
+
+  <div class="section-title">VEHICLE INFORMATION</div>
+  <table>
+    <tr>
+      <th>REGISTERED OWNER</th>
+      <th>MAKE & MODEL</th>
+      <th>COLOR</th>
+      <th>TAG NO.</th>
+    </tr>
+    <tr>
+      <td><input type="text"></td>
+      <td><input type="text"></td>
+      <td><input type="text"></td>
+      <td><input type="text" placeholder="00000000"></td>
+    </tr>
+    <tr>
+      <th colspan="4">CONDITION OF VEHICLE</th>
+    </tr>
+    <tr>
+      <td colspan="4">
+        <select>
+          <option value="">-- Select Condition --</option>
+          <option>Good</option>
+          <option>Damaged</option>
+          <option>Burned</option>
+          <option>Stripped</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+
+  <div class="section-title">TOW DETAILS</div>
+  <table>
+    <tr>
+      <th>TIME & DATE</th>
+      <th>REQUESTED BY</th>
+      <th>TAKEN TO</th>
+    </tr>
+    <tr>
+      <td><input type="datetime-local"></td>
+      <td>
+        <select>
+          <option value="">-- Select --</option>
+          <option>Police</option>
+          <option>City</option>
+          <option>Owner</option>
+        </select>
+      </td>
+      <td><input type="text"></td>
+    </tr>
+    <tr>
+      <th>LOCATION</th>
+      <th colspan="2">REASON FOR TOW</th>
+    </tr>
+    <tr>
+      <td><input type="text"></td>
+      <td colspan="2">
+        <select>
+          <option value="">-- Select Reason --</option>
+          <option>Illegal Parking</option>
+          <option>Accident</option>
+          <option>Abandoned</option>
+          <option>Breakdown</option>
+        </select>
+      </td>
+    </tr>
+  </table>
+
+  <button onclick="resetForm()">Submit</button>
+
+  <script>
+    function resetForm() {
+      const inputs = document.querySelectorAll('input, select');
+      inputs.forEach(input => input.value = '');
+      alert("Form submitted and reset!");
+    }
+  </script>
+</body>
+</html>
