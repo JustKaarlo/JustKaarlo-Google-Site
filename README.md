@@ -4,7 +4,7 @@ HTML &amp; other resources for my Google Site.
 ## Site Links  
 • [index.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/)  
 &nbsp; • **Total War**  
-&nbsp;&nbsp; • [Shogun2.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Shogun2.html)  - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Shogun2.html`
+&nbsp;&nbsp; • [Shogun2.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Shogun2.html)  - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Shogun2.html`  
 &nbsp;&nbsp; • [Attila.html](https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Attila.html) - `https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Attila.html`
 
 ## EMBED for Google Sites
