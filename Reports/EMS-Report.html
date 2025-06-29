@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SAMR Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: transparent;
+      padding: 30px;
+      max-width: 850px;
+      margin: auto;
+      color: #333;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      padding: 25px;
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 32px;
+      font-weight: bold;
+      color: #17499a;
+      margin-bottom: 10px;
+    }
+
+    .sub-logo {
+      text-align: center;
+      font-size: 14px;
+      color: #b00000;
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      font-size: 18px;
+      text-align: center;
+      margin: 25px 0 10px;
+      border-top: 2px solid #ccc;
+      padding-top: 10px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .field-group {
+      flex: 1;
+      min-width: 150px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .field-group label {
+      font-size: 13px;
+      margin-bottom: 4px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
+    textarea {
+      padding: 6px 10px;
+      border: 1px solid #aaa;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #f9f9f9;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 50px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 5px 0;
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+    }
+
+    .checkbox-group input {
+      margin-right: 5px;
+    }
+
+    .wide {
+      width: 100%;
+    }
+
+    button {
+      width: 100%;
+      background-color: #17499a;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #102f65;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo">SAMR</div>
+    <div class="sub-logo">SAN ANDREAS MEDICAL RESPONSE</div>
+
+    <div class="row">
+      <div class="field-group">
+        <label>NO#</label>
+        <input type="text" placeholder="0000">
+      </div>
+      <div class="field-group">
+        <label>Time & Date</label>
+        <input type="datetime-local">
+      </div>
+      <div class="field-group wide">
+        <label>Location of Incident</label>
+        <input type="text">
+      </div>
+    </div>
+
+    <div class="section-title">PATIENT INFORMATION</div>
+    <div class="row">
+      <div class="field-group">
+        <label>Name</label>
+        <input type="text">
+      </div>
+      <div class="field-group">
+        <label>Gender</label>
+        <input type="text">
+      </div>
+      <div class="field-group">
+        <label>Date of Birth</label>
+        <input type="date">
+      </div>
+    </div>
+
+    <div class="section-title">ASSESSMENT</div>
+    <div class="row">
+      <div class="field-group wide">
+        <label>Primary Injury/Condition</label>
+        <textarea></textarea>
+      </div>
+      <div class="field-group wide">
+        <label>Visible Injuries</label>
+        <textarea></textarea>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field-group">
+        <label>Pulse</label>
+        <select>
+          <option value=""> Select </option>
+          <option>NONE</option>
+          <option>VERY WEAK</option>
+          <option>WEAK STABLE</option>
+          <option>NORMAL</option>
+          <option>HIGH</option>
+          <option>VERY HIGH</option>
+          <option>DANGEROUSLY HIGH</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Respiration</label>
+        <select>
+          <option value=""> Select </option>
+          <option>NONE</option>
+          <option>VERY LIGHT</option>
+          <option>LIGHT</option>
+          <option>MODERATE</option>
+          <option>VIGOROUS</option>
+          <option>VERY HARD</option>
+          <option>MAX EFFORT</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>Blood Pressure</label>
+        <select>
+          <option value=""> Select </option>
+          <option>NONE</option>
+          <option>NORMAL</option>
+          <option>ELEVATED</option>
+          <option>STAGE-1</option>
+          <option>STAGE-2</option>
+          <option>HYPERTENSIVE CRISIS</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-group wide">
+      <label>Level of Consciousness</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox"> Alert</label>
+        <label><input type="checkbox"> Voice</label>
+        <label><input type="checkbox"> Pain</label>
+        <label><input type="checkbox"> Unresponsive</label>
+      </div>
+    </div>
+
+    <div class="field-group wide">
+      <label>Treatment Provided</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox"> Basic First Aid</label>
+        <label><input type="checkbox"> Tourniquet Applied</label>
+        <label><input type="checkbox"> Wound Dressing / Bandaging</label>
+        <label><input type="checkbox"> Transport to Hospital</label>
+        <label><input type="checkbox"> Pain Relief Administered</label>
+        <label><input type="checkbox"> CPR</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field-group wide">
+        <label>Transported To</label>
+        <select>
+          <option value="">  Select  </option>
+          <option>CENTRAL LOS SANTOS MEDICAL CENTER</option>
+          <option>MOUNT ZONAH MEDICAL CENTER</option>
+          <option>PILLBOX HILL MEDICAL CENTER</option>
+          <option>ST. FIACRE HOSPITAL</option>
+          <option>ECLIPSE MEDICAL TOWER</option>
+          <option>PORTOLA TRINITY MEDICAL CENTER</option>
+          <option>THE BAY CARE CENTER</option>
+          <option>SANDY SHORES MEDICAL CENTER</option>
+        </select>
+      </div>
+      <div class="field-group wide">
+        <label>Condition During Transport</label>
+        <select>
+          <option value="">  Select  </option>
+          <option>STABLE</option>
+          <option>CRITICAL</option>
+          <option>DETERIORATING</option>
+          <option>IMPROVED</option>
+          <option>DECEASED</option>
+        </select>
+      </div>
+    </div>
+
+    <button onclick="resetForm()">Submit</button>
+  </div>
+
+  <script>
+    function resetForm() {
+      const inputs = document.querySelectorAll('input, textarea');
+      inputs.forEach(el => {
+        if (el.type === 'checkbox') el.checked = false;
+        else el.value = '';
+      });
+    }
+  </script>
+</body>
+</html>
