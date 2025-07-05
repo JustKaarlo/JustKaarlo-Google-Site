@@ -323,6 +323,8 @@
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
+      document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+      document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
     }
 
     function showPopup(id) {
