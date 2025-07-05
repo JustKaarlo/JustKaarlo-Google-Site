@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Discord Webhook Form</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+      max-width: 500px;
+      margin: auto;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #5865F2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #4752c4;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Report Form</h2>
+  <input type="text" id="username" placeholder="Your Name">
+  <textarea id="message" placeholder="Your message here..."></textarea>
+  <button onclick="sendToDiscord()">Submit</button>
+
+  <script>
+    function sendToDiscord() {
+      const username = document.getElementById("username").value;
+      const message = document.getElementById("message").value;
+
+      const payload = {
+        content: `**New Form Submission**\n**Name:** ${username}\n**Message:** ${message}`
+      };
+
+      fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }).then(response => {
+        if (response.ok) {
+          alert("Submitted!");
+        } else {
+          alert("Something went wrong.");
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
