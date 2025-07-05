@@ -100,6 +100,14 @@
       font-weight: bold;
       z-index: 101;
     }
+
+    .bottom-center {
+      position: fixed;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
   </style>
 </head>
 <body>
@@ -110,7 +118,10 @@
     <button class="report-btn">EMS REPORT</button>
     <button class="report-btn">TOW REPORT</button>
     <button class="report-btn">CORONER REPORT</button>
-    <button class="report-btn">DASHBOARD</button>
+  </div>
+
+  <div class="bottom-center">
+    <button class="report-btn" onclick="window.location.href='https://justkaarlo.github.io/JustKaarlo-Google-Site/'">DASHBOARD</button>
   </div>
 
   <div class="overlay" id="overlay" onclick="closeModal()"></div>
