@@ -130,35 +130,38 @@
     <iframe id="modal-frame" src="" allowtransparency="true"></iframe>
   </div>
 
-  <script>
+    <script>
     const modal = document.getElementById('modal');
     const iframe = document.getElementById('modal-frame');
     const overlay = document.getElementById('overlay');
-
+  
     function openModal(src) {
       iframe.src = src;
       overlay.style.display = 'block';
       modal.style.display = 'block';
-
-      // once content loads, resize modal to fit
+  
       iframe.onload = () => {
+        const maxHeightPx = window.innerHeight * 0.95;
         try {
+          // try same-origin resize
           const doc = iframe.contentDocument || iframe.contentWindow.document;
           const contentHeight = doc.documentElement.scrollHeight;
-          const maxH = window.innerHeight * 0.95;
-          modal.style.height = Math.min(contentHeight, maxH) + 'px';
+          modal.style.height = Math.min(contentHeight, maxHeightPx) + 'px';
         } catch (e) {
-          // cross-origin or error: fallback to full height
-          modal.style.height = maxH + 'px';
+          // cross-origin fallback
+          modal.style.height = maxHeightPx + 'px';
         }
+        // make sure iframe never scrolls outside
+        iframe.style.height = '100%';
+        iframe.style.overflow = 'hidden';
       };
     }
-
+  
     function closeModal() {
       modal.style.display = 'none';
       overlay.style.display = 'none';
       iframe.src = '';
-      modal.style.height = ''; // reset
+      modal.style.height = '';
     }
   </script>
 </body>
