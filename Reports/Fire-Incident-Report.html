@@ -87,6 +87,23 @@
       color: white;
     }
 
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin: 15px 0;
+    }
+
+    .checkbox-group label {
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .checkbox-group input {
+      margin-right: 5px;
+    }
+    
     .wide {
       width: 100%;
     }
@@ -243,12 +260,13 @@
         <label>Fire Spread Level</label>
         <input type="text" id="spreadLevel">
       </div>
-      <div class="field-group wide">
-        <label>Methods Used</label>
-        <div id="method-tags" class="tag-container">
-          <input type="text" id="methodInput" placeholder="Type and press Enter">
-        </div>
-      </div>
+    </div>
+
+    <div class="section-title">METHODS USED</div>
+    <div class="checkbox-group" id="methods-used">
+        <label><input type="checkbox" value="Water"> Water</label>
+        <label><input type="checkbox" value="Foam"> Foam</label>
+        <label><input type="checkbox" value="Fire Extinguishers"> Fire Extinguishers</label>
     </div>
 
     <div class="button-row">
