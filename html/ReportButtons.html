@@ -32,7 +32,7 @@
     }
 
     .report-btn {
-      background: rgba(44, 47, 51, 0.15); /* More transparent */
+      background: rgba(44, 47, 51, 0.15);
       color: white;
       font-weight: 800;
       font-size: 34px;
@@ -65,17 +65,19 @@
       width: 80%;
       max-width: 800px;
       height: 80%;
-      background: #2C2F33;
-      border-radius: 16px;
-      overflow: hidden;
+      background: transparent; /* Made fully transparent */
+      border-radius: 0;
+      overflow: visible;
       z-index: 100;
-      box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+      box-shadow: none;
     }
 
     .modal iframe {
       width: 100%;
       height: 100%;
       border: none;
+      background: transparent;
+      pointer-events: auto;
     }
 
     .overlay {
@@ -118,15 +120,16 @@
     <button class="report-btn">EMS REPORT</button>
     <button class="report-btn">TOW REPORT</button>
     <button class="report-btn">CORONER REPORT</button>
-    <div class="bottom-center">
-      <button class="report-btn" onclick="window.location.href='https://justkaarlo.github.io/JustKaarlo-Google-Site/'">DASHBOARD</button>
-    </div>
+  </div>
+
+  <div class="bottom-center">
+    <button class="report-btn" onclick="window.location.href='https://justkaarlo.github.io/JustKaarlo-Google-Site/'">DASHBOARD</button>
   </div>
 
   <div class="overlay" id="overlay" onclick="closeModal()"></div>
   <div class="modal" id="modal">
     <button class="close-btn" onclick="closeModal()">Close</button>
-    <iframe id="modal-frame" src=""></iframe>
+    <iframe id="modal-frame" src="" allowtransparency="true"></iframe>
   </div>
 
   <script>
