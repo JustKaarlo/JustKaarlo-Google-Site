@@ -190,6 +190,34 @@
       color: #ccc;
       margin-top: 6px;
     }
+
+    #error-popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #23272A;
+      color: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      display: none;
+      z-index: 10;
+      max-width: 90%;
+      text-align: center;
+    }
+    
+    #error-popup .header-title {
+      color: #f04747;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    #error-popup .header-subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 6px;
+    }
   </style>
 </head>
 <body>
@@ -241,6 +269,11 @@
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Report Has Been Logged.</div>
     </div>
+
+    <div id="error-popup">
+      <div class="header-title">⚠️ Submission Failed</div>
+      <div class="header-subtitle">All fields are required.</div>
+    </div>
   </div>
 
   <script>
@@ -267,7 +300,16 @@
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
     }
-  
+    
+    function showErrorPopup() {
+      const errorPopup = document.getElementById('error-popup');
+      errorPopup.style.display = 'block';
+      errorPopup.onclick = () => errorPopup.style.display = 'none';
+      setTimeout(() => {
+        errorPopup.style.display = 'none';
+      }, 3000);
+    }
+    
     function showPopup() {
       const popup = document.getElementById('popup-overlay');
       popup.style.display = 'block';
@@ -288,7 +330,7 @@
   
       // Required field check
       if (!location || !datetime || !defendant || !officer || offenses.length === 0) {
-        alert("All fields are required, including at least one offense.");
+        showErrorPopup();
         return;
       }
   
