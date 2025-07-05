@@ -5,51 +5,59 @@
   <title>SAMR Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
+    * { font-family: 'Rubik', sans-serif; }
+
     body {
-      font-family: 'Rubik', sans-serif;
       background: transparent;
       padding: 30px;
       max-width: 850px;
       margin: auto;
-      color: #333;
+      color: white;
     }
 
     .card {
-      background: white;
+      background: #2C2F33;
       border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      padding: 0;
+      overflow: hidden;
+      position: relative;
     }
 
     .logo {
+      background: #56585B;
+      padding: 15px;
       text-align: center;
-      font-size: 32px;
-      font-weight: bold;
-      color: #17499a;
-      margin-bottom: 10px;
     }
 
-    .sub-logo {
-      text-align: center;
+    .logo .main {
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      margin: 0;
+    }
+
+    .logo .sub {
       font-size: 14px;
-      color: #b00000;
-      margin-bottom: 30px;
+      color: #ccc;
+      margin-top: 4px;
     }
 
     .section-title {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
+      background: #23272A;
       text-align: center;
-      margin: 25px 0 10px;
-      border-top: 2px solid #ccc;
-      padding-top: 10px;
+      padding: 8px;
+      margin-top: 20px;
+      border-radius: 6px;
     }
 
     .row {
       display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
       flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px;
     }
 
     .field-group {
@@ -62,20 +70,23 @@
     .field-group label {
       font-size: 13px;
       margin-bottom: 4px;
+      color: #ccc;
+      font-weight: bold;
+      text-transform: uppercase;
     }
 
     input[type="text"],
     input[type="date"],
     input[type="time"],
     input[type="datetime-local"],
-    textarea,
-    select {
+    select,
+    textarea {
       padding: 6px 10px;
-      border: 1px solid #aaa;
+      border: 1px solid #444;
       border-radius: 6px;
       font-size: 14px;
-      background: #f9f9f9;
-      font-family: 'Rubik', sans-serif;
+      background: #23272A;
+      color: white;
     }
 
     textarea {
@@ -87,11 +98,12 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin: 5px 0;
+      margin: 10px 15px;
     }
 
     .checkbox-group label {
       font-size: 14px;
+      color: #ccc;
     }
 
     .checkbox-group input {
@@ -102,29 +114,89 @@
       width: 100%;
     }
 
-    button {
-      width: 100%;
-      background-color: #3c78d8;
-      color: white;
-      border: none;
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin: 15px;
+    }
+
+    .button-row button {
       padding: 12px;
       border-radius: 6px;
       font-size: 16px;
-      margin-top: 20px;
+      font-family: 'Rubik', sans-serif;
+      border: none;
       cursor: pointer;
       transition: background 0.3s ease;
-      font-family: 'Rubik', sans-serif;
+      flex: 1;
     }
 
-    button:hover {
+    .clear-btn {
+      background-color: #4f545c;
+      color: #c0c0c0;
+    }
+
+    .clear-btn:hover {
+      background-color: #5d626a;
+    }
+
+    .submit-btn {
+      background-color: #3c78d8;
+      color: white;
+    }
+
+    .submit-btn:hover {
       background-color: #5187dc;
+    }
+
+    #popup-overlay,
+    #error-popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #23272A;
+      color: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      display: none;
+      z-index: 10;
+      max-width: 90%;
+      text-align: center;
+    }
+
+    #popup-overlay .header-title {
+      color: #7289da;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #popup-overlay .header-subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 6px;
+    }
+
+    #error-popup .header-title {
+      color: #f04747;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #error-popup .header-subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 6px;
     }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="logo">SAMR</div>
-    <div class="sub-logo">SAN ANDREAS MEDICAL RESPONSE</div>
+    <div class="logo">
+      <div class="main">SAN ANDREAS MEDICAL RESPONSE</div>
+      <div class="sub">EMS REPORT</div>
+    </div>
 
     <div class="row">
       <div class="field-group">
@@ -169,7 +241,7 @@
       <div class="field-group">
         <label>Pulse</label>
         <select>
-          <option value=""> Select </option>
+          <option value="">Select</option>
           <option>NONE</option>
           <option>VERY WEAK</option>
           <option>WEAK STABLE</option>
@@ -182,7 +254,7 @@
       <div class="field-group">
         <label>Respiration</label>
         <select>
-          <option value=""> Select </option>
+          <option value="">Select</option>
           <option>NONE</option>
           <option>VERY LIGHT</option>
           <option>LIGHT</option>
@@ -195,7 +267,7 @@
       <div class="field-group">
         <label>Blood Pressure</label>
         <select>
-          <option value=""> Select </option>
+          <option value="">Select</option>
           <option>NONE</option>
           <option>NORMAL</option>
           <option>ELEVATED</option>
@@ -232,7 +304,7 @@
       <div class="field-group wide">
         <label>Transported To</label>
         <select>
-          <option value="">  Select  </option>
+          <option value="">Select</option>
           <option>CENTRAL LOS SANTOS MEDICAL CENTER</option>
           <option>MOUNT ZONAH MEDICAL CENTER</option>
           <option>PILLBOX HILL MEDICAL CENTER</option>
@@ -246,7 +318,7 @@
       <div class="field-group wide">
         <label>Condition During Transport</label>
         <select>
-          <option value="">  Select  </option>
+          <option value="">Select</option>
           <option>STABLE</option>
           <option>CRITICAL</option>
           <option>DETERIORATING</option>
@@ -256,16 +328,45 @@
       </div>
     </div>
 
-    <button onclick="resetForm()">Submit</button>
+    <div class="button-row">
+      <button class="clear-btn" onclick="resetForm()">Clear</button>
+      <button class="submit-btn" onclick="submitForm()">Submit</button>
+    </div>
+
+    <div id="popup-overlay">
+      <div class="header-title">✅ Report Submitted</div>
+      <div class="header-subtitle">Your Report Has Been Logged</div>
+    </div>
+
+    <div id="error-popup">
+      <div class="header-title">⚠️ Submission Failed</div>
+      <div class="header-subtitle">All Fields Are Required</div>
+    </div>
   </div>
 
   <script>
     function resetForm() {
-      const elements = document.querySelectorAll('input, textarea, select');
-      elements.forEach(el => {
+      document.querySelectorAll('input, textarea, select').forEach(el => {
         if (el.type === 'checkbox') el.checked = false;
         else el.value = '';
       });
+    }
+
+    function showPopup() {
+      const popup = document.getElementById('popup-overlay');
+      popup.style.display = 'block';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
+    function showErrorPopup() {
+      const errorPopup = document.getElementById('error-popup');
+      errorPopup.style.display = 'block';
+      setTimeout(() => errorPopup.style.display = 'none', 3000);
+    }
+
+    function submitForm() {
+      // Add your required validation logic here, or webhook later
+      showPopup(); // Replace with actual webhook fetch call if needed
     }
   </script>
 </body>
