@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>SAMR Report</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
   <style>
     * { font-family: 'Rubik', sans-serif; }
 
@@ -89,6 +89,30 @@
       color: white;
     }
 
+    textarea {
+      resize: vertical;
+      min-height: 50px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin: 15px 0;
+    }
+
+    .checkbox-group label {
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .checkbox-group input {
+      margin-right: 5px;
+    }
+
+    .wide { width: 100%; }
+
     button {
       background-color: #3c78d8;
       color: white;
@@ -104,32 +128,6 @@
       background-color: #5187dc;
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 50px;
-    }
-
-    .checkbox-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 10px 15px;
-      justify-content: center;
-    }
-
-    .checkbox-group label {
-      font-size: 14px;
-      color: #ccc;
-    }
-
-    .checkbox-group input {
-      margin-right: 5px;
-    }
-
-    .wide {
-      width: 100%;
-    }
-
     .button-row {
       display: flex;
       gap: 10px;
@@ -140,7 +138,7 @@
       background-color: #4f545c;
       color: #c0c0c0;
     }
-    
+
     .clear-btn:hover {
       background-color: #5d626a;
     }
@@ -172,19 +170,13 @@
       font-weight: bold;
     }
 
-    #popup-overlay .header-subtitle {
-      font-size: 14px;
-      color: #ccc;
-      margin-top: 6px;
-    }
-
     #error-popup .header-title {
       color: #f04747;
       font-size: 18px;
       font-weight: bold;
     }
 
-    #error-popup .header-subtitle {
+    .header-subtitle {
       font-size: 14px;
       color: #ccc;
       margin-top: 6px;
@@ -201,11 +193,11 @@
     <div class="row">
       <div class="field-group">
         <label>Time & Date</label>
-        <input type="datetime-local">
+        <input type="datetime-local" id="datetime">
       </div>
       <div class="field-group wide">
         <label>Location of Incident</label>
-        <input type="text">
+        <input type="text" id="location">
       </div>
     </div>
 
@@ -213,15 +205,15 @@
     <div class="row">
       <div class="field-group">
         <label>Name</label>
-        <input type="text">
+        <input type="text" id="name">
       </div>
       <div class="field-group">
         <label>Gender</label>
-        <input type="text">
+        <input type="text" id="gender">
       </div>
       <div class="field-group">
         <label>Date of Birth</label>
-        <input type="date">
+        <input type="date" id="dob">
       </div>
     </div>
 
@@ -229,81 +221,63 @@
     <div class="row">
       <div class="field-group wide">
         <label>Primary Injury/Condition</label>
-        <textarea></textarea>
+        <textarea id="primary"></textarea>
       </div>
       <div class="field-group wide">
         <label>Visible Injuries</label>
-        <textarea></textarea>
+        <textarea id="injuries"></textarea>
       </div>
     </div>
 
     <div class="row">
       <div class="field-group">
         <label>Pulse</label>
-        <select>
+        <select id="pulse">
           <option value="">Select</option>
-          <option>NONE</option>
-          <option>VERY WEAK</option>
-          <option>WEAK STABLE</option>
-          <option>NORMAL</option>
-          <option>HIGH</option>
-          <option>VERY HIGH</option>
-          <option>DANGEROUSLY HIGH</option>
+          <option>NONE</option><option>VERY WEAK</option><option>WEAK STABLE</option>
+          <option>NORMAL</option><option>HIGH</option><option>VERY HIGH</option><option>DANGEROUSLY HIGH</option>
         </select>
       </div>
       <div class="field-group">
         <label>Respiration</label>
-        <select>
+        <select id="respiration">
           <option value="">Select</option>
-          <option>NONE</option>
-          <option>VERY LIGHT</option>
-          <option>LIGHT</option>
-          <option>MODERATE</option>
-          <option>VIGOROUS</option>
-          <option>VERY HARD</option>
-          <option>MAX EFFORT</option>
+          <option>NONE</option><option>VERY LIGHT</option><option>LIGHT</option>
+          <option>MODERATE</option><option>VIGOROUS</option><option>VERY HARD</option><option>MAX EFFORT</option>
         </select>
       </div>
       <div class="field-group">
         <label>Blood Pressure</label>
-        <select>
+        <select id="bp">
           <option value="">Select</option>
-          <option>NONE</option>
-          <option>NORMAL</option>
-          <option>ELEVATED</option>
-          <option>STAGE-1</option>
-          <option>STAGE-2</option>
-          <option>HYPERTENSIVE CRISIS</option>
+          <option>NONE</option><option>NORMAL</option><option>ELEVATED</option>
+          <option>STAGE-1</option><option>STAGE-2</option><option>HYPERTENSIVE CRISIS</option>
         </select>
       </div>
     </div>
 
     <div class="section-title">LEVEL OF CONSCIOUSNESS</div>
-    <div class="field-group wide">
-      <div class="checkbox-group">
-        <label><input type="checkbox"> Alert</label>
-        <label><input type="checkbox"> Voice</label>
-        <label><input type="checkbox"> Pain</label>
-        <label><input type="checkbox"> Unresponsive</label>
-      </div>
+    <div class="checkbox-group" id="consciousness">
+      <label><input type="checkbox" value="Alert"> Alert</label>
+      <label><input type="checkbox" value="Voice"> Voice</label>
+      <label><input type="checkbox" value="Pain"> Pain</label>
+      <label><input type="checkbox" value="Unresponsive"> Unresponsive</label>
     </div>
-    
+
     <div class="section-title">TREATMENT PROVIDED</div>
-    <div class="field-group wide">
-      <div class="checkbox-group">
-        <label><input type="checkbox"> Basic First Aid</label>
-        <label><input type="checkbox"> Tourniquet Applied</label>
-        <label><input type="checkbox"> Wound Dressing / Bandaging</label>
-        <label><input type="checkbox"> Transport to Hospital</label>
-        <label><input type="checkbox"> Pain Relief Administered</label>
-        <label><input type="checkbox"> CPR</label>
-      </div>
+    <div class="checkbox-group" id="treatment">
+      <label><input type="checkbox" value="Basic First Aid"> Basic First Aid</label>
+      <label><input type="checkbox" value="Tourniquet Applied"> Tourniquet Applied</label>
+      <label><input type="checkbox" value="Wound Dressing / Bandaging"> Wound Dressing / Bandaging</label>
+      <label><input type="checkbox" value="Transport to Hospital"> Transport to Hospital</label>
+      <label><input type="checkbox" value="Pain Relief Administered"> Pain Relief Administered</label>
+      <label><input type="checkbox" value="CPR"> CPR</label>
     </div>
 
     <div class="row">
       <div class="field-group wide">
         <label>Transported To</label>
-        <select>
+        <select id="hospital">
           <option value="">Select</option>
           <option>CENTRAL LOS SANTOS MEDICAL CENTER</option>
           <option>MOUNT ZONAH MEDICAL CENTER</option>
@@ -317,13 +291,9 @@
       </div>
       <div class="field-group wide">
         <label>Condition During Transport</label>
-        <select>
+        <select id="condition">
           <option value="">Select</option>
-          <option>STABLE</option>
-          <option>CRITICAL</option>
-          <option>DETERIORATING</option>
-          <option>IMPROVED</option>
-          <option>DECEASED</option>
+          <option>STABLE</option><option>CRITICAL</option><option>DETERIORATING</option><option>IMPROVED</option><option>DECEASED</option>
         </select>
       </div>
     </div>
@@ -364,9 +334,59 @@
       setTimeout(() => errorPopup.style.display = 'none', 3000);
     }
 
-    function submitForm() {
-      // Add your required validation logic here, or webhook later
-      showPopup(); // Replace with actual webhook fetch call if needed
+    async function submitForm() {
+      const getCheckboxValues = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
+      const datetime = document.getElementById('datetime').value;
+      const location = document.getElementById('location').value;
+      const name = document.getElementById('name').value;
+      const gender = document.getElementById('gender').value;
+      const dob = document.getElementById('dob').value;
+      const primary = document.getElementById('primary').value;
+      const injuries = document.getElementById('injuries').value;
+      const pulse = document.getElementById('pulse').value;
+      const respiration = document.getElementById('respiration').value;
+      const bp = document.getElementById('bp').value;
+      const consciousness = getCheckboxValues('consciousness');
+      const treatment = getCheckboxValues('treatment');
+      const hospital = document.getElementById('hospital').value;
+      const condition = document.getElementById('condition').value;
+
+      if (!datetime || !location || !name || !gender || !dob || !primary || !injuries || !pulse || !respiration || !bp || consciousness.length === 0 || treatment.length === 0 || !hospital || !condition) {
+        showErrorPopup();
+        return;
+      }
+
+      const embed = {
+        title: "SAMR Report",
+        color: 4737096,
+        fields: [
+          { name: "Date & Time", value: `\`\`\`\n${datetime}\n\`\`\`` },
+          { name: "Location", value: `\`\`\`\n${location}\n\`\`\`` },
+          { name: "Name", value: `\`\`\`\n${name}\n\`\`\`` },
+          { name: "Gender", value: `\`\`\`\n${gender}\n\`\`\`` },
+          { name: "DOB", value: `\`\`\`\n${dob}\n\`\`\`` },
+          { name: "Primary Condition", value: `\`\`\`\n${primary}\n\`\`\`` },
+          { name: "Visible Injuries", value: `\`\`\`\n${injuries}\n\`\`\`` },
+          { name: "Vitals", value: `\`\`\`\nPulse: ${pulse}\nRespiration: ${respiration}\nBlood Pressure: ${bp}\n\`\`\`` },
+          { name: "Level of Consciousness", value: `\`\`\`\n${consciousness.join(", ")}\n\`\`\`` },
+          { name: "Treatment Provided", value: `\`\`\`\n${treatment.join(", ")}\n\`\`\`` },
+          { name: "Transported To", value: `\`\`\`\n${hospital}\n\`\`\`` },
+          { name: "Condition During Transport", value: `\`\`\`\n${condition}\n\`\`\`` }
+        ],
+        footer: { text: "San Andreas Medical Response" },
+        timestamp: new Date().toISOString()
+      };
+
+      fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ embeds: [embed] })
+      }).then(() => {
+        showPopup();
+        resetForm();
+      }).catch(() => {
+        showErrorPopup();
+      });
     }
   </script>
 </body>
