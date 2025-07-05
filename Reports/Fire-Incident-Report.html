@@ -318,6 +318,8 @@
       });
     }
 
+    createTagInput('unitInput', 'unit-tags');
+
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
