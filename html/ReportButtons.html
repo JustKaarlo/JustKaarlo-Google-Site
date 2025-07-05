@@ -23,22 +23,26 @@
 
     .container {
       display: grid;
-      grid-template-columns: repeat(3, 200px);
-      gap: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
       justify-content: center;
+      width: 100%;
+      max-width: 1000px;
+      padding: 40px;
     }
-
+    
     .report-btn {
       background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(6px);
       border: none;
-      padding: 15px;
-      border-radius: 12px;
+      padding: 40px 20px;
+      border-radius: 16px;
       color: white;
-      font-size: 16px;
+      font-size: 20px;
       cursor: pointer;
       transition: background 0.3s;
       text-align: center;
+      height: 150px;
     }
 
     .report-btn:hover {
