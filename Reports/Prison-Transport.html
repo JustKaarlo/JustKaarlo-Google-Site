@@ -42,7 +42,6 @@
 
     .header-subtitle {
       font-size: 15px;
-      font-style: bold;
       color: #ccc;
       margin-top: 4px;
     }
@@ -91,11 +90,6 @@
       color: white;
     }
 
-    select option {
-      background: #2C2F33;
-      color: white;
-    }
-
     .wide {
       width: 100%;
     }
@@ -114,7 +108,6 @@
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
 
     button:hover {
@@ -272,9 +265,7 @@
       suspects.forEach((container, index) => {
         const numberBox = container.querySelector('.no-box');
         const deleteButton = container.querySelector('.delete-btn');
-
         numberBox.textContent = `Suspect #${index + 1}`;
-
         if (index === 0) {
           deleteButton.disabled = true;
           deleteButton.style.backgroundColor = '#3a3a3a';
@@ -291,35 +282,31 @@
 
     function addSuspect() {
       const container = document.getElementById("suspectList");
-
       const suspectCard = document.createElement("div");
       suspectCard.className = "suspect-container";
-
       suspectCard.innerHTML = `
-          <div class="suspect-header">
-            <span class="no-box">Suspect</span>
-            <button class="delete-btn" onclick="removeSuspect(this)">🗑️</button>
+        <div class="suspect-header">
+          <span class="no-box">Suspect</span>
+          <button class="delete-btn" onclick="removeSuspect(this)">🗑️</button>
+        </div>
+        <div class="suspect-row">
+          <div class="field-group">
+            <label>Name</label>
+            <input type="text">
           </div>
-          <div class="suspect-row">
-            <div class="field-group">
-              <label>Name</label>
-              <input type="text">
-            </div>
-            <div class="field-group">
-              <label>Gender</label>
-              <select>
-                <option value="">Select</option>
-                <option>Male</option>
-                <option>Female</option>
-              </select>
-            </div>
-            <div class="field-group">
-              <label>Date of Birth</label>
-              <input type="date">
-            </div>
+          <div class="field-group">
+            <label>Gender</label>
+            <select>
+              <option value="">Select</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
           </div>
-        `;
-
+          <div class="field-group">
+            <label>Date of Birth</label>
+            <input type="date">
+          </div>
+        </div>`;
       container.appendChild(suspectCard);
       updateSuspectListNumbers();
     }
@@ -340,10 +327,6 @@
       addSuspect();
     }
 
-    window.onload = () => {
-      addSuspect();
-    };
-
     function showPopup() {
       const popup = document.getElementById('popup-overlay');
       popup.style.display = 'block';
@@ -363,11 +346,17 @@
       const pickup = document.getElementById('pickup').value.trim();
       const receiver = document.getElementById('receiver').value.trim();
       const department = document.getElementById('department').value.trim();
-
       if (!datetime || !pickup || !receiver || !department) {
         showErrorPopup();
         return;
       }
+
+      const suspects = [...document.querySelectorAll('.suspect-container')].map((el, i) => {
+        const name = el.querySelector('input[type="text"]').value.trim();
+        const gender = el.querySelector('select').value.trim();
+        const dob = el.querySelector('input[type="date"]').value.trim();
+        return `#${i + 1} ${name} | ${gender} | ${dob}`;
+      }).filter(x => x.includes("|")).join("\n");
 
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
 
@@ -379,7 +368,8 @@
           { name: "Pickup Location", value: `\`\`\`\n${pickup}\n\`\`\`` },
           { name: "Prison Facility", value: "```Bolingbroke Pen.```" },
           { name: "Received By", value: `\`\`\`\n${receiver}\n\`\`\`` },
-          { name: "Department", value: `\`\`\`\n${department}\n\`\`\`` }
+          { name: "Department", value: `\`\`\`\n${department}\n\`\`\`` },
+          { name: "Suspects", value: `\`\`\`\n${suspects || 'No suspect info provided'}\n\`\`\`` }
         ],
         footer: { text: "Department of Correction" },
         timestamp: new Date().toISOString()
@@ -396,6 +386,8 @@
         alert("Failed to submit report.");
       });
     }
-  </script> 
+
+    window.onload = () => addSuspect();
+  </script>
 </body>
 </html>
