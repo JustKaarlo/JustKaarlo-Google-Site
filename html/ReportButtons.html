@@ -22,13 +22,13 @@
     }
 
     .container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
       gap: 40px;
       padding: 50px;
-      width: 100%;
       max-width: 1200px;
-      justify-items: center;
+      width: 100%;
     }
 
     .report-btn {
@@ -110,6 +110,12 @@
       transform: translateX(-50%);
       z-index: 10;
     }
+
+    .report-btn.center-align {
+      flex-basis: 100%;
+      display: flex;
+      justify-content: center;
+    }
   </style>
 </head>
 <body>
@@ -120,10 +126,11 @@
     <button class="report-btn">EMS REPORT</button>
     <button class="report-btn">TOW REPORT</button>
     <button class="report-btn">CORONER REPORT</button>
-  </div>
-
-  <div class="bottom-center">
-    <button class="report-btn" onclick="window.location.href='https://justkaarlo.github.io/JustKaarlo-Google-Site/'">DASHBOARD</button>
+    
+    <!-- Centered last button -->
+    <div class="report-btn center-align">
+      <button class="report-btn" onclick="window.location.href='https://justkaarlo.github.io/JustKaarlo-Google-Site/'">DASHBOARD</button>
+    </div>
   </div>
 
   <div class="overlay" id="overlay" onclick="closeModal()"></div>
