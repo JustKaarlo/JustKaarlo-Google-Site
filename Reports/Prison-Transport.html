@@ -196,6 +196,40 @@
       font-size: 18px;
       font-weight: bold;
     }
+
+    .suspect-container {
+      background: #23272A;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .suspect-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .suspect-header .no-box {
+      font-size: 14px;
+      padding: 4px 10px;
+      background: #444;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .suspect-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .suspect-row .field-group {
+      flex: 1;
+      min-width: 140px;
+    }
   </style>
 </head>
 
@@ -255,6 +289,7 @@
       </table>
     </div>
 
+    <div id="suspectList"></div>
     <div style="text-align: center; margin: 15px;">
       <button onclick="addSuspect()">+ Add Suspect</button>
     </div>
@@ -292,32 +327,45 @@
 
     function addSuspect() {
       suspectCount++;
-      const tbody = document.getElementById("suspectTable").querySelector("tbody");
-      const row = document.createElement("tr");
+      const container = document.getElementById("suspectList");
 
-      row.innerHTML = `
-        <td><span class="no-box">${suspectCount}</span></td>
-        <td><input type="text"></td>
-        <td>
-          <select>
-            <option value="">Select</option>
-            <option>Male</option>
-            <option>Female</option>
-          </select>
-        </td>
-        <td><input type="date"></td>
-        <td><button onclick="this.closest('tr').remove()">🗑️</button></td>
+      const suspectCard = document.createElement("div");
+      suspectCard.className = "suspect-container";
+
+      suspectCard.innerHTML = `
+        <div class="suspect-header">
+          <span class="no-box">Suspect #${suspectCount}</span>
+          <button onclick="this.closest('.suspect-container').remove()">🗑️</button>
+        </div>
+        <div class="suspect-row">
+          <div class="field-group">
+            <label>Name</label>
+            <input type="text">
+          </div>
+          <div class="field-group">
+            <label>Gender</label>
+            <select>
+              <option value="">Select</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Date of Birth</label>
+            <input type="date">
+          </div>
+        </div>
       `;
-
-      tbody.appendChild(row);
+      
+      container.appendChild(suspectCard);
     }
+
 
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"], input[type="date"], select').forEach(el => {
         if (!el.hasAttribute('readonly')) el.value = '';
       });
-      const tbody = document.getElementById("suspectTable").getElementsByTagName("tbody")[0];
-      while (tbody.rows.length > 1) tbody.deleteRow(-1);
+      document.getElementById("suspectList").innerHTML = '';
       suspectCount = 1;
     }
 
