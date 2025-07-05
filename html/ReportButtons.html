@@ -78,6 +78,14 @@
       background: transparent;
       pointer-events: auto;
       overflow: hidden;
+
+      /* Hides scrollbar visually */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
+    }
+
+    .modal iframe::-webkit-scrollbar {
+      display: none; /* Chrome, Safari */
     }
 
     .overlay {
@@ -102,13 +110,13 @@
       font-weight: bold;
       z-index: 101;
     }
-    
+
     .center-align {
       flex-basis: 100%;
       display: flex;
       justify-content: center;
     }
-    
+
     .center-align.report-btn {
       width: 100%;
       max-width: 320px;
