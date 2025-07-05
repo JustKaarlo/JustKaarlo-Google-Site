@@ -5,141 +5,95 @@
   <title>Reports</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Rubik', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
+    * { box-sizing: border-box; font-family: 'Rubik', sans-serif; margin: 0; padding: 0; }
     html, body {
-      height: 100%;
-      background: #1e1f22 url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center center fixed;
-      background-size: cover;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      height:100%;
+      background: #1e1f22 url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center/cover fixed;
+      display: flex; justify-content: center; align-items: center;
     }
 
     .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 40px;
-      padding: 50px;
-      max-width: 1200px;
-      width: 100%;
+      display:flex; flex-wrap:wrap; justify-content:center;
+      gap:40px; padding:50px;
+      max-width:1200px; width:100%;
     }
 
     .report-btn {
-      background: rgba(44, 47, 51, 0.15);
-      color: white;
-      font-weight: 800;
-      font-size: 34px;
-      letter-spacing: 2px;
-      padding: 40px 30px;
-      border: none;
-      border-radius: 16px;
+      background: rgba(44,47,51,0.15);
+      color: white; font-weight:800; font-size:34px;
+      letter-spacing:2px; padding:40px 30px;
+      border:none; border-radius:16px;
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      cursor: pointer;
-      text-transform: uppercase;
+      box-shadow:0 4px 12px rgba(0,0,0,0.4);
+      cursor:pointer; text-transform:uppercase;
       transition: all 0.2s ease;
-      width: 100%;
-      max-width: 320px;
-      text-align: center;
+      width:100%; max-width:320px;
+      text-align:center;
     }
     .report-btn:hover {
       transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+      box-shadow:0 6px 16px rgba(0,0,0,0.5);
     }
 
     .modal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 850px;
-      max-height: 95vh;
-      background: transparent;
-      overflow: hidden;
-      z-index: 100;
-      box-shadow: none;
+      position:fixed; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:90%; max-width:850px;
+      /* NO static height: we'll set it via JS */
+      background:transparent; overflow:hidden;
+      display:none; z-index:100;
       transition: height 0.2s ease;
     }
 
-    /* clipper hides the iframe’s scrollbar */
     .iframe-wrapper {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      position: relative;
+      width:100%; height:100%;
+      overflow:hidden; position:relative;
     }
-
-    /* nudge the iframe so its native scrollbar is out of view */
     .iframe-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: -17px;               /* shift left by scrollbar width */
-      width: calc(100% + 17px);  /* compensate width */
-      height: 100%;
-      border: none;
-      background: transparent;
+      position:absolute;
+      top:0; left:-17px;
+      width:calc(100% + 17px); height:100%;
+      border:none; background:transparent;
     }
 
     .overlay {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      z-index: 99;
+      position:fixed; top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.7);
+      display:none; z-index:99;
     }
-
     .close-btn {
-      position: absolute;
-      top: 12px;
-      right: 16px;
-      background: #f04747;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-weight: bold;
-      z-index: 101;
+      position:absolute; top:12px; right:16px;
+      background:#f04747; color:white;
+      border:none; border-radius:6px;
+      padding:5px 10px; cursor:pointer;
+      font-weight:bold; z-index:101;
     }
 
     .center-align {
-      flex-basis: 100%;
-      display: flex;
-      justify-content: center;
+      flex-basis:100%; display:flex; justify-content:center;
     }
     .center-align.report-btn {
-      width: 100%;
-      max-width: 320px;
+      width:100%; max-width:320px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Arrest-Report.html')">ARREST REPORT</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Citation-Report.html')">CITATION REPORT</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Fire-Incident-Report.html')">FIRE REPORT</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/EMS-Report.html')">EMS REPORT</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/TOW-Report.html')">TOW REPORT</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Coroner-Report.html')">CORONER REPORT</button>
-    <button class="report-btn center-align" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Prison-Transport.html')">PRISON TRANSPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/Arrest-Report.html')">ARREST REPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/Citation-Report.html')">CITATION REPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/Fire-Incident-Report.html')">FIRE REPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/EMS-Report.html')">EMS REPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/TOW-Report.html')">TOW REPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/Coroner-Report.html')">CORONER REPORT</button>
+    <button class="report-btn center-align" onclick="openModal('Reports/Prison-Transport.html')">PRISON TRANSPORT</button>
   </div>
 
   <div class="overlay" id="overlay" onclick="closeModal()"></div>
   <div class="modal" id="modal">
     <button class="close-btn" onclick="closeModal()">Close</button>
     <div class="iframe-wrapper">
-      <iframe id="modal-frame" src="" allowtransparency="true" scrolling="no"></iframe>
+      <iframe id="modal-frame" scrolling="no"></iframe>
     </div>
   </div>
 
@@ -149,16 +103,33 @@
     const overlay = document.getElementById('overlay');
 
     function openModal(src) {
-      iframe.src = src;
+      // first show overlay+modal so its width is known
       overlay.style.display = 'block';
       modal.style.display = 'block';
+
+      // set up onload to size the modal
+      iframe.onload = () => {
+        // clamp to 95% of viewport
+        const maxH = window.innerHeight * 0.95;
+        let h;
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow.document;
+          h = Math.min(doc.documentElement.scrollHeight, maxH);
+        } catch {
+          h = maxH;
+        }
+        modal.style.height = h + 'px';
+      };
+
+      // finally set src (fires onload after load)
+      iframe.src = src;
     }
 
     function closeModal() {
       modal.style.display = 'none';
       overlay.style.display = 'none';
-      iframe.src = '';
-      modal.style.height = '';
+      iframe.src = '';           // clear so onload re-triggers next time
+      modal.style.height = '';   // reset
     }
   </script>
 </body>
