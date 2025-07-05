@@ -21,17 +21,6 @@
       flex-direction: column;
     }
 
-    .title {
-      margin-top: 40px;
-      margin-bottom: 20px;
-    }
-
-    .title img {
-      max-width: 90%;
-      height: auto;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
-    }
-
     .container {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -41,12 +30,33 @@
       width: 100%;
     }
 
+    .title {
+      width: 100%;
+      max-width: 800px;
+      padding: 0 50px;
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    .title img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+    }
+
     .report-btn {
       position: relative;
       background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
       border: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(30px) saturate(180%);
-      -webkit-backdrop-filter: blur(30px) saturate(180%);
+      backdrop-filter: blur(10px) saturate(180%);
+      -webkit-backdrop-filter: blur(10px) saturate(180%);
       border-radius: 22px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       cursor: pointer;
