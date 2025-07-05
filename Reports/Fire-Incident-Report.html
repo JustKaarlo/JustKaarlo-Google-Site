@@ -318,9 +318,6 @@
       });
     }
 
-    createTagInput('unitInput', 'unit-tags');
-    createTagInput('methodInput', 'method-tags');
-
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
@@ -337,9 +334,9 @@
       const datetime = document.getElementById('datetime').value.trim();
       const location = document.getElementById('location').value.trim();
       const units = [...document.querySelectorAll('#unit-tags .tag')].map(t => t.textContent.replace('×', '').trim());
-      const incidentType = document.getElementById('incidentType').value.trim();
-      const spreadLevel = document.getElementById('spreadLevel').value.trim();
-      const methods = [...document.querySelectorAll('#method-tags .tag')].map(t => t.textContent.replace('×', '').trim());
+      const incidentType = document.getElementById('incident-type').value.trim();
+      const spreadLevel = document.getElementById('fire-spread-level').value.trim();
+      const methods = [...document.querySelectorAll('#methods-used input:checked')].map(el => el.value.trim());
 
       if (!datetime || !location || units.length === 0 || !incidentType || !spreadLevel || methods.length === 0) {
         showPopup('error-popup');
