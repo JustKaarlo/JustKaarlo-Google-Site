@@ -50,7 +50,6 @@
       max-width: 320px;
       text-align: center;
     }
-
     .report-btn:hover {
       transform: scale(1.05);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
@@ -69,6 +68,7 @@
       overflow: hidden;
       z-index: 100;
       box-shadow: none;
+      transition: height 0.2s ease;
     }
 
     .modal iframe {
@@ -77,15 +77,6 @@
       border: none;
       background: transparent;
       pointer-events: auto;
-      overflow-y: scroll;
-
-      /* Hide scrollbars visually */
-      scrollbar-width: none;          /* Firefox */
-      -ms-overflow-style: none;       /* IE/Edge */
-    }
-
-    .modal iframe::-webkit-scrollbar {
-      display: none;                  /* Chrome/Safari */
     }
 
     .overlay {
@@ -116,7 +107,6 @@
       display: flex;
       justify-content: center;
     }
-
     .center-align.report-btn {
       width: 100%;
       max-width: 320px;
@@ -125,13 +115,13 @@
 </head>
 <body>
   <div class="container">
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Arrest-Report.html')">ARREST REPORT</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Citation-Report.html')">CITATION REPORT</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Fire-Incident-Report.html')">FIRE REPORT</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/EMS-Report.html')">EMS REPORT</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/TOW-Report.html')">TOW REPORT</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Coroner-Report.html')">CORONER REPORT</button>
-    <button class="report-btn center-align" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Prison-Transport.html')">PRISON TRANSPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/Arrest-Report.html')">ARREST REPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/Citation-Report.html')">CITATION REPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/Fire-Incident-Report.html')">FIRE REPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/EMS-Report.html')">EMS REPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/TOW-Report.html')">TOW REPORT</button>
+    <button class="report-btn" onclick="openModal('Reports/Coroner-Report.html')">CORONER REPORT</button>
+    <button class="report-btn center-align" onclick="openModal('Reports/Prison-Transport.html')">PRISON TRANSPORT</button>
   </div>
 
   <div class="overlay" id="overlay" onclick="closeModal()"></div>
@@ -141,16 +131,34 @@
   </div>
 
   <script>
-    function openModal(file) {
-      document.getElementById('modal-frame').src = file;
-      document.getElementById('modal').style.display = 'block';
-      document.getElementById('overlay').style.display = 'block';
+    const modal = document.getElementById('modal');
+    const iframe = document.getElementById('modal-frame');
+    const overlay = document.getElementById('overlay');
+
+    function openModal(src) {
+      iframe.src = src;
+      overlay.style.display = 'block';
+      modal.style.display = 'block';
+
+      // once content loads, resize modal to fit
+      iframe.onload = () => {
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow.document;
+          const contentHeight = doc.documentElement.scrollHeight;
+          const maxH = window.innerHeight * 0.95;
+          modal.style.height = Math.min(contentHeight, maxH) + 'px';
+        } catch (e) {
+          // cross-origin or error: fallback to full height
+          modal.style.height = maxH + 'px';
+        }
+      };
     }
 
     function closeModal() {
-      document.getElementById('modal').style.display = 'none';
-      document.getElementById('overlay').style.display = 'none';
-      document.getElementById('modal-frame').src = '';
+      modal.style.display = 'none';
+      overlay.style.display = 'none';
+      iframe.src = '';
+      modal.style.height = ''; // reset
     }
   </script>
 </body>
