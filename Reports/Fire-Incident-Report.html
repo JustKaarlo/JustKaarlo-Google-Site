@@ -10,7 +10,7 @@
     body {
       background: transparent;
       padding: 30px;
-      max-width: 850px;
+      max-width: 750px;
       margin: auto;
       color: white;
     }
@@ -87,24 +87,6 @@
       color: white;
     }
 
-    .checkbox-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-top: 8px;
-    }
-
-    .checkbox-group label {
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      color: white;
-    }
-
-    .checkbox-group input {
-      margin-right: 6px;
-    }
-
     .wide {
       width: 100%;
     }
@@ -118,7 +100,6 @@
       font-size: 16px;
       cursor: pointer;
       transition: background 0.3s ease;
-      margin: 15px;
     }
 
     button:hover {
@@ -173,7 +154,7 @@
       background-color: #4f545c;
       color: #c0c0c0;
     }
-    
+
     .clear-btn:hover {
       background-color: #5d626a;
     }
@@ -204,13 +185,19 @@
       font-weight: bold;
     }
 
+    #popup-overlay .header-subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 6px;
+    }
+
     #error-popup .header-title {
       color: #f04747;
       font-size: 18px;
       font-weight: bold;
     }
 
-    .header-subtitle {
+    #error-popup .header-subtitle {
       font-size: 14px;
       color: #ccc;
       margin-top: 6px;
@@ -218,6 +205,7 @@
   </style>
 </head>
 <body>
+
   <div class="card">
     <div class="header">
       <div class="header-title">SAN ANDRES FIRE RESCUE</div>
@@ -237,44 +225,28 @@
 
     <div class="row">
       <div class="field-group wide">
-        <label>FIRE UNIT(S) ON SCENE</label>
-        <div id="tag-container" class="tag-container">
-          <input type="text" id="fireUnitsInput" placeholder="Type And Press Enter">
+        <label>Fire Unit(s) on Scene</label>
+        <div id="unit-tags" class="tag-container">
+          <input type="text" id="unitInput" placeholder="Type and press Enter">
         </div>
       </div>
     </div>
 
     <div class="section-title">SCENE DETAILS</div>
+
     <div class="row">
       <div class="field-group">
         <label>Incident Type</label>
-        <select id="incidentType">
-          <option value="">Select</option>
-          <option>STRUCTURE FIRE</option>
-          <option>VEHICLE FIRE</option>
-          <option>WILDFIRE/BRUSH FIRE</option>
-          <option>ELECTRICAL FIRE</option>
-          <option>KITCHEN FIRE</option>
-          <option>EXPLOSION</option>
-          <option>OTHER</option>
-        </select>
+        <input type="text" id="incidentType">
       </div>
       <div class="field-group">
         <label>Fire Spread Level</label>
-        <select id="spreadLevel">
-          <option value="">Select</option>
-          <option>MINOR</option>
-          <option>MODERATE</option>
-          <option>EXTENSIVE</option>
-          <option>OUT OF CONTROL</option>
-        </select>
+        <input type="text" id="spreadLevel">
       </div>
       <div class="field-group wide">
         <label>Methods Used</label>
-        <div class="checkbox-group">
-          <label><input type="checkbox" value="Water"> Water</label>
-          <label><input type="checkbox" value="Foam"> Foam</label>
-          <label><input type="checkbox" value="Fire Extinguishers"> Fire Extinguishers</label>
+        <div id="method-tags" class="tag-container">
+          <input type="text" id="methodInput" placeholder="Type and press Enter">
         </div>
       </div>
     </div>
@@ -283,7 +255,7 @@
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
-    
+
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Report Has Been Logged</div>
@@ -296,30 +268,29 @@
   </div>
 
   <script>
-    const input = document.getElementById('fireUnitsInput');
-    const container = document.getElementById('tag-container');
-
-    input.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && this.value.trim() !== '') {
-        e.preventDefault();
-        addTag(this.value.trim());
-        this.value = '';
-      }
-    });
-
-    function addTag(text) {
-      const tag = document.createElement('div');
-      tag.className = 'tag';
-      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
-      container.insertBefore(tag, input);
-      tag.querySelector('.remove').addEventListener('click', () => tag.remove());
+    function createTagInput(inputId, containerId) {
+      const input = document.getElementById(inputId);
+      const container = document.getElementById(containerId);
+      input.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && this.value.trim() !== '') {
+          e.preventDefault();
+          const text = this.value.trim();
+          const tag = document.createElement('div');
+          tag.className = 'tag';
+          tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+          container.insertBefore(tag, input);
+          tag.querySelector('.remove').addEventListener('click', () => tag.remove());
+          this.value = '';
+        }
+      });
     }
+
+    createTagInput('unitInput', 'unit-tags');
+    createTagInput('methodInput', 'method-tags');
 
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
-      document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
-      document.querySelectorAll('select').forEach(el => el.value = '');
     }
 
     function showPopup(id) {
@@ -332,10 +303,10 @@
     async function submitForm() {
       const datetime = document.getElementById('datetime').value.trim();
       const location = document.getElementById('location').value.trim();
-      const units = [...document.querySelectorAll('.tag')].map(t => t.textContent.replace('×', '').trim());
+      const units = [...document.querySelectorAll('#unit-tags .tag')].map(t => t.textContent.replace('×', '').trim());
       const incidentType = document.getElementById('incidentType').value.trim();
       const spreadLevel = document.getElementById('spreadLevel').value.trim();
-      const methods = [...document.querySelectorAll('input[type="checkbox"]:checked')].map(cb => cb.value);
+      const methods = [...document.querySelectorAll('#method-tags .tag')].map(t => t.textContent.replace('×', '').trim());
 
       if (!datetime || !location || units.length === 0 || !incidentType || !spreadLevel || methods.length === 0) {
         showPopup('error-popup');
@@ -367,7 +338,7 @@
         showPopup('popup-overlay');
         resetForm();
       }).catch(() => {
-        alert("Failed To Submit Report");
+        alert("Failed to submit report.");
       });
     }
   </script>
