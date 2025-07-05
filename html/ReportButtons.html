@@ -71,12 +71,23 @@
       transition: height 0.2s ease;
     }
 
-    .modal iframe {
+    /* clipper hides the iframe’s scrollbar */
+    .iframe-wrapper {
       width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* nudge the iframe so its native scrollbar is out of view */
+    .iframe-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: -17px;               /* shift left by scrollbar width */
+      width: calc(100% + 17px);  /* compensate width */
       height: 100%;
       border: none;
       background: transparent;
-      pointer-events: auto;
     }
 
     .overlay {
@@ -127,36 +138,22 @@
   <div class="overlay" id="overlay" onclick="closeModal()"></div>
   <div class="modal" id="modal">
     <button class="close-btn" onclick="closeModal()">Close</button>
-    <iframe id="modal-frame" src="" allowtransparency="true"></iframe>
+    <div class="iframe-wrapper">
+      <iframe id="modal-frame" src="" allowtransparency="true" scrolling="no"></iframe>
+    </div>
   </div>
 
-    <script>
+  <script>
     const modal = document.getElementById('modal');
     const iframe = document.getElementById('modal-frame');
     const overlay = document.getElementById('overlay');
-  
+
     function openModal(src) {
       iframe.src = src;
       overlay.style.display = 'block';
       modal.style.display = 'block';
-  
-      iframe.onload = () => {
-        const maxHeightPx = window.innerHeight * 0.95;
-        try {
-          // try same-origin resize
-          const doc = iframe.contentDocument || iframe.contentWindow.document;
-          const contentHeight = doc.documentElement.scrollHeight;
-          modal.style.height = Math.min(contentHeight, maxHeightPx) + 'px';
-        } catch (e) {
-          // cross-origin fallback
-          modal.style.height = maxHeightPx + 'px';
-        }
-        // make sure iframe never scrolls outside
-        iframe.style.height = '100%';
-        iframe.style.overflow = 'hidden';
-      };
     }
-  
+
     function closeModal() {
       modal.style.display = 'none';
       overlay.style.display = 'none';
