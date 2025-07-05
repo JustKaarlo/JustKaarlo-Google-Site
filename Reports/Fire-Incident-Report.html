@@ -125,6 +125,43 @@
     button:hover {
       background-color: #5187dc;
     }
+
+    /* Tag input styles */
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid #aaa;
+      border-radius: 6px;
+      background: #f9f9f9;
+    }
+
+    .tag-container input {
+      border: none;
+      flex: 1;
+      min-width: 120px;
+      padding: 6px 8px;
+      font-size: 14px;
+      background: transparent;
+      outline: none;
+    }
+
+    .tag {
+      background-color: #e0e0e0;
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+    }
+
+    .tag .remove {
+      margin-left: 8px;
+      color: #900;
+      cursor: pointer;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -147,7 +184,9 @@
     <div class="row">
       <div class="field-group wide">
         <label>FIRE UNIT(S) ON SCENE</label>
-        <input type="text">
+        <div id="tag-container" class="tag-container">
+          <input type="text" id="fireUnitsInput" placeholder="Type and press Enter">
+        </div>
       </div>
     </div>
 
@@ -195,6 +234,31 @@
       elements.forEach(el => {
         if (el.type === 'checkbox') el.checked = false;
         else el.value = '';
+      });
+
+      // Clear all tags from FIRE UNITS
+      document.querySelectorAll('.tag').forEach(tag => tag.remove());
+    }
+
+    const input = document.getElementById('fireUnitsInput');
+    const container = document.getElementById('tag-container');
+
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && this.value.trim() !== '') {
+        e.preventDefault();
+        addTag(this.value.trim());
+        this.value = '';
+      }
+    });
+
+    function addTag(text) {
+      const tag = document.createElement('div');
+      tag.className = 'tag';
+      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+      container.insertBefore(tag, input);
+
+      tag.querySelector('.remove').addEventListener('click', () => {
+        tag.remove();
       });
     }
   </script>
