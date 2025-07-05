@@ -163,6 +163,25 @@
       font-weight: bold;
     }
 
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin: 15px;
+    }
+
+    .clear-btn {
+      background-color: #4f545c;
+      color: #c0c0c0;
+    }
+    
+    .clear-btn:hover {
+      background-color: #5d626a;
+    }
+
+    .submit-btn {
+      flex: 1;
+    }
+
     #popup-overlay, #error-popup {
       position: absolute;
       top: 50%;
@@ -260,8 +279,11 @@
       </div>
     </div>
 
-    <button onclick="submitForm()">Submit</button>
-
+    <div class="button-row">
+      <button class="clear-btn" onclick="resetForm()">Clear</button>
+      <button class="submit-btn" onclick="submitForm()">Submit</button>
+    </div>
+    
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Report Has Been Logged</div>
