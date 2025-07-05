@@ -107,23 +107,23 @@
       flex-basis: 100%;
       display: flex;
       justify-content: center;
-      margin-top: 20px;
+    }
+    
+    .center-align.report-btn {
+      width: 100%;
+      max-width: 320px;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Arrest-Report.html')">ARREST REPORT</button>
-    <button class="report-btn">CITATION REPORT</button>
+    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Arrest-Report.html')">CITATION REPORT</button>
     <button class="report-btn">FIRE REPORT</button>
     <button class="report-btn">EMS REPORT</button>
     <button class="report-btn">TOW REPORT</button>
     <button class="report-btn">CORONER REPORT</button>
-    
-    <!-- Centered last button -->
-    <div class="center-align">
-      <button class="report-btn" onclick="window.location.href='https://justkaarlo.github.io/JustKaarlo-Google-Site/'">DASHBOARD</button>
-    </div>
+    <button class="report-btn center-align" onclick="window.location.href='https://justkaarlo.github.io/JustKaarlo-Google-Site/'">DASHBOARD</button>
   </div>
 
   <div class="overlay" id="overlay" onclick="closeModal()"></div>
