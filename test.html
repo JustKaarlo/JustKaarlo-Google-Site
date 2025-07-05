@@ -197,7 +197,7 @@
   <script>
     const offenseInput = document.getElementById('offenseInput');
     const offenseContainer = document.getElementById('offense-tags');
-
+  
     offenseInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && this.value.trim() !== '') {
         e.preventDefault();
@@ -205,51 +205,67 @@
         this.value = '';
       }
     });
-
+  
     function addOffenseTag(text) {
       const tag = document.createElement('div');
       tag.className = 'tag';
       tag.innerHTML = `${text} <span class="remove">&times;</span>`;
       offenseContainer.insertBefore(tag, offenseInput);
-
       tag.querySelector('.remove').addEventListener('click', () => tag.remove());
     }
-
+  
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
     }
-
+  
     async function submitForm() {
       const location = document.getElementById('location').value.trim();
       const datetime = document.getElementById('datetime').value.trim();
       const defendant = document.getElementById('defendant').value.trim();
       const officer = document.getElementById('officer').value.trim();
       const offenses = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
-
-      const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
-
+  
+      const webhookURL = 'YOUR_DISCORD_WEBHOOK_URL_HERE';
+  
       const embed = {
         title: "Arrest Report",
         color: 4737096,
         fields: [
-          { name: "Location", value: `\`${location || 'N/A'}\``, inline: true },
-          { name: "Date & Time", value: `\`${datetime || 'N/A'}\``, inline: true },
-          { name: "Defendant", value: `\`${defendant || 'N/A'}\``, inline: true },
-          { name: "Officer", value: `\`${officer || 'N/A'}\``, inline: true },
+          {
+            name: "Location",
+            value: `\`\`\`\n${location || 'N/A'}\n\`\`\``,
+            inline: false
+          },
+          {
+            name: "Date & Time",
+            value: `\`\`\`\n${datetime || 'N/A'}\n\`\`\``,
+            inline: false
+          },
+          {
+            name: "Defendant",
+            value: `\`\`\`\n${defendant || 'N/A'}\n\`\`\``,
+            inline: false
+          },
+          {
+            name: "Officer",
+            value: `\`\`\`\n${officer || 'N/A'}\n\`\`\``,
+            inline: false
+          },
           {
             name: "Offenses",
             value: offenses.length > 0
               ? `\`\`\`\n${offenses.join('\n')}\n\`\`\``
-              : '`None listed`'
+              : '```None listed```',
+            inline: false
           }
         ],
         footer: {
-          text: "Department of Justice"
+          text: "State of San Andreas • 'The State You’re In'"
         },
         timestamp: new Date().toISOString()
       };
-
+  
       fetch(webhookURL, {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
