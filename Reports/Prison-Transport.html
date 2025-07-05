@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Prison Transport Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
-    * { font-family: 'Rubik', sans-serif; }
+    * {
+      font-family: 'Rubik', sans-serif;
+    }
 
     body {
       background: transparent;
@@ -93,7 +96,9 @@
       color: white;
     }
 
-    .wide { width: 100%; }
+    .wide {
+      width: 100%;
+    }
 
     .button-row {
       display: flex;
@@ -129,7 +134,8 @@
       flex: 1;
     }
 
-    #popup-overlay, #error-popup {
+    #popup-overlay,
+    #error-popup {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -261,57 +267,82 @@
   </div>
 
   <script>
-    let suspectCount = 0;
+    function updateSuspectListNumbers() {
+      const suspects = document.querySelectorAll('.suspect-container');
+      suspects.forEach((container, index) => {
+        const numberBox = container.querySelector('.no-box');
+        const deleteButton = container.querySelector('.delete-btn');
+
+        numberBox.textContent = `Suspect #${index + 1}`;
+
+        if (index === 0) {
+          deleteButton.disabled = true;
+          deleteButton.style.backgroundColor = '#3a3a3a';
+          deleteButton.style.cursor = 'not-allowed';
+          deleteButton.title = "Cannot remove the first suspect";
+        } else {
+          deleteButton.disabled = false;
+          deleteButton.style.backgroundColor = '';
+          deleteButton.style.cursor = 'pointer';
+          deleteButton.title = "";
+        }
+      });
+    }
 
     function addSuspect() {
       const container = document.getElementById("suspectList");
-      const currentNumber = suspectCount + 1;
 
       const suspectCard = document.createElement("div");
       suspectCard.className = "suspect-container";
 
       suspectCard.innerHTML = `
-        <div class="suspect-header">
-          <span class="no-box">Suspect #${currentNumber}</span>
-          <button onclick="this.closest('.suspect-container').remove()">🗑️</button>
-        </div>
-        <div class="suspect-row">
-          <div class="field-group">
-            <label>Name</label>
-            <input type="text">
+          <div class="suspect-header">
+            <span class="no-box">Suspect</span>
+            <button class="delete-btn" onclick="removeSuspect(this)">🗑️</button>
           </div>
-          <div class="field-group">
-            <label>Gender</label>
-            <select>
-              <option value="">Select</option>
-              <option>Male</option>
-              <option>Female</option>
-            </select>
+          <div class="suspect-row">
+            <div class="field-group">
+              <label>Name</label>
+              <input type="text">
+            </div>
+            <div class="field-group">
+              <label>Gender</label>
+              <select>
+                <option value="">Select</option>
+                <option>Male</option>
+                <option>Female</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label>Date of Birth</label>
+              <input type="date">
+            </div>
           </div>
-          <div class="field-group">
-            <label>Date of Birth</label>
-            <input type="date">
-          </div>
-        </div>
-      `;
+        `;
 
       container.appendChild(suspectCard);
-      suspectCount++;
+      updateSuspectListNumbers();
     }
 
-    // Add initial suspect on load
-    window.onload = () => {
-      addSuspect();
-    };
+    function removeSuspect(button) {
+      const suspectCard = button.closest('.suspect-container');
+      if (suspectCard) {
+        suspectCard.remove();
+        updateSuspectListNumbers();
+      }
+    }
 
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"], input[type="date"], select').forEach(el => {
         if (!el.hasAttribute('readonly')) el.value = '';
       });
       document.getElementById("suspectList").innerHTML = '';
-      suspectCount = 0;
       addSuspect();
     }
+
+    window.onload = () => {
+      addSuspect();
+    };
 
     function showPopup() {
       const popup = document.getElementById('popup-overlay');
@@ -365,6 +396,6 @@
         alert("Failed to submit report.");
       });
     }
-  </script>
+  </script> 
 </body>
 </html>
