@@ -148,9 +148,42 @@
     .submit-btn {
       flex: 1;
     }
+
+    /* Popup Styling */
+    #popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(30, 30, 30, 0.4);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .popup-card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+    }
+
+    .popup-card .header-title {
+      color: #3c78d8;
+    }
+
+    .popup-card .header-subtitle {
+      color: #555;
+      margin-top: 5px;
+    }
   </style>
 </head>
 <body>
+
   <div class="card">
     <div class="header">
       <div class="header-title">STATE OF SAN ANDREAS</div>
@@ -194,10 +227,18 @@
     </div>
   </div>
 
+  <!-- Popup Element -->
+  <div id="popup-overlay">
+    <div class="popup-card">
+      <div class="header-title">✅ Report Submitted</div>
+      <div class="header-subtitle">Your arrest report has been logged successfully.</div>
+    </div>
+  </div>
+
   <script>
     const offenseInput = document.getElementById('offenseInput');
     const offenseContainer = document.getElementById('offense-tags');
-  
+
     offenseInput.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' && this.value.trim() !== '') {
         e.preventDefault();
@@ -205,7 +246,7 @@
         this.value = '';
       }
     });
-  
+
     function addOffenseTag(text) {
       const tag = document.createElement('div');
       tag.className = 'tag';
@@ -213,21 +254,34 @@
       offenseContainer.insertBefore(tag, offenseInput);
       tag.querySelector('.remove').addEventListener('click', () => tag.remove());
     }
-  
+
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
     }
-  
+
+    function showPopup() {
+      const popup = document.getElementById('popup-overlay');
+      popup.style.display = 'flex';
+
+      popup.onclick = () => {
+        popup.style.display = 'none';
+      };
+
+      setTimeout(() => {
+        popup.style.display = 'none';
+      }, 3000);
+    }
+
     async function submitForm() {
       const location = document.getElementById('location').value.trim();
       const datetime = document.getElementById('datetime').value.trim();
       const defendant = document.getElementById('defendant').value.trim();
       const officer = document.getElementById('officer').value.trim();
       const offenses = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
-  
-      const webhookURL = 'YOUR_DISCORD_WEBHOOK_URL_HERE';
-  
+
+      const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
+
       const embed = {
         title: "Arrest Report",
         color: 4737096,
@@ -265,13 +319,13 @@
         },
         timestamp: new Date().toISOString()
       };
-  
+
       fetch(webhookURL, {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ embeds: [embed] })
       }).then(() => {
-        alert("Arrest report submitted.");
+        showPopup();
         resetForm();
       }).catch(() => {
         alert("Failed to submit report.");
