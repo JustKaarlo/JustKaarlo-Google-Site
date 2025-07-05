@@ -5,55 +5,60 @@
   <title>Fire Rescue Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
-    * {
-      font-family: 'Rubik', sans-serif;
-    }
+    * { font-family: 'Rubik', sans-serif; }
 
     body {
       background: transparent;
       padding: 30px;
       max-width: 850px;
       margin: auto;
-      color: #333;
+      color: white;
     }
 
     .card {
-      background: white;
+      background: #2C2F33;
       border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      padding: 0;
+      overflow: hidden;
+      position: relative;
     }
 
     .header {
+      background: #56585B;
+      padding: 15px;
       text-align: center;
-      margin-bottom: 20px;
     }
 
-    .logo-title {
-      font-size: 28px;
+    .header-title {
+      font-size: 20px;
       font-weight: bold;
-      color: #800000;
+      color: white;
+      margin: 0;
     }
 
-    .sub-logo {
-      font-size: 14px;
-      color: #555;
+    .header-subtitle {
+      font-size: 15px;
+      font-style: bold;
+      color: #ccc;
+      margin-top: 4px;
     }
 
     .section-title {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
+      background: #23272A;
       text-align: center;
-      margin: 25px 0 10px;
-      border-top: 2px solid #ccc;
-      padding-top: 10px;
+      padding: 8px;
+      margin-top: 20px;
+      border-radius: 6px;
     }
 
     .row {
       display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
       flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px;
     }
 
     .field-group {
@@ -66,16 +71,20 @@
     .field-group label {
       font-size: 13px;
       margin-bottom: 4px;
+      color: #ccc;
+      font-weight: bold;
+      text-transform: uppercase;
     }
 
     input[type="text"],
     input[type="datetime-local"],
     select {
       padding: 6px 10px;
-      border: 1px solid #aaa;
+      border: 1px solid #444;
       border-radius: 6px;
       font-size: 14px;
-      background: #f9f9f9;
+      background: #23272A;
+      color: white;
     }
 
     .checkbox-group {
@@ -89,21 +98,11 @@
       font-size: 14px;
       display: flex;
       align-items: center;
+      color: white;
     }
 
     .checkbox-group input {
       margin-right: 6px;
-    }
-
-    .unit-info {
-      text-align: center;
-      font-size: 14px;
-      color: #222;
-      padding: 10px;
-      border: 1px solid #ccc;
-      background: #f2f2f2;
-      border-radius: 6px;
-      margin-bottom: 20px;
     }
 
     .wide {
@@ -111,31 +110,29 @@
     }
 
     button {
-      width: 100%;
       background-color: #3c78d8;
       color: white;
       border: none;
       padding: 12px;
       border-radius: 6px;
       font-size: 16px;
-      margin-top: 20px;
       cursor: pointer;
       transition: background 0.3s ease;
+      margin: 15px;
     }
 
     button:hover {
       background-color: #5187dc;
     }
 
-    /* Tag input styles */
     .tag-container {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
       padding: 6px;
-      border: 1px solid #aaa;
+      border: 1px solid #444;
       border-radius: 6px;
-      background: #f9f9f9;
+      background: #23272A;
     }
 
     .tag-container input {
@@ -145,11 +142,13 @@
       padding: 6px 8px;
       font-size: 14px;
       background: transparent;
+      color: white;
       outline: none;
     }
 
     .tag {
-      background-color: #e0e0e0;
+      background-color: #99aab5;
+      color: #2C2F33;
       padding: 5px 10px;
       border-radius: 12px;
       font-size: 13px;
@@ -159,26 +158,61 @@
 
     .tag .remove {
       margin-left: 8px;
-      color: #900;
+      color: #2C2F33;
       cursor: pointer;
       font-weight: bold;
+    }
+
+    #popup-overlay, #error-popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #23272A;
+      color: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      display: none;
+      z-index: 10;
+      max-width: 90%;
+      text-align: center;
+    }
+
+    #popup-overlay .header-title {
+      color: #7289da;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #error-popup .header-title {
+      color: #f04747;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .header-subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 6px;
     }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="header">
-      <div class="logo-title">SAN ANDRES FIRE RESCUE</div>
+      <div class="header-title">SAN ANDRES FIRE RESCUE</div>
+      <div class="header-subtitle">FIRE RESCUE REPORT</div>
     </div>
 
     <div class="row">
       <div class="field-group wide">
         <label>Time & Date</label>
-        <input type="datetime-local">
+        <input type="datetime-local" id="datetime">
       </div>
       <div class="field-group wide">
         <label>Location of Incident</label>
-        <input type="text">
+        <input type="text" id="location">
       </div>
     </div>
 
@@ -195,7 +229,7 @@
     <div class="row">
       <div class="field-group">
         <label>Incident Type</label>
-        <select>
+        <select id="incidentType">
           <option value="">Select</option>
           <option>STRUCTURE FIRE</option>
           <option>VEHICLE FIRE</option>
@@ -208,7 +242,7 @@
       </div>
       <div class="field-group">
         <label>Fire Spread Level</label>
-        <select>
+        <select id="spreadLevel">
           <option value="">Select</option>
           <option>MINOR</option>
           <option>MODERATE</option>
@@ -219,28 +253,27 @@
       <div class="field-group wide">
         <label>Methods Used</label>
         <div class="checkbox-group">
-          <label><input type="checkbox"> Water</label>
-          <label><input type="checkbox"> Foam</label>
-          <label><input type="checkbox"> Fire Extinguishers</label>
+          <label><input type="checkbox" value="Water"> Water</label>
+          <label><input type="checkbox" value="Foam"> Foam</label>
+          <label><input type="checkbox" value="Fire Extinguishers"> Fire Extinguishers</label>
         </div>
       </div>
     </div>
 
-    <button onclick="resetForm()">Submit</button>
+    <button onclick="submitForm()">Submit</button>
+
+    <div id="popup-overlay">
+      <div class="header-title">✅ Report Submitted</div>
+      <div class="header-subtitle">Your Report Has Been Logged</div>
+    </div>
+
+    <div id="error-popup">
+      <div class="header-title">⚠️ Submission Failed</div>
+      <div class="header-subtitle">All Fields Are Required</div>
+    </div>
   </div>
 
   <script>
-    function resetForm() {
-      const elements = document.querySelectorAll('input, select');
-      elements.forEach(el => {
-        if (el.type === 'checkbox') el.checked = false;
-        else el.value = '';
-      });
-
-      // Clear tags
-      document.querySelectorAll('.tag').forEach(tag => tag.remove());
-    }
-
     const input = document.getElementById('fireUnitsInput');
     const container = document.getElementById('tag-container');
 
@@ -257,9 +290,62 @@
       tag.className = 'tag';
       tag.innerHTML = `${text} <span class="remove">&times;</span>`;
       container.insertBefore(tag, input);
+      tag.querySelector('.remove').addEventListener('click', () => tag.remove());
+    }
 
-      tag.querySelector('.remove').addEventListener('click', () => {
-        tag.remove();
+    function resetForm() {
+      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
+      document.querySelectorAll('.tag').forEach(tag => tag.remove());
+      document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+      document.querySelectorAll('select').forEach(el => el.value = '');
+    }
+
+    function showPopup(id) {
+      const popup = document.getElementById(id);
+      popup.style.display = 'block';
+      popup.onclick = () => popup.style.display = 'none';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
+    async function submitForm() {
+      const datetime = document.getElementById('datetime').value.trim();
+      const location = document.getElementById('location').value.trim();
+      const units = [...document.querySelectorAll('.tag')].map(t => t.textContent.replace('×', '').trim());
+      const incidentType = document.getElementById('incidentType').value.trim();
+      const spreadLevel = document.getElementById('spreadLevel').value.trim();
+      const methods = [...document.querySelectorAll('input[type="checkbox"]:checked')].map(cb => cb.value);
+
+      if (!datetime || !location || units.length === 0 || !incidentType || !spreadLevel || methods.length === 0) {
+        showPopup('error-popup');
+        return;
+      }
+
+      const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
+
+      const embed = {
+        title: "Fire Rescue Report",
+        color: 4737096,
+        fields: [
+          { name: "Date & Time", value: `\`\`\`\n${datetime}\n\`\`\`` },
+          { name: "Location", value: `\`\`\`\n${location}\n\`\`\`` },
+          { name: "Fire Units", value: `\`\`\`\n${units.join(', ')}\n\`\`\`` },
+          { name: "Incident Type", value: `\`\`\`\n${incidentType}\n\`\`\`` },
+          { name: "Fire Spread Level", value: `\`\`\`\n${spreadLevel}\n\`\`\`` },
+          { name: "Methods Used", value: `\`\`\`\n${methods.join(', ')}\n\`\`\`` }
+        ],
+        footer: { text: "San Andres Fire Rescue" },
+        timestamp: new Date().toISOString()
+      };
+
+      fetch(webhookURL, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ embeds: [embed] })
+      }).then(() => {
+        showPopup('popup-overlay');
+        resetForm();
+      }).catch(() => {
+        alert("Failed To Submit Report");
       });
     }
   </script>
