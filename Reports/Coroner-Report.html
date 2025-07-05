@@ -5,55 +5,59 @@
   <title>Coroner Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
+    * { font-family: 'Rubik', sans-serif; }
+
     body {
-      font-family: 'Rubik', sans-serif;
       background: transparent;
       padding: 30px;
       max-width: 850px;
       margin: auto;
-      color: #333;
+      color: white;
     }
 
     .card {
-      background: white;
+      background: #2C2F33;
       border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      padding: 0;
+      overflow: hidden;
+      position: relative;
     }
 
     .header {
+      background: #56585B;
+      padding: 15px;
       text-align: center;
-      margin-bottom: 20px;
     }
 
     .header-title {
-      background-color: #2f4561;
-      color: white;
-      padding: 10px;
+      font-size: 20px;
       font-weight: bold;
-      font-size: 16px;
+      color: white;
+      margin: 0;
     }
 
     .sub-header {
       font-size: 14px;
-      font-style: italic;
-      margin-top: 5px;
+      color: #ccc;
+      margin-top: 4px;
     }
 
     .section-title {
       font-weight: bold;
-      font-size: 18px;
+      font-size: 16px;
+      background: #23272A;
       text-align: center;
-      margin: 30px 0 10px;
-      border-top: 2px solid #ccc;
-      padding-top: 10px;
+      padding: 8px;
+      margin-top: 20px;
+      border-radius: 6px;
     }
 
     .row {
       display: flex;
-      gap: 10px;
-      margin-bottom: 12px;
       flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px;
     }
 
     .field-group {
@@ -66,6 +70,9 @@
     .field-group label {
       font-size: 13px;
       margin-bottom: 4px;
+      color: #ccc;
+      font-weight: bold;
+      text-transform: uppercase;
     }
 
     input[type="text"],
@@ -74,11 +81,11 @@
     input[type="datetime-local"],
     textarea {
       padding: 6px 10px;
-      border: 1px solid #aaa;
+      border: 1px solid #444;
       border-radius: 6px;
       font-size: 14px;
-      background: #f9f9f9;
-      font-family: 'Rubik', sans-serif;
+      background: #23272A;
+      color: white;
     }
 
     textarea {
@@ -90,11 +97,12 @@
       display: flex;
       flex-wrap: wrap;
       gap: 15px;
-      margin-top: 10px;
+      margin: 15px;
     }
 
     .checkbox-group label {
       font-size: 14px;
+      color: #ccc;
     }
 
     .checkbox-group input {
@@ -105,45 +113,91 @@
       width: 100%;
     }
 
-    button {
-      width: 100%;
-      background-color: #3c78d8;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 16px;
-      margin-top: 20px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      font-family: 'Rubik', sans-serif;
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin: 15px;
     }
 
-    button:hover {
+    .clear-btn {
+      background-color: #4f545c;
+      color: #c0c0c0;
+    }
+
+    .clear-btn:hover {
+      background-color: #5d626a;
+    }
+
+    .submit-btn {
+      flex: 1;
+      background-color: #3c78d8;
+    }
+
+    .submit-btn:hover {
       background-color: #5187dc;
+    }
+
+    #popup-overlay, #error-popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #23272A;
+      color: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      display: none;
+      z-index: 10;
+      max-width: 90%;
+      text-align: center;
+    }
+
+    #popup-overlay .header-title {
+      color: #7289da;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #popup-overlay .header-subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 6px;
+    }
+
+    #error-popup .header-title {
+      color: #f04747;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #error-popup .header-subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 6px;
     }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="header">
-      <div class="header-title">LOS SANTOS COUNTY DEPARTMENT OF MEDICAL EXAMINER-CORONER</div>
-      <div class="sub-header">“Law and Science Serving the Community”</div>
+      <div class="header-title">MEDICAL EXAMINER-CORONER</div>
+      <div class="sub-header">CORONER REPORT</div>
     </div>
 
-    <div class="section-title">DECEDENTS INFORMATION</div>
+    <div class="section-title">DECEDENT'S INFORMATION</div>
     <div class="row">
       <div class="field-group">
         <label>Date of Examination</label>
-        <input type="date">
+        <input type="date" id="exam_date">
       </div>
       <div class="field-group">
         <label>Name</label>
-        <input type="text">
+        <input type="text" id="name">
       </div>
       <div class="field-group">
         <label>Date of Birth</label>
-        <input type="date">
+        <input type="date" id="dob">
       </div>
     </div>
 
@@ -151,35 +205,115 @@
     <div class="row">
       <div class="field-group">
         <label>Time & Date</label>
-        <input type="datetime-local">
+        <input type="datetime-local" id="datetime">
       </div>
       <div class="field-group wide">
         <label>Location</label>
-        <input type="text">
+        <input type="text" id="location">
       </div>
     </div>
 
-    <div class="field-group wide">
-      <label>Cause of Death</label>
-      <textarea></textarea>
+    <div class="row">
+      <div class="field-group wide">
+        <label>Cause of Death</label>
+        <textarea id="cause"></textarea>
+      </div>
     </div>
 
     <div class="checkbox-group">
-      <label><input type="checkbox"> Signs of foul play/crime scene?</label>
-      <label><input type="checkbox"> Medications administered?</label>
-      <label><input type="checkbox"> Defibrillation attempted?</label>
-      <label><input type="checkbox"> CPR attempted?</label>
+      <label><input type="checkbox" id="foul"> Signs of foul play/crime scene?</label>
+      <label><input type="checkbox" id="meds"> Medications administered?</label>
+      <label><input type="checkbox" id="defib"> Defibrillation attempted?</label>
+      <label><input type="checkbox" id="cpr"> CPR attempted?</label>
     </div>
 
-    <button onclick="resetForm()">Submit</button>
+    <div class="button-row">
+      <button class="clear-btn" onclick="resetForm()">Clear</button>
+      <button class="submit-btn" onclick="submitForm()">Submit</button>
+    </div>
+
+    <div id="popup-overlay">
+      <div class="header-title">✅ Report Submitted</div>
+      <div class="header-subtitle">Your Coroner Report Has Been Logged</div>
+    </div>
+
+    <div id="error-popup">
+      <div class="header-title">⚠️ Submission Failed</div>
+      <div class="header-subtitle">All Required Fields Must Be Filled</div>
+    </div>
   </div>
 
   <script>
     function resetForm() {
-      const elements = document.querySelectorAll('input, textarea');
-      elements.forEach(el => {
+      const fields = document.querySelectorAll('input, textarea');
+      fields.forEach(el => {
         if (el.type === 'checkbox') el.checked = false;
         else el.value = '';
+      });
+    }
+
+    function showErrorPopup() {
+      const popup = document.getElementById('error-popup');
+      popup.style.display = 'block';
+      popup.onclick = () => popup.style.display = 'none';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
+    function showPopup() {
+      const popup = document.getElementById('popup-overlay');
+      popup.style.display = 'block';
+      popup.onclick = () => popup.style.display = 'none';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
+    async function submitForm() {
+      const name = document.getElementById('name').value.trim();
+      const dob = document.getElementById('dob').value;
+      const exam_date = document.getElementById('exam_date').value;
+      const datetime = document.getElementById('datetime').value;
+      const location = document.getElementById('location').value.trim();
+      const cause = document.getElementById('cause').value.trim();
+
+      const foul = document.getElementById('foul').checked ? '✅ Yes' : '❌ No';
+      const meds = document.getElementById('meds').checked ? '✅ Yes' : '❌ No';
+      const defib = document.getElementById('defib').checked ? '✅ Yes' : '❌ No';
+      const cpr = document.getElementById('cpr').checked ? '✅ Yes' : '❌ No';
+
+      if (!name || !dob || !exam_date || !datetime || !location || !cause) {
+        showErrorPopup();
+        return;
+      }
+
+      const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
+
+      const embed = {
+        title: "Coroner Report",
+        color: 4737096,
+        fields: [
+          { name: "Name", value: `\`\`\`\n${name}\n\`\`\`` },
+          { name: "Date of Birth", value: `\`\`\`\n${dob}\n\`\`\`` },
+          { name: "Date of Examination", value: `\`\`\`\n${exam_date}\n\`\`\`` },
+          { name: "Pronounced Dead (Time & Date)", value: `\`\`\`\n${datetime}\n\`\`\`` },
+          { name: "Location", value: `\`\`\`\n${location}\n\`\`\`` },
+          { name: "Cause of Death", value: `\`\`\`\n${cause}\n\`\`\`` },
+          {
+            name: "Observations",
+            value: `\`\`\`\nFoul Play: ${foul}\nMedications: ${meds}\nDefibrillation: ${defib}\nCPR: ${cpr}\n\`\`\``
+          }
+        ],
+        footer: { text: "LS County Medical Examiner-Coroner" },
+        timestamp: new Date().toISOString()
+      };
+
+      fetch(webhookURL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ embeds: [embed] })
+      }).then(() => {
+        showPopup();
+        resetForm();
+      }).catch(() => {
+        alert("Failed to submit report.");
       });
     }
   </script>
