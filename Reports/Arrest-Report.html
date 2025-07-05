@@ -164,6 +164,22 @@
       background: #2C2F33;
       color: white;
     }
+    #pin-error {
+      color: #f04747;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+    .shake {
+      animation: shake 0.4s;
+    }
+    @keyframes shake {
+      0% { transform: translate(-50%, -50%) translateX(0); }
+      25% { transform: translate(-50%, -50%) translateX(-10px); }
+      50% { transform: translate(-50%, -50%) translateX(10px); }
+      75% { transform: translate(-50%, -50%) translateX(-10px); }
+      100% { transform: translate(-50%, -50%) translateX(0); }
+    }
   </style>
 </head>
 <body>
@@ -198,6 +214,7 @@
       <div class="header-title">🔒 PIN Required</div>
       <div class="header-subtitle">Please enter your 4-digit authorization code to submit</div>
       <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
+      <div id="pin-error">Wrong PIN code</div>
       <div style="margin-top: 15px;"><button onclick="validatePin()">Confirm</button></div>
     </div>
   </div>
@@ -245,14 +262,20 @@
       }
       window.tempSubmissionData = { location, datetime, defendant, officer, offenses };
       document.getElementById('pin-popup').style.display = 'block';
+      document.getElementById('pin-error').style.display = 'none';
     }
     function validatePin() {
-      const enteredPin = document.getElementById('pin-input').value.trim();
+      const pinInput = document.getElementById('pin-input');
+      const errorText = document.getElementById('pin-error');
+      const enteredPin = pinInput.value.trim();
       if (enteredPin === '2118') {
         document.getElementById('pin-popup').style.display = 'none';
         sendWebhook();
       } else {
-        alert("Incorrect PIN. Please try again.");
+        errorText.style.display = 'block';
+        const popup = document.getElementById('pin-popup');
+        popup.classList.add('shake');
+        setTimeout(() => popup.classList.remove('shake'), 400);
       }
     }
     function sendWebhook() {
