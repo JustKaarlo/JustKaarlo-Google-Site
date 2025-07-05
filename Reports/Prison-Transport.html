@@ -95,39 +95,6 @@
 
     .wide { width: 100%; }
 
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0 10px;
-      color: white;
-    }
-
-    table th, table td {
-      padding: 6px 8px;
-      text-align: center;
-      font-size: 14px;
-      border: none;
-    }
-
-    table th {
-      color: #ccc;
-      font-weight: bold;
-    }
-
-    .suspect-row {
-      background: #23272A;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-    }
-
-    .no-box {
-      display: inline-block;
-      padding: 4px 10px;
-      background: #444;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-
     .button-row {
       display: flex;
       gap: 10px;
@@ -201,7 +168,7 @@
       background: #23272A;
       border-radius: 10px;
       padding: 15px;
-      margin-bottom: 15px;
+      margin: 15px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
     }
 
@@ -260,35 +227,6 @@
     </div>
 
     <div class="section-title">SUSPECT(S) INFORMATION</div>
-    <div class="row">
-      <table id="suspectTable">
-        <thead>
-          <tr>
-            <th>NO#</th>
-            <th>Name</th>
-            <th>Gender</th>
-            <th>Date of Birth</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><span class="no-box">1</span></td>
-            <td><input type="text"></td>
-            <td>
-              <select>
-                <option value="">Select</option>
-                <option>Male</option>
-                <option>Female</option>
-              </select>
-            </td>
-            <td><input type="date"></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
     <div id="suspectList"></div>
     <div style="text-align: center; margin: 15px;">
       <button onclick="addSuspect()">+ Add Suspect</button>
@@ -323,18 +261,18 @@
   </div>
 
   <script>
-    let suspectCount = 1;
+    let suspectCount = 0;
 
     function addSuspect() {
-      suspectCount++;
       const container = document.getElementById("suspectList");
+      const currentNumber = suspectCount + 1;
 
       const suspectCard = document.createElement("div");
       suspectCard.className = "suspect-container";
 
       suspectCard.innerHTML = `
         <div class="suspect-header">
-          <span class="no-box">Suspect #${suspectCount}</span>
+          <span class="no-box">Suspect #${currentNumber}</span>
           <button onclick="this.closest('.suspect-container').remove()">🗑️</button>
         </div>
         <div class="suspect-row">
@@ -356,17 +294,23 @@
           </div>
         </div>
       `;
-      
+
       container.appendChild(suspectCard);
+      suspectCount++;
     }
 
+    // Add initial suspect on load
+    window.onload = () => {
+      addSuspect();
+    };
 
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"], input[type="date"], select').forEach(el => {
         if (!el.hasAttribute('readonly')) el.value = '';
       });
       document.getElementById("suspectList").innerHTML = '';
-      suspectCount = 1;
+      suspectCount = 0;
+      addSuspect();
     }
 
     function showPopup() {
