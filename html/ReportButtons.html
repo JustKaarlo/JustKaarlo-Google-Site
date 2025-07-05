@@ -77,15 +77,15 @@
       border: none;
       background: transparent;
       pointer-events: auto;
-      overflow: hidden;
+      overflow-y: scroll;
 
-      /* Hides scrollbar visually */
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none; /* IE/Edge */
+      /* Hide scrollbars visually */
+      scrollbar-width: none;          /* Firefox */
+      -ms-overflow-style: none;       /* IE/Edge */
     }
 
     .modal iframe::-webkit-scrollbar {
-      display: none; /* Chrome, Safari */
+      display: none;                  /* Chrome/Safari */
     }
 
     .overlay {
