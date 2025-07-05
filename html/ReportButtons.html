@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Reports</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
@@ -14,7 +14,7 @@
 
     html, body {
       height: 100%;
-      background: #1e1f22 url('https://justkaarlo.github.io/JustKaarlo-Google-Site/Resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center center fixed;
+      background: #1e1f22 url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center center fixed;
       background-size: cover;
       display: flex;
       justify-content: center;
@@ -24,29 +24,36 @@
     .container {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 30px;
-      justify-content: center;
+      gap: 40px;
+      padding: 50px;
       width: 100%;
-      max-width: 1000px;
-      padding: 40px;
+      max-width: 1200px;
+      justify-items: center;
     }
-    
+
     .report-btn {
-      background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(6px);
-      border: none;
-      padding: 40px 20px;
-      border-radius: 16px;
+      background: rgba(44, 47, 51, 0.4);
       color: white;
-      font-size: 20px;
+      font-weight: 800;
+      font-size: 34px;
+      letter-spacing: 2px;
+      padding: 40px 30px;
+      border: none;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       cursor: pointer;
-      transition: background 0.3s;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+      width: 100%;
+      max-width: 320px;
       text-align: center;
-      height: 150px;
     }
 
     .report-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
     }
 
     .modal {
