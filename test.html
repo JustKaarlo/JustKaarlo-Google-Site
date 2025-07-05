@@ -80,14 +80,12 @@
     }
 
     button {
-      width: 100%;
       background-color: #3c78d8;
       color: white;
       border: none;
       padding: 12px;
       border-radius: 6px;
       font-size: 16px;
-      margin-top: 20px;
       cursor: pointer;
       transition: background 0.3s ease;
     }
@@ -131,6 +129,25 @@
       cursor: pointer;
       font-weight: bold;
     }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .clear-btn {
+      background-color: #ccc;
+      color: #333;
+    }
+
+    .clear-btn:hover {
+      background-color: #bbb;
+    }
+
+    .submit-btn {
+      flex: 1;
+    }
   </style>
 </head>
 <body>
@@ -171,14 +188,10 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="field-group wide">
-        <label>Optional Image</label>
-        <input type="file" id="imageInput" accept="image/*">
-      </div>
+    <div class="button-row">
+      <button class="clear-btn" onclick="resetForm()">Clear</button>
+      <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
-
-    <button onclick="submitForm()">Submit</button>
   </div>
 
   <script>
@@ -205,7 +218,6 @@
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
-      document.getElementById('imageInput').value = '';
     }
 
     async function submitForm() {
@@ -214,53 +226,40 @@
       const defendant = document.getElementById('defendant').value.trim();
       const officer = document.getElementById('officer').value.trim();
       const offenses = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
-      const fileInput = document.getElementById('imageInput');
-      const file = fileInput.files[0];
 
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
 
       const embed = {
         title: "Arrest Report",
-        color: 7506394, // Blue-ish
+        color: 4737096,
         fields: [
-          { name: "📍 Location", value: location || 'N/A', inline: true },
-          { name: "🕒 Date & Time", value: datetime || 'N/A', inline: true },
-          { name: "👤 Defendant", value: defendant || 'N/A', inline: true },
-          { name: "👮 Officer", value: officer || 'N/A', inline: true },
-          { name: "🚨 Offenses", value: offenses.length > 0 ? offenses.join(', ') : 'None listed' }
+          { name: "Location", value: `\`${location || 'N/A'}\``, inline: true },
+          { name: "Date & Time", value: `\`${datetime || 'N/A'}\``, inline: true },
+          { name: "Defendant", value: `\`${defendant || 'N/A'}\``, inline: true },
+          { name: "Officer", value: `\`${officer || 'N/A'}\``, inline: true },
+          {
+            name: "Offenses",
+            value: offenses.length > 0
+              ? `\`\`\`\n${offenses.join('\n')}\n\`\`\``
+              : '`None listed`'
+          }
         ],
         footer: {
-          text: "State of San Andreas • 'The State You’re In'"
+          text: "Department of Justice"
         },
         timestamp: new Date().toISOString()
       };
 
-      if (file) {
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
-
-        fetch(webhookURL, {
-          method: "POST",
-          body: formData
-        }).then(() => {
-          alert("Submitted with image!");
-          resetForm();
-        }).catch(() => {
-          alert("Failed to submit.");
-        });
-      } else {
-        fetch(webhookURL, {
-          method: "POST",
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ embeds: [embed] })
-        }).then(() => {
-          alert("Submitted!");
-          resetForm();
-        }).catch(() => {
-          alert("Failed to submit.");
-        });
-      }
+      fetch(webhookURL, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ embeds: [embed] })
+      }).then(() => {
+        alert("Arrest report submitted.");
+        resetForm();
+      }).catch(() => {
+        alert("Failed to submit report.");
+      });
     }
   </script>
 </body>
