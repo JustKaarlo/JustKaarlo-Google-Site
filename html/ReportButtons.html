@@ -7,84 +7,82 @@
   <style>
     * { box-sizing: border-box; font-family: 'Rubik', sans-serif; margin: 0; padding: 0; }
     html, body {
-      height: 100%;
+      height:100%;
       background: #1e1f22 url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center/cover fixed;
       display: flex; justify-content: center; align-items: center;
     }
 
     .container {
-      display: flex; flex-wrap: wrap; justify-content: center;
-      gap: 40px; padding: 50px;
-      max-width: 1200px; width: 100%;
+      display:flex; flex-wrap:wrap; justify-content:center;
+      gap:40px; padding:50px;
+      max-width:1200px; width:100%;
     }
-
     .report-btn {
       background: rgba(44,47,51,0.15);
-      color: white; font-weight: 800; font-size: 34px;
-      letter-spacing: 2px; padding: 40px 30px;
-      border: none; border-radius: 16px;
+      color: white; font-weight:800; font-size:34px;
+      letter-spacing:2px; padding:40px 30px;
+      border:none; border-radius:16px;
       backdrop-filter: blur(10px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      cursor: pointer; text-transform: uppercase;
+      box-shadow:0 4px 12px rgba(0,0,0,0.4);
+      cursor:pointer; text-transform:uppercase;
       transition: all 0.2s ease;
-      width: 100%; max-width: 320px;
-      text-align: center;
+      width:100%; max-width:320px;
+      text-align:center;
     }
     .report-btn:hover {
       transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+      box-shadow:0 6px 16px rgba(0,0,0,0.5);
     }
 
     .modal {
-      position: fixed; top: 50%; left: 50%;
-      transform: translate(-50%,-50%);
-      width: 90%; max-width: 850px;
-      background: transparent;
-      overflow: hidden;
-      display: none; z-index: 100;
+      position:fixed; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      width:90%; max-width:850px;
+      background:transparent; overflow:hidden;
+      display:none; z-index:100;
       transition: height 0.2s ease;
     }
 
     .iframe-wrapper {
-      width: 100%; height: 100%;
-      overflow: auto;             /* enable scrolling */
-      position: relative;
-      scrollbar-width: none;      /* Firefox */
-      -ms-overflow-style: none;   /* IE 10+ */
+      width:100%; height:100%;
+      overflow:auto;             /* wrapper scroll if needed */
+      position:relative;
+      scrollbar-width: none;     /* Firefox */
+      -ms-overflow-style: none;  /* IE 10+ */
     }
     .iframe-wrapper::-webkit-scrollbar {
-      display: none;              /* Chrome, Safari, Opera */
       width: 0;
-      height: 0;
+      height: 0;                 /* Chrome, Safari, Opera */
+      background: transparent;
     }
 
     .iframe-wrapper iframe {
-      position: absolute;
-      top: 0; left: -17px;
-      width: calc(100% + 17px);
-      height: 100%;
-      border: none; background: transparent;
+      position:absolute;
+      top:0; left:-17px;
+      width:calc(100% + 17px);
+      height:100%;
+      border:none; background:transparent;
     }
 
     .overlay {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.7);
-      display: none; z-index: 99;
+      position:fixed; top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.7);
+      display:none; z-index:99;
     }
     .close-btn {
-      position: absolute; top: 12px; right: 16px;
-      background: #f04747; color: white;
-      border: none; border-radius: 6px;
-      padding: 5px 10px; cursor: pointer;
-      font-weight: bold; z-index: 101;
+      position:absolute; top:12px; right:16px;
+      background:#f04747; color:white;
+      border:none; border-radius:6px;
+      padding:5px 10px; cursor:pointer;
+      font-weight:bold; z-index:101;
     }
 
     .center-align {
-      flex-basis: 100%; display: flex; justify-content: center;
+      flex-basis:100%; display:flex; justify-content:center;
     }
     .center-align.report-btn {
-      width: 100%; max-width: 320px;
+      width:100%; max-width:320px;
     }
   </style>
 </head>
@@ -108,23 +106,45 @@
   </div>
 
   <script>
-    const modal = document.getElementById('modal');
+    const modal  = document.getElementById('modal');
     const iframe = document.getElementById('modal-frame');
-    const overlay = document.getElementById('overlay');
+    const overlay= document.getElementById('overlay');
 
     function openModal(src) {
       overlay.style.display = 'block';
-      modal.style.display = 'block';
+      modal.style.display   = 'block';
 
       iframe.onload = () => {
+        // figure out height
         const maxH = window.innerHeight * 0.95;
         let h;
         try {
           const doc = iframe.contentDocument || iframe.contentWindow.document;
           h = Math.min(doc.documentElement.scrollHeight, maxH);
-        } catch {
+
+          // now inject CSS to hide the iframe’s own scrollbars
+          const html = doc.documentElement;
+          const body = doc.body;
+          html.style.scrollbarWidth    = 'none';
+          html.style.msOverflowStyle   = 'none';
+          body.style.scrollbarWidth    = 'none';
+          body.style.msOverflowStyle   = 'none';
+
+          const styleTag = doc.createElement('style');
+          styleTag.textContent = `
+            html::-webkit-scrollbar,
+            body::-webkit-scrollbar {
+              width:0px; height:0px;
+              background: transparent;
+            }
+          `;
+          doc.head.appendChild(styleTag);
+
+        } catch (err) {
+          // cross-origin or failure: just clamp
           h = maxH;
         }
+
         modal.style.height = h + 'px';
       };
 
@@ -133,9 +153,9 @@
 
     function closeModal() {
       modal.style.display = 'none';
-      overlay.style.display = 'none';
-      iframe.src = '';
-      modal.style.height = '';
+      overlay.style.display= 'none';
+      iframe.src           = '';
+      modal.style.height   = '';
     }
   </script>
 </body>
