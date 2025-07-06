@@ -43,7 +43,7 @@
       width:100%;
       height:auto;
       display:block;
-      border-radius:12px; /* soften edges */
+      border-radius:12px;
     }
     /* modal overlay */
     .modal-overlay {
@@ -91,44 +91,115 @@
 <body>
 
   <div class="grid">
-    <!-- Attila card now uses your AttilaFrame.png -->
+    <!-- Attila card -->
     <div class="card" onclick="openModal()">
-      <img src="AttilaFrame.png" alt="Total War Attila">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/AttilaFrame.png" alt="Total War Attila">
     </div>
-
-    <!-- other cards unchanged -->
+    <!-- other cards -->
     <div class="card" onclick="location.href='Shogun2.html'">
-      <img src="https://via.placeholder.com/80?text=Shogun+2" alt="Shogun 2 logo">
+      <img src="https://via.placeholder.com/80?text=Shogun+2" alt="Shogun 2">
     </div>
     <div class="card" onclick="location.href='Rome2.html'">
-      <img src="https://via.placeholder.com/80?text=Rome+II" alt="Rome II logo">
+      <img src="https://via.placeholder.com/80?text=Rome+II" alt="Rome II">
     </div>
     <div class="card" onclick="location.href='Empire.html'">
-      <img src="https://via.placeholder.com/80?text=Empire" alt="Empire logo">
+      <img src="https://via.placeholder.com/80?text=Empire" alt="Empire">
     </div>
     <div class="card" onclick="location.href='Napoleon.html'">
-      <img src="https://via.placeholder.com/80?text=Napoleon" alt="Napoleon logo">
+      <img src="https://via.placeholder.com/80?text=Napoleon" alt="Napoleon">
     </div>
     <div class="card" onclick="location.href='Britannia.html'">
-      <img src="https://via.placeholder.com/80?text=Britannia" alt="Britannia logo">
+      <img src="https://via.placeholder.com/80?text=Britannia" alt="Britannia">
     </div>
   </div>
 
-  <!-- Modal Structure -->
+  <!-- Modal -->
   <div id="overlay" class="modal-overlay" onclick="closeModal()">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="close-btn" onclick="closeModal()">×</div>
-      <iframe src="Attila.html" title="Attila Mods"></iframe>
+      <iframe id="modal-frame" title="Attila Mods"></iframe>
     </div>
   </div>
 
   <script>
+    // your Attila HTML as a JS template string
+    const attilaMarkup = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Total War ATTILA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <style>
+    body {
+      overflow: hidden;
+      margin: 0;
+      padding: 20px;
+      background: transparent;
+      font-family: 'Rubik', sans-serif;
+      color: white;
+    }
+    h1 { font-size:24px; margin-bottom:10px; }
+    ul { list-style:none; padding:0; }
+    li {
+      margin:8px 0;
+      padding:6px 12px;
+      background:rgba(255,255,255,0.1);
+      border-radius:6px;
+    }
+    a { color:white; text-decoration:none; }
+    a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <h1>
+    <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png"
+         alt="Attila" style="height:24px; vertical-align:middle; margin-right:8px;">
+    Attila
+  </h1>
+  <ul id="fileList">Loading...</ul>
+  <script>
+    (async function(){
+      const folderId = "15r5NfzciWGfClpGvmT5ydfH4fDbScVAl";
+      const apiKey   = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
+      const url = \`https://www.googleapis.com/drive/v3/files?q='\${folderId}'+in+parents+and+trashed=false&key=\${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)\`;
+      const data = await (await fetch(url)).json();
+      const list = document.getElementById("fileList");
+      list.innerHTML = "";
+      if (!data.files || !data.files.length) {
+        list.innerHTML = "<li>No files found.</li>";
+        return;
+      }
+      data.files.forEach(f => {
+        const li = document.createElement("li");
+        const a  = document.createElement("a");
+        a.href   = f.webViewLink;
+        a.target = "_blank";
+        const icon = document.createElement("img");
+        icon.src   = f.iconLink;
+        icon.style.cssText = "height:20px; vertical-align:middle; margin-right:8px;";
+        a.appendChild(icon);
+        a.appendChild(document.createTextNode(f.name));
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    })();
+  <\/script>
+</body>
+</html>
+    `;
+
     const overlay = document.getElementById('overlay');
+    const frame   = document.getElementById('modal-frame');
+
     function openModal() {
+      frame.srcdoc = attilaMarkup;
       overlay.style.display = 'flex';
     }
+
     function closeModal() {
       overlay.style.display = 'none';
+      frame.srcdoc = '';
     }
   </script>
 
