@@ -104,12 +104,11 @@
     <div id="empire-card" class="card">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Empire2.png" alt="Total War Empire">
     </div>
-
-    <div class="card" onclick="location.href='Napoleon.html'">
-      <img src="https://via.placeholder.com/80?text=Napoleon" alt="Napoleon">
+    <div id="napoleon-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Napoleon.png" alt="Total War Napoleon">
     </div>
-    <div class="card" onclick="location.href='Britannia.html'">
-      <img src="https://via.placeholder.com/80?text=Britannia" alt="Britannia">
+    <div id="britannia-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png" alt="Total War Thrones of Britannia">
     </div>
   </div>
 
@@ -128,6 +127,8 @@
       const shogunCard  = document.getElementById('shogun-card');
       const romeCard    = document.getElementById('rome-card');
       const empireCard  = document.getElementById('empire-card');
+      const napoleonCard  = document.getElementById('napoleon-card"');
+      const britanniaCard  = document.getElementById('britannia-card');
       const closeBtn    = document.querySelector('.close-btn');
 
       function openModal(file) {
@@ -139,6 +140,8 @@
       shogunCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Shogun2.html'));
       romeCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/RomeII.html'));
       empireCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Empire.html'));
+      napoleonCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Napoleon.html'));
+      britanniaCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Thrones.html'));
 
       overlay.addEventListener('click', () => {
         overlay.style.display = 'none';
