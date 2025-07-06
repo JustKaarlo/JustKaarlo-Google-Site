@@ -9,7 +9,10 @@
     * { margin:0; padding:0; box-sizing:border-box }
     body {
       font-family:'Rubik',sans-serif;
-      background: url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/TotalWar_Background.png') center/cover no-repeat fixed;
+      background:
+        linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),
+        linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.3)),
+        url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/TotalWar_Background.png') center/cover no-repeat fixed;
       color:#eee;
       min-height:100vh;
       display:flex;
@@ -45,12 +48,11 @@
       display:block;
       border-radius:12px;
     }
-    /* modal overlay */
     .modal-overlay {
       position:fixed;
       top:0; left:0;
       width:100vw; height:100vh;
-      background:rgba(0,0,0,0.7);
+      background:rgba(0,0,0,0.8);
       display:none;
       align-items:center;
       justify-content:center;
@@ -92,13 +94,14 @@
 
   <div class="grid">
     <!-- Attila card -->
-    <div class="card" onclick="openModal()">
-      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/AttilaFrame.png" alt="Total War Attila">
+    <div class="card" onclick="openAttilaModal()">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Total War Attila">
+    </div>
+    <!-- Shogun 2 card -->
+    <div class="card" onclick="openShogunModal()">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Shogun2.png" alt="Total War Shogun 2">
     </div>
     <!-- other cards -->
-    <div class="card" onclick="location.href='Shogun2.html'">
-      <img src="https://via.placeholder.com/80?text=Shogun+2" alt="Shogun 2">
-    </div>
     <div class="card" onclick="location.href='Rome2.html'">
       <img src="https://via.placeholder.com/80?text=Rome+II" alt="Rome II">
     </div>
@@ -113,16 +116,19 @@
     </div>
   </div>
 
-  <!-- Modal -->
+  <!-- Modal Overlay -->
   <div id="overlay" class="modal-overlay" onclick="closeModal()">
     <div class="modal" onclick="event.stopPropagation()">
       <div class="close-btn" onclick="closeModal()">×</div>
-      <iframe id="modal-frame" title="Attila Mods"></iframe>
+      <iframe id="modal-frame" title="Mods"></iframe>
     </div>
   </div>
 
   <script>
-    // your Attila HTML as a JS template string
+    const overlay = document.getElementById('overlay');
+    const frame   = document.getElementById('modal-frame');
+
+    // Attila markup
     const attilaMarkup = `
 <!DOCTYPE html>
 <html lang="en">
@@ -131,30 +137,17 @@
   <title>Total War ATTILA</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
-    body {
-      overflow: hidden;
-      margin: 0;
-      padding: 20px;
-      background: transparent;
-      font-family: 'Rubik', sans-serif;
-      color: white;
-    }
+    body { overflow: hidden; margin: 0; padding: 20px; background: transparent; font-family: 'Rubik', sans-serif; color: white; }
     h1 { font-size:24px; margin-bottom:10px; }
     ul { list-style:none; padding:0; }
-    li {
-      margin:8px 0;
-      padding:6px 12px;
-      background:rgba(255,255,255,0.1);
-      border-radius:6px;
-    }
+    li { margin:8px 0; padding:6px 12px; background:rgba(255,255,255,0.1); border-radius:6px; }
     a { color:white; text-decoration:none; }
     a:hover { text-decoration:underline; }
   </style>
 </head>
 <body>
   <h1>
-    <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png"
-         alt="Attila" style="height:24px; vertical-align:middle; margin-right:8px;">
+    <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Attila" style="height:24px; vertical-align:middle; margin-right:8px;">
     Attila
   </h1>
   <ul id="fileList">Loading...</ul>
@@ -162,7 +155,7 @@
     (async function(){
       const folderId = "15r5NfzciWGfClpGvmT5ydfH4fDbScVAl";
       const apiKey   = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
-      const url = \`https://www.googleapis.com/drive/v3/files?q='\${folderId}'+in+parents+and+trashed=false&key=\${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)\`;
+      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
       const data = await (await fetch(url)).json();
       const list = document.getElementById("fileList");
       list.innerHTML = "";
@@ -189,19 +182,71 @@
 </html>
     `;
 
-    const overlay = document.getElementById('overlay');
-    const frame   = document.getElementById('modal-frame');
+    // Shogun 2 markup
+    const shogunMarkup = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Total War SHOGUN 2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <style>
+    body { overflow: hidden; margin: 0; padding: 20px; background: transparent; font-family: 'Rubik', sans-serif; color: white; }
+    h1 { font-size:24px; margin-bottom:10px; }
+    ul { list-style:none; padding:0; }
+    li { margin:8px 0; padding:6px 12px; background:rgba(255,255,255,0.1); border-radius:6px; }
+    a { color:white; text-decoration:none; }
+    a:hover { text-decoration:underline; }
+  </style>
+</head>
+<body>
+  <h1>
+    <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Shogun2.png" alt="Shogun 2" style="height:24px; vertical-align:middle; margin-right:8px;">
+    Shogun 2
+  </h1>
+  <ul id="fileList">Loading...</ul>
+  <script>
+    (async function(){n      const folderId = "1zYVOwQN--y78iTUnku67DyABh5maAfV_";
+      const apiKey   = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
+      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
+      const data = await (await fetch(url)).json();
+      const list = document.getElementById("fileList");
+      list.innerHTML = "";
+      if (!data.files || !data.files.length) {
+        list.innerHTML = "<li>No files found.</li>";
+        return;
+      }
+      data.files.forEach(f => {
+        const li = document.createElement("li");
+        const a  = document.createElement("a");
+        a.href   = f.webViewLink;
+        a.target = "_blank";
+        const icon = document.createElement("img");
+        icon.src   = f.iconLink;
+        icon.style.cssText = "height:20px; vertical-align:middle; margin-right:8px;";
+        a.appendChild(icon);
+        a.appendChild(document.createTextNode(f.name));
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    })();
+  <\/script>
+</body>
+</html>
+    `;
 
-    function openModal() {
+    function openAttilaModal() {
       frame.srcdoc = attilaMarkup;
       overlay.style.display = 'flex';
     }
-
+    function openShogunModal() {
+      frame.srcdoc = shogunMarkup;
+      overlay.style.display = 'flex';
+    }
     function closeModal() {
       overlay.style.display = 'none';
       frame.srcdoc = '';
     }
   </script>
-
 </body>
 </html>
