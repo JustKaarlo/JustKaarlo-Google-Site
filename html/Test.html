@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Total War Mods</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
@@ -19,7 +19,7 @@
     }
     .grid {
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); /* Increased min width */
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
       gap:2rem;
       width:100%;
       max-width:1000px;
@@ -30,7 +30,7 @@
       border-radius:16px;
       backdrop-filter:blur(8px);
       box-shadow:0 8px 24px rgba(0,0,0,0.5);
-      padding:1.5rem; /* Increased padding */
+      padding:1.5rem;
       text-align:center;
       cursor:pointer;
       transition:transform .2s, background .2s;
@@ -73,12 +73,12 @@
     .modal .close-btn {
       position:absolute;
       top:12px; right:12px;
-      width:48px; height:48px; /* Increased size */
+      width:48px; height:48px;
       background:rgba(255,255,255,0.2);
       border-radius:50%;
-      font-size:2rem; /* Larger font */
+      font-size:2rem;
       color:#fff;
-      line-height:48px; /* Match height */
+      line-height:48px;
       text-align:center;
       cursor:pointer;
       transition:background .2s;
@@ -119,6 +119,7 @@
   </div>
 
   <script>
+    // Attila popup markup
     const attilaMarkup = `
 <!DOCTYPE html>
 <html lang="en">
@@ -135,8 +136,7 @@
   a:hover{text-decoration:underline}
 </style>
 </head><body>
-  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png"
-      alt="Attila" style="height:24px;vertical-align:middle;margin-right:8px">Attila</h1>
+  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Attila" style="height:24px;vertical-align:middle;margin-right:8px">Attila</h1>
   <ul id="fileList">Loading...</ul>
   <script>
     (async function(){
@@ -144,23 +144,30 @@
       const apiKey="AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
       const url=`https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,webViewLink,iconLink)`;
       const data=await(await fetch(url)).json();
-      const list=document.getElementById("fileList");
-      list.innerHTML="";
-      if(!data.files||!data.files.length){
-        list.innerHTML="<li>No files found.</li>";
-        return;
-      }
-      data.files.forEach(f=>{
-        const li=document.createElement("li");
-        const a=document.createElement("a");
-        a.href=f.webViewLink;a.target="_blank";
-        const icon=document.createElement("img");
-        icon.src=f.iconLink;icon.style.cssText="height:20px;vertical-align:middle;margin-right:8px";
-        a.append(icon,document.createTextNode(f.name));
-        li.appendChild(a);
-        list.appendChild(li);
+      const list=document.getElementById("fileList"); list.innerHTML="";
+      if(!data.files||!data.files.length){ list.innerHTML="<li>No files found.</li>"; return; }
+      data.files.forEach(f=>{ const li=document.createElement("li"); const a=document.createElement("a"); a.href=f.webViewLink; a.target="_blank";
+        const icon=document.createElement("img"); icon.src=f.iconLink; icon.style.cssText="height:20px;vertical-align:middle;margin-right:8px";
+        a.append(icon, document.createTextNode(f.name)); li.appendChild(a); list.appendChild(li);
       });
     })();
   <\/script>
+`;
+
+    // show overlay and inject markup
+    function openModal() {
+      const overlay = document.getElementById('overlay');
+      const frame = document.getElementById('modal-frame');
+      frame.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(attilaMarkup);
+      overlay.style.display = 'flex';
+    }
+
+    function closeModal() {
+      const overlay = document.getElementById('overlay');
+      const frame = document.getElementById('modal-frame');
+      overlay.style.display = 'none';
+      frame.src = '';
+    }
+  </script>
 </body>
 </html>
