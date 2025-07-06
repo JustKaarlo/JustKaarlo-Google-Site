@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Total War Mods</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
@@ -10,7 +10,7 @@
     body {
       font-family: 'Rubik', sans-serif;
       background:
-        linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+        linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
         linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
         url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/TotalWar_Background.png') center/cover no-repeat fixed;
       color: #eee;
@@ -72,7 +72,7 @@
     .modal iframe {
       width: 100%; height: 100%; border: 0;
     }
-    .modal .close-btn {
+    .close-btn {
       position: absolute;
       top: 12px; right: 12px;
       width: 40px; height: 40px;
@@ -85,23 +85,19 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-    .modal .close-btn:hover {
+    .close-btn:hover {
       background: rgba(255, 255, 255, 0.3);
     }
   </style>
 </head>
 <body>
-
   <div class="grid">
-    <!-- Attila card -->
-    <div class="card" onclick="openAttilaModal()">
+    <div id="attila-card" class="card">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Total War Attila">
     </div>
-    <!-- Shogun 2 card -->
-    <div class="card" onclick="openShogunModal()">
+    <div id="shogun-card" class="card">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Shogun2.png" alt="Total War Shogun 2">
     </div>
-    <!-- other cards -->
     <div class="card" onclick="location.href='Rome2.html'">
       <img src="https://via.placeholder.com/80?text=Rome+II" alt="Rome II">
     </div>
@@ -116,16 +112,14 @@
     </div>
   </div>
 
-  <!-- Modal Overlay -->
-  <div id="overlay" class="modal-overlay" onclick="closeModal()">
-    <div class="modal" onclick="event.stopPropagation()">
-      <div class="close-btn" onclick="closeModal()">×</div>
+  <div id="overlay" class="modal-overlay">
+    <div class="modal">
+      <div class="close-btn">×</div>
       <iframe id="modal-frame" title="Mods"></iframe>
     </div>
   </div>
 
   <script>
-    // Attila markup
     const attilaMarkup = `
 <!DOCTYPE html>
 <html lang="en">
@@ -175,11 +169,7 @@
       });
     })();
   <\/script>
-</body>
-</html>
     `;
-
-    // Shogun 2 markup
     const shogunMarkup = `
 <!DOCTYPE html>
 <html lang="en">
@@ -229,25 +219,34 @@
       });
     })();
   <\/script>
-</body>
-</html>
     `;
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('overlay');
+      const frame = document.getElementById('modal-frame');
+      const attilaCard = document.getElementById('attila-card');
+      const shogunCard = document.getElementById('shogun-card');
 
-    const overlay = document.getElementById('overlay');
-    const frame = document.getElementById('modal-frame');
+      attilaCard.addEventListener('click', () => {
+        frame.srcdoc = attilaMarkup;
+        overlay.style.display = 'flex';
+      });
 
-    function openAttilaModal() {
-      frame.srcdoc = attilaMarkup;
-      overlay.style.display = 'flex';
-    }
-    function openShogunModal() {
-      frame.srcdoc = shogunMarkup;
-      overlay.style.display = 'flex';
-    }
-    function closeModal() {
-      overlay.style.display = 'none';
-      frame.srcdoc = '';
-    }
+      shogunCard.addEventListener('click', () => {
+        frame.srcdoc = shogunMarkup;
+        overlay.style.display = 'flex';
+      });
+
+      overlay.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        frame.srcdoc = '';
+      });
+
+      document.querySelector('.close-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        overlay.style.display = 'none';
+        frame.srcdoc = '';
+      });
+    });
   </script>
 </body>
 </html>
