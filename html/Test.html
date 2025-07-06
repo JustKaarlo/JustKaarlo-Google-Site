@@ -4,22 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>JustKaarlo Total War Mods</title>
-  <!-- Rubik font -->
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
-    /* reset + base */
-    * { margin:0; padding:0; box-sizing:border-box; }
+    * { margin:0; padding:0; box-sizing:border-box }
     body {
       font-family:'Rubik',sans-serif;
-      background: #1e1e1e;
-      color: #eee;
+      background:#1e1e1e;
+      color:#eee;
       min-height:100vh;
       display:flex;
       align-items:center;
       justify-content:center;
       padding:2rem;
     }
-    /* grid of cards */
     .grid {
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
@@ -27,110 +24,93 @@
       width:100%;
       max-width:1000px;
     }
-    /* glass card */
     .card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(255,255,255,0.15);
       border-radius:16px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-      padding:1.5rem 1rem;
+      backdrop-filter:blur(8px);
+      box-shadow:0 8px 24px rgba(0,0,0,0.5);
+      padding:1rem;
       text-align:center;
       cursor:pointer;
-      transition: transform .2s, background .2s;
+      transition:transform .2s, background .2s;
     }
     .card:hover {
-      transform: translateY(-4px);
-      background: rgba(255,255,255,0.08);
+      transform:translateY(-4px);
+      background:rgba(255,255,255,0.08);
     }
     .card img {
-      width:80px;
-      height:80px;
-      object-fit:contain;
-      margin-bottom:.75rem;
-    }
-    .card span {
+      width:100%;
+      height:auto;
       display:block;
-      font-size:1rem;
-      font-weight:500;
-      color:#f0f0f0;
+      border-radius:12px; /* soften edges */
     }
-
     /* modal overlay */
     .modal-overlay {
       position:fixed;
       top:0; left:0;
       width:100vw; height:100vh;
-      background: rgba(0,0,0,0.7);
+      background:rgba(0,0,0,0.7);
       display:none;
       align-items:center;
       justify-content:center;
       z-index:100;
     }
-    /* glass modal window */
     .modal {
       position:relative;
-      width:80vw;
-      max-width:900px;
+      width:80vw; max-width:900px;
       height:80vh;
-      background: rgba(255,255,255,0.05);
+      background:rgba(255,255,255,0.05);
       border:1px solid rgba(255,255,255,0.15);
       border-radius:16px;
-      backdrop-filter: blur(12px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.6);
+      backdrop-filter:blur(12px);
+      box-shadow:0 12px 32px rgba(0,0,0,0.6);
       overflow:hidden;
     }
     .modal iframe {
-      width:100%;
-      height:100%;
-      border:0;
+      width:100%; height:100%; border:0;
     }
-    /* close button */
     .modal .close-btn {
       position:absolute;
       top:12px; right:12px;
       width:32px; height:32px;
-      background: rgba(255,255,255,0.2);
+      background:rgba(255,255,255,0.2);
       border-radius:50%;
       font-size:1.5rem;
       color:#fff;
       line-height:32px;
       text-align:center;
       cursor:pointer;
+      transition:background .2s;
     }
     .modal .close-btn:hover {
-      background: rgba(255,255,255,0.3);
+      background:rgba(255,255,255,0.3);
     }
   </style>
 </head>
 <body>
 
   <div class="grid">
-    <!-- Attila: opens modal -->
-    <div class="card" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Attila.html')">
-      <img src="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/325610/capsule_616x353.jpg?t=1724864047" alt="Attila logo">
-      <span>Attila</span>
+    <!-- Attila card now uses your AttilaFrame.png -->
+    <div class="card" onclick="openModal()">
+      <img src="AttilaFrame.png" alt="Total War Attila">
     </div>
+
     <!-- other cards unchanged -->
     <div class="card" onclick="location.href='Shogun2.html'">
       <img src="https://via.placeholder.com/80?text=Shogun+2" alt="Shogun 2 logo">
-      <span>Shogun 2</span>
     </div>
     <div class="card" onclick="location.href='Rome2.html'">
       <img src="https://via.placeholder.com/80?text=Rome+II" alt="Rome II logo">
-      <span>Rome II</span>
     </div>
     <div class="card" onclick="location.href='Empire.html'">
       <img src="https://via.placeholder.com/80?text=Empire" alt="Empire logo">
-      <span>Empire</span>
     </div>
     <div class="card" onclick="location.href='Napoleon.html'">
       <img src="https://via.placeholder.com/80?text=Napoleon" alt="Napoleon logo">
-      <span>Napoleon</span>
     </div>
     <div class="card" onclick="location.href='Britannia.html'">
       <img src="https://via.placeholder.com/80?text=Britannia" alt="Britannia logo">
-      <span>Britannia</span>
     </div>
   </div>
 
