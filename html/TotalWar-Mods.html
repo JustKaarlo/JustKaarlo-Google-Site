@@ -101,10 +101,10 @@
     <div id="rome-card" class="card">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_RomeII.png" alt="Total War Rome II">
     </div>
-    
-    <div class="card" onclick="location.href='Empire.html'">
-      <img src="https://via.placeholder.com/80?text=Empire" alt="Empire">
+    <div id="empire-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Empire.png" alt="Total War Rome II">
     </div>
+
     <div class="card" onclick="location.href='Napoleon.html'">
       <img src="https://via.placeholder.com/80?text=Napoleon" alt="Napoleon">
     </div>
@@ -127,6 +127,7 @@
       const attilaCard  = document.getElementById('attila-card');
       const shogunCard  = document.getElementById('shogun-card');
       const romeCard    = document.getElementById('rome-card');
+      const empireCard  = document.getElementById('empire-card');
       const closeBtn    = document.querySelector('.close-btn');
 
       function openModal(file) {
@@ -137,6 +138,7 @@
       attilaCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Attila.html'));
       shogunCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Shogun2.html'));
       romeCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/RomeII.html'));
+      empireCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Empire.html'));
 
       overlay.addEventListener('click', () => {
         overlay.style.display = 'none';
