@@ -3,147 +3,112 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Total War Modding</title>
+  <title>JustKaarlo Total War Mods</title>
+  <!-- Rubik font -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
-    /* Base reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
+    /* reset + base */
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      /* swap in your own background or gradient */
-      background: url('your-background.jpg') center/cover no-repeat fixed;
-      font-family: 'Segoe UI', sans-serif;
-      color: #fff;
-      line-height: 1.5;
+      font-family:'Rubik',sans-serif;
+      background: #1e1e1e;
+      color: #eee;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:2rem;
     }
-
-    /* Navigation */
-    nav {
-      width: 100%;
-      padding: 1rem 2rem;
-      position: sticky;
-      top: 0;
-      backdrop-filter: blur(8px);
-      background: rgba(0, 0, 0, 0.3);
-      display: flex;
-      gap: 1rem;
-      z-index: 10;
-    }
-    nav a {
-      color: #f0f0f0;
-      text-decoration: none;
-      padding: 0.4rem 0.8rem;
-      border-radius: 8px;
-      transition: background 0.2s;
-    }
-    nav a:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    /* Main grid */
+    /* grid of cards */
     .grid {
-      max-width: 1200px;
-      margin: 2rem auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 2rem;
-      padding: 0 1rem;
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:2rem;
+      width:100%;
+      max-width:1000px;
     }
-
-    /* Glass-card */
+    /* glass card */
     .card {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 16px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.2s;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius:16px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      padding:1.5rem 1rem;
+      text-align:center;
+      cursor:pointer;
+      transition: transform .2s, background .2s;
     }
     .card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-4px);
+      background: rgba(255,255,255,0.08);
     }
-
     .card img {
-      width: 100%;
-      display: block;
+      width:80px;
+      height:80px;
+      object-fit:contain;
+      margin-bottom:.75rem;
     }
-
-    .card h2 {
-      font-size: 1.4rem;
-      margin: 1rem;
-    }
-
-    .card a {
-      margin: 0 1rem 1rem;
-      text-decoration: none;
-      color: #fff;
-      background: rgba(0, 123, 255, 0.6);
-      padding: 0.6rem 1rem;
-      border-radius: 8px;
-      text-align: center;
-      transition: background 0.2s;
-    }
-    .card a:hover {
-      background: rgba(0, 123, 255, 0.8);
+    .card span {
+      display:block;
+      font-size:1rem;
+      font-weight:500;
+      color:#f0f0f0;
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <a href="/">Home</a>
-    <a href="/modding">Modding</a>
-    <a href="#attila">Atilla</a>
-    <a href="#shogun2">Shogun 2</a>
-    <a href="#rome2">Rome II</a>
-    <a href="#empire">Empire</a>
-    <a href="#napoleon">Napoleon</a>
-    <a href="#britannia">Britannia</a>
-  </nav>
-
-  <main class="grid">
-    <div class="card" id="attila">
-      <img src="images/attila.jpg" alt="Total War Atilla"/>
-      <h2>Total War: Atilla</h2>
-      <a href="/modding/total-war/atilla">View Mods</a>
+  <div class="grid">
+    <!-- Attila: opens Attila.html in a popup -->
+    <div class="card" onclick="openPopup('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Attila.html','Attila',800,600)">
+      <img src="https://via.placeholder.com/80?text=Attila" alt="Attila logo">
+      <span>Attila</span>
     </div>
 
-    <div class="card" id="shogun2">
-      <img src="images/shogun2.jpg" alt="Total War Shogun 2"/>
-      <h2>Total War: Shogun 2</h2>
-      <a href="/modding/total-war/shogun2">View Mods</a>
+    <!-- Shogun 2 -->
+    <div class="card" onclick="location.href='Shogun2.html'">
+      <img src="https://via.placeholder.com/80?text=Shogun+2" alt="Shogun 2 logo">
+      <span>Shogun 2</span>
     </div>
 
-    <div class="card" id="rome2">
-      <img src="images/rome2.jpg" alt="Total War Rome II"/>
-      <h2>Total War: Rome II</h2>
-      <a href="/modding/total-war/rome2">View Mods</a>
+    <!-- Rome II -->
+    <div class="card" onclick="location.href='Rome2.html'">
+      <img src="https://via.placeholder.com/80?text=Rome+II" alt="Rome II logo">
+      <span>Rome II</span>
     </div>
 
-    <div class="card" id="empire">
-      <img src="images/empire.jpg" alt="Total War Empire"/>
-      <h2>Total War: Empire</h2>
-      <a href="/modding/total-war/empire">View Mods</a>
+    <!-- Empire -->
+    <div class="card" onclick="location.href='Empire.html'">
+      <img src="https://via.placeholder.com/80?text=Empire" alt="Empire logo">
+      <span>Empire</span>
     </div>
 
-    <div class="card" id="napoleon">
-      <img src="images/napoleon.jpg" alt="Total War Napoleon"/>
-      <h2>Total War: Napoleon</h2>
-      <a href="/modding/total-war/napoleon">View Mods</a>
+    <!-- Napoleon -->
+    <div class="card" onclick="location.href='Napoleon.html'">
+      <img src="https://via.placeholder.com/80?text=Napoleon" alt="Napoleon logo">
+      <span>Napoleon</span>
     </div>
 
-    <div class="card" id="britannia">
-      <img src="images/britannia.jpg" alt="Total War Britannia"/>
-      <h2>Total War: Britannia</h2>
-      <a href="/modding/total-war/britannia">View Mods</a>
+    <!-- Britannia -->
+    <div class="card" onclick="location.href='Britannia.html'">
+      <img src="https://via.placeholder.com/80?text=Britannia" alt="Britannia logo">
+      <span>Britannia</span>
     </div>
-  </main>
+  </div>
+
+  <script>
+    function openPopup(url, name, w, h) {
+      // calculate centered position
+      const left = (screen.width/2) - (w/2);
+      const top  = (screen.height/2) - (h/2);
+      window.open(
+        url,
+        name,
+        `width=${w},height=${h},top=${top},left=${left},resizable,scrollbars`
+      );
+    }
+  </script>
 
 </body>
 </html>
