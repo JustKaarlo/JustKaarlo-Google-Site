@@ -19,7 +19,7 @@
     }
     .grid {
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); /* Increased min width */
       gap:2rem;
       width:100%;
       max-width:1000px;
@@ -30,7 +30,7 @@
       border-radius:16px;
       backdrop-filter:blur(8px);
       box-shadow:0 8px 24px rgba(0,0,0,0.5);
-      padding:1rem;
+      padding:1.5rem; /* Increased padding */
       text-align:center;
       cursor:pointer;
       transition:transform .2s, background .2s;
@@ -73,12 +73,12 @@
     .modal .close-btn {
       position:absolute;
       top:12px; right:12px;
-      width:32px; height:32px;
+      width:48px; height:48px; /* Increased size */
       background:rgba(255,255,255,0.2);
       border-radius:50%;
-      font-size:1.5rem;
+      font-size:2rem; /* Larger font */
       color:#fff;
-      line-height:32px;
+      line-height:48px; /* Match height */
       text-align:center;
       cursor:pointer;
       transition:background .2s;
@@ -142,7 +142,7 @@
     (async function(){
       const folderId="15r5NfzciWGfClpGvmT5ydfH4fDbScVAl";
       const apiKey="AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
-      const url=\`https://www.googleapis.com/drive/v3/files?q='\${folderId}'+in+parents+and+trashed=false&key=\${apiKey}&fields=files(id,name,webViewLink,iconLink)\`;
+      const url=`https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,webViewLink,iconLink)`;
       const data=await(await fetch(url)).json();
       const list=document.getElementById("fileList");
       list.innerHTML="";
@@ -162,20 +162,5 @@
       });
     })();
   <\/script>
-</body></html>
-    `;
-    const overlay = document.getElementById('overlay');
-    const frame = document.getElementById('modal-frame');
-
-    function openModal() {
-      frame.srcdoc = attilaMarkup;
-      overlay.style.display = 'flex';
-    }
-    function closeModal() {
-      overlay.style.display = 'none';
-      frame.srcdoc = '';
-    }
-  </script>
-
 </body>
 </html>
