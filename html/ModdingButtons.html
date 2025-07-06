@@ -25,16 +25,15 @@
       width: 100%;
       max-width: 800px;
       padding: 0 50px;
-      margin-top: 40px;
-      margin-bottom: 20px;
+      margin: 40px 0 20px;
     }
 
     .title img {
       width: 100%;
       height: auto;
       display: block;
-      opacity: 0.5;           /* 50% transparent */
-      filter: blur(2px);      /* slight blur */
+      opacity: 0.7;    /* 70% opacity */
+      /* blur removed */
     }
 
     .container {
@@ -49,8 +48,6 @@
     .report-btn {
       position: relative;
       background: rgba(255, 255, 255, 0.02);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
       border: none;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
@@ -63,11 +60,16 @@
       align-items: center;
       text-decoration: none;
       overflow: hidden;
+
+      /* subtle motion blur effect */
+      filter: blur(2px);
     }
 
     .report-btn:hover {
       transform: scale(1.03);
       box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      /* maybe sharpen a bit on hover */
+      filter: blur(1px);
     }
 
     .report-btn img {
