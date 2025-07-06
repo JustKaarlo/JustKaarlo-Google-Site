@@ -235,6 +235,9 @@
 </html>
     `;
 
+    const overlay = document.getElementById('overlay');
+    const frame   = document.getElementById('modal-frame');
+
     function openAttilaModal() {
       frame.srcdoc = attilaMarkup;
       overlay.style.display = 'flex';
