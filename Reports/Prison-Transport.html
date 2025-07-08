@@ -346,6 +346,18 @@
       const pickup = document.getElementById('pickup').value.trim();
       const receiver = document.getElementById('receiver').value.trim();
       const department = document.getElementById('department').value.trim();
+
+      const suspectEls = [...document.querySelectorAll('.suspect-container')];
+      for (let i = 0; i < suspectEls.length; i++) {
+        const el = suspectEls[i];
+        const name = el.querySelector('input[type="text"]').value.trim();
+        const gender = el.querySelector('select').value.trim();
+        const dob = el.querySelector('input[type="date"]').value.trim();
+        if (!name || !gender || !dob) {
+          showErrorPopup();
+          return;
+        }
+      }
       if (!datetime || !pickup || !receiver || !department) {
         showErrorPopup();
         return;
