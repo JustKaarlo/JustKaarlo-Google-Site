@@ -209,7 +209,7 @@
     <div class="section-title">TRANSPORT DETAILS</div>
     <div class="row">
       <div class="field-group">
-        <label>Time & Date</label>
+        <label>Date & Time</label>
         <input type="datetime-local" id="datetime">
       </div>
       <div class="field-group">
@@ -355,21 +355,22 @@
         const name = el.querySelector('input[type="text"]').value.trim();
         const gender = el.querySelector('select').value.trim();
         const dob = el.querySelector('input[type="date"]').value.trim();
-        return `#${i + 1} ${name} | ${gender} | ${dob}`;
+        return `#${i + 1} ${name} <> ${gender} <> ${dob}`;
       }).filter(x => x.includes("|")).join("\n");
 
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
 
+      const niceDateTime = datetime.replace('T', ' ');
       const embed = {
-        title: "Prison Transport Report",
+        title: "PRISON TRANSPORT REPORT",
         color: 4737096,
         fields: [
-          { name: "Time & Date", value: `\`\`\`\n${datetime}\n\`\`\`` },
-          { name: "Pickup Location", value: `\`\`\`\n${pickup}\n\`\`\`` },
-          { name: "Prison Facility", value: "```Bolingbroke Pen.```" },
-          { name: "Received By", value: `\`\`\`\n${receiver}\n\`\`\`` },
-          { name: "Department", value: `\`\`\`\n${department}\n\`\`\`` },
-          { name: "Suspects", value: `\`\`\`\n${suspects || 'No suspect info provided'}\n\`\`\`` }
+          { name: "Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: true },
+          { name: "Prison Facility", value: "```Bolingbroke Pen.```", inline: true },
+          { name: "Pickup Location", value: `\`\`\`\n${pickup}\n\`\`\``, inline: false },
+          { name: "Received By", value: `\`\`\`\n${receiver}\n\`\`\``, inline: true },
+          { name: "Department", value: `\`\`\`\n${department}\n\`\`\``,  inline: true },
+          { name: "Suspects", value: `\`\`\`\n${suspects || 'No Suspect Info Provided'}\n\`\`\``, inline: false }
         ],
         footer: { text: "Department of Correction" },
         timestamp: new Date().toISOString()
@@ -383,7 +384,7 @@
         showPopup();
         resetForm();
       }).catch(() => {
-        alert("Failed to submit report.");
+        alert("Failed to Submit Report.");
       });
     }
 
