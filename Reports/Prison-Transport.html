@@ -355,7 +355,7 @@
         const name = el.querySelector('input[type="text"]').value.trim();
         const gender = el.querySelector('select').value.trim();
         const dob = el.querySelector('input[type="date"]').value.trim();
-        return `#${i + 1} ${name} | ${gender} | ${dob}`;
+        return `\`\`\`#${i + 1} ${name} | ${gender} | ${dob}\`\`\``;
       }).filter(x => x.includes("|")).join("\n");
 
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
@@ -369,7 +369,7 @@
           { name: "Prison Facility", value: "```Bolingbroke Pen.```", inline: true },
           { name: "Pickup Location", value: `\`\`\`\n${pickup}\n\`\`\``, inline: false },
           { name: "Received By", value: `\`\`\`\n${receiver}\n\`\`\``, inline: true },
-          { name: "Department", value: `\`\`\`\n${department}\n\`\`\``,  inline: true },
+          { name: "Department", value: `\`\`\`\n${department}\n\`\`\``, inline: true },
           { name: "Suspects", value: `\`\`\`\n${suspects || 'No Suspect Info Provided'}\n\`\`\``, inline: false }
         ],
         footer: { text: "Department of Correction" },
