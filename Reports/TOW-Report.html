@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>TOW Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
-    * { font-family: 'Rubik', sans-serif; }
+    * {
+      font-family: 'Rubik', sans-serif;
+    }
 
     body {
       background: transparent;
@@ -125,7 +128,8 @@
       flex: 1;
     }
 
-    #popup-overlay, #error-popup {
+    #popup-overlay,
+    #error-popup {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -134,7 +138,7 @@
       color: white;
       border-radius: 12px;
       padding: 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
       display: none;
       z-index: 10;
       max-width: 90%;
@@ -161,6 +165,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <div class="card">
@@ -302,20 +307,21 @@
 
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
 
+      const niceDateTime = values.datetime.replace('T', ' ');
       const embed = {
-        title: "TOW Report",
+        title: "TOW REPORT",
         color: 4737096,
         fields: [
-          { name: "Registered Owner", value: `\`\`\`\n${values.owner}\n\`\`\`` },
-          { name: "Make & Model", value: `\`\`\`\n${values.makeModel}\n\`\`\`` },
-          { name: "Color", value: `\`\`\`\n${values.color}\n\`\`\`` },
-          { name: "Tag No.", value: `\`\`\`\n${values.tag}\n\`\`\`` },
-          { name: "Condition", value: `\`\`\`\n${values.condition}\n\`\`\`` },
-          { name: "Time & Date", value: `\`\`\`\n${values.datetime}\n\`\`\`` },
-          { name: "Requested By", value: `\`\`\`\n${values.requestedBy}\n\`\`\`` },
-          { name: "Taken To", value: `\`\`\`\n${values.takenTo}\n\`\`\`` },
-          { name: "Location", value: `\`\`\`\n${values.location}\n\`\`\`` },
-          { name: "Reason for Tow", value: `\`\`\`\n${values.reason}\n\`\`\`` }
+          { name: "Registered Owner", value: `\`\`\`\n${values.owner}\n\`\`\``, inline: true },
+          { name: "Make & Model", value: `\`\`\`\n${values.makeModel}\n\`\`\``, inline: true },
+          { name: "Color", value: `\`\`\`\n${values.color}\n\`\`\``, inline: true },
+          { name: "Tag No.", value: `\`\`\`\n${values.tag}\n\`\`\``, inline: true },
+          { name: "Condition", value: `\`\`\`\n${values.condition}\n\`\`\``, inline: false },
+          { name: "Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: true },
+          { name: "Requested By", value: `\`\`\`\n${values.requestedBy}\n\`\`\``, inline: true },
+          { name: "Taken To", value: `\`\`\`\n${values.takenTo}\n\`\`\``, inline: true },
+          { name: "Location", value: `\`\`\`\n${values.location}\n\`\`\``, inline: false },
+          { name: "Reason for Tow", value: `\`\`\`\n${values.reason}\n\`\`\``, inline: false }
         ],
         footer: { text: "Department of Transportation" },
         timestamp: new Date().toISOString()
@@ -328,7 +334,7 @@
       }).then(() => {
         showPopup();
         resetForm();
-      }).catch(() => alert("Failed to submit report."));
+      }).catch(() => alert("Failed to Submit Report."));
     }
   </script>
 </body>
