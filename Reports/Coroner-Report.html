@@ -115,7 +115,7 @@
     .wide {
       width: 100%;
     }
-    
+
     button {
       background-color: #3c78d8;
       color: white;
@@ -126,7 +126,11 @@
       cursor: pointer;
       transition: background 0.3s ease;
     }
-    button:hover { background-color: #5187dc; }
+
+    button:hover {
+      background-color: #5187dc;
+    }
+
     .tag-container {
       display: flex;
       flex-wrap: wrap;
@@ -379,20 +383,20 @@
     function sendWebhook() {
       const data = window.tempSubmissionData;
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
-
+      const niceDateTime = data.datetime.replace('T', ' ');
       const embed = {
-        title: "Coroner Report",
+        title: "CORONER REPORT",
         color: 4737096,
         fields: [
-          { name: "Name", value: `\`\`\`\n${data.name}\n\`\`\`` },
-          { name: "Date of Birth", value: `\`\`\`\n${data.dob}\n\`\`\`` },
-          { name: "Date of Examination", value: `\`\`\`\n${data.exam_date}\n\`\`\`` },
-          { name: "Pronounced Dead (Time & Date)", value: `\`\`\`\n${data.datetime}\n\`\`\`` },
-          { name: "Location", value: `\`\`\`\n${data.location}\n\`\`\`` },
-          { name: "Cause of Death", value: `\`\`\`\n${data.cause}\n\`\`\`` },
-          { name: "Observations", value: `\`\`\`\nFoul Play: ${data.foul}\nMedications: ${data.meds}\nDefibrillation: ${data.defib}\nCPR: ${data.cpr}\n\`\`\`` }
+          { name: "Date of Examination", value: `\`\`\`\n${data.exam_date}\n\`\`\``, inline: false },
+          { name: "Name", value: `\`\`\`\n${data.name}\n\`\`\``, inline: true },
+          { name: "Date of Birth", value: `\`\`\`\n${data.dob}\n\`\`\``, inline: true },
+          { name: "Pronounced Dead (Time & Date)", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
+          { name: "Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
+          { name: "Cause of Death", value: `\`\`\`\n${data.cause}\n\`\`\``, inline: false },
+          { name: "Observations", value: `\`\`\`\nFoul Play: ${data.foul}\nMedications: ${data.meds}\nDefibrillation: ${data.defib}\nCPR: ${data.cpr}\n\`\`\``, inline: false }
         ],
-        footer: { text: "LS COUNTY MEDICAL EXAMINER-CORONER" },
+        footer: { text: "Medical Examiner Office" },
         timestamp: new Date().toISOString()
       };
 
@@ -404,7 +408,7 @@
         showPopup();
         resetForm();
       }).catch(() => {
-        alert("Failed to submit report.");
+        alert("Failed to Submit Report.");
       });
     }
   </script>
