@@ -370,7 +370,7 @@
           { name: "Pickup Location", value: `\`\`\`\n${pickup}\n\`\`\``, inline: false },
           { name: "Received By", value: `\`\`\`\n${receiver}\n\`\`\``, inline: true },
           { name: "Department", value: `\`\`\`\n${department}\n\`\`\``, inline: true },
-          { name: "Suspects", value: `\`\`\`\n${suspects || 'No Suspect Info Provided'}\n\`\`\``, inline: false }
+          { name: "Suspects", value: `${suspects || '```No Suspect Info Provided```'}`, inline: false }
         ],
         footer: { text: "Department of Correction" },
         timestamp: new Date().toISOString()
