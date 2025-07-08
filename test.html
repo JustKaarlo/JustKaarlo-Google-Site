@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Prison Transport Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Rubik', sans-serif; }
+    body {
+      background: transparent;
+      padding: 30px;
+      max-width: 750px;
+      margin: auto;
+      color: white;
+    }
+    .card {
+      background: #2C2F33;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .header {
+      background: #56585B;
+      padding: 15px;
+      text-align: center;
+    }
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      margin: 0;
+    }
+    .header-subtitle {
+      font-size: 15px;
+      color: #ccc;
+      margin-top: 4px;
+    }
+    .section-title {
+      font-weight: bold;
+      font-size: 16px;
+      background: #23272A;
+      text-align: center;
+      padding: 8px;
+      margin-top: 20px;
+      border-radius: 6px;
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px;
+    }
+    .field-group {
+      flex: 1;
+      min-width: 150px;
+      display: flex;
+      flex-direction: column;
+    }
+    .field-group label {
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: #ccc;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    input[type="text"],
+    input[type="datetime-local"],
+    input[type="date"],
+    select {
+      padding: 6px 10px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #23272A;
+      color: white;
+    }
+    .wide { width: 100%; }
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin: 15px;
+    }
+    button {
+      background-color: #3c78d8;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover { background-color: #5187dc; }
+    .clear-btn { background-color: #4f545c; color: #c0c0c0; }
+    .clear-btn:hover { background-color: #5d626a; }
+    .submit-btn { flex: 1; }
+    #popup-overlay,
+    #error-popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #23272A;
+      color: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      display: none;
+      z-index: 10;
+      max-width: 90%;
+      text-align: center;
+    }
+    #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
+    #popup-overlay .header-subtitle,
+    #error-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
+    #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
+    .suspect-container {
+      background: #23272A;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .suspect-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .suspect-header .no-box {
+      font-size: 14px;
+      padding: 4px 10px;
+      background: #444;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+    .suspect-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .suspect-row .field-group {
+      flex: 1;
+      min-width: 140px;
+    }
+  </style>
+
+  <!-- include html2canvas for screenshot -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+
+<body>
+  <div class="card">
+    <div class="header">
+      <div class="header-title">DEPT. OF CORRECTIONS AND REHABILITATION</div>
+      <div class="header-subtitle">PRISON TRANSPORT REPORT</div>
+    </div>
+
+    <div class="section-title">TRANSPORT DETAILS</div>
+    <div class="row">
+      <div class="field-group">
+        <label>Date &amp; Time</label>
+        <input type="datetime-local" id="datetime">
+      </div>
+      <div class="field-group">
+        <label>Prison Facility</label>
+        <input type="text" value="Bolingbroke Pen." readonly>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field-group wide">
+        <label>Pickup Location</label>
+        <input type="text" id="pickup">
+      </div>
+    </div>
+
+    <div class="section-title">SUSPECT(S) INFORMATION</div>
+    <div id="suspectList"></div>
+    <div style="text-align: center; margin: 15px;">
+      <button onclick="addSuspect()">+ Add Suspect</button>
+    </div>
+
+    <div class="section-title">CUSTODY TRANSFER</div>
+    <div class="row">
+      <div class="field-group">
+        <label>Received By</label>
+        <input type="text" id="receiver">
+      </div>
+      <div class="field-group">
+        <label>Department</label>
+        <input type="text" id="department">
+      </div>
+    </div>
+
+    <div class="button-row">
+      <button class="clear-btn" onclick="resetForm()">Clear</button>
+      <button class="submit-btn" onclick="submitForm()">Submit</button>
+    </div>
+
+    <div id="popup-overlay">
+      <div class="header-title">✅ Report Submitted</div>
+      <div class="header-subtitle">Your Transport Report Has Been Logged</div>
+    </div>
+
+    <div id="error-popup">
+      <div class="header-title">⚠️ Submission Failed</div>
+      <div class="header-subtitle">All Fields Are Required</div>
+    </div>
+  </div>
+
+  <script>
+    const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
+
+    function updateSuspectListNumbers() {
+      const suspects = document.querySelectorAll('.suspect-container');
+      suspects.forEach((container, index) => {
+        const numberBox = container.querySelector('.no-box');
+        const deleteButton = container.querySelector('.delete-btn');
+        numberBox.textContent = `Suspect #${index + 1}`;
+        if (index === 0) {
+          deleteButton.disabled = true;
+          deleteButton.style.backgroundColor = '#3a3a3a';
+          deleteButton.style.cursor = 'not-allowed';
+          deleteButton.title = "Cannot remove the first suspect";
+        } else {
+          deleteButton.disabled = false;
+          deleteButton.style.backgroundColor = '';
+          deleteButton.style.cursor = 'pointer';
+          deleteButton.title = "";
+        }
+      });
+    }
+
+    function addSuspect() {
+      const container = document.getElementById("suspectList");
+      const suspectCard = document.createElement("div");
+      suspectCard.className = "suspect-container";
+      suspectCard.innerHTML = `
+        <div class="suspect-header">
+          <span class="no-box">Suspect</span>
+          <button class="delete-btn" onclick="removeSuspect(this)">🗑️</button>
+        </div>
+        <div class="suspect-row">
+          <div class="field-group">
+            <label>Name</label>
+            <input type="text">
+          </div>
+          <div class="field-group">
+            <label>Gender</label>
+            <select>
+              <option value="">Select</option>
+              <option>Male</option>
+              <option>Female</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label>Date of Birth</label>
+            <input type="date">
+          </div>
+        </div>`;
+      container.appendChild(suspectCard);
+      updateSuspectListNumbers();
+    }
+
+    function removeSuspect(button) {
+      const suspectCard = button.closest('.suspect-container');
+      if (suspectCard) {
+        suspectCard.remove();
+        updateSuspectListNumbers();
+      }
+    }
+
+    function resetForm() {
+      document.querySelectorAll('input[type="text"], input[type="datetime-local"], input[type="date"], select').forEach(el => {
+        if (!el.hasAttribute('readonly')) el.value = '';
+      });
+      document.getElementById("suspectList").innerHTML = '';
+      addSuspect();
+    }
+
+    function showPopup() {
+      const popup = document.getElementById('popup-overlay');
+      popup.style.display = 'block';
+      popup.onclick = () => popup.style.display = 'none';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
+    function showErrorPopup() {
+      const errorPopup = document.getElementById('error-popup');
+      errorPopup.style.display = 'block';
+      errorPopup.onclick = () => errorPopup.style.display = 'none';
+      setTimeout(() => errorPopup.style.display = 'none', 3000);
+    }
+
+    function submitForm() {
+      // grab top-level fields
+      const datetime   = document.getElementById('datetime').value.trim();
+      const pickup     = document.getElementById('pickup').value.trim();
+      const receiver   = document.getElementById('receiver').value.trim();
+      const department = document.getElementById('department').value.trim();
+
+      // basic check
+      if (!datetime || !pickup || !receiver || !department) {
+        showErrorPopup();
+        return;
+      }
+
+      // validate suspects
+      const suspectEls = [...document.querySelectorAll('.suspect-container')];
+      for (let el of suspectEls) {
+        const name   = el.querySelector('input[type="text"]').value.trim();
+        const gender = el.querySelector('select').value.trim();
+        const dob    = el.querySelector('input[type="date"]').value.trim();
+        if (!name || !gender || !dob) {
+          showErrorPopup();
+          return;
+        }
+      }
+
+      // build suspects code-blocks
+      const suspectBlocks = suspectEls.map((el, i) => {
+        const name   = el.querySelector('input[type="text"]').value.trim();
+        const gender = el.querySelector('select').value.trim();
+        const dob    = el.querySelector('input[type="date"]').value.trim();
+        return `\`\`\`#${i+1} ${name} | ${gender} | ${dob}\`\`\``;
+      });
+      const suspectsValue = suspectBlocks.join('\n');
+
+      // prepare embed
+      const niceDateTime = datetime.replace('T',' ');
+      const embed = {
+        title: "PRISON TRANSPORT REPORT",
+        color: 4737096,
+        fields: [
+          { name: "Date & Time",     value: `\`\`\`${niceDateTime}\`\`\``,           inline: true  },
+          { name: "Prison Facility", value: "```Bolingbroke Pen.```",               inline: true  },
+          { name: "Pickup Location", value: `\`\`\`${pickup}\`\`\``,                inline: false },
+          { name: "Received By",     value: `\`\`\`${receiver}\`\`\``,              inline: true  },
+          { name: "Department",      value: `\`\`\`${department}\`\`\``,            inline: true  },
+          { name: "\u200B",          value: "\u200B",                              inline: false },
+          { name: "Suspects",        value: suspectsValue || '```No Suspect Info```', inline: false }
+        ],
+        footer: { text: "Department of Correction" },
+        timestamp: new Date().toISOString(),
+        image: { url: "attachment://report.png" }
+      };
+
+      // snapshot + send
+      html2canvas(document.querySelector('.card')).then(canvas => {
+        canvas.toBlob(blob => {
+          const form = new FormData();
+          form.append("payload_json", JSON.stringify({ embeds: [embed] }));
+          form.append("file", blob, "report.png");
+          fetch(webhookURL, { method: "POST", body: form })
+            .then(() => {
+              showPopup();
+              resetForm();
+            })
+            .catch(err => {
+              console.error(err);
+              alert("Failed to send report image.");
+            });
+        }, "image/png");
+      });
+    }
+
+    window.onload = () => addSuspect();
+  </script>
+</body>
+</html>
