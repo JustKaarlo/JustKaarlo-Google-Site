@@ -330,15 +330,19 @@
     function sendWebhook() {
       const data = window.tempSubmissionData;
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
+      const niceDateTime = data.datetime.replace('T', ' ');
+      const violationsInline = data.violations
+        .map(off => `\`${off}\``)
+        .join(', ');
       const embed = {
         title: "Citation Report",
         color: 4737096,
         fields: [
           { name: "Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
-          { name: "Date & Time", value: `\`\`\`\n${data.datetime}\n\`\`\``, inline: false },
-          { name: "Name", value: `\`\`\`\n${data.name}\n\`\`\``, inline: false },
-          { name: "Amount", value: `\`\`\`\n${data.amount}\n\`\`\``, inline: false },
-          { name: "Violations", value: `\`\`\`\n${data.violations.join('\n')}\n\`\`\``, inline: false }
+          { name: "Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
+          { name: "Name", value: `\`\`\`\n${data.name}\n\`\`\``, inline: true },
+          { name: "Amount", value: `\`\`\`\n${data.amount}\n\`\`\``, inline: true },
+          { name: "Violations", value: violationsInline, inline: false }
         ],
         footer: { text: "Department of Justice" },
         timestamp: new Date().toISOString()
@@ -348,11 +352,13 @@
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ embeds: [embed] })
-      }).then(() => {
+      })
+      .then(() => {
         showPopup();
         resetForm();
-      }).catch(() => {
-        alert("Failed to submit report.");
+      })
+      .catch(() => {
+        alert("Failed to Submit Report.");
       });
     }
 
