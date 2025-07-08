@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <title>Prison Transport Report</title>
@@ -22,22 +21,9 @@
       overflow: hidden;
       position: relative;
     }
-    .header {
-      background: #56585B;
-      padding: 15px;
-      text-align: center;
-    }
-    .header-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: white;
-      margin: 0;
-    }
-    .header-subtitle {
-      font-size: 15px;
-      color: #ccc;
-      margin-top: 4px;
-    }
+    .header { background: #56585B; padding: 15px; text-align: center; }
+    .header-title { font-size: 20px; font-weight: bold; color: white; margin: 0; }
+    .header-subtitle { font-size: 15px; color: #ccc; margin-top: 4px; }
     .section-title {
       font-weight: bold;
       font-size: 16px;
@@ -96,8 +82,6 @@
     .clear-btn { background-color: #4f545c; color: #c0c0c0; }
     .clear-btn:hover { background-color: #5d626a; }
     .submit-btn { flex: 1; }
-    /* hide these in the screenshot */
-    .control-btn { /* marker class, no CSS needed here */ }
     #popup-overlay,
     #error-popup {
       position: absolute;
@@ -182,7 +166,7 @@
     <div class="section-title">SUSPECT(S) INFORMATION</div>
     <div id="suspectList"></div>
     <div style="text-align: center; margin: 15px;">
-      <button class="control-btn" onclick="addSuspect()">+ Add Suspect</button>
+      <button onclick="addSuspect()">+ Add Suspect</button>
     </div>
 
     <div class="section-title">CUSTODY TRANSFER</div>
@@ -198,8 +182,8 @@
     </div>
 
     <div class="button-row">
-      <button class="clear-btn control-btn" onclick="resetForm()">Clear</button>
-      <button class="submit-btn control-btn" onclick="submitForm()">Submit</button>
+      <button class="clear-btn" onclick="resetForm()">Clear</button>
+      <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
 
     <div id="popup-overlay">
@@ -214,29 +198,26 @@
   </div>
 
   <script>
-    const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
+    const webhookURL = 'https://discord.com/api/webhooks/…your_webhook_here…';
 
     function updateSuspectListNumbers() {
-      document.querySelectorAll('.suspect-container').forEach((container, i) => {
-        const num = container.querySelector('.no-box');
-        const del = container.querySelector('.delete-btn');
+      document.querySelectorAll('.suspect-container').forEach((c, i) => {
+        const num = c.querySelector('.no-box');
+        const del = c.querySelector('.delete-btn');
         num.textContent = `Suspect #${i+1}`;
         if (i === 0) {
           del.disabled = true;
-          del.style.backgroundColor = '#3a3a3a';
           del.style.cursor = 'not-allowed';
           del.title = "Cannot remove the first suspect";
         } else {
           del.disabled = false;
-          del.style.backgroundColor = '';
-          del.style.cursor = 'pointer';
-          del.title = '';
+          del.title = "";
         }
       });
     }
 
     function addSuspect() {
-      const wrapper = document.getElementById('suspectList');
+      const list = document.getElementById('suspectList');
       const div = document.createElement('div');
       div.className = 'suspect-container';
       div.innerHTML = `
@@ -246,12 +227,14 @@
         </div>
         <div class="suspect-row">
           <div class="field-group"><label>Name</label><input type="text"></div>
-          <div class="field-group"><label>Gender</label><select>
-            <option value="">Select</option><option>Male</option><option>Female</option>
-          </select></div>
+          <div class="field-group"><label>Gender</label>
+            <select>
+              <option value="">Select</option><option>Male</option><option>Female</option>
+            </select>
+          </div>
           <div class="field-group"><label>Date of Birth</label><input type="date"></div>
         </div>`;
-      wrapper.appendChild(div);
+      list.appendChild(div);
       updateSuspectListNumbers();
     }
 
@@ -265,40 +248,40 @@
 
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"], input[type="date"], select')
-        .forEach(el => { if (!el.hasAttribute('readonly')) el.value = ''; });
+              .forEach(el => { if (!el.hasAttribute('readonly')) el.value = ''; });
       document.getElementById('suspectList').innerHTML = '';
       addSuspect();
     }
 
     function showPopup() {
-      const pop = document.getElementById('popup-overlay');
-      pop.style.display = 'block';
-      pop.onclick = () => pop.style.display = 'none';
-      setTimeout(() => pop.style.display = 'none', 3000);
+      const p = document.getElementById('popup-overlay');
+      p.style.display = 'block';
+      p.onclick = () => p.style.display = 'none';
+      setTimeout(() => p.style.display = 'none', 3000);
     }
 
     function showErrorPopup() {
-      const pop = document.getElementById('error-popup');
-      pop.style.display = 'block';
-      pop.onclick = () => pop.style.display = 'none';
-      setTimeout(() => pop.style.display = 'none', 3000);
+      const p = document.getElementById('error-popup');
+      p.style.display = 'block';
+      p.onclick = () => p.style.display = 'none';
+      setTimeout(() => p.style.display = 'none', 3000);
     }
 
     function submitForm() {
-      // top‐level fields
-      const dt   = document.getElementById('datetime').value.trim();
-      const pk   = document.getElementById('pickup').value.trim();
-      const rb   = document.getElementById('receiver').value.trim();
-      const dep  = document.getElementById('department').value.trim();
-      if (!dt || !pk || !rb || !dep) {
+      // validate top‐level
+      const dt = document.getElementById('datetime').value.trim();
+      const pu = document.getElementById('pickup').value.trim();
+      const rb = document.getElementById('receiver').value.trim();
+      const dp = document.getElementById('department').value.trim();
+      if (!dt || !pu || !rb || !dp) {
         showErrorPopup();
         return;
       }
-      // suspect fields
-      for (let card of document.querySelectorAll('.suspect-container')) {
-        const n = card.querySelector('input[type="text"]').value.trim();
-        const g = card.querySelector('select').value.trim();
-        const d = card.querySelector('input[type="date"]').value.trim();
+      // validate suspects
+      for (let c of document.querySelectorAll('.suspect-container')) {
+        const n = c.querySelector('input[type="text"]').value.trim();
+        const g = c.querySelector('select').value.trim();
+        const d = c.querySelector('input[type="date"]').value.trim();
         if (!n || !g || !d) {
           showErrorPopup();
           return;
@@ -313,10 +296,11 @@
         timestamp: new Date().toISOString()
       };
 
-      // hide controls, snapshot, then restore
-      const controls = document.querySelectorAll('.control-btn');
-      controls.forEach(b => b.style.display = 'none');
+      // hide _all_ buttons in .card
+      const buttons = document.querySelectorAll('.card button');
+      buttons.forEach(b => b.style.visibility = 'hidden');
 
+      // snapshot
       html2canvas(document.querySelector('.card')).then(canvas => {
         canvas.toBlob(blob => {
           const form = new FormData();
@@ -324,14 +308,14 @@
           form.append('file', blob, 'report.png');
           fetch(webhookURL, { method: 'POST', body: form })
             .then(() => {
-              // show buttons again
-              controls.forEach(b => b.style.display = '');
+              // restore buttons, show success, reset
+              buttons.forEach(b => b.style.visibility = '');
               showPopup();
               resetForm();
             })
             .catch(err => {
               console.error(err);
-              controls.forEach(b => b.style.display = '');
+              buttons.forEach(b => b.style.visibility = '');
               alert('Failed to send report image.');
             });
         }, 'image/png');
