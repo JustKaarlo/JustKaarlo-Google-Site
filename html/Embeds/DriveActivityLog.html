@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Drive Activity Log</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <style>
+    body {
+      overflow: hidden;
+      margin: 0;
+      padding: 20px;
+      background: transparent;
+      font-family: 'Rubik', sans-serif;
+      color: white;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    th {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      text-align: left;
+    }
+
+    td {
+      color: white;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    <img src="https://ssl.gstatic.com/docs/doclist/images/icon_11_spreadsheet_list.png" 
+         alt="Google Sheets Icon"
+         style="height: 24px; vertical-align: middle; margin-right: 8px;">
+    Drive Activity Log
+  </h1>
+
+  <table id="dataTable"></table>
+
+  <script>
+    fetch('https://docs.google.com/spreadsheets/d/e/2PACX-1vTDrcH4uAC4I1wugay-7N4_HAmZcyH-tiy54KRB2_skvOwbNOEFA8bSV9nwnpCgIiGfeWPR4LZiKoG-/pub?output=csv')
+      .then(res => res.text())
+      .then(csv => {
+        const rows = csv.trim().split('\n').map(row => row.split(','));
+        const table = document.getElementById('dataTable');
+
+        rows.forEach((row, rowIndex) => {
+          const tr = document.createElement('tr');
+          row.forEach(cell => {
+            const td = document.createElement(rowIndex === 0 ? 'th' : 'td');
+            td.textContent = cell;
+            tr.appendChild(td);
+          });
+          table.appendChild(tr);
+        });
+      });
+  </script>
+</body>
+</html>
