@@ -361,7 +361,7 @@
     async function submitForm() {
       const getCheckboxValues = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
       const datetime = document.getElementById('datetime').value;
-      const niceDateTime = datetime.replace('T', '');
+      const niceDateTime = datetime.replace('T', ' ');
       const location = document.getElementById('location').value;
       const name = document.getElementById('name').value;
       const gender = document.getElementById('gender').value;
@@ -380,22 +380,28 @@
         showErrorPopup();
         return;
       }
+      const consciousnessInline = consciousness
+        .map(off => `\`${off}\``)
+        .join(', ');
+      const treatmentInline = treatment
+        .map(off => `\`${off}\``)
+        .join(', ');
       const embed = {
         title: "MEDICAL REPORT",
         color: 4737096,
         fields: [
-          { name: "Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\`` },
-          { name: "Location", value: `\`\`\`\n${location}\n\`\`\`` },
-          { name: "Name", value: `\`\`\`\n${name}\n\`\`\`` },
-          { name: "Gender", value: `\`\`\`\n${gender}\n\`\`\`` },
-          { name: "DOB", value: `\`\`\`\n${dob}\n\`\`\`` },
-          { name: "Primary Condition", value: `\`\`\`\n${primary}\n\`\`\`` },
-          { name: "Visible Injuries", value: `\`\`\`\n${injuries}\n\`\`\`` },
-          { name: "Vitals", value: `\`\`\`\nPulse: ${pulse}\nRespiration: ${respiration}\nBlood Pressure: ${bp}\n\`\`\`` },
-          { name: "Level of Consciousness", value: `\`\`\`\n${consciousness.join(", ")}\n\`\`\`` },
-          { name: "Treatment Provided", value: `\`\`\`\n${treatment.join(", ")}\n\`\`\`` },
-          { name: "Transported To", value: `\`\`\`\n${hospital}\n\`\`\`` },
-          { name: "Condition During Transport", value: `\`\`\`\n${condition}\n\`\`\`` }
+          { name: "Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
+          { name: "Location", value: `\`\`\`\n${location}\n\`\`\``, inline: false },
+          { name: "Name", value: `\`\`\`\n${name}\n\`\`\``, inline: true },
+          { name: "Gender", value: `\`\`\`\n${gender}\n\`\`\``, inline: true },
+          { name: "DOB", value: `\`\`\`\n${dob}\n\`\`\``, inline: true },
+          { name: "Primary Condition", value: `\`\`\`\n${primary}\n\`\`\``, inline: true },
+          { name: "Visible Injuries", value: `\`\`\`\n${injuries}\n\`\`\``, inline: true },
+          { name: "Vitals", value: `\`\`\`\nPulse: ${pulse}\nRespiration: ${respiration}\nBlood Pressure: ${bp}\n\`\`\``, inline: false },
+          { name: "Level of Consciousness", value: consciousnessInline, inline: false },
+          { name: "Treatment Provided", value: treatmentInline, inline: false },
+          { name: "Transported To", value: `\`\`\`\n${hospital}\n\`\`\``, inline: true },
+          { name: "Condition During Transport", value: `\`\`\`\n${condition}\n\`\`\``, inline: true }
         ],
         footer: { text: "Emergency Medical Services" },
         timestamp: new Date().toISOString()
