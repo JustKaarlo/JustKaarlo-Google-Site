@@ -147,7 +147,7 @@
     }
   </style>
 
-  <!-- include html2canvas for screenshot -->
+  <!-- html2canvas for snapshotting -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 
@@ -244,22 +244,11 @@
           <button class="delete-btn" onclick="removeSuspect(this)">🗑️</button>
         </div>
         <div class="suspect-row">
-          <div class="field-group">
-            <label>Name</label>
-            <input type="text">
-          </div>
-          <div class="field-group">
-            <label>Gender</label>
-            <select>
-              <option value="">Select</option>
-              <option>Male</option>
-              <option>Female</option>
-            </select>
-          </div>
-          <div class="field-group">
-            <label>Date of Birth</label>
-            <input type="date">
-          </div>
+          <div class="field-group"><label>Name</label><input type="text"></div>
+          <div class="field-group"><label>Gender</label><select>
+            <option value="">Select</option><option>Male</option><option>Female</option>
+          </select></div>
+          <div class="field-group"><label>Date of Birth</label><input type="date"></div>
         </div>`;
       container.appendChild(suspectCard);
       updateSuspectListNumbers();
@@ -274,9 +263,8 @@
     }
 
     function resetForm() {
-      document.querySelectorAll('input[type="text"], input[type="datetime-local"], input[type="date"], select').forEach(el => {
-        if (!el.hasAttribute('readonly')) el.value = '';
-      });
+      document.querySelectorAll('input[type="text"], input[type="datetime-local"], input[type="date"], select')
+              .forEach(el => { if (!el.hasAttribute('readonly')) el.value = ''; });
       document.getElementById("suspectList").innerHTML = '';
       addSuspect();
     }
@@ -296,19 +284,17 @@
     }
 
     function submitForm() {
-      // grab top-level fields
+      // top-level validation
       const datetime   = document.getElementById('datetime').value.trim();
       const pickup     = document.getElementById('pickup').value.trim();
       const receiver   = document.getElementById('receiver').value.trim();
       const department = document.getElementById('department').value.trim();
-
-      // basic check
       if (!datetime || !pickup || !receiver || !department) {
         showErrorPopup();
         return;
       }
 
-      // validate suspects
+      // suspect validation
       const suspectEls = [...document.querySelectorAll('.suspect-container')];
       for (let el of suspectEls) {
         const name   = el.querySelector('input[type="text"]').value.trim();
@@ -320,35 +306,16 @@
         }
       }
 
-      // build suspects code-blocks
-      const suspectBlocks = suspectEls.map((el, i) => {
-        const name   = el.querySelector('input[type="text"]').value.trim();
-        const gender = el.querySelector('select').value.trim();
-        const dob    = el.querySelector('input[type="date"]').value.trim();
-        return `\`\`\`#${i+1} ${name} | ${gender} | ${dob}\`\`\``;
-      });
-      const suspectsValue = suspectBlocks.join('\n');
-
-      // prepare embed
+      // build minimal embed
       const niceDateTime = datetime.replace('T',' ');
       const embed = {
-        title: "PRISON TRANSPORT REPORT",
-        color: 4737096,
-        fields: [
-          { name: "Date & Time",     value: `\`\`\`${niceDateTime}\`\`\``,           inline: true  },
-          { name: "Prison Facility", value: "```Bolingbroke Pen.```",               inline: true  },
-          { name: "Pickup Location", value: `\`\`\`${pickup}\`\`\``,                inline: false },
-          { name: "Received By",     value: `\`\`\`${receiver}\`\`\``,              inline: true  },
-          { name: "Department",      value: `\`\`\`${department}\`\`\``,            inline: true  },
-          { name: "\u200B",          value: "\u200B",                              inline: false },
-          { name: "Suspects",        value: suspectsValue || '```No Suspect Info```', inline: false }
-        ],
+        title: "Prison Transport Report",
+        image: { url: "attachment://report.png" },
         footer: { text: "Department of Correction" },
-        timestamp: new Date().toISOString(),
-        image: { url: "attachment://report.png" }
+        timestamp: new Date().toISOString()
       };
 
-      // snapshot + send
+      // snapshot + send only picture, title, footer & timestamp
       html2canvas(document.querySelector('.card')).then(canvas => {
         canvas.toBlob(blob => {
           const form = new FormData();
