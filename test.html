@@ -96,6 +96,8 @@
     .clear-btn { background-color: #4f545c; color: #c0c0c0; }
     .clear-btn:hover { background-color: #5d626a; }
     .submit-btn { flex: 1; }
+    /* hide these in the screenshot */
+    .control-btn { /* marker class, no CSS needed here */ }
     #popup-overlay,
     #error-popup {
       position: absolute;
@@ -180,7 +182,7 @@
     <div class="section-title">SUSPECT(S) INFORMATION</div>
     <div id="suspectList"></div>
     <div style="text-align: center; margin: 15px;">
-      <button onclick="addSuspect()">+ Add Suspect</button>
+      <button class="control-btn" onclick="addSuspect()">+ Add Suspect</button>
     </div>
 
     <div class="section-title">CUSTODY TRANSFER</div>
@@ -196,8 +198,8 @@
     </div>
 
     <div class="button-row">
-      <button class="clear-btn" onclick="resetForm()">Clear</button>
-      <button class="submit-btn" onclick="submitForm()">Submit</button>
+      <button class="clear-btn control-btn" onclick="resetForm()">Clear</button>
+      <button class="submit-btn control-btn" onclick="submitForm()">Submit</button>
     </div>
 
     <div id="popup-overlay">
@@ -215,30 +217,29 @@
     const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
 
     function updateSuspectListNumbers() {
-      const suspects = document.querySelectorAll('.suspect-container');
-      suspects.forEach((container, index) => {
-        const numberBox = container.querySelector('.no-box');
-        const deleteButton = container.querySelector('.delete-btn');
-        numberBox.textContent = `Suspect #${index + 1}`;
-        if (index === 0) {
-          deleteButton.disabled = true;
-          deleteButton.style.backgroundColor = '#3a3a3a';
-          deleteButton.style.cursor = 'not-allowed';
-          deleteButton.title = "Cannot remove the first suspect";
+      document.querySelectorAll('.suspect-container').forEach((container, i) => {
+        const num = container.querySelector('.no-box');
+        const del = container.querySelector('.delete-btn');
+        num.textContent = `Suspect #${i+1}`;
+        if (i === 0) {
+          del.disabled = true;
+          del.style.backgroundColor = '#3a3a3a';
+          del.style.cursor = 'not-allowed';
+          del.title = "Cannot remove the first suspect";
         } else {
-          deleteButton.disabled = false;
-          deleteButton.style.backgroundColor = '';
-          deleteButton.style.cursor = 'pointer';
-          deleteButton.title = "";
+          del.disabled = false;
+          del.style.backgroundColor = '';
+          del.style.cursor = 'pointer';
+          del.title = '';
         }
       });
     }
 
     function addSuspect() {
-      const container = document.getElementById("suspectList");
-      const suspectCard = document.createElement("div");
-      suspectCard.className = "suspect-container";
-      suspectCard.innerHTML = `
+      const wrapper = document.getElementById('suspectList');
+      const div = document.createElement('div');
+      div.className = 'suspect-container';
+      div.innerHTML = `
         <div class="suspect-header">
           <span class="no-box">Suspect</span>
           <button class="delete-btn" onclick="removeSuspect(this)">🗑️</button>
@@ -250,64 +251,61 @@
           </select></div>
           <div class="field-group"><label>Date of Birth</label><input type="date"></div>
         </div>`;
-      container.appendChild(suspectCard);
+      wrapper.appendChild(div);
       updateSuspectListNumbers();
     }
 
-    function removeSuspect(button) {
-      const suspectCard = button.closest('.suspect-container');
-      if (suspectCard) {
-        suspectCard.remove();
+    function removeSuspect(btn) {
+      const card = btn.closest('.suspect-container');
+      if (card) {
+        card.remove();
         updateSuspectListNumbers();
       }
     }
 
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"], input[type="date"], select')
-              .forEach(el => { if (!el.hasAttribute('readonly')) el.value = ''; });
-      document.getElementById("suspectList").innerHTML = '';
+        .forEach(el => { if (!el.hasAttribute('readonly')) el.value = ''; });
+      document.getElementById('suspectList').innerHTML = '';
       addSuspect();
     }
 
     function showPopup() {
-      const popup = document.getElementById('popup-overlay');
-      popup.style.display = 'block';
-      popup.onclick = () => popup.style.display = 'none';
-      setTimeout(() => popup.style.display = 'none', 3000);
+      const pop = document.getElementById('popup-overlay');
+      pop.style.display = 'block';
+      pop.onclick = () => pop.style.display = 'none';
+      setTimeout(() => pop.style.display = 'none', 3000);
     }
 
     function showErrorPopup() {
-      const errorPopup = document.getElementById('error-popup');
-      errorPopup.style.display = 'block';
-      errorPopup.onclick = () => errorPopup.style.display = 'none';
-      setTimeout(() => errorPopup.style.display = 'none', 3000);
+      const pop = document.getElementById('error-popup');
+      pop.style.display = 'block';
+      pop.onclick = () => pop.style.display = 'none';
+      setTimeout(() => pop.style.display = 'none', 3000);
     }
 
     function submitForm() {
-      // top-level validation
-      const datetime   = document.getElementById('datetime').value.trim();
-      const pickup     = document.getElementById('pickup').value.trim();
-      const receiver   = document.getElementById('receiver').value.trim();
-      const department = document.getElementById('department').value.trim();
-      if (!datetime || !pickup || !receiver || !department) {
+      // top‐level fields
+      const dt   = document.getElementById('datetime').value.trim();
+      const pk   = document.getElementById('pickup').value.trim();
+      const rb   = document.getElementById('receiver').value.trim();
+      const dep  = document.getElementById('department').value.trim();
+      if (!dt || !pk || !rb || !dep) {
         showErrorPopup();
         return;
       }
-
-      // suspect validation
-      const suspectEls = [...document.querySelectorAll('.suspect-container')];
-      for (let el of suspectEls) {
-        const name   = el.querySelector('input[type="text"]').value.trim();
-        const gender = el.querySelector('select').value.trim();
-        const dob    = el.querySelector('input[type="date"]').value.trim();
-        if (!name || !gender || !dob) {
+      // suspect fields
+      for (let card of document.querySelectorAll('.suspect-container')) {
+        const n = card.querySelector('input[type="text"]').value.trim();
+        const g = card.querySelector('select').value.trim();
+        const d = card.querySelector('input[type="date"]').value.trim();
+        if (!n || !g || !d) {
           showErrorPopup();
           return;
         }
       }
 
-      // build minimal embed
-      const niceDateTime = datetime.replace('T',' ');
+      // minimal embed
       const embed = {
         title: "Prison Transport Report",
         image: { url: "attachment://report.png" },
@@ -315,22 +313,28 @@
         timestamp: new Date().toISOString()
       };
 
-      // snapshot + send only picture, title, footer & timestamp
+      // hide controls, snapshot, then restore
+      const controls = document.querySelectorAll('.control-btn');
+      controls.forEach(b => b.style.display = 'none');
+
       html2canvas(document.querySelector('.card')).then(canvas => {
         canvas.toBlob(blob => {
           const form = new FormData();
-          form.append("payload_json", JSON.stringify({ embeds: [embed] }));
-          form.append("file", blob, "report.png");
-          fetch(webhookURL, { method: "POST", body: form })
+          form.append('payload_json', JSON.stringify({ embeds: [embed] }));
+          form.append('file', blob, 'report.png');
+          fetch(webhookURL, { method: 'POST', body: form })
             .then(() => {
+              // show buttons again
+              controls.forEach(b => b.style.display = '');
               showPopup();
               resetForm();
             })
             .catch(err => {
               console.error(err);
-              alert("Failed to send report image.");
+              controls.forEach(b => b.style.display = '');
+              alert('Failed to send report image.');
             });
-        }, "image/png");
+        }, 'image/png');
       });
     }
 
