@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Coroner Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
-    * { font-family: 'Rubik', sans-serif; }
+    * {
+      font-family: 'Rubik', sans-serif;
+    }
 
     body {
       background: transparent;
@@ -88,21 +91,6 @@
       color: white;
     }
 
-    button {
-      background-color: #3c78d8;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button:hover {
-      background-color: #5187dc;
-    }
-
     textarea {
       resize: vertical;
       min-height: 50px;
@@ -127,7 +115,7 @@
     .wide {
       width: 100%;
     }
-    
+
     .button-row {
       display: flex;
       gap: 10px;
@@ -138,7 +126,7 @@
       background-color: #4f545c;
       color: #c0c0c0;
     }
-    
+
     .clear-btn:hover {
       background-color: #5d626a;
     }
@@ -147,7 +135,10 @@
       flex: 1;
     }
 
-    #popup-overlay, #error-popup {
+    /* Popups and PIN */
+    #popup-overlay,
+    #error-popup,
+    #pin-popup {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -156,7 +147,7 @@
       color: white;
       border-radius: 12px;
       padding: 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
       display: none;
       z-index: 10;
       max-width: 90%;
@@ -169,7 +160,9 @@
       font-weight: bold;
     }
 
-    #popup-overlay .header-subtitle {
+    #popup-overlay .header-subtitle,
+    #error-popup .header-subtitle,
+    #pin-popup .header-subtitle {
       font-size: 14px;
       color: #ccc;
       margin-top: 6px;
@@ -181,13 +174,53 @@
       font-weight: bold;
     }
 
-    #error-popup .header-subtitle {
+    #pin-popup input {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      text-align: center;
+      margin-top: 15px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #2C2F33;
+      color: white;
+    }
+
+    #pin-error {
+      color: #f04747;
       font-size: 14px;
-      color: #ccc;
-      margin-top: 6px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .shake {
+      animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+      0% {
+        transform: translate(-50%, -50%) translateX(0);
+      }
+
+      25% {
+        transform: translate(-50%, -50%) translateX(-10px);
+      }
+
+      50% {
+        transform: translate(-50%, -50%) translateX(10px);
+      }
+
+      75% {
+        transform: translate(-50%, -50%) translateX(-10px);
+      }
+
+      100% {
+        transform: translate(-50%, -50%) translateX(0);
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="card">
     <div class="header">
@@ -241,7 +274,7 @@
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
-    
+
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Coroner Report Has Been Logged</div>
@@ -250,6 +283,14 @@
     <div id="error-popup">
       <div class="header-title">⚠️ Submission Failed</div>
       <div class="header-subtitle">All Required Fields Must Be Filled</div>
+    </div>
+
+    <div id="pin-popup">
+      <div class="header-title">🔒 PIN Required</div>
+      <div class="header-subtitle">Please enter your 4-digit authorization code to submit</div>
+      <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
+      <div id="pin-error">Wrong PIN code</div>
+      <div style="margin-top: 15px;"><button onclick="validatePin()">Confirm</button></div>
     </div>
   </div>
 
@@ -276,7 +317,7 @@
       setTimeout(() => popup.style.display = 'none', 3000);
     }
 
-    async function submitForm() {
+    function submitForm() {
       const name = document.getElementById('name').value.trim();
       const dob = document.getElementById('dob').value;
       const exam_date = document.getElementById('exam_date').value;
@@ -294,22 +335,41 @@
         return;
       }
 
+      window.tempSubmissionData = { name, dob, exam_date, datetime, location, cause, foul, meds, defib, cpr };
+      document.getElementById('pin-popup').style.display = 'block';
+      document.getElementById('pin-error').style.display = 'none';
+    }
+
+    function validatePin() {
+      const pinInput = document.getElementById('pin-input');
+      const errorText = document.getElementById('pin-error');
+      const enteredPin = pinInput.value.trim();
+      if (enteredPin === '2118') {
+        document.getElementById('pin-popup').style.display = 'none';
+        sendWebhook();
+      } else {
+        errorText.style.display = 'block';
+        const popup = document.getElementById('pin-popup');
+        popup.classList.add('shake');
+        setTimeout(() => popup.classList.remove('shake'), 400);
+      }
+    }
+
+    function sendWebhook() {
+      const data = window.tempSubmissionData;
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
 
       const embed = {
         title: "Coroner Report",
         color: 4737096,
         fields: [
-          { name: "Name", value: `\`\`\`\n${name}\n\`\`\`` },
-          { name: "Date of Birth", value: `\`\`\`\n${dob}\n\`\`\`` },
-          { name: "Date of Examination", value: `\`\`\`\n${exam_date}\n\`\`\`` },
-          { name: "Pronounced Dead (Time & Date)", value: `\`\`\`\n${datetime}\n\`\`\`` },
-          { name: "Location", value: `\`\`\`\n${location}\n\`\`\`` },
-          { name: "Cause of Death", value: `\`\`\`\n${cause}\n\`\`\`` },
-          {
-            name: "Observations",
-            value: `\`\`\`\nFoul Play: ${foul}\nMedications: ${meds}\nDefibrillation: ${defib}\nCPR: ${cpr}\n\`\`\``
-          }
+          { name: "Name", value: `\`\`\`\n${data.name}\n\`\`\`` },
+          { name: "Date of Birth", value: `\`\`\`\n${data.dob}\n\`\`\`` },
+          { name: "Date of Examination", value: `\`\`\`\n${data.exam_date}\n\`\`\`` },
+          { name: "Pronounced Dead (Time & Date)", value: `\`\`\`\n${data.datetime}\n\`\`\`` },
+          { name: "Location", value: `\`\`\`\n${data.location}\n\`\`\`` },
+          { name: "Cause of Death", value: `\`\`\`\n${data.cause}\n\`\`\`` },
+          { name: "Observations", value: `\`\`\`\nFoul Play: ${data.foul}\nMedications: ${data.meds}\nDefibrillation: ${data.defib}\nCPR: ${data.cpr}\n\`\`\`` }
         ],
         footer: { text: "LS COUNTY MEDICAL EXAMINER-CORONER" },
         timestamp: new Date().toISOString()
