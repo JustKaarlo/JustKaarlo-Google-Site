@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Coroner Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
-    * { font-family: 'Rubik', sans-serif; }
+    * {
+      font-family: 'Rubik', sans-serif;
+    }
+
     body {
       background: transparent;
       padding: 30px;
@@ -13,6 +17,7 @@
       margin: auto;
       color: white;
     }
+
     .card {
       background: #2C2F33;
       border-radius: 12px;
@@ -21,22 +26,26 @@
       overflow: hidden;
       position: relative;
     }
+
     .header {
       background: #56585B;
       padding: 15px;
       text-align: center;
     }
+
     .header-title {
       font-size: 20px;
       font-weight: bold;
       color: white;
       margin: 0;
     }
+
     .sub-header {
       font-size: 14px;
       color: #ccc;
       margin-top: 4px;
     }
+
     .section-title {
       font-weight: bold;
       font-size: 16px;
@@ -46,18 +55,21 @@
       margin-top: 20px;
       border-radius: 6px;
     }
+
     .row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin: 15px;
     }
+
     .field-group {
       flex: 1;
       min-width: 150px;
       display: flex;
       flex-direction: column;
     }
+
     .field-group label {
       font-size: 13px;
       margin-bottom: 4px;
@@ -65,7 +77,12 @@
       font-weight: bold;
       text-transform: uppercase;
     }
-    input[type="text"], input[type="date"], input[type="time"], input[type="datetime-local"], textarea {
+
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
+    textarea {
       padding: 6px 10px;
       border: 1px solid #444;
       border-radius: 6px;
@@ -73,6 +90,32 @@
       background: #23272A;
       color: white;
     }
+
+    textarea {
+      resize: vertical;
+      min-height: 50px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 15px;
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .checkbox-group input {
+      margin-right: 5px;
+    }
+
+    .wide {
+      width: 100%;
+    }
+    
     button {
       background-color: #3c78d8;
       color: white;
@@ -84,34 +127,39 @@
       transition: background 0.3s ease;
     }
     button:hover { background-color: #5187dc; }
-    textarea {
-      resize: vertical;
-      min-height: 50px;
-    }
-    .checkbox-group {
+    .tag-container {
       display: flex;
       flex-wrap: wrap;
-      gap: 15px;
-      margin: 15px;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #23272A;
     }
-    .checkbox-group label {
-      font-size: 14px;
-      color: #ccc;
-    }
-    .checkbox-group input { margin-right: 5px; }
-    .wide { width: 100%; }
+
     .button-row {
       display: flex;
       gap: 10px;
       margin: 15px;
     }
+
     .clear-btn {
       background-color: #4f545c;
       color: #c0c0c0;
     }
-    .clear-btn:hover { background-color: #5d626a; }
-    .submit-btn { flex: 1; }
-    #popup-overlay, #error-popup, #pin-popup {
+
+    .clear-btn:hover {
+      background-color: #5d626a;
+    }
+
+    .submit-btn {
+      flex: 1;
+    }
+
+    /* Popups and PIN */
+    #popup-overlay,
+    #error-popup,
+    #pin-popup {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -120,17 +168,33 @@
       color: white;
       border-radius: 12px;
       padding: 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
       display: none;
       z-index: 10;
       max-width: 90%;
       text-align: center;
     }
-    #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
+
+    #popup-overlay .header-title {
+      color: #7289da;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
     #popup-overlay .header-subtitle,
     #error-popup .header-subtitle,
-    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
-    #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
+    #pin-popup .header-subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 6px;
+    }
+
+    #error-popup .header-title {
+      color: #f04747;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
     #pin-popup input {
       width: 100%;
       padding: 10px;
@@ -142,38 +206,106 @@
       background: #2C2F33;
       color: white;
     }
+
     #pin-error {
       color: #f04747;
       font-size: 14px;
       margin-top: 10px;
       display: none;
     }
+
     .shake {
       animation: shake 0.4s;
     }
+
     @keyframes shake {
-      0% { transform: translate(-50%, -50%) translateX(0); }
-      25% { transform: translate(-50%, -50%) translateX(-10px); }
-      50% { transform: translate(-50%, -50%) translateX(10px); }
-      75% { transform: translate(-50%, -50%) translateX(-10px); }
-      100% { transform: translate(-50%, -50%) translateX(0); }
+      0% {
+        transform: translate(-50%, -50%) translateX(0);
+      }
+
+      25% {
+        transform: translate(-50%, -50%) translateX(-10px);
+      }
+
+      50% {
+        transform: translate(-50%, -50%) translateX(10px);
+      }
+
+      75% {
+        transform: translate(-50%, -50%) translateX(-10px);
+      }
+
+      100% {
+        transform: translate(-50%, -50%) translateX(0);
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="card">
     <div class="header">
       <div class="header-title">MEDICAL EXAMINER-CORONER</div>
       <div class="sub-header">CORONER REPORT</div>
     </div>
-    <!-- existing form fields remain unchanged -->
-    <!-- ... -->
+
+    <div class="section-title">DECEDENT'S INFORMATION</div>
+    <div class="row">
+      <div class="field-group">
+        <label>Date of Examination</label>
+        <input type="date" id="exam_date">
+      </div>
+      <div class="field-group">
+        <label>Name</label>
+        <input type="text" id="name">
+      </div>
+      <div class="field-group">
+        <label>Date of Birth</label>
+        <input type="date" id="dob">
+      </div>
+    </div>
+
+    <div class="section-title">PRONOUNCEMENT OF DEATH</div>
+    <div class="row">
+      <div class="field-group">
+        <label>Time & Date</label>
+        <input type="datetime-local" id="datetime">
+      </div>
+      <div class="field-group wide">
+        <label>Location</label>
+        <input type="text" id="location">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field-group wide">
+        <label>Cause of Death</label>
+        <textarea id="cause"></textarea>
+      </div>
+    </div>
+
+    <div class="checkbox-group">
+      <label><input type="checkbox" id="foul"> Signs of foul play/crime scene?</label>
+      <label><input type="checkbox" id="meds"> Medications administered?</label>
+      <label><input type="checkbox" id="defib"> Defibrillation attempted?</label>
+      <label><input type="checkbox" id="cpr"> CPR attempted?</label>
+    </div>
+
     <div class="button-row">
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
-    <div id="popup-overlay"><div class="header-title">✅ Report Submitted</div><div class="header-subtitle">Your Coroner Report Has Been Logged</div></div>
-    <div id="error-popup"><div class="header-title">⚠️ Submission Failed</div><div class="header-subtitle">All Required Fields Must Be Filled</div></div>
+
+    <div id="popup-overlay">
+      <div class="header-title">✅ Report Submitted</div>
+      <div class="header-subtitle">Your Coroner Report Has Been Logged</div>
+    </div>
+
+    <div id="error-popup">
+      <div class="header-title">⚠️ Submission Failed</div>
+      <div class="header-subtitle">All Required Fields Must Be Filled</div>
+    </div>
+
     <div id="pin-popup">
       <div class="header-title">🔒 PIN Required</div>
       <div class="header-subtitle">Please enter your 4-digit authorization code to submit</div>
@@ -182,25 +314,30 @@
       <div style="margin-top: 15px;"><button onclick="validatePin()">Confirm</button></div>
     </div>
   </div>
+
   <script>
     function resetForm() {
-      document.querySelectorAll('input, textarea').forEach(el => {
+      const fields = document.querySelectorAll('input, textarea');
+      fields.forEach(el => {
         if (el.type === 'checkbox') el.checked = false;
         else el.value = '';
       });
     }
+
     function showErrorPopup() {
       const popup = document.getElementById('error-popup');
       popup.style.display = 'block';
       popup.onclick = () => popup.style.display = 'none';
       setTimeout(() => popup.style.display = 'none', 3000);
     }
+
     function showPopup() {
       const popup = document.getElementById('popup-overlay');
       popup.style.display = 'block';
       popup.onclick = () => popup.style.display = 'none';
       setTimeout(() => popup.style.display = 'none', 3000);
     }
+
     function submitForm() {
       const name = document.getElementById('name').value.trim();
       const dob = document.getElementById('dob').value;
@@ -208,17 +345,22 @@
       const datetime = document.getElementById('datetime').value;
       const location = document.getElementById('location').value.trim();
       const cause = document.getElementById('cause').value.trim();
+
       const foul = document.getElementById('foul').checked ? '✅ Yes' : '❌ No';
       const meds = document.getElementById('meds').checked ? '✅ Yes' : '❌ No';
       const defib = document.getElementById('defib').checked ? '✅ Yes' : '❌ No';
       const cpr = document.getElementById('cpr').checked ? '✅ Yes' : '❌ No';
+
       if (!name || !dob || !exam_date || !datetime || !location || !cause) {
-        showErrorPopup(); return;
+        showErrorPopup();
+        return;
       }
+
       window.tempSubmissionData = { name, dob, exam_date, datetime, location, cause, foul, meds, defib, cpr };
       document.getElementById('pin-popup').style.display = 'block';
       document.getElementById('pin-error').style.display = 'none';
     }
+
     function validatePin() {
       const pinInput = document.getElementById('pin-input');
       const errorText = document.getElementById('pin-error');
@@ -233,30 +375,37 @@
         setTimeout(() => popup.classList.remove('shake'), 400);
       }
     }
+
     function sendWebhook() {
-      const d = window.tempSubmissionData;
+      const data = window.tempSubmissionData;
+      const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
+
       const embed = {
         title: "Coroner Report",
         color: 4737096,
         fields: [
-          { name: "Name", value: `\`\`\`\n${d.name}\n\`\`\`` },
-          { name: "Date of Birth", value: `\`\`\`\n${d.dob}\n\`\`\`` },
-          { name: "Date of Examination", value: `\`\`\`\n${d.exam_date}\n\`\`\`` },
-          { name: "Pronounced Dead (Time & Date)", value: `\`\`\`\n${d.datetime}\n\`\`\`` },
-          { name: "Location", value: `\`\`\`\n${d.location}\n\`\`\`` },
-          { name: "Cause of Death", value: `\`\`\`\n${d.cause}\n\`\`\`` },
-          { name: "Observations", value: `\`\`\`\nFoul Play: ${d.foul}\nMedications: ${d.meds}\nDefibrillation: ${d.defib}\nCPR: ${d.cpr}\n\`\`\`` }
+          { name: "Name", value: `\`\`\`\n${data.name}\n\`\`\`` },
+          { name: "Date of Birth", value: `\`\`\`\n${data.dob}\n\`\`\`` },
+          { name: "Date of Examination", value: `\`\`\`\n${data.exam_date}\n\`\`\`` },
+          { name: "Pronounced Dead (Time & Date)", value: `\`\`\`\n${data.datetime}\n\`\`\`` },
+          { name: "Location", value: `\`\`\`\n${data.location}\n\`\`\`` },
+          { name: "Cause of Death", value: `\`\`\`\n${data.cause}\n\`\`\`` },
+          { name: "Observations", value: `\`\`\`\nFoul Play: ${data.foul}\nMedications: ${data.meds}\nDefibrillation: ${data.defib}\nCPR: ${data.cpr}\n\`\`\`` }
         ],
         footer: { text: "LS COUNTY MEDICAL EXAMINER-CORONER" },
         timestamp: new Date().toISOString()
       };
-      fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
-        method: "POST",
+
+      fetch(webhookURL, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ embeds: [embed] })
       }).then(() => {
-        showPopup(); resetForm();
-      }).catch(() => alert("Failed to submit report."));
+        showPopup();
+        resetForm();
+      }).catch(() => {
+        alert("Failed to submit report.");
+      });
     }
   </script>
 </body>
