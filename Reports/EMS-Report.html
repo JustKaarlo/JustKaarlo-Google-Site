@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <title>SAMR Report</title>
+  <title>Medical Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
   <style>
-    * { font-family: 'Rubik', sans-serif; }
+    * {
+      font-family: 'Rubik', sans-serif;
+    }
 
     body {
       background: transparent;
@@ -111,7 +114,9 @@
       margin-right: 5px;
     }
 
-    .wide { width: 100%; }
+    .wide {
+      width: 100%;
+    }
 
     button {
       background-color: #3c78d8;
@@ -183,6 +188,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="card">
     <div class="logo">
@@ -234,24 +240,38 @@
         <label>Pulse</label>
         <select id="pulse">
           <option value="">Select</option>
-          <option>NONE</option><option>VERY WEAK</option><option>WEAK STABLE</option>
-          <option>NORMAL</option><option>HIGH</option><option>VERY HIGH</option><option>DANGEROUSLY HIGH</option>
+          <option>NONE</option>
+          <option>VERY WEAK</option>
+          <option>WEAK STABLE</option>
+          <option>NORMAL</option>
+          <option>HIGH</option>
+          <option>VERY HIGH</option>
+          <option>DANGEROUSLY HIGH</option>
         </select>
       </div>
       <div class="field-group">
         <label>Respiration</label>
         <select id="respiration">
           <option value="">Select</option>
-          <option>NONE</option><option>VERY LIGHT</option><option>LIGHT</option>
-          <option>MODERATE</option><option>VIGOROUS</option><option>VERY HARD</option><option>MAX EFFORT</option>
+          <option>NONE</option>
+          <option>VERY LIGHT</option>
+          <option>LIGHT</option>
+          <option>MODERATE</option>
+          <option>VIGOROUS</option>
+          <option>VERY HARD</option>
+          <option>MAX EFFORT</option>
         </select>
       </div>
       <div class="field-group">
         <label>Blood Pressure</label>
         <select id="bp">
           <option value="">Select</option>
-          <option>NONE</option><option>NORMAL</option><option>ELEVATED</option>
-          <option>STAGE-1</option><option>STAGE-2</option><option>HYPERTENSIVE CRISIS</option>
+          <option>NONE</option>
+          <option>NORMAL</option>
+          <option>ELEVATED</option>
+          <option>STAGE-1</option>
+          <option>STAGE-2</option>
+          <option>HYPERTENSIVE CRISIS</option>
         </select>
       </div>
     </div>
@@ -293,7 +313,11 @@
         <label>Condition During Transport</label>
         <select id="condition">
           <option value="">Select</option>
-          <option>STABLE</option><option>CRITICAL</option><option>DETERIORATING</option><option>IMPROVED</option><option>DECEASED</option>
+          <option>STABLE</option>
+          <option>CRITICAL</option>
+          <option>DETERIORATING</option>
+          <option>IMPROVED</option>
+          <option>DECEASED</option>
         </select>
       </div>
     </div>
@@ -337,6 +361,7 @@
     async function submitForm() {
       const getCheckboxValues = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
       const datetime = document.getElementById('datetime').value;
+      const niceDateTime = datetime.replace('T', '');
       const location = document.getElementById('location').value;
       const name = document.getElementById('name').value;
       const gender = document.getElementById('gender').value;
@@ -355,9 +380,8 @@
         showErrorPopup();
         return;
       }
-
       const embed = {
-        title: "SAMR Report",
+        title: "MEDICAL REPORT",
         color: 4737096,
         fields: [
           { name: "Date & Time", value: `\`\`\`\n${datetime}\n\`\`\`` },
@@ -373,7 +397,7 @@
           { name: "Transported To", value: `\`\`\`\n${hospital}\n\`\`\`` },
           { name: "Condition During Transport", value: `\`\`\`\n${condition}\n\`\`\`` }
         ],
-        footer: { text: "San Andreas Medical Response" },
+        footer: { text: "Emergency Medical Services" },
         timestamp: new Date().toISOString()
       };
 
