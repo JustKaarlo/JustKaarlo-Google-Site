@@ -281,15 +281,19 @@
     function sendWebhook() {
       const data = window.tempSubmissionData;
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
+      const niceDateTime = data.datetime.replace('T', ' ');
+      const offensesInline = data.offenses
+        .map(off => `\`${off}\``)
+        .join(', ');
       const embed = {
         title: "ARREST REPORT",
         color: 4737096,
         fields: [
           { name: "Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
-          { name: "Date & Time", value: `\`\`\`\n${data.datetime}\n\`\`\``, inline: false },
+          { name: "Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
           { name: "Defendant", value: `\`\`\`\n${data.defendant}\n\`\`\``, inline: true },
           { name: "Officer", value: `\`\`\`\n${data.officer}\n\`\`\``, inline: true },
-          { name: "Offenses", value: `\`\`\`\n${data.offenses.join('\n')}\n\`\`\``, inline: false }
+          { name: "Offenses", value: offensesInline, inline: false }
         ],
         footer: { text: "Department of Justice" },
         timestamp: new Date().toISOString()
@@ -298,11 +302,9 @@
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ embeds: [embed] })
-      }).then(() => {
-        showPopup(); resetForm();
-      }).catch(() => {
-        alert("Failed to submit report.");
-      });
+      })
+      .then(() => { showPopup(); resetForm(); })
+      .catch(() => { alert("Failed to submit report."); });
     }
   </script>
 </body>
