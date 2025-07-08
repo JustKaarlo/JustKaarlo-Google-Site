@@ -361,7 +361,6 @@
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
 
       const niceDateTime = datetime.replace('T', ' ');
-      const suspectsValue = suspects.join('\n');
       const embed = {
         title: "PRISON TRANSPORT REPORT",
         color: 4737096,
@@ -371,7 +370,7 @@
           { name: "Pickup Location", value: `\`\`\`\n${pickup}\n\`\`\``, inline: false },
           { name: "Received By", value: `\`\`\`\n${receiver}\n\`\`\``, inline: true },
           { name: "Department", value: `\`\`\`\n${department}\n\`\`\``, inline: true },
-          { name: "Suspects", value: suspectsValue || "```No Suspect Info Provided```", inline: false }
+          { name: "Suspects", value: `${suspects || 'No Suspect Info Provided'}`, inline: false }
         ],
         footer: { text: "Department of Correction" },
         timestamp: new Date().toISOString()
