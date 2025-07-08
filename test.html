@@ -17,7 +17,6 @@
       background: #2C2F33;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-      padding: 0;
       overflow: hidden;
       position: relative;
     }
@@ -133,7 +132,7 @@
     }
   </style>
 
-  <!-- html2canvas for snapshotting -->
+  <!-- html2canvas for screenshotting -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 
@@ -165,7 +164,7 @@
 
     <div class="section-title">SUSPECT(S) INFORMATION</div>
     <div id="suspectList"></div>
-    <div style="text-align: center; margin: 15px;">
+    <div style="text-align:center; margin:15px;">
       <button onclick="addSuspect()">+ Add Suspect</button>
     </div>
 
@@ -190,7 +189,6 @@
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Transport Report Has Been Logged</div>
     </div>
-
     <div id="error-popup">
       <div class="header-title">⚠️ Submission Failed</div>
       <div class="header-subtitle">All Fields Are Required</div>
@@ -200,11 +198,25 @@
   <script>
     const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
 
+    // helper: ABCD-1234
+    function generateReportID() {
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let part1 = '';
+      for (let i = 0; i < 4; i++) {
+        part1 += letters.charAt(Math.floor(Math.random() * letters.length));
+      }
+      let part2 = '';
+      for (let i = 0; i < 4; i++) {
+        part2 += Math.floor(Math.random() * 10);
+      }
+      return `${part1}-${part2}`;
+    }
+
     function updateSuspectListNumbers() {
       document.querySelectorAll('.suspect-container').forEach((c, i) => {
         const num = c.querySelector('.no-box');
         const del = c.querySelector('.delete-btn');
-        num.textContent = `Suspect #${i+1}`;
+        num.textContent = `Suspect #${i + 1}`;
         if (i === 0) {
           del.disabled = true;
           del.style.cursor = 'not-allowed';
@@ -247,8 +259,9 @@
     }
 
     function resetForm() {
-      document.querySelectorAll('input[type="text"], input[type="datetime-local"], input[type="date"], select')
-              .forEach(el => { if (!el.hasAttribute('readonly')) el.value = ''; });
+      document.querySelectorAll('input, select').forEach(el => {
+        if (!el.hasAttribute('readonly')) el.value = '';
+      });
       document.getElementById('suspectList').innerHTML = '';
       addSuspect();
     }
@@ -268,7 +281,7 @@
     }
 
     function submitForm() {
-      // validate top‐level
+      // validate top fields
       const dt = document.getElementById('datetime').value.trim();
       const pu = document.getElementById('pickup').value.trim();
       const rb = document.getElementById('receiver').value.trim();
@@ -278,7 +291,7 @@
         return;
       }
       // validate suspects
-      for (let c of document.querySelectorAll('.suspect-container')) {
+      for (const c of document.querySelectorAll('.suspect-container')) {
         const n = c.querySelector('input[type="text"]').value.trim();
         const g = c.querySelector('select').value.trim();
         const d = c.querySelector('input[type="date"]').value.trim();
@@ -288,33 +301,44 @@
         }
       }
 
-      // minimal embed
+      // generate a unique ID
+      const reportID = generateReportID();
+
+      // build minimal embed + ID field
       const embed = {
         title: "Prison Transport Report",
+        fields: [
+          { name: "Report ID", value: `\`${reportID}\``, inline: false }
+        ],
         image: { url: "attachment://report.png" },
         footer: { text: "Department of Correction" },
         timestamp: new Date().toISOString()
       };
 
-      // hide _all_ buttons in .card
-      const buttons = document.querySelectorAll('.card button');
+      // hide header + all buttons
+      const card    = document.querySelector('.card');
+      const header  = card.querySelector('.header');
+      const buttons = card.querySelectorAll('button');
+      header.style.display = 'none';
       buttons.forEach(b => b.style.visibility = 'hidden');
 
-      // snapshot
-      html2canvas(document.querySelector('.card')).then(canvas => {
+      // snapshot at 1:1
+      html2canvas(card, { scale: 1 }).then(canvas => {
         canvas.toBlob(blob => {
           const form = new FormData();
           form.append('payload_json', JSON.stringify({ embeds: [embed] }));
           form.append('file', blob, 'report.png');
           fetch(webhookURL, { method: 'POST', body: form })
-            .then(() => {
-              // restore buttons, show success, reset
+            .then(()=> {
+              // restore UI
+              header.style.display = '';
               buttons.forEach(b => b.style.visibility = '');
               showPopup();
               resetForm();
             })
             .catch(err => {
               console.error(err);
+              header.style.display = '';
               buttons.forEach(b => b.style.visibility = '');
               alert('Failed to send report image.');
             });
