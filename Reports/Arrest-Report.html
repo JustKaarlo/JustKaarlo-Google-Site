@@ -282,13 +282,13 @@
       const data = window.tempSubmissionData;
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
       const embed = {
-        title: "Arrest Report",
-        color: 4737096,
+        title: "ARREST REPORT",
+        color: 434647,
         fields: [
           { name: "Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
           { name: "Date & Time", value: `\`\`\`\n${data.datetime}\n\`\`\``, inline: false },
-          { name: "Defendant", value: `\`\`\`\n${data.defendant}\n\`\`\``, inline: false },
-          { name: "Officer", value: `\`\`\`\n${data.officer}\n\`\`\``, inline: false },
+          { name: "Defendant", value: `\`\`\`\n${data.defendant}\n\`\`\``, inline: true },
+          { name: "Officer", value: `\`\`\`\n${data.officer}\n\`\`\``, inline: true },
           { name: "Offenses", value: `\`\`\`\n${data.offenses.join('\n')}\n\`\`\``, inline: false }
         ],
         footer: { text: "Department of Justice" },
