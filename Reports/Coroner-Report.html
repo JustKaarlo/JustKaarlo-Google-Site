@@ -388,13 +388,13 @@
         title: "CORONER REPORT",
         color: 4737096,
         fields: [
-          { name: "Date of Examination", value: `\`\`\`\n${data.exam_date}\n\`\`\``, inline: false },
-          { name: "Name", value: `\`\`\`\n${data.name}\n\`\`\``, inline: true },
-          { name: "Date of Birth", value: `\`\`\`\n${data.dob}\n\`\`\``, inline: true },
-          { name: "Pronounced Dead (Time & Date)", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
-          { name: "Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
-          { name: "Cause of Death", value: `\`\`\`\n${data.cause}\n\`\`\``, inline: false },
-          { name: "Observations", value: `\`\`\`\nFoul Play: ${data.foul}\nMedications: ${data.meds}\nDefibrillation: ${data.defib}\nCPR: ${data.cpr}\n\`\`\``, inline: false }
+          { name: "> Date of Examination", value: `\`\`\`\n${data.exam_date}\n\`\`\``, inline: false },
+          { name: "> Name", value: `\`\`\`\n${data.name}\n\`\`\``, inline: true },
+          { name: "> Date of Birth", value: `\`\`\`\n${data.dob}\n\`\`\``, inline: true },
+          { name: "> Pronounced Dead (Time & Date)", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
+          { name: "> Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
+          { name: "> Cause of Death", value: `\`\`\`\n${data.cause}\n\`\`\``, inline: false },
+          { name: "> Observations", value: `\`\`\`\nFoul Play: ${data.foul}\nMedications: ${data.meds}\nDefibrillation: ${data.defib}\nCPR: ${data.cpr}\n\`\`\``, inline: false }
         ],
         footer: { text: "Medical Examiner Office" },
         timestamp: new Date().toISOString()
