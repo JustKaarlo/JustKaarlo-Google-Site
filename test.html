@@ -331,10 +331,10 @@
         ctx.font = '16px Rubik';
         ctx.textBaseline = 'top';
 
-        ctx.fillText(data.location,          20,  80);
-        ctx.fillText(data.datetime.replace('T',' '), 20, 120);
-        ctx.fillText(data.defendant,         20, 160);
-        ctx.fillText(data.officer,           20, 200);
+        ctx.fillText(data.location,            37, 136);
+        ctx.fillText(data.datetime.replace('T',' '), 392, 136);
+        ctx.fillText(data.defendant,           37, 211);
+        ctx.fillText(data.officer,             392, 211);
 
         data.offenses.forEach((off, i) => {
           ctx.fillText(`• ${off}`, 20, 240 + i * 20);
