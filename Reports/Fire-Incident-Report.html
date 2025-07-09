@@ -364,12 +364,12 @@
         title: "FIRE INCIDENT REPORT",
         color: 4737096,
         fields: [
-          { name: "Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
-          { name: "Location", value: `\`\`\`\n${location}\n\`\`\``, inline: false },
-          { name: "Fire Units", value: unitsInline, inline: false },
-          { name: "Incident Type", value: `\`\`\`\n${incidentType}\n\`\`\``, inline: true },
-          { name: "Fire Spread Level", value: `\`\`\`\n${spreadLevel}\n\`\`\``, inline: true },
-          { name: "Methods Used", value: methodsInline, inline: false }
+          { name: "> Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
+          { name: "> Location", value: `\`\`\`\n${location}\n\`\`\``, inline: false },
+          { name: "> Fire Units", value: unitsInline, inline: false },
+          { name: "> Incident Type", value: `\`\`\`\n${incidentType}\n\`\`\``, inline: true },
+          { name: "> Fire Spread Level", value: `\`\`\`\n${spreadLevel}\n\`\`\``, inline: true },
+          { name: "> Methods Used", value: methodsInline, inline: false }
         ],
         footer: { text: "Fire Rescue" },
         timestamp: new Date().toISOString()
