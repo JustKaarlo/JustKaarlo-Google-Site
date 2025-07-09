@@ -1,47 +1,104 @@
-<div style="display: flex; justify-content: center; gap: 20px; margin: 30px;">
-  <button style="
-    background: rgba(44, 47, 51, 0.4);
-    color: white;
-    font-family: 'Rubik', sans-serif;
-    font-weight: 800;
-    font-size: 40px;
-    letter-spacing: 2px;
-    padding: 30px 60px;
-    border: none;
-    border-radius: 10px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
-  "
-  onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.5)'"
-  onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.4)'"
-  onclick="window.open('https://sites.google.com/view/justkaarlos/modding?authuser=0','_blank')">
-    MODDING
-  </button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Modding Buttons</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Rubik', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-  <button style="
-    background: rgba(44, 47, 51, 0.4);
-    color: white;
-    font-family: 'Rubik', sans-serif;
-    font-weight: 800;
-    font-size: 40px;
-    letter-spacing: 2px;
-    padding: 30px 60px;
-    border: none;
-    border-radius: 10px;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: all 0.2s ease;
-  "
-  onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 16px rgba(0,0,0,0.5)'"
-  onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.4)'"
-  onclick="window.open('https://sites.google.com/view/justkaarlos/fivem/FiveM-Reports','_blank')">
-    REPORTS
-  </button>
-</div>
+    html, body {
+      height: 100%;
+      background: #1e1f22 url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid_5120x2880.png') no-repeat center/cover fixed;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .title {
+      width: 100%;
+      max-width: 800px;
+      margin: 40px 0 20px;
+      padding: 20px 50px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .title h1 {
+      font-size: 64px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.9);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      padding: 20px 50px 50px;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .report-btn {
+      position: relative;
+      background: rgba(255, 255, 255, 0.02);
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      overflow: hidden;
+    }
+
+    .report-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    }
+
+    .report-btn img {
+      max-height: 140px;
+      max-width: 100%;
+      z-index: 1;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="title">
+    <h1>MODS</h1>
+  </div>
+
+  <div class="container">
+    <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/modding/total-war','_blank')">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar-button_icon.png" alt="Total War">
+    </a>
+    <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/modding/fivem','_blank')">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/FiveM-button_icon.png" alt="FiveM">
+    </a>
+    <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/modding/Ready-Or-Not','_blank')">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/ReadyOrNot-button_icon.png" alt="Ready Or Not">
+    </a>
+    <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/modding/elden-ring','_blank')">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/EldenRing-button_icon.png" alt="Elden Ring">
+    </a>
+  </div>
+</body>
+</html>
