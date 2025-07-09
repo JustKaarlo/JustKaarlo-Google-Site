@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Reports</title>
@@ -12,7 +13,8 @@
       padding: 0;
     }
 
-    html, body {
+    html,
+    body {
       height: 100%;
       overflow: hidden;
       background: none;
@@ -74,19 +76,19 @@
       color: rgba(255, 255, 255, 0.9);
       text-transform: uppercase;
       letter-spacing: 4px;
-      text-shadow: 0 0 8px rgba(0,0,0,0.6);
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
     }
 
     .report-btn {
-      background: rgba(44,47,51,0.15);
+      background: rgba(44, 47, 51, 0.15);
       color: white;
       font-weight: 800;
       font-size: 34px;
       letter-spacing: 2px;
-      padding: 30px 30px;
+      padding: 40px 30px;
       border: none;
       border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       cursor: pointer;
       text-transform: uppercase;
       transition: all 0.2s ease;
@@ -96,7 +98,7 @@
 
     .report-btn:hover {
       transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
     }
 
     .report-btn.center-align {
@@ -109,7 +111,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
       display: none;
       z-index: 3;
     }
@@ -168,19 +170,29 @@
     }
   </style>
 </head>
+
 <body>
   <canvas id="particle-canvas"></canvas>
   <div class="container">
     <div class="title">
       <h1>FILE A REPORT</h1>
     </div>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Arrest-Report.html')">ARREST</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Citation-Report.html')">CITATION</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Fire-Incident-Report.html')">FIRE INCIDENT</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/EMS-Report.html')">MEDICAL</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/TOW-Report.html')">TOW</button>
-    <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Coroner-Report.html')">CORONER</button>
-    <button class="report-btn center-align" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Prison-Transport.html')">PRISON TRANSPORT</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Arrest-Report.html')">ARREST</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Citation-Report.html')">CITATION</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Fire-Incident-Report.html')">FIRE
+      INCIDENT</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/EMS-Report.html')">MEDICAL</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/TOW-Report.html')">TOW</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Coroner-Report.html')">CORONER</button>
+    <button class="report-btn center-align"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Prison-Transport.html')">PRISON
+      TRANSPORT</button>
   </div>
   <div class="overlay" id="overlay" onclick="closeModal()"></div>
   <div class="modal" id="modal">
@@ -247,21 +259,21 @@
     animateParticles();
 
     // Modal logic
-    const modal   = document.getElementById('modal');
-    const iframe  = document.getElementById('modal-frame');
+    const modal = document.getElementById('modal');
+    const iframe = document.getElementById('modal-frame');
     const overlay = document.getElementById('overlay');
     function openModal(src) {
       overlay.style.display = 'block';
-      modal.style.display   = 'block';
+      modal.style.display = 'block';
       iframe.onload = () => {
         const maxH = window.innerHeight * 0.95;
         let h;
         try {
           const doc = iframe.contentDocument || iframe.contentWindow.document;
           h = Math.min(doc.documentElement.scrollHeight, maxH);
-          doc.documentElement.style.scrollbarWidth  = 'none';
+          doc.documentElement.style.scrollbarWidth = 'none';
           doc.documentElement.style.msOverflowStyle = 'none';
-          doc.body.style.scrollbarWidth  = 'none';
+          doc.body.style.scrollbarWidth = 'none';
           doc.body.style.msOverflowStyle = 'none';
           const styleTag = doc.createElement('style');
           styleTag.textContent = `html::-webkit-scrollbar, body::-webkit-scrollbar {width:0; height:0; background: transparent;}`;
@@ -275,10 +287,10 @@
     }
 
     function closeModal() {
-      modal.style.display   = 'none';
+      modal.style.display = 'none';
       overlay.style.display = 'none';
-      iframe.src            = '';
-      modal.style.height    = '';
+      iframe.src = '';
+      modal.style.height = '';
     }
   </script>
 </body>
