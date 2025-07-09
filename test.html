@@ -66,8 +66,7 @@
       font-weight: bold;
       text-transform: uppercase;
     }
-    input[type="text"],
-    input[type="datetime-local"] {
+    input[type="text"], input[type="datetime-local"] {
       padding: 6px 10px;
       border: 1px solid #444;
       border-radius: 6px;
@@ -134,9 +133,7 @@
       background-color: #5d626a;
     }
     .submit-btn { flex: 1; }
-    #popup-overlay,
-    #error-popup,
-    #pin-popup {
+    #popup-overlay, #error-popup, #pin-popup {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -151,23 +148,11 @@
       max-width: 90%;
       text-align: center;
     }
-    #popup-overlay .header-title {
-      color: #7289da;
-      font-size: 18px;
-      font-weight: bold;
-    }
+    #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
     #popup-overlay .header-subtitle,
     #error-popup .header-subtitle,
-    #pin-popup .header-subtitle {
-      font-size: 14px;
-      color: #ccc;
-      margin-top: 6px;
-    }
-    #error-popup .header-title {
-      color: #f04747;
-      font-size: 18px;
-      font-weight: bold;
-    }
+    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
+    #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
     #pin-popup input {
       width: 100%;
       padding: 10px;
@@ -198,6 +183,13 @@
   </style>
 </head>
 <body>
+  <!-- Hidden PNG template of your card -->
+  <img id="bgImage" src="card-template.png" alt="" style="display:none">
+
+  <!-- The canvas we'll draw onto -->
+  <canvas id="reportCanvas" width="750" height="450" style="display:none"></canvas>
+
+  <!-- Your onscreen form -->
   <div class="card">
     <div class="header">
       <div class="header-title">DEPARTMENT OF JUSTICE</div>
@@ -235,6 +227,8 @@
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
+
+    <!-- popups -->
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Report Has Been Logged</div>
@@ -254,66 +248,63 @@
     </div>
   </div>
 
-  <!-- html2canvas -->
-  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
   <script>
-    // tagging logic
+    // tag logic (unchanged)
     const offenseInput = document.getElementById('offenseInput');
     const offenseContainer = document.getElementById('offense-tags');
-    offenseInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && this.value.trim() !== '') {
+    offenseInput.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && offenseInput.value.trim()) {
         e.preventDefault();
-        addOffenseTag(this.value.trim());
-        this.value = '';
+        addOffenseTag(offenseInput.value.trim());
+        offenseInput.value = '';
       }
     });
     function addOffenseTag(text) {
       const tag = document.createElement('div');
       tag.className = 'tag';
-      tag.innerHTML = \`\${text} <span class="remove">&times;</span>\`;
+      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
       offenseContainer.insertBefore(tag, offenseInput);
       tag.querySelector('.remove').addEventListener('click', () => tag.remove());
     }
-
-    // form reset & popups
     function resetForm() {
-      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
-      document.querySelectorAll('.tag').forEach(tag => tag.remove());
+      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(i => i.value = '');
+      document.querySelectorAll('.tag').forEach(t => t.remove());
     }
+
+    // popups
     function showErrorPopup() {
-      const errorPopup = document.getElementById('error-popup');
-      errorPopup.style.display = 'block';
-      errorPopup.onclick = () => errorPopup.style.display = 'none';
-      setTimeout(() => { errorPopup.style.display = 'none'; }, 3000);
+      const e = document.getElementById('error-popup');
+      e.style.display = 'block';
+      setTimeout(() => e.style.display = 'none', 3000);
     }
     function showPopup() {
-      const popup = document.getElementById('popup-overlay');
-      popup.style.display = 'block';
-      popup.onclick = () => popup.style.display = 'none';
-      setTimeout(() => { popup.style.display = 'none'; }, 3000);
+      const p = document.getElementById('popup-overlay');
+      p.style.display = 'block';
+      setTimeout(() => p.style.display = 'none', 3000);
     }
 
-    // submission + PIN flow
+    // form & PIN
     function submitForm() {
-      const location = document.getElementById('location').value.trim();
-      const datetime = document.getElementById('datetime').value.trim();
-      const defendant = document.getElementById('defendant').value.trim();
-      const officer = document.getElementById('officer').value.trim();
-      const offenses = [...document.querySelectorAll('.tag')]
-        .map(tag => tag.textContent.replace('×', '').trim());
-      if (!location || !datetime || !defendant || !officer || offenses.length === 0) {
+      const loc = document.getElementById('location').value.trim();
+      const dt  = document.getElementById('datetime').value.trim();
+      const def = document.getElementById('defendant').value.trim();
+      const off = document.getElementById('officer').value.trim();
+      const offs = [...document.querySelectorAll('.tag')]
+        .map(t => t.textContent.replace('×','').trim());
+
+      if (!loc || !dt || !def || !off || offs.length === 0) {
         showErrorPopup();
         return;
       }
-      window.tempSubmissionData = { location, datetime, defendant, officer, offenses };
+
+      window.tempSubmissionData = { location: loc, datetime: dt, defendant: def, officer: off, offenses: offs };
       document.getElementById('pin-popup').style.display = 'block';
       document.getElementById('pin-error').style.display = 'none';
     }
     function validatePin() {
-      const enteredPin = document.getElementById('pin-input').value.trim();
+      const pin = document.getElementById('pin-input').value.trim();
       const popup = document.getElementById('pin-popup');
-      if (enteredPin === '2118') {
+      if (pin === '2118') {
         popup.style.display = 'none';
         sendWebhook();
       } else {
@@ -323,45 +314,52 @@
       }
     }
 
-    // improved snapshot + file upload
+    // the canvas + webhook magic
+    const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni'; 
     function sendWebhook() {
       const data = window.tempSubmissionData;
-      const cardEl = document.querySelector('.card');
+      const canvas = document.getElementById('reportCanvas');
+      const ctx = canvas.getContext('2d');
+      const bg  = document.getElementById('bgImage');
 
-      // wait for font to load first
-      document.fonts.ready.then(() => {
-        html2canvas(cardEl, {
-          backgroundColor: window.getComputedStyle(cardEl).backgroundColor,
-          width:  cardEl.scrollWidth,
-          height: cardEl.scrollHeight,
-          scale: window.devicePixelRatio,
-          scrollX: -window.scrollX,
-          scrollY: -window.scrollY,
-          useCORS: true
-        }).then(canvas => {
-          canvas.toBlob(blob => {
-            const form = new FormData();
-            form.append('file', blob, 'arrest-report.png');
-            form.append('payload_json', JSON.stringify({
-              username: 'DOJ Bot',
-              content: \`📝 Arrest report for **\${data.defendant}**\`
-            }));
+      // when the image is ready, draw + send
+      bg.onload = () => {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
-            fetch('https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni', {
-              method: 'POST',
-              body: form
-            })
-            .then(() => {
-              showPopup();
-              resetForm();
-            })
-            .catch(err => {
-              console.error(err);
-              alert('Failed to submit report.');
-            });
-          }, 'image/png');
+        ctx.fillStyle = 'white';
+        ctx.font = '16px Rubik';
+        ctx.textBaseline = 'top';
+
+        ctx.fillText(data.location,          20,  80);
+        ctx.fillText(data.datetime.replace('T',' '), 20, 120);
+        ctx.fillText(data.defendant,         20, 160);
+        ctx.fillText(data.officer,           20, 200);
+
+        data.offenses.forEach((off, i) => {
+          ctx.fillText(`• ${off}`, 20, 240 + i * 20);
         });
-      });
+
+        canvas.toBlob(blob => {
+          const form = new FormData();
+          form.append('file', blob, 'report.png');
+          form.append('payload_json', JSON.stringify({
+            embeds: [{
+              title: 'ARREST REPORT',
+              color: 4737096,
+              footer: { text: 'Department of Justice' },
+              timestamp: new Date().toISOString()
+            }]
+          }));
+
+          fetch(webhookURL, { method:'POST', body: form })
+            .then(() => { showPopup(); resetForm(); })
+            .catch(() => alert('Failed to Submit Report.'));
+        });
+      };
+
+      // trigger onload in case it's already cached
+      if (bg.complete) bg.onload();
     }
   </script>
 </body>
