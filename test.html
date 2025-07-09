@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Prison Transport Report</title>
+  <title>Arrest Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
     * { font-family: 'Rubik', sans-serif; }
@@ -16,7 +16,8 @@
     .card {
       background: #2C2F33;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      padding: 0;
       overflow: hidden;
       position: relative;
     }
@@ -25,8 +26,18 @@
       padding: 15px;
       text-align: center;
     }
-    .header-title { font-size: 20px; font-weight: bold; color: white; margin: 0; }
-    .header-subtitle { font-size: 15px; color: #ccc; margin-top: 4px; }
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      margin: 0;
+    }
+    .header-subtitle {
+      font-size: 15px;
+      font-style: bold;
+      color: #ccc;
+      margin-top: 4px;
+    }
     .section-title {
       font-weight: bold;
       font-size: 16px;
@@ -55,10 +66,7 @@
       font-weight: bold;
       text-transform: uppercase;
     }
-    input[type="text"],
-    input[type="datetime-local"],
-    input[type="date"],
-    select {
+    input[type="text"], input[type="datetime-local"] {
       padding: 6px 10px;
       border: 1px solid #444;
       border-radius: 6px;
@@ -67,11 +75,6 @@
       color: white;
     }
     .wide { width: 100%; }
-    .button-row {
-      display: flex;
-      gap: 10px;
-      margin: 15px;
-    }
     button {
       background-color: #3c78d8;
       color: white;
@@ -80,13 +83,57 @@
       border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
+      transition: background 0.3s ease;
     }
     button:hover { background-color: #5187dc; }
-    .clear-btn { background-color: #4f545c; color: #c0c0c0; }
-    .clear-btn:hover { background-color: #5d626a; }
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #23272A;
+    }
+    .tag-container input {
+      border: none;
+      flex: 1;
+      min-width: 120px;
+      padding: 6px 8px;
+      font-size: 14px;
+      background: transparent;
+      color: white;
+      outline: none;
+    }
+    .tag {
+      background-color: #99aab5;
+      color: #2C2F33;
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+    }
+    .tag .remove {
+      margin-left: 8px;
+      color: #2C2F33;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin: 15px;
+    }
+    .clear-btn {
+      background-color: #4f545c;
+      color: #c0c0c0;
+    }
+    .clear-btn:hover {
+      background-color: #5d626a;
+    }
     .submit-btn { flex: 1; }
-    #popup-overlay,
-    #error-popup {
+    #popup-overlay, #error-popup, #pin-popup {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -103,243 +150,196 @@
     }
     #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
     #popup-overlay .header-subtitle,
-    #error-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
+    #error-popup .header-subtitle,
+    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
     #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
-    .suspect-container {
-      background: #23272A;
-      border-radius: 10px;
-      padding: 15px;
-      margin: 15px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    #pin-popup input {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      text-align: center;
+      margin-top: 15px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #2C2F33;
+      color: white;
     }
-    .suspect-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    .suspect-header .no-box {
+    #pin-error {
+      color: #f04747;
       font-size: 14px;
-      padding: 4px 10px;
-      background: #444;
-      border-radius: 8px;
-      font-weight: bold;
+      margin-top: 10px;
+      display: none;
     }
-    .suspect-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+    .shake {
+      animation: shake 0.4s;
     }
-    .suspect-row .field-group {
-      flex: 1;
-      min-width: 140px;
+    @keyframes shake {
+      0% { transform: translate(-50%, -50%) translateX(0); }
+      25% { transform: translate(-50%, -50%) translateX(-10px); }
+      50% { transform: translate(-50%, -50%) translateX(10px); }
+      75% { transform: translate(-50%, -50%) translateX(-10px); }
+      100% { transform: translate(-50%, -50%) translateX(0); }
     }
   </style>
-  <!-- html2canvas for screenshotting -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
-
 <body>
   <div class="card">
     <div class="header">
-      <div class="header-title">DEPT. OF CORRECTIONS AND REHABILITATION</div>
-      <div class="header-subtitle">PRISON TRANSPORT REPORT</div>
+      <div class="header-title">DEPARTMENT OF JUSTICE</div>
+      <div class="header-subtitle">ARREST REPORT</div>
     </div>
-
-    <div class="section-title">TRANSPORT DETAILS</div>
-    <div class="row">
-      <div class="field-group">
-        <label>Date &amp; Time</label>
-        <input type="datetime-local" id="datetime">
-      </div>
-      <div class="field-group">
-        <label>Prison Facility</label>
-        <input type="text" value="Bolingbroke Pen." readonly>
-      </div>
-    </div>
-
     <div class="row">
       <div class="field-group wide">
-        <label>Pickup Location</label>
-        <input type="text" id="pickup">
+        <label>Location</label>
+        <input type="text" id="location">
+      </div>
+      <div class="field-group">
+        <label>Time & Date</label>
+        <input type="datetime-local" id="datetime">
       </div>
     </div>
-
-    <div class="section-title">SUSPECT(S) INFORMATION</div>
-    <div id="suspectList"></div>
-    <div style="text-align:center; margin:15px;">
-      <button onclick="addSuspect()">+ Add Suspect</button>
-    </div>
-
-    <div class="section-title">CUSTODY TRANSFER</div>
     <div class="row">
       <div class="field-group">
-        <label>Received By</label>
-        <input type="text" id="receiver">
+        <label>Defendant</label>
+        <input type="text" id="defendant">
       </div>
       <div class="field-group">
-        <label>Department</label>
-        <input type="text" id="department">
+        <label>Arresting Officer</label>
+        <input type="text" id="officer">
       </div>
     </div>
-
+    <div class="section-title">CRIMINAL OFFENSE(S)</div>
+    <div class="row">
+      <div class="field-group wide">
+        <div id="offense-tags" class="tag-container">
+          <input type="text" id="offenseInput" placeholder="Type And Press Enter">
+        </div>
+      </div>
+    </div>
     <div class="button-row">
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
-
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
-      <div class="header-subtitle">Your Transport Report Has Been Logged</div>
+      <div class="header-subtitle">Your Report Has Been Logged</div>
     </div>
     <div id="error-popup">
       <div class="header-title">⚠️ Submission Failed</div>
       <div class="header-subtitle">All Fields Are Required</div>
     </div>
+    <div id="pin-popup">
+      <div class="header-title">🔒 PIN Required</div>
+      <div class="header-subtitle">Please enter your 4-digit authorization code to submit</div>
+      <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
+      <div id="pin-error">Wrong PIN code</div>
+      <div style="margin-top: 15px;">
+        <button onclick="validatePin()">Confirm</button>
+      </div>
+    </div>
   </div>
 
+  <!-- html2canvas -->
+  <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
   <script>
-    const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
-
-    // helper: ABCD-1234
-    function generateReportID() {
-      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      let part1 = '';
-      for (let i = 0; i < 4; i++) {
-        part1 += letters.charAt(Math.floor(Math.random() * letters.length));
+    // tagging logic
+    const offenseInput = document.getElementById('offenseInput');
+    const offenseContainer = document.getElementById('offense-tags');
+    offenseInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && this.value.trim() !== '') {
+        e.preventDefault();
+        addOffenseTag(this.value.trim());
+        this.value = '';
       }
-      let part2 = '';
-      for (let i = 0; i < 4; i++) {
-        part2 += Math.floor(Math.random() * 10);
-      }
-      return `${part1}-${part2}`;
+    });
+    function addOffenseTag(text) {
+      const tag = document.createElement('div');
+      tag.className = 'tag';
+      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+      offenseContainer.insertBefore(tag, offenseInput);
+      tag.querySelector('.remove').addEventListener('click', () => tag.remove());
     }
 
-    function updateSuspectListNumbers() {
-      document.querySelectorAll('.suspect-container').forEach((c, i) => {
-        const num = c.querySelector('.no-box');
-        const del = c.querySelector('.delete-btn');
-        num.textContent = `Suspect #${i + 1}`;
-        if (i === 0) {
-          del.disabled = true;
-          del.style.cursor = 'not-allowed';
-          del.title = "Cannot remove the first suspect";
-        } else {
-          del.disabled = false;
-          del.title = "";
-        }
-      });
-    }
-
-    function addSuspect() {
-      const list = document.getElementById('suspectList');
-      const div = document.createElement('div');
-      div.className = 'suspect-container';
-      div.innerHTML = `
-        <div class="suspect-header">
-          <span class="no-box">Suspect</span>
-          <button class="delete-btn" onclick="removeSuspect(this)">🗑️</button>
-        </div>
-        <div class="suspect-row">
-          <div class="field-group"><label>Name</label><input type="text"></div>
-          <div class="field-group"><label>Gender</label><select>
-            <option value="">Select</option><option>Male</option><option>Female</option>
-          </select></div>
-          <div class="field-group"><label>Date of Birth</label><input type="date"></div>
-        </div>`;
-      list.appendChild(div);
-      updateSuspectListNumbers();
-    }
-
-    function removeSuspect(btn) {
-      const card = btn.closest('.suspect-container');
-      if (card) {
-        card.remove();
-        updateSuspectListNumbers();
-      }
-    }
-
+    // form reset & popups
     function resetForm() {
-      document.querySelectorAll('input, select').forEach(el => {
-        if (!el.hasAttribute('readonly')) el.value = '';
-      });
-      document.getElementById('suspectList').innerHTML = '';
-      addSuspect();
+      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
+      document.querySelectorAll('.tag').forEach(tag => tag.remove());
     }
-
-    function showPopup() {
-      const p = document.getElementById('popup-overlay');
-      p.style.display = 'block';
-      p.onclick = () => p.style.display = 'none';
-      setTimeout(() => p.style.display = 'none', 3000);
-    }
-
     function showErrorPopup() {
-      const p = document.getElementById('error-popup');
-      p.style.display = 'block';
-      p.onclick = () => p.style.display = 'none';
-      setTimeout(() => p.style.display = 'none', 3000);
+      const errorPopup = document.getElementById('error-popup');
+      errorPopup.style.display = 'block';
+      errorPopup.onclick = () => errorPopup.style.display = 'none';
+      setTimeout(() => { errorPopup.style.display = 'none'; }, 3000);
+    }
+    function showPopup() {
+      const popup = document.getElementById('popup-overlay');
+      popup.style.display = 'block';
+      popup.onclick = () => popup.style.display = 'none';
+      setTimeout(() => { popup.style.display = 'none'; }, 3000);
     }
 
+    // submission + PIN flow
     function submitForm() {
-      // top‐level validation
-      const dt = document.getElementById('datetime').value.trim();
-      const pu = document.getElementById('pickup').value.trim();
-      const rb = document.getElementById('receiver').value.trim();
-      const dp = document.getElementById('department').value.trim();
-      if (!dt || !pu || !rb || !dp) {
+      const location = document.getElementById('location').value.trim();
+      const datetime = document.getElementById('datetime').value.trim();
+      const defendant = document.getElementById('defendant').value.trim();
+      const officer = document.getElementById('officer').value.trim();
+      const offenses = [...document.querySelectorAll('.tag')]
+        .map(tag => tag.textContent.replace('×', '').trim());
+      if (!location || !datetime || !defendant || !officer || offenses.length === 0) {
         showErrorPopup();
         return;
       }
-
-      // suspect validation
-      for (const c of document.querySelectorAll('.suspect-container')) {
-        const n = c.querySelector('input[type="text"]').value.trim();
-        const g = c.querySelector('select').value.trim();
-        const d = c.querySelector('input[type="date"]').value.trim();
-        if (!n || !g || !d) {
-          showErrorPopup();
-          return;
-        }
+      window.tempSubmissionData = { location, datetime, defendant, officer, offenses };
+      document.getElementById('pin-popup').style.display = 'block';
+      document.getElementById('pin-error').style.display = 'none';
+    }
+    function validatePin() {
+      const enteredPin = document.getElementById('pin-input').value.trim();
+      const popup = document.getElementById('pin-popup');
+      if (enteredPin === '2118') {
+        popup.style.display = 'none';
+        sendWebhook();
+      } else {
+        document.getElementById('pin-error').style.display = 'block';
+        popup.classList.add('shake');
+        setTimeout(() => popup.classList.remove('shake'), 400);
       }
+    }
 
-      // generate a unique ID
-      const reportID = generateReportID();
+    // NEW: snapshot + file upload
+    function sendWebhook() {
+      const data = window.tempSubmissionData;
+      const cardEl = document.querySelector('.card');
 
-      // hide header + buttons
-      const card    = document.querySelector('.card');
-      const header  = card.querySelector('.header');
-      const buttons = card.querySelectorAll('button');
-      header.style.display = 'none';
-      buttons.forEach(b => b.style.visibility = 'hidden');
-
-      // snapshot at 1:1 scale
-      html2canvas(card, { scale: 1 }).then(canvas => {
+      html2canvas(cardEl, { backgroundColor: null }).then(canvas => {
         canvas.toBlob(blob => {
           const form = new FormData();
-          // send the ID as message content, and the png as attachment
-          form.append('content', `**Report ID:** ${reportID}`);
-          form.append('file', blob, 'report.png');
+          // attach the PNG
+          form.append('file', blob, 'arrest-report.png');
+          // optional message alongside the image
+          const payload = {
+            username: 'DOJ Bot',
+            content: `📝 Arrest report for **${data.defendant}**`
+          };
+          form.append('payload_json', JSON.stringify(payload));
 
-          fetch(webhookURL, { method: 'POST', body: form })
-            .then(() => {
-              // restore UI, show success, reset
-              header.style.display = '';
-              buttons.forEach(b => b.style.visibility = '');
-              showPopup();
-              resetForm();
-            })
-            .catch(err => {
-              console.error(err);
-              header.style.display = '';
-              buttons.forEach(b => b.style.visibility = '');
-              alert('Failed to send report image.');
-            });
+          fetch('https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni', {
+            method: 'POST',
+            body: form
+          })
+          .then(() => {
+            showPopup();
+            resetForm();
+          })
+          .catch(err => {
+            console.error(err);
+            alert('Failed to submit report.');
+          });
         }, 'image/png');
       });
     }
-
-    window.onload = () => addSuspect();
   </script>
 </body>
 </html>
