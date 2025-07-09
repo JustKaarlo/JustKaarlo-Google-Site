@@ -14,19 +14,43 @@
 
     html, body {
       height: 100%;
-      background: #1e1f22 url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center/cover fixed;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      overflow: hidden;
+      background: none;
+    }
+
+    /* Background image with blur */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center/cover;
+      filter: blur(8px);
+      transform: scale(1.05);
+      z-index: -2;
+    }
+
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
 
     .container {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 40px;
       max-width: 1200px;
       width: 100%;
       padding: 20px 50px 50px;
+      margin: 0 auto;
     }
 
     .title {
@@ -38,6 +62,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
 
     .title h1 {
@@ -46,6 +71,7 @@
       color: rgba(255, 255, 255, 0.9);
       text-transform: uppercase;
       letter-spacing: 4px;
+      text-shadow: 0 0 8px rgba(0,0,0,0.6);
     }
 
     .report-btn {
@@ -71,7 +97,6 @@
       box-shadow: 0 6px 16px rgba(0,0,0,0.5);
     }
 
-    /* Center the single final button in column 2 */
     .report-btn.center-align {
       grid-column: 2 / 3;
     }
@@ -84,20 +109,20 @@
       height: 100%;
       background: rgba(0,0,0,0.7);
       display: none;
-      z-index: 99;
+      z-index: 3;
     }
 
     .modal {
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%,-50%);
+      transform: translate(-50%, -50%);
       width: 90%;
       max-width: 850px;
       background: transparent;
       overflow: hidden;
       display: none;
-      z-index: 100;
+      z-index: 4;
       transition: height 0.2s ease;
     }
 
@@ -137,11 +162,12 @@
       padding: 5px 10px;
       cursor: pointer;
       font-weight: bold;
-      z-index: 101;
+      z-index: 5;
     }
   </style>
 </head>
 <body>
+  <canvas id="particle-canvas"></canvas>
   <div class="container">
     <div class="title">
       <h1>FILE A REPORT</h1>
@@ -154,7 +180,6 @@
     <button class="report-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Coroner-Report.html')">CORONER</button>
     <button class="report-btn center-align" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Prison-Transport.html')">PRISON TRANSPORT</button>
   </div>
-
   <div class="overlay" id="overlay" onclick="closeModal()"></div>
   <div class="modal" id="modal">
     <button class="close-btn" onclick="closeModal()">Close</button>
@@ -162,45 +187,88 @@
       <iframe id="modal-frame"></iframe>
     </div>
   </div>
-
   <script>
+    // Particle background
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+
+    class Particle {
+      constructor() {
+        this.init();
+      }
+      init() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+          this.init();
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.08)';
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    resize();
+    initParticles();
+    animateParticles();
+
+    // Modal logic
     const modal   = document.getElementById('modal');
     const iframe  = document.getElementById('modal-frame');
     const overlay = document.getElementById('overlay');
-
     function openModal(src) {
       overlay.style.display = 'block';
       modal.style.display   = 'block';
-
       iframe.onload = () => {
         const maxH = window.innerHeight * 0.95;
         let h;
         try {
           const doc = iframe.contentDocument || iframe.contentWindow.document;
           h = Math.min(doc.documentElement.scrollHeight, maxH);
-
-          const html = doc.documentElement;
-          const body = doc.body;
-          html.style.scrollbarWidth  = 'none';
-          html.style.msOverflowStyle = 'none';
-          body.style.scrollbarWidth  = 'none';
-          body.style.msOverflowStyle = 'none';
-
+          doc.documentElement.style.scrollbarWidth  = 'none';
+          doc.documentElement.style.msOverflowStyle = 'none';
+          doc.body.style.scrollbarWidth  = 'none';
+          doc.body.style.msOverflowStyle = 'none';
           const styleTag = doc.createElement('style');
-          styleTag.textContent = `
-            html::-webkit-scrollbar,
-            body::-webkit-scrollbar {
-              width:0px; height:0px;
-              background: transparent;
-            }
-          `;
+          styleTag.textContent = `html::-webkit-scrollbar, body::-webkit-scrollbar {width:0; height:0; background: transparent;}`;
           doc.head.appendChild(styleTag);
-        } catch (err) {
+        } catch {
           h = maxH;
         }
         modal.style.height = h + 'px';
       };
-
       iframe.src = src;
     }
 
