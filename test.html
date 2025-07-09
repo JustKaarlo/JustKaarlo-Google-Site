@@ -317,7 +317,7 @@
         canvas.toBlob(blob => {
           const form = new FormData();
           // attach the PNG
-          form.append('file', blob, 'arrest-report.png');
+          form.append('file', blob, 'resources/DISCORD_WEBHOOK_ARREST_REPORT.png');
           // optional message alongside the image
           const payload = {
             username: 'DOJ Bot',
