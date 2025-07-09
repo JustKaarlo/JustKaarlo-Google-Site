@@ -74,17 +74,8 @@
       font-size: 14px;
     }
     .wide { width: 100%; }
-    button {
-      background: #3c78d8;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button:hover { background: #5187dc; }
+
+    /* buttons layout */
     .button-row {
       display: flex;
       gap: 10px;
@@ -93,8 +84,26 @@
     .clear-btn {
       background: #4f545c;
       color: #c0c0c0;
+      flex: 0 0 auto;
     }
-    .clear-btn:hover { background: #5d626a; }
+    .clear-btn:hover {
+      background: #5d626a;
+    }
+    .submit-btn {
+      background: #3c78d8;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+      flex: 1;
+    }
+    .submit-btn:hover {
+      background: #5187dc;
+    }
+
     /* tag container */
     .tag-container {
       display: flex;
@@ -129,6 +138,7 @@
       cursor: pointer;
       font-weight: bold;
     }
+
     /* popups */
     #popup-overlay,
     #error-popup,
@@ -155,8 +165,11 @@
       25%,75% { transform: translate(-50%,-50%) translateX(-10px); }
       50% { transform: translate(-50%,-50%) translateX(10px); }
     }
+
     /* == Custom Offense Menu Styles == */
     #offenseMenu.offense-menu {
+      position: absolute;
+      z-index: 1000;
       background: #2F3136;
       border: 1px solid #202225;
       border-radius: 8px;
