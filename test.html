@@ -66,7 +66,8 @@
       font-weight: bold;
       text-transform: uppercase;
     }
-    input[type="text"], input[type="datetime-local"] {
+    input[type="text"],
+    input[type="datetime-local"] {
       padding: 6px 10px;
       border: 1px solid #444;
       border-radius: 6px;
@@ -133,7 +134,9 @@
       background-color: #5d626a;
     }
     .submit-btn { flex: 1; }
-    #popup-overlay, #error-popup, #pin-popup {
+    #popup-overlay,
+    #error-popup,
+    #pin-popup {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -148,11 +151,23 @@
       max-width: 90%;
       text-align: center;
     }
-    #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
+    #popup-overlay .header-title {
+      color: #7289da;
+      font-size: 18px;
+      font-weight: bold;
+    }
     #popup-overlay .header-subtitle,
     #error-popup .header-subtitle,
-    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
-    #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
+    #pin-popup .header-subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 6px;
+    }
+    #error-popup .header-title {
+      color: #f04747;
+      font-size: 18px;
+      font-weight: bold;
+    }
     #pin-popup input {
       width: 100%;
       padding: 10px;
@@ -256,7 +271,7 @@
     function addOffenseTag(text) {
       const tag = document.createElement('div');
       tag.className = 'tag';
-      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+      tag.innerHTML = \`\${text} <span class="remove">&times;</span>\`;
       offenseContainer.insertBefore(tag, offenseInput);
       tag.querySelector('.remove').addEventListener('click', () => tag.remove());
     }
@@ -308,36 +323,44 @@
       }
     }
 
-    // NEW: snapshot + file upload
+    // improved snapshot + file upload
     function sendWebhook() {
       const data = window.tempSubmissionData;
       const cardEl = document.querySelector('.card');
 
-      html2canvas(cardEl, { backgroundColor: null }).then(canvas => {
-        canvas.toBlob(blob => {
-          const form = new FormData();
-          // attach the PNG
-          form.append('file', blob, 'DISCORD_WEBHOOK_ARREST_REPORT.png');
-          // optional message alongside the image
-          const payload = {
-            username: 'DOJ Bot',
-            content: `📝 Arrest report for **${data.defendant}**`
-          };
-          form.append('payload_json', JSON.stringify(payload));
+      // wait for font to load first
+      document.fonts.ready.then(() => {
+        html2canvas(cardEl, {
+          backgroundColor: window.getComputedStyle(cardEl).backgroundColor,
+          width:  cardEl.scrollWidth,
+          height: cardEl.scrollHeight,
+          scale: window.devicePixelRatio,
+          scrollX: -window.scrollX,
+          scrollY: -window.scrollY,
+          useCORS: true
+        }).then(canvas => {
+          canvas.toBlob(blob => {
+            const form = new FormData();
+            form.append('file', blob, 'arrest-report.png');
+            form.append('payload_json', JSON.stringify({
+              username: 'DOJ Bot',
+              content: \`📝 Arrest report for **\${data.defendant}**\`
+            }));
 
-          fetch('https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni', {
-            method: 'POST',
-            body: form
-          })
-          .then(() => {
-            showPopup();
-            resetForm();
-          })
-          .catch(err => {
-            console.error(err);
-            alert('Failed to Submit Report.');
-          });
-        }, 'image/png');
+            fetch('https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni', {
+              method: 'POST',
+              body: form
+            })
+            .then(() => {
+              showPopup();
+              resetForm();
+            })
+            .catch(err => {
+              console.error(err);
+              alert('Failed to Submit Report.');
+            });
+          }, 'image/png');
+        });
       });
     }
   </script>
