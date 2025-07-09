@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Modding Buttons</title>
+  <title>Mods Buttons</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     * {
@@ -18,14 +18,20 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
+    }
+
+    .wrapper {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      max-width: 800px;
+      width: 100%;
+      padding: 20px 50px 50px;
     }
 
     .title {
-      width: 100%;
-      max-width: 800px;
-      margin: 40px 0 20px;
-      padding: 20px 50px;
+      grid-column: 1 / -1;
+      padding: 20px;
       background: rgba(255, 255, 255, 0.1);
       backdrop-filter: blur(10px);
       border-radius: 12px;
@@ -40,15 +46,7 @@
       color: rgba(255, 255, 255, 0.9);
       text-transform: uppercase;
       letter-spacing: 4px;
-    }
-
-    .container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 40px;
-      padding: 20px 50px 50px;
-      max-width: 800px;
-      width: 100%;
+      margin: 0;
     }
 
     .report-btn {
@@ -78,15 +76,14 @@
       max-width: 100%;
       z-index: 1;
     }
-
   </style>
 </head>
 <body>
-  <div class="title">
-    <h1>MODS</h1>
-  </div>
+  <div class="wrapper">
+    <div class="title">
+      <h1>MODS</h1>
+    </div>
 
-  <div class="container">
     <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/modding/total-war','_blank')">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar-button_icon.png" alt="Total War">
     </a>
