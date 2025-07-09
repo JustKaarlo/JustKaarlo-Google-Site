@@ -338,11 +338,11 @@
         title: "CITATION REPORT",
         color: 4737096,
         fields: [
-          { name: "Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
-          { name: "Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
-          { name: "Name", value: `\`\`\`\n${data.name}\n\`\`\``, inline: true },
-          { name: "Amount", value: `\`\`\`\n${data.amount}\n\`\`\``, inline: true },
-          { name: "Violations", value: violationsInline, inline: false }
+          { name: "> Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
+          { name: "> Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
+          { name: "> Name", value: `\`\`\`\n${data.name}\n\`\`\``, inline: true },
+          { name: "> Amount", value: `\`\`\`\n${data.amount}\n\`\`\``, inline: true },
+          { name: "> Violations", value: violationsInline, inline: false }
         ],
         footer: { text: "Department of Justice" },
         timestamp: new Date().toISOString()
