@@ -18,37 +18,40 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
     }
 
-    .title {
-      width: 100%;
-      max-width: 800px;
-      padding: 0 50px;
-      margin: 40px 0 20px;
-    }
-
-    .title img {
-      width: 100%;
-      height: auto;
-      display: block;
-      opacity: 0.7;    /* 70% transparency */
-      /* no blur */
-    }
-
-    .container {
+    .wrapper {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 40px;
-      padding: 20px 50px 50px;
       max-width: 800px;
       width: 100%;
+      padding: 20px 50px 50px;
+    }
+
+    .title {
+      grid-column: 1 / -1;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .title h1 {
+      font-size: 64px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.9);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin: 0;
     }
 
     .report-btn {
       position: relative;
       background: rgba(255, 255, 255, 0.02);
-      /* backdrop-filter removed */
       border: none;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
@@ -72,35 +75,25 @@
       max-height: 140px;
       max-width: 100%;
       z-index: 1;
-      /* no drop-shadow */
-    }
-
-    .report-text {
-      font-size: 28px;
-      font-weight: 800;
-      color: white;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      z-index: 1;
     }
   </style>
 </head>
 <body>
-  <div class="title">
-    <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ModdingTitleFrame.png" alt="Modding Title">
-  </div>
+  <div class="wrapper">
+    <div class="title">
+      <h1>MODS</h1>
+    </div>
 
-  <div class="container">
     <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/modding/total-war','_blank')">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar-button_icon.png" alt="Total War">
     </a>
     <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/modding/fivem','_blank')">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/FiveM-button_icon.png" alt="FiveM">
     </a>
-        <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/modding/Ready-Or-Not','_blank')">
+    <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/modding/Ready-Or-Not','_blank')">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/ReadyOrNot-button_icon.png" alt="Ready Or Not">
     </a>
-        <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/modding/elden-ring','_blank')">
+    <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/modding/elden-ring','_blank')">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/EldenRing-button_icon.png" alt="Elden Ring">
     </a>
   </div>
