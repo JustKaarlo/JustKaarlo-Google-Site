@@ -135,7 +135,7 @@
       min-width: 140px;
     }
   </style>
-  <!-- html2canvas -->
+  <!-- html2canvas for screenshotting -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 
@@ -199,14 +199,28 @@
   </div>
 
   <script>
-    const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
+    const webhookURL = 'https://discord.com/api/webhooks/your_webhook_here';
+
+    // helper: ABCD-1234
+    function generateReportID() {
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let part1 = '';
+      for (let i = 0; i < 4; i++) {
+        part1 += letters.charAt(Math.floor(Math.random() * letters.length));
+      }
+      let part2 = '';
+      for (let i = 0; i < 4; i++) {
+        part2 += Math.floor(Math.random() * 10);
+      }
+      return `${part1}-${part2}`;
+    }
 
     function updateSuspectListNumbers() {
-      document.querySelectorAll('.suspect-container').forEach((c,i)=>{
+      document.querySelectorAll('.suspect-container').forEach((c, i) => {
         const num = c.querySelector('.no-box');
         const del = c.querySelector('.delete-btn');
-        num.textContent = `Suspect #${i+1}`;
-        if(i===0){
+        num.textContent = `Suspect #${i + 1}`;
+        if (i === 0) {
           del.disabled = true;
           del.style.cursor = 'not-allowed';
           del.title = "Cannot remove the first suspect";
@@ -217,8 +231,8 @@
       });
     }
 
-    function addSuspect(){
-      const wrap = document.getElementById('suspectList');
+    function addSuspect() {
+      const list = document.getElementById('suspectList');
       const div = document.createElement('div');
       div.className = 'suspect-container';
       div.innerHTML = `
@@ -228,74 +242,74 @@
         </div>
         <div class="suspect-row">
           <div class="field-group"><label>Name</label><input type="text"></div>
-          <div class="field-group"><label>Gender</label>
-            <select>
-              <option value="">Select</option>
-              <option>Male</option>
-              <option>Female</option>
-            </select>
-          </div>
+          <div class="field-group"><label>Gender</label><select>
+            <option value="">Select</option><option>Male</option><option>Female</option>
+          </select></div>
           <div class="field-group"><label>Date of Birth</label><input type="date"></div>
         </div>`;
-      wrap.appendChild(div);
+      list.appendChild(div);
       updateSuspectListNumbers();
     }
 
-    function removeSuspect(btn){
+    function removeSuspect(btn) {
       const card = btn.closest('.suspect-container');
-      if(card){ card.remove(); updateSuspectListNumbers(); }
+      if (card) {
+        card.remove();
+        updateSuspectListNumbers();
+      }
     }
 
-    function resetForm(){
-      document.querySelectorAll('input, select').forEach(el=>{
-        if(!el.hasAttribute('readonly')) el.value = '';
+    function resetForm() {
+      document.querySelectorAll('input, select').forEach(el => {
+        if (!el.hasAttribute('readonly')) el.value = '';
       });
       document.getElementById('suspectList').innerHTML = '';
       addSuspect();
     }
 
-    function showPopup(){
+    function showPopup() {
       const p = document.getElementById('popup-overlay');
       p.style.display = 'block';
-      p.onclick = ()=>p.style.display='none';
-      setTimeout(()=>p.style.display='none',3000);
+      p.onclick = () => p.style.display = 'none';
+      setTimeout(() => p.style.display = 'none', 3000);
     }
 
-    function showErrorPopup(){
+    function showErrorPopup() {
       const p = document.getElementById('error-popup');
       p.style.display = 'block';
-      p.onclick = ()=>p.style.display='none';
-      setTimeout(()=>p.style.display='none',3000);
+      p.onclick = () => p.style.display = 'none';
+      setTimeout(() => p.style.display = 'none', 3000);
     }
 
-    function submitForm(){
+    function submitForm() {
       // top‐level validation
       const dt = document.getElementById('datetime').value.trim();
       const pu = document.getElementById('pickup').value.trim();
       const rb = document.getElementById('receiver').value.trim();
       const dp = document.getElementById('department').value.trim();
-      if(!dt||!pu||!rb||!dp){ showErrorPopup(); return; }
+      if (!dt || !pu || !rb || !dp) {
+        showErrorPopup();
+        return;
+      }
 
       // suspect validation
-      for(const c of document.querySelectorAll('.suspect-container')){
+      for (const c of document.querySelectorAll('.suspect-container')) {
         const n = c.querySelector('input[type="text"]').value.trim();
         const g = c.querySelector('select').value.trim();
         const d = c.querySelector('input[type="date"]').value.trim();
-        if(!n||!g||!d){ showErrorPopup(); return; }
+        if (!n || !g || !d) {
+          showErrorPopup();
+          return;
+        }
       }
 
-      // prepare minimal embed
-      const embed = {
-        title: "Prison Transport Report",
-        image: { url: "attachment://report.png" },
-        footer: { text: "Department of Correction" },
-        timestamp: new Date().toISOString()
-      };
+      // generate a unique ID
+      const reportID = generateReportID();
 
       // hide header + buttons
-      const card     = document.querySelector('.card');
-      const header   = card.querySelector('.header');
-      const buttons  = card.querySelectorAll('button');
+      const card    = document.querySelector('.card');
+      const header  = card.querySelector('.header');
+      const buttons = card.querySelectorAll('button');
       header.style.display = 'none';
       buttons.forEach(b => b.style.visibility = 'hidden');
 
@@ -303,17 +317,19 @@
       html2canvas(card, { scale: 1 }).then(canvas => {
         canvas.toBlob(blob => {
           const form = new FormData();
-          form.append('payload_json', JSON.stringify({ embeds: [embed] }));
+          // send the ID as message content, and the png as attachment
+          form.append('content', `**Report ID:** ${reportID}`);
           form.append('file', blob, 'report.png');
+
           fetch(webhookURL, { method: 'POST', body: form })
-            .then(()=>{
-              // restore UI
+            .then(() => {
+              // restore UI, show success, reset
               header.style.display = '';
               buttons.forEach(b => b.style.visibility = '');
               showPopup();
               resetForm();
             })
-            .catch(err=>{
+            .catch(err => {
               console.error(err);
               header.style.display = '';
               buttons.forEach(b => b.style.visibility = '');
