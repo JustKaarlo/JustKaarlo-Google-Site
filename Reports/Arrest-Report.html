@@ -289,11 +289,11 @@
         title: "ARREST REPORT",
         color: 4737096,
         fields: [
-          { name: "Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
-          { name: "Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
-          { name: "Defendant", value: `\`\`\`\n${data.defendant}\n\`\`\``, inline: true },
-          { name: "Officer", value: `\`\`\`\n${data.officer}\n\`\`\``, inline: true },
-          { name: "Offenses", value: offensesInline, inline: false }
+          { name: "> Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
+          { name: "> Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
+          { name: "> Defendant", value: `\`\`\`\n${data.defendant}\n\`\`\``, inline: true },
+          { name: "> Officer", value: `\`\`\`\n${data.officer}\n\`\`\``, inline: true },
+          { name: "> Offenses", value: offensesInline, inline: false }
         ],
         footer: { text: "Department of Justice" },
         timestamp: new Date().toISOString()
