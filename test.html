@@ -49,10 +49,11 @@
       z-index: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      justify-content: center;
       gap: 40px;
+      max-width: 1200px;
+      width: 100%;
       padding: 20px 50px 50px;
-      /* centered grid, no fixed width */
+      margin: 0 auto;
     }
 
     .title {
@@ -76,32 +77,27 @@
       text-shadow: 0 0 8px rgba(0,0,0,0.6);
     }
 
-    /* Button frame design from ModdingButtons */
     .report-btn {
-      position: relative;
       background: rgba(44,47,51,0.15);
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      width: 100%;
-      height: 200px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-transform: uppercase;
+      color: white;
       font-weight: 800;
       font-size: 34px;
       letter-spacing: 2px;
-      color: white;
-      overflow: hidden;
-      text-decoration: none;
+      padding: 40px 30px;
+      border: none;
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+      width: 100%;
+      text-align: center;
     }
 
     .report-btn:hover {
-      transform: scale(1.03);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
     }
 
     .report-btn.center-align {
@@ -206,7 +202,9 @@
     window.addEventListener('resize', resize);
 
     class Particle {
-      constructor() { this.init(); }
+      constructor() {
+        this.init();
+      }
       init() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
@@ -217,19 +215,37 @@
       update() {
         this.x += this.vx;
         this.y += this.vy;
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.init();
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+          this.init();
+        }
       }
       draw() {
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(255,255,255,0.08)';
         ctx.fill();
       }
     }
 
-    function initParticles(){ particles = []; for(let i=0;i<100;i++) particles.push(new Particle()); }
-    function animateParticles(){ ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(animateParticles);}    
-    resize(); initParticles(); animateParticles();
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    resize();
+    initParticles();
+    animateParticles();
 
     // Modal logic
     const modal   = document.getElementById('modal');
