@@ -223,25 +223,17 @@
     }
 
     @keyframes shake {
-      0% {
-        transform: translate(-50%, -50%) translateX(0);
-      }
+      0% { transform: translate(-50%, -50%) translateX(0); }
+      25% { transform: translate(-50%, -50%) translateX(-10px); }
+      50% { transform: translate(-50%, -50%) translateX(10px); }
+      75% { transform: translate(-50%, -50%) translateX(-10px); }
+      100% { transform: translate(-50%, -50%) translateX(0); }
+    }
 
-      25% {
-        transform: translate(-50%, -50%) translateX(-10px);
-      }
-
-      50% {
-        transform: translate(-50%, -50%) translateX(10px);
-      }
-
-      75% {
-        transform: translate(-50%, -50%) translateX(-10px);
-      }
-
-      100% {
-        transform: translate(-50%, -50%) translateX(0);
-      }
+    input[readonly] {
+      color: #888;
+      background: #2C2F33;
+      cursor: not-allowed;
     }
   </style>
 </head>
@@ -257,7 +249,7 @@
     <div class="row">
       <div class="field-group">
         <label>Date of Examination</label>
-        <input type="date" id="exam_date">
+        <input type="date" id="exam_date" readonly>
       </div>
       <div class="field-group">
         <label>Name</label>
@@ -320,6 +312,12 @@
   </div>
 
   <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const examInput = document.getElementById('exam_date');
+      const today = new Date().toISOString().split('T')[0];
+      examInput.value = today;
+    });
+
     function resetForm() {
       const fields = document.querySelectorAll('input, textarea');
       fields.forEach(el => {
