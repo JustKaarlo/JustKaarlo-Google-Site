@@ -101,6 +101,7 @@
       flex-wrap: wrap;
       gap: 15px;
       margin: 15px;
+      justify-content: center;
     }
 
     .checkbox-group label {
@@ -319,7 +320,7 @@
     });
 
     function resetForm() {
-      const fields = document.querySelectorAll('input, textarea');
+      const fields = document.querySelectorAll('input:not(#exam_date), textarea');
       fields.forEach(el => {
         if (el.type === 'checkbox') el.checked = false;
         else el.value = '';
