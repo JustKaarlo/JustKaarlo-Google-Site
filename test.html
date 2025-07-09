@@ -183,13 +183,14 @@
   </style>
 </head>
 <body>
-  <!-- Hidden PNG template of your card -->
-  <img id="bgImage" src="card-template.png" alt="" style="display:none">
+  <!-- Swap in your hosted URL here -->
+  <img id="bgImage"
+       src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/DISCORD_WEBHOOK_ARREST_REPORT.png"
+       alt=""
+       style="display:none">
 
-  <!-- The canvas we'll draw onto -->
   <canvas id="reportCanvas" width="750" height="450" style="display:none"></canvas>
 
-  <!-- Your onscreen form -->
   <div class="card">
     <div class="header">
       <div class="header-title">DEPARTMENT OF JUSTICE</div>
@@ -228,7 +229,6 @@
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
 
-    <!-- popups -->
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Report Has Been Logged</div>
@@ -249,7 +249,6 @@
   </div>
 
   <script>
-    // tag logic (unchanged)
     const offenseInput = document.getElementById('offenseInput');
     const offenseContainer = document.getElementById('offense-tags');
     offenseInput.addEventListener('keydown', e => {
@@ -271,7 +270,6 @@
       document.querySelectorAll('.tag').forEach(t => t.remove());
     }
 
-    // popups
     function showErrorPopup() {
       const e = document.getElementById('error-popup');
       e.style.display = 'block';
@@ -283,7 +281,6 @@
       setTimeout(() => p.style.display = 'none', 3000);
     }
 
-    // form & PIN
     function submitForm() {
       const loc = document.getElementById('location').value.trim();
       const dt  = document.getElementById('datetime').value.trim();
@@ -301,6 +298,7 @@
       document.getElementById('pin-popup').style.display = 'block';
       document.getElementById('pin-error').style.display = 'none';
     }
+
     function validatePin() {
       const pin = document.getElementById('pin-input').value.trim();
       const popup = document.getElementById('pin-popup');
@@ -314,16 +312,18 @@
       }
     }
 
-    // the canvas + webhook magic
-    const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni'; 
+    // preload your URL-based template
+    const bg = document.getElementById('bgImage');
+    let bgReady = false;
+    bg.addEventListener('load', () => { bgReady = true; });
+
+    const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
     function sendWebhook() {
       const data = window.tempSubmissionData;
       const canvas = document.getElementById('reportCanvas');
-      const ctx = canvas.getContext('2d');
-      const bg  = document.getElementById('bgImage');
+      const ctx    = canvas.getContext('2d');
 
-      // when the image is ready, draw + send
-      bg.onload = () => {
+      function drawAndPost() {
         ctx.clearRect(0,0,canvas.width,canvas.height);
         ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
 
@@ -351,15 +351,17 @@
               timestamp: new Date().toISOString()
             }]
           }));
-
           fetch(webhookURL, { method:'POST', body: form })
             .then(() => { showPopup(); resetForm(); })
             .catch(() => alert('Failed to Submit Report.'));
         });
-      };
+      }
 
-      // trigger onload in case it's already cached
-      if (bg.complete) bg.onload();
+      if (bgReady) {
+        drawAndPost();
+      } else {
+        bg.addEventListener('load', drawAndPost, { once: true });
+      }
     }
   </script>
 </body>
