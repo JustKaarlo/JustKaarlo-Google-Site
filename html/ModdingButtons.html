@@ -14,44 +14,73 @@
 
     html, body {
       height: 100%;
-      background: #1e1f22 url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid_5120x2880.png') no-repeat center/cover fixed;
+      overflow: hidden;
+      background: none;
       display: flex;
       justify-content: center;
       align-items: center;
     }
 
+    /* Blurred background image */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center/cover;
+      filter: blur(8px);
+      transform: scale(1.05);
+      z-index: -2;
+    }
+
+    /* Particle canvas */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
     .wrapper {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 40px;
       max-width: 800px;
       width: 100%;
       padding: 20px 50px 50px;
+      margin: 0 auto;
     }
 
     .title {
       grid-column: 1 / -1;
       padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255,255,255,0.1);
       backdrop-filter: blur(10px);
       border-radius: 12px;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
 
     .title h1 {
       font-size: 64px;
       font-weight: 800;
-      color: rgba(255, 255, 255, 0.9);
+      color: rgba(255,255,255,0.9);
       text-transform: uppercase;
       letter-spacing: 4px;
-      margin: 0;
+      text-shadow: 0 0 8px rgba(0,0,0,0.6);
     }
 
     .report-btn {
       position: relative;
-      background: rgba(255, 255, 255, 0.02);
+      background: rgba(44,47,51,0.15);
       border: none;
       border-radius: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
@@ -79,11 +108,11 @@
   </style>
 </head>
 <body>
+  <canvas id="particle-canvas"></canvas>
   <div class="wrapper">
     <div class="title">
       <h1>MODS</h1>
     </div>
-
     <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/mods/total-war','_blank')">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar-button_icon.png" alt="Total War">
     </a>
@@ -97,5 +126,42 @@
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/EldenRing-button_icon.png" alt="Elden Ring">
     </a>
   </div>
+  <script>
+    // Particle background
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+
+    class Particle {
+      constructor() { this.init(); }
+      init() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.init();
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(255,255,255,0.08)';
+        ctx.fill();
+      }
+    }
+
+    function initParticles(){ particles = []; for(let i=0;i<100;i++) particles.push(new Particle()); }
+    function animateParticles(){ ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(animateParticles);}    
+    resize(); initParticles(); animateParticles();
+  </script>
 </body>
 </html>
