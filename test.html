@@ -250,14 +250,18 @@
     .subcard .step {
       position: relative;
       display: flex;
-      align-items: center;
+      align-items: flex-start;   /* align items at their top edge */
       margin-bottom: 1.5rem;
       z-index: 2;
+      border-radius: 8px;
+      padding: 1rem;
+      background: rgba(30, 30, 30, 0.5);
     }
     .subcard .step .circle {
       width: 1.75rem;
       height: 1.75rem;
-      margin-right: 0.75rem;
+      margin: 0;
+      margin-right: 1rem;
       border: 2px solid var(--accent);
       border-radius: 50%;
       display: flex;
@@ -277,6 +281,7 @@
     }
     .subcard .step .step-text {
       margin: 0.5rem 0 0 2.5rem;
+      margin-top: 0.1rem;
       padding-left: 0.5rem;
       list-style: disc;
       font-size: 0.85rem;
@@ -374,9 +379,9 @@
             <div class="step-content">
               <div class="step-title">Open MDT</div>
               <ul class="step-text">
-                <li>Open MDT by pressing <code>Page Up</code> key</li>
-                <li>You do not need to be in your vehicle</li>
-                <li>It may take a few moments to open (says “loading”) which is normal</li>
+                <li>Open MDT by pressing <code>Page Up</code>.</li>
+                <li>You do not need to be in your vehicle.</li>
+                <li>It may take a few moments to open (says “loading”) which is normal.</li>
               </ul>
             </div>
           </div>
