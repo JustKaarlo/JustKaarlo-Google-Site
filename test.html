@@ -82,7 +82,6 @@
     header h1 {
       font-size: 1.8rem;
       color: var(--accent);
-      display: flex;
       align-items: baseline;
     }
 
@@ -210,6 +209,27 @@
       position: relative;
       z-index: 1;
     }
+
+    .subcards {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+
+    .subcards .subcard {
+      flex: 1 1 45%;
+      backdrop-filter: blur(8px);
+      background: var(--bg-panel);
+      border: 1px solid var(--border-glass);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .subcards .subcard h4 {
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
   </style>
 </head>
 
@@ -289,9 +309,16 @@
     </section>
     <!-- Shifts & Status -->
     <section id="dept" class="glass-card">
-      <h3>Shifts &amp; Status</h3>
-      <div class="note-card">
-        <p class="toc-note">Dept, Uniform, Vehicle, &amp; Status</p>
+      <h3>Dept, Uniform, Vehicle, &amp; Status</h3>
+      <div class="subcards">
+        <div class="subcard">
+          <h4>Selecting your department</h4>
+          <p><!-- put dept info here --></p>
+        </div>
+        <div class="subcard">
+          <h4>Uniform, Vehicle &amp; Status</h4>
+          <p><!-- put uniform/vehicle/status info here --></p>
+        </div>
       </div>
      </section>
   </main>
