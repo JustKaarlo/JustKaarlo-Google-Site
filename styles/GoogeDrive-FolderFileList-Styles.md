@@ -1,7 +1,109 @@
 <details>
 <summary>
 
-  ### **Style 1**   `Without API`
+  ### **Style 1**   `With API`
+
+</summary>
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ready Or Not</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <style>
+    body {
+      overflow: hidden;
+      margin: 0;
+      padding: 20px;
+      background: transparent;
+      font-family: 'Rubik', sans-serif;
+      color: white;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 8px 0;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/ReadyOrNot_Icon.png" alt="Ready Or Not"
+      style="height: 24px; vertical-align: middle; margin-right: 8px;">Ready Or Not</h1>
+  <ul id="fileList">Loading...</ul>
+
+  <script>
+    const folderId = "FOLDER_ID_HERE";
+    const apiKey = "API_KEY_HERE";
+
+    async function listFiles() {
+      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
+      const res = await fetch(url);
+      const data = await res.json();
+
+      const list = document.getElementById("fileList");
+      list.innerHTML = "";
+
+      if (!data.files || data.files.length === 0) {
+        list.innerHTML = "<li>No files found.</li>";
+        return;
+      }
+
+      data.files.forEach(file => {
+        const li = document.createElement("li");
+        const link = document.createElement("a");
+        link.href = file.webViewLink;
+        link.target = "_blank";
+        const icon = document.createElement("img");
+        icon.src = file.iconLink;
+        icon.alt = "";
+        icon.style.height = "20px";
+        icon.style.verticalAlign = "middle";
+        icon.style.marginRight = "8px";
+
+        link.textContent = ""; // Clear existing text
+        link.appendChild(icon);
+        link.appendChild(document.createTextNode(file.name));
+        li.appendChild(link);
+        list.appendChild(li);
+      });
+    }
+
+    listFiles();
+  </script>
+</body>
+</html>
+```
+
+</details>
+
+<details>
+<summary>
+
+  ### **Style 2**   `Without API`
 
 </summary>
 
