@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,8 +14,20 @@
       --text-light: #E0E0E0;
       --accent: #00B4D8;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
-    html, body { height: 100%; background: none; }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      background: none;
+    }
+
     body {
       background: linear-gradient(135deg, #0D0D0D, #1A1A1A);
       color: var(--text-light);
@@ -22,24 +35,31 @@
       position: relative;
       min-height: 100vh;
     }
+
     /* Blurred background image */
     body::before {
       content: '';
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center/cover;
       filter: blur(8px);
       transform: scale(1.05);
       z-index: -2;
     }
+
     /* Particle canvas */
     #particle-canvas {
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       z-index: -1;
     }
+
     .container {
       position: relative;
       z-index: 1;
@@ -47,18 +67,42 @@
       margin: 2rem auto;
       padding: 0 1rem;
     }
+
     header {
       backdrop-filter: blur(12px);
       background: var(--bg-panel);
       border-bottom: 1px solid var(--border-glass);
       padding: 1rem 2rem;
       border-radius: 0 0 12px 12px;
-      display: flex; align-items: center; justify-content: space-between;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
-    header h1 { font-size: 1.8rem; color: var(--accent); }
-    nav ul { list-style: none; display: flex; gap: 1rem; }
-    nav a { color: var(--text-light); text-decoration: none; font-weight: 600; padding: 0.5rem 1rem; border-radius: 8px; transition: background 0.3s; }
-    nav a:hover { background: rgba(255,255,255,0.1); }
+
+    header h1 {
+      font-size: 1.8rem;
+      color: var(--accent);
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+    }
+
+    nav a {
+      color: var(--text-light);
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      transition: background 0.3s;
+    }
+
+    nav a:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
     .glass-card {
       backdrop-filter: blur(10px);
       background: var(--bg-panel);
@@ -67,6 +111,7 @@
       padding: 1.5rem;
       margin-bottom: 2rem;
     }
+
     /* Small note card for TOC */
     .note-card {
       display: inline-block;
@@ -77,28 +122,78 @@
       padding: 0.5rem 1rem;
       margin-bottom: 1rem;
     }
-    section h2 { font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--accent); }
+
+    section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+
     /* Table of Contents */
-    section#toc .note-card { margin-bottom: 1rem; }
-    section#toc ul { margin-left: 1.5rem; padding-left: 0; list-style-position: inside; }
-    section#toc ul li { margin-bottom: 0.5rem; }
+    section#toc .note-card {
+      margin-bottom: 1rem;
+    }
+
+    section#toc ul {
+      margin-left: 1.5rem;
+      padding-left: 0;
+      list-style-position: inside;
+    }
+
+    section#toc ul li {
+      margin-bottom: 0.5rem;
+    }
+
     section#toc ul li:nth-child(2),
     section#toc ul li:nth-child(4),
     section#toc ul li:nth-child(10),
-    section#toc ul li:nth-child(13) { margin-bottom: 1.2rem; }
-    section#toc ul li a { color: var(--accent); text-decoration: none; }
-    section#toc ul li a:hover { text-decoration: underline; }
+    section#toc ul li:nth-child(13) {
+      margin-bottom: 1.2rem;
+    }
+
+    section#toc ul li a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    section#toc ul li a:hover {
+      text-decoration: underline;
+    }
+
     /* Notifications */
-    section#notifications ul { margin-left: 1rem; list-style: disc; }
-    section#notifications ul li { margin-bottom: 0.5rem; }
-    code { background: rgba(255,255,255,0.1); padding: 0.2rem 0.4rem; border-radius: 4px; }
-    img { max-width: 100%; border-radius: 8px; margin: 1rem 0; }
+    section#notifications ul {
+      margin-left: 1rem;
+      list-style: disc;
+    }
+
+    section#notifications ul li {
+      margin-bottom: 0.5rem;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+
     footer {
-      text-align: center; padding: 1rem 0; margin-top: 4rem;
-      font-size: 0.9rem; color: #888; position: relative; z-index: 1;
+      text-align: center;
+      padding: 1rem 0;
+      margin-top: 4rem;
+      font-size: 0.9rem;
+      color: #888;
+      position: relative;
+      z-index: 1;
     }
   </style>
 </head>
+
 <body>
   <canvas id="particle-canvas"></canvas>
   <header class="container">
@@ -117,11 +212,15 @@
       <h2>Welcome</h2>
       <p>This guide focuses on the controls for Emergency Responder Simulator (ERS).</p>
       &nbsp;
-      <p>This guide does not cover basic FiveM controls, DOT, or TeamSpeak setup. Please see the full TSDOJ controls page for all non-ERS specific controls to ensure you get the most out of your experience on all TSDOJ servers!</p>
+      <p>This guide does not cover basic FiveM controls, DOT, or TeamSpeak setup. Please see the full TSDOJ controls
+        page for all non-ERS specific controls to ensure you get the most out of your experience on all TSDOJ servers!
+      </p>
       &nbsp;
-      <p>We recommend using TeamSpeak for communication, but it is optional. If you do choose to use it, please ensure you review TeamSpeak rules & instructions in #teamspeak-information channel via TSDOJ’s discord.</p>
+      <p>We recommend using TeamSpeak for communication, but it is optional. If you do choose to use it, please ensure
+        you review TeamSpeak rules & instructions in #teamspeak-information channel via TSDOJ’s discord.</p>
       &nbsp;
-      <p>If you do not use a mic, that's ok too. And in that case, make sure to check out this recommendations section made specifically for those without a mic.</p>
+      <p>If you do not use a mic, that's ok too. And in that case, make sure to check out this recommendations section
+        made specifically for those without a mic.</p>
     </section>
     <!-- Notifications Settings -->
     <section id="notifications" class="glass-card">
@@ -166,7 +265,13 @@
         <li><a href="#mic">Recommended Functions For No Mic Units</a></li>
       </ul>
     </section>
-    <!-- Other sections remain unchanged -->
+    <!-- Shifts & Status -->
+    <section id="dept" class="glass-card">
+      <h3>Shifts &amp; Status</h3>
+      <div class="note-card">
+        <p style="font-size: 0.75rem; margin-top: 0.25rem;">Dept, Uniform, Vehicle, &amp; Status</p>
+      </div>
+     </section>
   </main>
   <footer>
     &copy; 2025 TSDOJ • Designed with Glass &amp; Blur
