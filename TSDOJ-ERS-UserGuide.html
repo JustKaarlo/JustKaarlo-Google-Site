@@ -12,7 +12,7 @@
       --bg-panel: rgba(30, 30, 30, 0.6);
       --border-glass: rgba(255, 255, 255, 0.2);
       --text-light: #E0E0E0;
-      --accent: #00B4D8;
+      --accent: #B0B0B0;
     }
 
     * {
@@ -253,9 +253,11 @@
       align-items: flex-start;   /* align items at their top edge */
       margin-bottom: 1.5rem;
       z-index: 2;
+      background: rgba(30, 30, 30, 0.4);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-glass);
       border-radius: 8px;
       padding: 1rem;
-      background: rgba(255, 255, 255, 0.1);
     }
     .subcard .step .circle {
       width: 1.75rem;
@@ -377,7 +379,7 @@
           <div class="step">
             <div class="circle">1</div>
             <div class="step-content">
-              <div class="step-title">Open MDT</div>
+              <div class="step-title"><b>Open MDT</b></div>
               <ul class="step-text">
                 <li>Open MDT by pressing <code>Page Up</code>.</li>
                 <li>You do not need to be in your vehicle.</li>
