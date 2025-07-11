@@ -2,169 +2,91 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Mods Buttons</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;800&display=swap" rel="stylesheet">
+  <title>Ready Or Not</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Rubik', sans-serif;
+    body {
+      overflow: hidden;
       margin: 0;
+      padding: 20px;
+      background: transparent;
+      font-family: 'Rubik', sans-serif;
+      color: white;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
       padding: 0;
     }
 
-    html, body {
-      height: 100%;
-      overflow: hidden;
-      background: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    li {
+      margin: 8px 0;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
     }
 
-    /* Blurred background image */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center/cover;
-      filter: blur(8px);
-      transform: scale(1.05);
-      z-index: -2;
-    }
-
-    /* Particle canvas */
-    #particle-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-
-    .wrapper {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 40px;
-      max-width: 800px;
-      width: 100%;
-      padding: 20px 50px 50px;
-      margin: 0 auto;
-    }
-
-    .title {
-      grid-column: 1 / -1;
-      padding: 20px;
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    .title h1 {
-      font-size: 64px;
-      font-weight: 800;
-      color: rgba(255,255,255,0.9);
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      text-shadow: 0 0 8px rgba(0,0,0,0.6);
-    }
-
-    .report-btn {
-      position: relative;
-      background: rgba(44,47,51,0.15);
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      width: 100%;
-      height: 200px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+    a {
+      color: white;
       text-decoration: none;
-      overflow: hidden;
     }
 
-    .report-btn:hover {
-      transform: scale(1.03);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+    a:hover {
+      text-decoration: underline;
     }
 
-    .report-btn img {
-      max-height: 140px;
-      max-width: 100%;
-      z-index: 1;
-    }
-
-    .center-btn {
-      grid-column: 1 / -1;
-      justify-self: center;
-      width: auto;
+    li img {
+      height: 20px;
+      vertical-align: middle;
+      margin-right: 8px;
     }
   </style>
 </head>
+
 <body>
-  <canvas id="particle-canvas"></canvas>
-  <div class="wrapper">
-    <div class="title">
-      <h1>MODS</h1>
-    </div>
-    <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/mods/total-war','_blank')">
-      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar-button_icon.png" alt="Total War">
-    </a>
-    <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/mods/Ready-Or-Not','_blank')">
-      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/ReadyOrNot-button_icon.png" alt="Ready Or Not">
-    </a>
-    <a class="report-btn center-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/mods/elden-ring','_blank')">
-      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/EldenRing-button_icon.png" alt="Elden Ring">
-    </a>
-  </div>
+  <h1>
+    <img
+      src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/ReadyOrNot_Icon.png"
+      alt="Ready Or Not"
+      style="height: 24px; vertical-align: middle; margin-right: 8px;"
+    >
+    Ready Or Not
+  </h1>
+
+  <ul id="fileList">
+    <li><a href="https://drive.google.com/file/d/1gaLJ13vZdj4y100CGD4b5WnAePMyOrEZ/view?usp=drive_link" target="_blank">AI Here I Come Settings.rar</a></li>
+  </ul>
+
   <script>
-    // Particle background
-    const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resize);
+    const iconMap = {
+      pdf:    'https://ssl.gstatic.com/docs/doclist/images/icon_10_pdf_list.png',
+      doc:    'https://ssl.gstatic.com/docs/doclist/images/icon_10_document_list.png',
+      docx:   'https://ssl.gstatic.com/docs/doclist/images/icon_10_document_list.png',
+      xls:    'https://ssl.gstatic.com/docs/doclist/images/icon_10_spreadsheet_list.png',
+      xlsx:   'https://ssl.gstatic.com/docs/doclist/images/icon_10_spreadsheet_list.png',
+      ppt:    'https://ssl.gstatic.com/docs/doclist/images/icon_10_presentation_list.png',
+      pptx:   'https://ssl.gstatic.com/docs/doclist/images/icon_10_presentation_list.png',
+      zip:    'https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png',
+      rar:    'https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png',
+      exe:    'https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png',
+      default:'https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png'
+    };
 
-    class Particle {
-      constructor() { this.init(); }
-      init() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 3 + 1;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-      }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.init();
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(255,255,255,0.08)';
-        ctx.fill();
-      }
-    }
-
-    function initParticles(){ particles = []; for(let i=0;i<100;i++) particles.push(new Particle()); }
-    function animateParticles(){ ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(animateParticles);}    
-    resize(); initParticles(); animateParticles();
+    document.querySelectorAll('#fileList a').forEach(link => {
+      const name = link.textContent.trim();
+      const extMatch = name.match(/\.([^.]+)$/);
+      const ext = extMatch ? extMatch[1].toLowerCase() : '';
+      const iconUrl = iconMap[ext] || iconMap.default;
+      const img = document.createElement('img');
+      img.src = iconUrl;
+      img.alt = '';
+      link.prepend(img);
+    });
   </script>
 </body>
 </html>
