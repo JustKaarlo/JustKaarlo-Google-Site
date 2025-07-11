@@ -12,6 +12,7 @@
       --bg-panel: rgba(30, 30, 30, 0.6);
       --border-glass: rgba(255, 255, 255, 0.2);
       --text-light: #E0E0E0;
+      --toc-text: #B3B3B3;
       --accent: #ffffff;
     }
 
@@ -141,6 +142,9 @@
       padding: 0.5rem 1rem;
       margin-bottom: 1rem;
     }
+    .note-card .toc-note {
+      color: rgba(255,255,255,0.8);
+    }
 
     section h2 {
       font-size: 1.5rem;
@@ -151,6 +155,18 @@
     /* Table of Contents */
     section#toc .note-card {
       margin-bottom: 1rem;
+    }
+
+    section#dept .note-card .step-note {
+      color: rgba(255,255,255,0.8);
+      display: inline-block;
+      backdrop-filter: blur(6px);
+      background: rgba(255, 255, 150, 0.4);
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      color: #333;
     }
 
     section#toc ul {
@@ -171,7 +187,7 @@
     }
 
     section#toc ul li a {
-      color: var(--accent);
+      color: var(--toc-text);
       text-decoration: none;
     }
 
@@ -403,8 +419,8 @@
               <div class="step-title"><b>Toggle Your Shift</b></div>
               <ul class="step-text">
                 <li>After selecting your preferred department, press the green toggle button at the bottom of your screen.</li>
-                <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/user-guide/toggle_your_shift.png" alt="Green toggle button at bottom of screen" style="display:block; margin:1rem auto; max-width:200px; border-radius:8px;">
-                <li><div class="note-card"><p class="toc-note">There are no sub-department breakouts to select other than “patrol” right now, but if you want options to select here, feel free to comment in the “tsdoj-suggestions” discord requesting this feature.</p></div></li>
+                <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/user-guide/toggle_your_shift.png" alt="Green toggle button at bottom of screen" style="float:left; margin:1rem 1rem 1rem 0; max-width:200px; border-radius:8px;">
+                <div class="note-card"><p class="step-note">There are no sub-department breakouts to select other than “patrol” right now, but if you want options to select here, feel free to comment in the “tsdoj-suggestions” discord requesting this feature.</p></div>
               </ul>
             </div>
           </div>
