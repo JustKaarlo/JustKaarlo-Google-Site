@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Ready Or Not</title>
@@ -31,13 +32,30 @@
       border-radius: 6px;
     }
 
-    a {
+    li a {
+      display: flex;
+      align-items: center;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: transform 0.2s ease,
+                  box-shadow 0.2s ease,
+                  background 0.2s ease;
+      text-decoration: none;
+      color: white;
+    }
+
+    a:hover {
       color: white;
       text-decoration: none;
     }
 
-    a:hover {
-      text-decoration: underline;
+    li a:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+      /* background: rgba(255,255,255,0.2); */
     }
 
     li img {
@@ -45,43 +63,29 @@
       vertical-align: middle;
       margin-right: 8px;
     }
-
-    #fileList li {
-      background: transparent;
-      border: 1px solid rgba(255,255,255,0.2);
-      border-radius: 6px;
-      backdrop-filter: blur(2px);
-      -webkit-backdrop-filter: blur(2px);
-      transition: 
-        background 0.3s ease, 
-        backdrop-filter 0.3s ease;
-    }
-
-    #fileList li:hover {
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
   </style>
 </head>
 
 <body>
   <h1>
-    <img
-      src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/ReadyOrNot_Icon.png"
-      alt="Ready Or Not"
-      style="height: 24px; vertical-align: middle; margin-right: 8px;"
-    >
+    <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/ReadyOrNot_Icon.png"
+      alt="Ready Or Not" style="height: 24px; vertical-align: middle; margin-right: 8px;">
     Ready Or Not
   </h1>
 
   <ul id="fileList">
-    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1gaLJ13vZdj4y100CGD4b5WnAePMyOrEZ/view" target="_blank">AI Here I Come Settings.rar</a></li>
-    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1Uh60mNfGsDsMZPXmA3b1JuoJ69JBubOm/view" target="_blank">Appearance.rar</a></li>
-    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/11PywcRs4SxEqcd4xdqH8V2AAKCNC2xJ0/view" target="_blank">QoL.rar</a></li>
-    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1SeDchrJb55aBBKNKSK-nt0GLfh9qLwX5/view" target="_blank">Sounds.rar</a></li>
-    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1odkUNs8DnPNJNLvT_IwJhViKMjakUYOU/view" target="_blank">Unused.rar</a></li>
-    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1OAeYwUS_nw2-P0dNb0OTW3B1Bl211Vxh/view" target="_blank">Weapons.rar</a></li>
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1gaLJ13vZdj4y100CGD4b5WnAePMyOrEZ/view"
+        target="_blank">AI Here I Come Settings.rar</a></li>
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1Uh60mNfGsDsMZPXmA3b1JuoJ69JBubOm/view"
+        target="_blank">Appearance.rar</a></li>
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/11PywcRs4SxEqcd4xdqH8V2AAKCNC2xJ0/view"
+        target="_blank">QoL.rar</a></li>
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1SeDchrJb55aBBKNKSK-nt0GLfh9qLwX5/view"
+        target="_blank">Sounds.rar</a></li>
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1odkUNs8DnPNJNLvT_IwJhViKMjakUYOU/view"
+        target="_blank">Unused.rar</a></li>
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1OAeYwUS_nw2-P0dNb0OTW3B1Bl211Vxh/view"
+        target="_blank">Weapons.rar</a></li>
   </ul>
 
   <script>
@@ -105,7 +109,7 @@
         addIcon(link, directUrl);
         return;
       }
-      
+
       const key = li.dataset.icon;
       if (key && iconMap[key]) {
         addIcon(link, iconMap[key]);
