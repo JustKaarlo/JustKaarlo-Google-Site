@@ -64,6 +64,19 @@
         return;
       }
 
+      data.files.sort((a, b) => {
+        const extA = a.name.slice(a.name.lastIndexOf('.') + 1).toLowerCase();
+        const extB = b.name.slice(b.name.lastIndexOf('.') + 1).toLowerCase();
+      
+        if (extA < extB) return -1;
+        if (extA > extB) return 1;
+      
+        return a.name.localeCompare(b.name, undefined, {
+          numeric: true,
+          sensitivity: 'base'
+        });
+      });
+      
       data.files.forEach(file => {
         const li = document.createElement("li");
         const link = document.createElement("a");
