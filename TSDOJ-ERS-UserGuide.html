@@ -14,6 +14,7 @@
       --text-light: #E0E0E0;
       --toc-text: #B3B3B3;
       --accent: #ffffff;
+      --link-color: #359aba;
     }
 
     * {
@@ -163,9 +164,11 @@
       background: rgba(53,154,186,1);
       border: none;
       border-radius: 8px;
-      padding: 0.75rem 1rem;
+      padding: 0.5rem 1rem;
       margin-bottom: 1rem;
       color: #ffffff;
+      max-width: 50px;
+      max-height: auto;
     }
 
     section#toc ul {
@@ -186,7 +189,7 @@
     }
 
     section#toc ul li a {
-      color: var(--toc-text);
+      color: var(--link-color);
       text-decoration: none;
     }
 
