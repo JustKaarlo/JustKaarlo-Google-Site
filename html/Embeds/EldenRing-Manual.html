@@ -1,1 +1,149 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Elden Ring</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <style>
+    body {
+      overflow: hidden;
+      margin: 0;
+      padding: 20px;
+      background: transparent;
+      font-family: 'Rubik', sans-serif;
+      color: white;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 8px 0;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: none;
+    }
+
+    li img {
+      height: 20px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    #fileList li {
+      margin: 8px 0;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      backdrop-filter: blur(2px);
+      /* -webkit-backdrop-filter: blur(2px); */
+      box-shadow: none;
+      transform: scale(1);
+      transform-origin: center;
+      transition: 
+        transform 0.2s ease,
+        background 0.2s ease,
+        backdrop-filter 0.3s ease,
+        box-shadow 0.2s ease;
+    }
+
+    #fileList li:hover {
+      transform: scale(1.03);
+      background: rgba(255, 255, 255, 0.13);
+      backdrop-filter: blur(3px);
+      /* -webkit-backdrop-filter: blur(8px); */
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    }
+  </style>
+</head>
+
+<body>
+  <h1>
+    <img
+      src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/EldenRing_Icon.png"
+      alt="Elden Ring"
+      style="height: 24px; vertical-align: middle; margin-right: 8px;"
+    >
+    Elden Ring
+  </h1>
+
+  <ul id="fileList">
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1H4CNr9O-522ue8j4uV4o20Y_WtGlZ4RX/view" target="_blank">Convergence (2.2.3).zip</a></li>
+    <li data-icon="document_1"><a href="https://docs.google.com/document/d/1f_ivmdEZK_39idy47rYmlBqG3ziCBGCvYUvFZ6DfeB8/view" target="_blank">What Custom Weapons Replaces</a></li>
+    <li data-icon="document_1"><a href="https://docs.google.com/document/d/1Yk9lpvatLsgAceVl9vIz2uku9Q2axgUyHHnmsQfkJ-w/view" target="_blank">What Custom Armor Replaces</a></li>
+    <li data-icon="document_1"><a href="https://docs.google.com/document/d/1qvn4JlOJtOIt6QRvyFhJD7mN-E9EYF9dltBQ1pvPfWE/view" target="_blank">Weapon Upgrades Explained</a></li>
+    <li data-icon="document_1"><a href="https://docs.google.com/document/d/1M9nrrk5YLiq0OnfRsB00E5cDWirs9EjQ41Rr-GcIAvs/view" target="_blank">Weapon Scaling & Catalyst Affinity Scaling</a></li>
+    <li data-icon="document_1"><a href="https://docs.google.com/document/d/16QDNy7jNtaHF5tOLJEJIMvyXLMkXicNVxiVxqEA6ds8/view" target="_blank">Scaling Values</a></li>
+    <li data-icon="document_1"><a href="https://docs.google.com/document/d/1KLo2y4X69FnxKf2eBe29YLYclYV-jhdXGvzNf9Nb7co/view" target="_blank">Path & Weapons</a></li>
+    <li data-icon="document_1"><a href="https://docs.google.com/document/d/1nQYmQBaJJFVwP-As5x1B8WvwUr7K1Z3_jc1gGz8GlDM/view" target="_blank">Kaarlo's Class Rating</a></li>
+    <li data-icon="document_1"><a href="https://docs.google.com/document/d/1f_z37sCqUTwYiNvOA4TA5OHDdMmCwY2Fm8GZjwxpwbg/view" target="_blank">Convergence Classes Summaries</a></li>
+  </ul>
+
+  <script>
+    const iconMap = {
+      archive_1: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_archive_1_icon.png',
+      archive_2: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_archive_2_icon.png',
+      document_1: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_document_1_icon.png',
+      document_2: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_document_2_icon.png',
+      exe: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_exe_icon.png',
+      pdf: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_pdf_icon.png',
+      presentation: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_presentation_icon.png',
+      spreadsheet: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_spreadsheet_icon.png',
+      generic: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_generic_icon.png',
+      default: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_generic_icon.png'
+    };
+
+    document.querySelectorAll('#fileList li').forEach(li => {
+      const link = li.querySelector('a');
+      const directUrl = li.dataset.iconUrl;
+      if (directUrl) {
+        addIcon(link, directUrl);
+        return;
+      }
+      
+      const key = li.dataset.icon;
+      if (key && iconMap[key]) {
+        addIcon(link, iconMap[key]);
+        return;
+      }
+
+      let ext = '';
+      const typeTag = li.querySelector('type');
+      if (typeTag) {
+        ext = typeTag.textContent.trim().toLowerCase();
+      } else {
+        const name = link.textContent.trim();
+        const m = name.match(/\.([^.]+)$/);
+        ext = m ? m[1].toLowerCase() : '';
+      }
+
+      const iconUrl = iconMap[ext] || iconMap.default;
+      addIcon(link, iconUrl);
+    });
+
+    function addIcon(link, src) {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      link.prepend(img);
+    }
+  </script>
+</body>
+</html>
