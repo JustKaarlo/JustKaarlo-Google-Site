@@ -45,6 +45,11 @@
       vertical-align: middle;
       margin-right: 8px;
     }
+
+    /* hide our helper tag */
+    type {
+      display: none;
+    }
   </style>
 </head>
 
@@ -59,7 +64,7 @@
   </h1>
 
   <ul id="fileList">
-    <li><a href="https://drive.google.com/file/d/1gaLJ13vZdj4y100CGD4b5WnAePMyOrEZ/view?usp=drive_link" target="_blank">AI Here I Come Settings.rar</a></li>
+    <li><a href="https://drive.google.com/file/d/1gaLJ13vZdj4y100CGD4b5WnAePMyOrEZ/view" target="_blank">AI Here I Come Settings.rar</a><type>rar</type></li>
   </ul>
 
   <script>
@@ -77,11 +82,16 @@
       default:'https://ssl.gstatic.com/docs/doclist/images/icon_10_generic_list.png'
     };
 
-    document.querySelectorAll('#fileList a').forEach(link => {
-      const name = link.textContent.trim();
-      const extMatch = name.match(/\.([^.]+)$/);
-      const ext = extMatch ? extMatch[1].toLowerCase() : '';
-      const iconUrl = iconMap[ext] || iconMap.default;
+    document.querySelectorAll('#fileList li').forEach(li => {
+      const link = li.querySelector('a');
+      const typeTag = li.querySelector('type');
+      let type = typeTag && typeTag.textContent.trim().toLowerCase();
+      if (!type) {
+        const name = link.textContent.trim();
+        const m = name.match(/\.([^.]+)$/);
+        type = m ? m[1].toLowerCase() : '';
+      }
+      const iconUrl = iconMap[type] || iconMap.default;
       const img = document.createElement('img');
       img.src = iconUrl;
       img.alt = '';
