@@ -1,0 +1,131 @@
+<details>
+<summary>
+
+  ### **Style 1**   `Without API`
+
+</summary>
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ready Or Not</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <style>
+    body {
+      overflow: hidden;
+      margin: 0;
+      padding: 20px;
+      background: transparent;
+      font-family: 'Rubik', sans-serif;
+      color: white;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin: 8px 0;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    li img {
+      height: 20px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>
+    <img
+      src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/ReadyOrNot_Icon.png"
+      alt="Ready Or Not"
+      style="height: 24px; vertical-align: middle; margin-right: 8px;"
+    >
+    Ready Or Not
+  </h1>
+
+  <ul id="fileList">
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1gaLJ13vZdj4y100CGD4b5WnAePMyOrEZ/view" target="_blank">AI Here I Come Settings.rar</a></li>
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1Uh60mNfGsDsMZPXmA3b1JuoJ69JBubOm/view" target="_blank">Appearance.rar</a></li>
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/11PywcRs4SxEqcd4xdqH8V2AAKCNC2xJ0/view" target="_blank">QoL.rar</a></li>
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1SeDchrJb55aBBKNKSK-nt0GLfh9qLwX5/view" target="_blank">Sounds.rar</a></li>
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1odkUNs8DnPNJNLvT_IwJhViKMjakUYOU/view" target="_blank">Unused.rar</a></li>
+    <li data-icon="archive_1"><a href="https://drive.google.com/file/d/1OAeYwUS_nw2-P0dNb0OTW3B1Bl211Vxh/view" target="_blank">Weapons.rar</a></li>
+  </ul>
+
+  <script>
+    const iconMap = {
+      archive_1: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_archive_1_icon.png',
+      archive_2: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_archive_2_icon.png',
+      document_1: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_document_1_icon.png',
+      document_2: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_document_2_icon.png',
+      exe: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_exe_icon.png',
+      pdf: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_pdf_icon.png',
+      presentation: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_presentation_icon.png',
+      spreadsheet: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_spreadsheet_icon.png',
+      generic: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_generic_icon.png',
+      default: 'https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/GoogleDrive_generic_icon.png'
+    };
+
+    document.querySelectorAll('#fileList li').forEach(li => {
+      const link = li.querySelector('a');
+      const directUrl = li.dataset.iconUrl;
+      if (directUrl) {
+        addIcon(link, directUrl);
+        return;
+      }
+      
+      const key = li.dataset.icon;
+      if (key && iconMap[key]) {
+        addIcon(link, iconMap[key]);
+        return;
+      }
+
+      let ext = '';
+      const typeTag = li.querySelector('type');
+      if (typeTag) {
+        ext = typeTag.textContent.trim().toLowerCase();
+      } else {
+        const name = link.textContent.trim();
+        const m = name.match(/\.([^.]+)$/);
+        ext = m ? m[1].toLowerCase() : '';
+      }
+
+      const iconUrl = iconMap[ext] || iconMap.default;
+      addIcon(link, iconUrl);
+    });
+
+    function addIcon(link, src) {
+      const img = document.createElement('img');
+      img.src = src;
+      img.alt = '';
+      link.prepend(img);
+    }
+  </script>
+</body>
+</html>
+```
+
+</details>
