@@ -2,443 +2,164 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Arrest Report</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <title>Mods Buttons</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
-    * { font-family: 'Rubik', sans-serif; }
-    body {
-      background: transparent;
-      padding: 30px;
-      max-width: 750px;
-      margin: auto;
-      color: white;
-    }
-    .card {
-      background: #2C2F33;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-      padding: 0;
-      overflow: hidden;
-      position: relative;
-    }
-    .header {
-      background: #56585B;
-      padding: 15px;
-      text-align: center;
-    }
-    .header-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: white;
+    * {
+      box-sizing: border-box;
+      font-family: 'Rubik', sans-serif;
       margin: 0;
+      padding: 0;
     }
-    .header-subtitle {
-      font-size: 15px;
-      color: #ccc;
-      margin-top: 4px;
-    }
-    .section-title {
-      font-weight: bold;
-      font-size: 16px;
-      background: #23272A;
-      text-align: center;
-      padding: 8px;
-      margin-top: 20px;
-      border-radius: 6px;
-    }
-    .row {
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: none;
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 15px;
-    }
-    .field-group {
-      flex: 1;
-      min-width: 150px;
-      display: flex;
-      flex-direction: column;
-    }
-    .field-group label {
-      font-size: 13px;
-      margin-bottom: 4px;
-      color: #ccc;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-    input[type="text"], input[type="datetime-local"] {
-      padding: 6px 10px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      font-size: 14px;
-      background: #23272A;
-      color: white;
-    }
-    .wide { width: 100%; }
-    button {
-      background-color: #3c78d8;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    button:hover { background-color: #5187dc; }
-    .tag-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 6px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      background: #23272A;
-    }
-    .tag-container input {
-      border: none;
-      flex: 1;
-      min-width: 120px;
-      padding: 6px 8px;
-      font-size: 14px;
-      background: transparent;
-      color: white;
-      outline: none;
-    }
-    .tag {
-      background-color: #99aab5;
-      color: #2C2F33;
-      padding: 5px 10px;
-      border-radius: 12px;
-      font-size: 13px;
-      display: flex;
+      justify-content: center;
       align-items: center;
     }
-    .tag .remove {
-      margin-left: 8px;
-      color: #2C2F33;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .button-row {
-      display: flex;
-      gap: 10px;
-      margin: 15px;
-    }
-    .clear-btn {
-      background-color: #4f545c;
-      color: #c0c0c0;
-    }
-    .clear-btn:hover {
-      background-color: #5d626a;
-    }
-    .submit-btn { flex: 1; }
 
-    /* Popup Styles */
-    #popup-overlay, #error-popup, #pin-popup {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      background: #23272A;
-      color: white;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-      display: none;
-      z-index: 10;
-      max-width: 90%;
-      text-align: center;
-    }
-    #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
-    #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
-    #popup-overlay .header-subtitle,
-    #error-popup .header-subtitle,
-    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
-    #pin-popup input {
-      width: 100%; padding: 10px;
-      font-size: 18px; text-align: center;
-      margin-top: 15px;
-      border-radius: 6px;
-      border: 1px solid #444;
-      background: #2C2F33;
-      color: white;
-    }
-    #pin-error { color: #f04747; font-size: 14px; margin-top: 10px; display: none; }
-    .shake { animation: shake 0.4s; }
-    @keyframes shake {
-      0% { transform: translate(-50%, -50%) translateX(0); }
-      25%, 75% { transform: translate(-50%, -50%) translateX(-10px); }
-      50% { transform: translate(-50%, -50%) translateX(10px); }
-      100% { transform: translate(-50%, -50%) translateX(0); }
+    /* Blurred background image */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center/cover;
+      filter: blur(8px);
+      transform: scale(1.05);
+      z-index: -2;
     }
 
-    /* == Custom Offense Menu Styles == */
-    #offenseMenu.offense-menu {
-      position: absolute;
-      z-index: 1000;
-      background: #2F3136;
-      border: 1px solid #202225;
-      border-radius: 8px;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7);
-      max-height: 280px;
-      width: 300px;
-      overflow: hidden;
-      font-size: 14px;
-      color: #DCDDDE;
-      display: none;
+    /* Particle canvas */
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
-    #offenseMenu.offense-menu details { border-bottom: 1px solid #393C43; }
-    #offenseMenu.offense-menu summary {
-      padding: 10px 16px;
-      background: #202225;
-      cursor: pointer;
+
+    .wrapper {
       position: relative;
-      list-style: none;
-      font-weight: 500;
-      color: #FFFFFF;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 40px;
+      max-width: 800px;
+      width: 100%;
+      padding: 20px 50px 50px;
+      margin: 0 auto;
     }
-    #offenseMenu.offense-menu summary::after {
-      content: "▸";
-      position: absolute;
-      right: 16px;
-      transition: transform 0.2s ease;
+
+    .title {
+      grid-column: 1 / -1;
+      padding: 20px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
     }
-    #offenseMenu.offense-menu details[open] summary::after { transform: rotate(90deg); }
-    #offenseMenu.offense-menu ul {
-      margin: 0; padding: 0; list-style: none;
-      max-height: 180px; overflow-y: auto;
+
+    .title h1 {
+      font-size: 64px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.9);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      text-shadow: 0 0 8px rgba(0,0,0,0.6);
     }
-    #offenseMenu.offense-menu li {
-      display: flex; justify-content: space-between;
-      align-items: center; padding: 8px 16px;
-      cursor: pointer; border-bottom: 1px solid #393C43;
-      transition: background 0.2s ease;
+
+    .report-btn {
+      position: relative;
+      background: rgba(44,47,51,0.15);
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none;
+      overflow: hidden;
     }
-    #offenseMenu.offense-menu li:last-child { border-bottom: none; }
-    #offenseMenu.offense-menu li:hover { background: #393C43; }
-    #offenseMenu.offense-menu .circle {
-      width: 12px; height: 12px;
-      border: 2px solid #72767D;
-      border-radius: 50%;
-      transition: background 0.2s, border-color 0.2s;
-      background: transparent;
+
+    .report-btn:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
     }
-    #offenseMenu.offense-menu li.selected .circle {
-      background: #43B581;
-      border-color: #43B581;
+
+    .report-btn img {
+      max-height: 140px;
+      max-width: 100%;
+      z-index: 1;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="header">
-      <div class="header-title">DEPARTMENT OF JUSTICE</div>
-      <div class="header-subtitle">ARREST REPORT</div>
+  <canvas id="particle-canvas"></canvas>
+  <div class="wrapper">
+    <div class="title">
+      <h1>MODS</h1>
     </div>
-    <div class="row">
-      <div class="field-group wide"><label>Location</label><input type="text" id="location"></div>
-      <div class="field-group"><label>Time & Date</label><input type="datetime-local" id="datetime"></div>
-    </div>
-    <div class="row">
-      <div class="field-group"><label>Defendant</label><input type="text" id="defendant"></div>
-      <div class="field-group"><label>Arresting Officer</label><input type="text" id="officer"></div>
-    </div>
-    <div class="section-title">CRIMINAL OFFENSE(S)</div>
-    <div class="row">
-      <div class="field-group wide">
-        <div id="offense-tags" class="tag-container">
-          <input type="text" id="offenseInput" placeholder="Type offense or click to choose" autocomplete="off">
-        </div>
-      </div>
-    </div>
-    <div class="button-row">
-      <button class="clear-btn" onclick="resetForm()">Clear</button>
-      <button class="submit-btn" onclick="submitForm()">Submit</button>
-    </div>
-  </div>
-  <!-- Offense overlay menu -->
-  <div id="offenseMenu" class="offense-menu">
-    <details>
-      <summary>Violent Crimes</summary>
-      <ul>
-        <li data-offense="187 PC – Murder">187 PC – Murder <span class="circle"></span></li>
-        <li data-offense="211 PC – Robbery">211 PC – Robbery <span class="circle"></span></li>
-        <li data-offense="245(a)(1) PC – Assault w/ Deadly Weapon">245(a)(1) PC – Assault w/ Deadly Weapon <span class="circle"></span></li>
-      </ul>
-    </details>
-    <details>
-      <summary>Property Crimes</summary>
-      <ul>
-        <li data-offense="459 PC – Burglary">459 PC – Burglary <span class="circle"></span></li>
-        <li data-offense="484 PC – Petty Theft">484 PC – Petty Theft <span class="circle"></span></li>
-        <li data-offense="499b PC – Shoplifting">499b PC – Shoplifting <span class="circle"></span></li>
-      </ul>
-    </details>
-    <details>
-      <summary>Traffic Offenses</summary>
-      <ul>
-        <li data-offense="23152 VC – DUI">23152 VC – DUI <span class="circle"></span></li>
-        <li data-offense="2800.1 CVC – Reckless Driving">2800.1 CVC – Reckless Driving <span class="circle"></span></li>
-        <li data-offense="20001 VC – Hit & Run">20001 VC – Hit & Run <span class="circle"></span></li>
-      </ul>
-    </details>
-    <details>
-      <summary>Other</summary>
-      <ul>
-        <li data-offense="148 PC – Resisting Arrest">148 PC – Resisting Arrest <span class="circle"></span></li>
-        <li data-offense="207 PC – Kidnapping">207 PC – Kidnapping <span class="circle"></span></li>
-      </ul>
-    </details>
-  </div>
-  <!-- Popups -->
-  <div id="popup-overlay"><div class="header-title">✅ Report Submitted</div><div class="header-subtitle">Your Report Has Been Logged</div></div>
-  <div id="error-popup"><div class="header-title">⚠️ Submission Failed</div><div class="header-subtitle">All Fields Are Required</div></div>
-  <div id="pin-popup">
-    <div class="header-title">🔒 PIN Required</div>
-    <div class="header-subtitle">Please enter your 4-digit authorization code to submit</div>
-    <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
-    <div id="pin-error">Wrong PIN code</div>
-    <div style="margin-top: 15px;"><button onclick="validatePin()">Confirm</button></div>
+    <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/mods/total-war','_blank')">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar-button_icon.png" alt="Total War">
+    </a>
+    <!-- Button 2 removed -->
+    <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/mods/Ready-Or-Not','_blank')">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/ReadyOrNot-button_icon.png" alt="Ready Or Not">
+    </a>
+    <a class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/mods/elden-ring','_blank')">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/EldenRing-button_icon.png" alt="Elden Ring">
+    </a>
   </div>
   <script>
-    const offenseInput = document.getElementById('offenseInput');
-    const offenseContainer = document.getElementById('offense-tags');
+    // Particle background
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
 
-    // Custom menu logic
-    const menu = document.getElementById('offenseMenu');
-    document.body.appendChild(menu);
-
-    offenseInput.addEventListener('focus', () => {
-      const rect = offenseInput.getBoundingClientRect();
-      menu.style.top = rect.bottom + window.scrollY + 'px';
-      menu.style.left = rect.left + window.scrollX + 'px';
-      menu.style.display = 'block';
-    });
-
-    offenseInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && this.value.trim()) {
-        e.preventDefault();
-        addOffenseTag(this.value.trim());
-        this.value = '';
-        menu.style.display = 'none';
+    class Particle {
+      constructor() { this.init(); }
+      init() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
       }
-    });
-
-    document.addEventListener('click', e => {
-      if (!menu.contains(e.target) && e.target !== offenseInput) {
-        menu.style.display = 'none';
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.init();
       }
-    });
-
-    menu.querySelectorAll('[data-offense]').forEach(item => {
-      item.addEventListener('click', () => {
-        const isSelected = item.classList.toggle('selected');
-        if (isSelected) addOffenseTag(item.dataset.offense);
-        else {
-          [...offenseContainer.querySelectorAll('.tag')].forEach(t => {
-            if (t.textContent.replace('×','').trim() === item.dataset.offense) t.remove();
-          });
-        }
-        offenseInput.value = '';
-        menu.style.display = 'none';
-      });
-    });
-
-    // Original form logic
-    offenseInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && this.value.trim() !== '') {
-        e.preventDefault();
-        addOffenseTag(this.value.trim());
-        this.value = '';
-      }
-    });
-
-    function addOffenseTag(text) {
-      const tag = document.createElement('div');
-      tag.className = 'tag';
-      tag.innerHTML = `${text} <span class="remove">×</span>`;
-      offenseContainer.insertBefore(tag, offenseInput);
-      tag.querySelector('.remove').addEventListener('click', () => tag.remove());
-    }
-
-    function resetForm() {
-      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
-      document.querySelectorAll('.tag').forEach(tag => tag.remove());
-      menu.querySelectorAll('li.selected').forEach(li => li.classList.remove('selected'));
-    }
-
-    function showErrorPopup() {
-      const errorPopup = document.getElementById('error-popup');
-      errorPopup.style.display = 'block';
-      errorPopup.onclick = () => errorPopup.style.display = 'none';
-      setTimeout(() => { errorPopup.style.display = 'none'; }, 3000);
-    }
-
-    function showPopup() {
-      const popup = document.getElementById('popup-overlay');
-      popup.style.display = 'block';
-      popup.onclick = () => popup.style.display = 'none';
-      setTimeout(() => { popup.style.display = 'none'; }, 3000);
-    }
-
-    function submitForm() {
-      const location = document.getElementById('location').value.trim();
-      const datetime = document.getElementById('datetime').value.trim();
-      const defendant = document.getElementById('defendant').value.trim();
-      const officer = document.getElementById('officer').value.trim();
-      const offenses = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
-      if (!location || !datetime || !defendant || !officer || offenses.length === 0) {
-        showErrorPopup(); return;
-      }
-      window.tempSubmissionData = { location, datetime, defendant, officer, offenses };
-      document.getElementById('pin-popup').style.display = 'block';
-      document.getElementById('pin-error').style.display = 'none';
-    }
-
-    function validatePin() {
-      const pinInput = document.getElementById('pin-input');
-      const errorText = document.getElementById('pin-error');
-      const enteredPin = pinInput.value.trim();
-      if (enteredPin === '2118') {
-        document.getElementById('pin-popup').style.display = 'none';
-        sendWebhook();
-      } else {
-        errorText.style.display = 'block';
-        const popup = document.getElementById('pin-popup');
-        popup.classList.add('shake');
-        setTimeout(() => popup.classList.remove('shake'), 400);
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
+        ctx.fillStyle = 'rgba(255,255,255,0.08)';
+        ctx.fill();
       }
     }
 
-    function sendWebhook() {
-      const data = window.tempSubmissionData;
-      const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
-      const niceDateTime = data.datetime.replace('T', ' ');
-      const offensesInline = data.offenses.map(off => `\`${off}\``).join(', ');
-      const embed = {
-        title: "ARREST REPORT",
-        color: 4737096,
-        fields: [
-          { name: "> Location", value: `\
-```\n${data.location}\n````, inline: false },
-          { name: "> Date & Time", value: `\
-```\n${niceDateTime}\n````, inline: false },
-          { name: "> Defendant", value: `\
-```\n${data.defendant}\n````, inline: true },
-          { name: "> Officer", value: `\
-```\n${data.officer}\n````, inline: true },
-          { name: "> Offenses", value: offensesInline, inline: false }
-        ],
-        footer: { text: "Department of Justice" },
-        timestamp: new Date().toISOString()
-      };
-      fetch(webhookURL, {
-        method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ embeds: [embed] })
-      })
-      .then(() => { showPopup(); resetForm(); })
-      .catch(() => { alert("Failed to Submit Report."); });
-    }
+    function initParticles(){ particles = []; for(let i=0;i<100;i++) particles.push(new Particle()); }
+    function animateParticles(){ ctx.clearRect(0,0,canvas.width,canvas.height); particles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(animateParticles);}    
+    resize(); initParticles(); animateParticles();
   </script>
 </body>
 </html>
