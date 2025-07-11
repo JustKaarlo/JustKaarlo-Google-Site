@@ -232,31 +232,32 @@
     .subcard .steps {
       position: relative;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
+      align-items: flex-start;
       margin-top: 1rem;
-      padding: 0 1rem;
+      padding-left: 1.5rem; /* space for the line & circles */
     }
     .subcard .steps::before {
       content: '';
       position: absolute;
-      top: 50%;
-      left: 5%;
-      right: 5%;
-      height: 2px;
+      top: 5%;
+      bottom: 5%;
+      left: 1rem;
+      width: 2px;
       background: var(--border-glass);
       z-index: 1;
     }
     .subcard .step {
       position: relative;
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
       z-index: 2;
-      flex: 1;
-      text-align: center;
     }
     .subcard .step .circle {
-      width: 2rem;
-      height: 2rem;
-      margin: 0 auto .5rem;
+      width: 1.75rem;
+      height: 1.75rem;
+      margin-right: 0.75rem;
       border: 2px solid var(--accent);
       border-radius: 50%;
       display: flex;
@@ -264,10 +265,25 @@
       justify-content: center;
       color: var(--accent);
       font-weight: 600;
+      flex-shrink: 0;
     }
     .subcard .step .step-title {
-      font-size: .875rem;
+      font-size: 0.9rem;
       color: var(--text-light);
+    }
+    .subcard .step .step-content {
+      display: flex;
+      flex-direction: column;
+    }
+    .subcard .step .step-text {
+      margin: 0.5rem 0 0 2.5rem;
+      padding-left: 0.5rem;
+      list-style: disc;
+      font-size: 0.85rem;
+      color: var(--text-light);
+    }
+    .subcard .step .step-text li {
+      margin-bottom: 0.25rem;
     }
   </style>
 </head>
@@ -350,27 +366,34 @@
     <section id="dept" class="glass-card">
       <h3>Dept, Uniform, Vehicle, &amp; Status</h3>
       <div class="subcards">
-        <div class="subcard">
-          <h4>Department</h4>
-          <div class="steps">
-            <div class="step">
-              <div class="circle">1</div>
-              <div class="step-title">Pick Dept</div>
-            </div>
-            <div class="step">
-              <div class="circle">2</div>
-              <div class="step-title">Assign Unit</div>
-            </div>
-            <div class="step">
-              <div class="circle">3</div>
-              <div class="step-title">Confirm</div>
-            </div>
-            <div class="step">
-              <div class="circle">4</div>
-              <div class="step-title">Activate</div>
+      <div class="subcard">
+        <h4>Department</h4>
+        <div class="steps">
+          <div class="step">
+            <div class="circle">1</div>
+            <div class="step-content">
+              <div class="step-title">Open MDT</div>
+              <ul class="step-text">
+                <li>Open MDT by pressing <code>Page Up</code> key</li>
+                <li>You do not need to be in your vehicle</li>
+                <li>It may take a few moments to open (says “loading”) which is normal</li>
+              </ul>
             </div>
           </div>
+          <div class="step">
+            <div class="circle">2</div>
+            <div class="step-title">Assign Unit</div>
+          </div>
+          <div class="step">
+            <div class="circle">3</div>
+            <div class="step-title">Confirm</div>
+          </div>
+          <div class="step">
+            <div class="circle">4</div>
+            <div class="step-title">Activate</div>
+          </div>
         </div>
+      </div>
         <div class="subcard">
           <h4>Uniform, Vehicle &amp; Status</h4>
           <p><!-- put uniform/vehicle/status info here --></p>
