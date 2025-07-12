@@ -367,7 +367,7 @@
       const enteredPin = pinInput.value.trim();
       if (enteredPin === '2118') {
         document.getElementById('pin-popup').style.display = 'none';
-        sendWebhook();
+        processSubmission();
       } else {
         errorText.style.display = 'block';
         const popup = document.getElementById('pin-popup');
@@ -387,11 +387,7 @@
       span.style = datetimeInput.style.cssText;
       datetimeInput.parentNode.replaceChild(span, datetimeInput);
 
-      const elementsToHide = [
-        document.querySelectorAll('.hide-for-screenshot'),
-        ...document.querySelectorAll('.tag .remove') 
-      ];
-
+      const elementsToHide = document.querySelectorAll('.hide-for-screenshot');
       elementsToHide.forEach(el => el.style.display = 'none');
 
       html2canvas(document.querySelector(".card"), {
