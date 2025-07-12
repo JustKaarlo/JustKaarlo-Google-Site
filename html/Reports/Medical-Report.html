@@ -154,7 +154,8 @@
     }
 
     #popup-overlay,
-    #error-popup {
+    #error-popup,
+    #pin-popup {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -182,11 +183,48 @@
       font-weight: bold;
     }
 
-    .header-subtitle {
+    #pin-popup .header-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    #pin-popup .header-subtitle {
       font-size: 14px;
       color: #ccc;
       margin-top: 6px;
     }
+
+    #pin-popup input {
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      text-align: center;
+      margin-top: 15px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #2C2F33;
+      color: white;
+    }
+
+    #pin-error {
+      color: #f04747;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .shake {
+      animation: shake 0.4s;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(-50%, -50%) translateX(0); }
+      25% { transform: translate(-50%, -50%) translateX(-10px); }
+      50% { transform: translate(-50%, -50%) translateX(10px); }
+      75% { transform: translate(-50%, -50%) translateX(-10px); }
+      100% { transform: translate(-50%, -50%) translateX(0); }
+    }
+
     textarea.autogrow {
       width: 100%;
       min-height: auto;
@@ -201,6 +239,7 @@
       overflow: hidden;
       box-sizing: border-box;
     }
+
     .row .location {
       display: flex;
       flex-wrap: wrap;
@@ -218,136 +257,6 @@
       <div class="sub">MEDICAL REPORT</div>
     </div>
 
-    <div class="row">
-      <div class="field-group">
-        <label>Time & Date</label>
-        <input type="datetime-local" id="datetime">
-      </div>
-      <div class="field-group wide">
-        <label>Location of Incident</label>
-        <textarea id="location" class="autogrow" rows="1"></textarea>
-      </div>
-    </div>
-
-    <div class="section-title">PATIENT INFORMATION</div>
-    <div class="row">
-      <div class="field-group">
-        <label>Name</label>
-        <input type="text" id="name">
-      </div>
-      <div class="field-group">
-        <label>Gender</label>
-        <select id="gender">
-          <option value="">Select</option>
-          <option>Male</option>
-          <option>Female</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label>Date of Birth</label>
-        <input type="date" id="dob">
-      </div>
-    </div>
-
-    <div class="section-title">ASSESSMENT</div>
-    <div class="row">
-      <div class="field-group wide">
-        <label>Primary Injury/Condition</label>
-        <textarea id="primary"></textarea>
-      </div>
-      <div class="field-group wide">
-        <label>Visible Injuries</label>
-        <textarea id="injuries"></textarea>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="field-group">
-        <label>Pulse</label>
-        <select id="pulse">
-          <option value="">Select</option>
-          <option>NONE</option>
-          <option>VERY WEAK</option>
-          <option>WEAK STABLE</option>
-          <option>NORMAL</option>
-          <option>HIGH</option>
-          <option>VERY HIGH</option>
-          <option>DANGEROUSLY HIGH</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label>Respiration</label>
-        <select id="respiration">
-          <option value="">Select</option>
-          <option>NONE</option>
-          <option>VERY LIGHT</option>
-          <option>LIGHT</option>
-          <option>MODERATE</option>
-          <option>VIGOROUS</option>
-          <option>VERY HARD</option>
-          <option>MAX EFFORT</option>
-        </select>
-      </div>
-      <div class="field-group">
-        <label>Blood Pressure</label>
-        <select id="bp">
-          <option value="">Select</option>
-          <option>NONE</option>
-          <option>NORMAL</option>
-          <option>ELEVATED</option>
-          <option>STAGE-1</option>
-          <option>STAGE-2</option>
-          <option>HYPERTENSIVE CRISIS</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="section-title">LEVEL OF CONSCIOUSNESS</div>
-    <div class="checkbox-group" id="consciousness">
-      <label><input type="checkbox" value="Alert"> Alert</label>
-      <label><input type="checkbox" value="Voice"> Voice</label>
-      <label><input type="checkbox" value="Pain"> Pain</label>
-      <label><input type="checkbox" value="Unresponsive"> Unresponsive</label>
-    </div>
-
-    <div class="section-title">TREATMENT PROVIDED</div>
-    <div class="checkbox-group" id="treatment">
-      <label><input type="checkbox" value="Basic First Aid"> Basic First Aid</label>
-      <label><input type="checkbox" value="Tourniquet Applied"> Tourniquet Applied</label>
-      <label><input type="checkbox" value="Wound Dressing / Bandaging"> Wound Dressing / Bandaging</label>
-      <label><input type="checkbox" value="Transport to Hospital"> Transport to Hospital</label>
-      <label><input type="checkbox" value="Pain Relief Administered"> Pain Relief Administered</label>
-      <label><input type="checkbox" value="CPR"> CPR</label>
-    </div>
-
-    <div class="row">
-      <div class="field-group wide">
-        <label>Transported To</label>
-        <select id="hospital">
-          <option value="">Select</option>
-          <option>CENTRAL LOS SANTOS MEDICAL CENTER</option>
-          <option>MOUNT ZONAH MEDICAL CENTER</option>
-          <option>PILLBOX HILL MEDICAL CENTER</option>
-          <option>ST. FIACRE HOSPITAL</option>
-          <option>ECLIPSE MEDICAL TOWER</option>
-          <option>PORTOLA TRINITY MEDICAL CENTER</option>
-          <option>THE BAY CARE CENTER</option>
-          <option>SANDY SHORES MEDICAL CENTER</option>
-        </select>
-      </div>
-      <div class="field-group wide">
-        <label>Condition During Transport</label>
-        <select id="condition">
-          <option value="">Select</option>
-          <option>STABLE</option>
-          <option>CRITICAL</option>
-          <option>DETERIORATING</option>
-          <option>IMPROVED</option>
-          <option>DECEASED</option>
-        </select>
-      </div>
-    </div>
-
     <div class="button-row .hide-for-screenshot">
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
@@ -357,10 +266,16 @@
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Report Has Been Logged</div>
     </div>
-
     <div id="error-popup">
       <div class="header-title">⚠️ Submission Failed</div>
       <div class="header-subtitle">All Fields Are Required</div>
+    </div>
+    <div id="pin-popup">
+      <div class="header-title">🔒 PIN Required</div>
+      <div class="header-subtitle">Please enter your 4-digit authorization code to submit</div>
+      <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
+      <div id="pin-error">Wrong PIN code</div>
+      <div style="margin-top:15px;"><button onclick="validatePin()">Confirm</button></div>
     </div>
   </div>
 
@@ -409,7 +324,49 @@
       setTimeout(() => errorPopup.style.display = 'none', 3000);
     }
 
-    async function submitForm() {
+    function submitForm() {
+      const getCheckboxValues = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
+      const datetime = document.getElementById('datetime').value;
+      const location = document.getElementById('location').value;
+      const name = document.getElementById('name').value;
+      const gender = document.getElementById('gender').value;
+      const dob = document.getElementById('dob').value;
+      const primary = document.getElementById('primary').value;
+      const injuries = document.getElementById('injuries').value;
+      const pulse = document.getElementById('pulse').value;
+      const respiration = document.getElementById('respiration').value;
+      const bp = document.getElementById('bp').value;
+      const consciousness = getCheckboxValues('consciousness');
+      const treatment = getCheckboxValues('treatment');
+      const hospital = document.getElementById('hospital').value;
+      const condition = document.getElementById('condition').value;
+
+      if (!datetime || !location || !name || !gender || !dob || !primary || !injuries
+        || !pulse || !respiration || !bp || consciousness.length === 0
+        || treatment.length === 0 || !hospital || !condition) {
+        showErrorPopup();
+        return;
+      }
+
+      document.getElementById('pin-popup').style.display = 'block';
+      document.getElementById('pin-error').style.display = 'none';
+    }
+
+    function validatePin() {
+      const pin = document.getElementById('pin-input').value.trim();
+      if (pin === '2118') {
+        document.getElementById('pin-popup').style.display = 'none';
+        processSubmission();
+      } else {
+        const err = document.getElementById('pin-error');
+        err.style.display = 'block';
+        const popup = document.getElementById('pin-popup');
+        popup.classList.add('shake');
+        setTimeout(() => popup.classList.remove('shake'), 400);
+      }
+    }
+
+    async function processSubmission() {
       const getCheckboxValues = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
       const datetime = document.getElementById('datetime').value;
       const niceDateTime = datetime.replace('T', ' ');
@@ -427,56 +384,25 @@
       const hospital = document.getElementById('hospital').value;
       const condition = document.getElementById('condition').value;
 
-      // basic validation
-      if (!datetime || !location || !name || !gender || !dob || !primary || !injuries
-        || !pulse || !respiration || !bp || consciousness.length === 0
-        || treatment.length === 0 || !hospital || !condition) {
-        showErrorPopup();
-        return;
-      }
-
-      // Prepare embed fields
-      const fields = [
-        { name: "> Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
-        { name: "> Location", value: `\`\`\`\n${location}\n\`\`\``, inline: false },
-        { name: "> Name", value: `\`\`\`\n${name}\n\`\`\``, inline: true },
-        { name: "> Gender", value: `\`\`\`\n${gender}\n\`\`\``, inline: true },
-        { name: "> DOB", value: `\`\`\`\n${dob}\n\`\`\``, inline: true },
-        { name: "> Primary Condition", value: `\`\`\`\n${primary}\n\`\`\``, inline: true },
-        { name: "> Visible Injuries", value: `\`\`\`\n${injuries}\n\`\`\``, inline: true },
-        { name: "> Vitals", value: `\`\`\`\nPulse: ${pulse}\nRespiration: ${respiration}\nBlood Pressure: ${bp}\n\`\`\``, inline: false },
-        { name: "> Level of Consciousness", value: consciousness.map(c => `\`${c}\``).join(', '), inline: false },
-        { name: "> Treatment Provided", value: treatment.map(t => `\`${t}\``).join(', '), inline: false },
-        { name: "> Transported To", value: `\`\`\`\n${hospital}\n\`\`\``, inline: true },
-        { name: "> Condition During Transport", value: `\`\`\`\n${condition}\n\`\`\``, inline: true }
-      ];
-
       const generatedID = randomID();
-      const formattedDateTime = data.datetime.replace('T', ' ');
       const datetimeInput = document.getElementById('datetime');
-      const originalInput = datetimeInput.cloneNode(true);
       const span = document.createElement('div');
-      span.textContent = formattedDateTime;
+      span.textContent = niceDateTime;
       span.style = datetimeInput.style.cssText;
       datetimeInput.parentNode.replaceChild(span, datetimeInput);
 
-      const elementsToHide = document.querySelectorAll('.hide-for-screenshot');
-      elementsToHide.forEach(el => el.style.display = 'none');
       const toHide = [
         document.querySelector('.button-row'),
         document.querySelector('.logo')
       ].filter(Boolean);
       const originalStyles = toHide.map(el => el.style.display);
-    
+
       html2canvas(document.querySelector('.card'), {
         backgroundColor: null,
         useCORS: true,
         scale: 2
       }).then(canvas => {
         toHide.forEach((el, i) => el.style.display = originalStyles[i]);
-        const datetimeDisplay = document.getElementById('datetime-display');
-        datetimeDisplay.parentNode.replaceChild(datetimeClone, datetimeDisplay);
-
         canvas.toBlob(blob => {
           const embed = {
             title: "MEDICAL REPORT",
@@ -484,7 +410,8 @@
             color: 4737096,
             image: { url: "attachment://report.png" },
             footer: { text: "Emergency Medical Services" },
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            fields
           };
 
           const formData = new FormData();
@@ -505,7 +432,6 @@
         });
       });
     }
-
     document.querySelector('.submit-btn').addEventListener('click', submitForm);
     document.querySelector('.clear-btn').addEventListener('click', resetForm);
   </script>
