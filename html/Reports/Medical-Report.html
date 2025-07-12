@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <title>Medical Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     * {
       font-family: 'Rubik', sans-serif;
@@ -186,12 +187,33 @@
       color: #ccc;
       margin-top: 6px;
     }
+    textarea.autogrow {
+      width: 100%;
+      min-height: auto;
+      line-height: 1.4;
+      padding: 6px 10px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #23272A;
+      color: white;
+      resize: none;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    .row .location {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 15px;
+    }
   </style>
 </head>
 
 <body>
   <div class="card">
-    <div class="logo">
+    <div class="logo .hide-for-screenshot">
       <div class="main">EMERGENCY MEDICAL RESPONSE</div>
       <div class="sub">MEDICAL REPORT</div>
     </div>
@@ -203,7 +225,7 @@
       </div>
       <div class="field-group wide">
         <label>Location of Incident</label>
-        <input type="text" id="location">
+        <textarea id="location" class="autogrow" rows="1"></textarea>
       </div>
     </div>
 
@@ -326,7 +348,7 @@
       </div>
     </div>
 
-    <div class="button-row">
+    <div class="button-row .hide-for-screenshot">
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
@@ -343,11 +365,36 @@
   </div>
 
   <script>
+    function autoGrow(el) {
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const locField = document.getElementById("location");
+      autoGrow(locField);
+      locField.addEventListener("input", () => autoGrow(locField));
+    });
+
+    function randomID() {
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const numbers = "0123456789";
+      let id = "";
+      for (let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
+      id += "-";
+      for (let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
+      id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
+      return id;
+    }
+
     function resetForm() {
       document.querySelectorAll('input, textarea, select').forEach(el => {
         if (el.type === 'checkbox') el.checked = false;
         else el.value = '';
       });
+      const loc = document.getElementById('location');
+      loc.value = '';
+      autoGrow(loc);
     }
 
     function showPopup() {
@@ -380,48 +427,87 @@
       const hospital = document.getElementById('hospital').value;
       const condition = document.getElementById('condition').value;
 
-      if (!datetime || !location || !name || !gender || !dob || !primary || !injuries || !pulse || !respiration || !bp || consciousness.length === 0 || treatment.length === 0 || !hospital || !condition) {
+      // basic validation
+      if (!datetime || !location || !name || !gender || !dob || !primary || !injuries
+        || !pulse || !respiration || !bp || consciousness.length === 0
+        || treatment.length === 0 || !hospital || !condition) {
         showErrorPopup();
         return;
       }
-      const consciousnessInline = consciousness
-        .map(off => `\`${off}\``)
-        .join(', ');
-      const treatmentInline = treatment
-        .map(off => `\`${off}\``)
-        .join(', ');
-      const embed = {
-        title: "MEDICAL REPORT",
-        color: 4737096,
-        fields: [
-          { name: "> Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
-          { name: "> Location", value: `\`\`\`\n${location}\n\`\`\``, inline: false },
-          { name: "> Name", value: `\`\`\`\n${name}\n\`\`\``, inline: true },
-          { name: "> Gender", value: `\`\`\`\n${gender}\n\`\`\``, inline: true },
-          { name: "> DOB", value: `\`\`\`\n${dob}\n\`\`\``, inline: true },
-          { name: "> Primary Condition", value: `\`\`\`\n${primary}\n\`\`\``, inline: true },
-          { name: "> Visible Injuries", value: `\`\`\`\n${injuries}\n\`\`\``, inline: true },
-          { name: "> Vitals", value: `\`\`\`\nPulse: ${pulse}\nRespiration: ${respiration}\nBlood Pressure: ${bp}\n\`\`\``, inline: false },
-          { name: "> Level of Consciousness", value: consciousnessInline, inline: false },
-          { name: "> Treatment Provided", value: treatmentInline, inline: false },
-          { name: "> Transported To", value: `\`\`\`\n${hospital}\n\`\`\``, inline: true },
-          { name: "> Condition During Transport", value: `\`\`\`\n${condition}\n\`\`\``, inline: true }
-        ],
-        footer: { text: "Emergency Medical Services" },
-        timestamp: new Date().toISOString()
-      };
 
-      fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
-        method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ embeds: [embed] })
-      }).then(() => {
-        showPopup();
-        resetForm();
-      }).catch(() => {
-        showErrorPopup();
+      // Prepare embed fields
+      const fields = [
+        { name: "> Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
+        { name: "> Location", value: `\`\`\`\n${location}\n\`\`\``, inline: false },
+        { name: "> Name", value: `\`\`\`\n${name}\n\`\`\``, inline: true },
+        { name: "> Gender", value: `\`\`\`\n${gender}\n\`\`\``, inline: true },
+        { name: "> DOB", value: `\`\`\`\n${dob}\n\`\`\``, inline: true },
+        { name: "> Primary Condition", value: `\`\`\`\n${primary}\n\`\`\``, inline: true },
+        { name: "> Visible Injuries", value: `\`\`\`\n${injuries}\n\`\`\``, inline: true },
+        { name: "> Vitals", value: `\`\`\`\nPulse: ${pulse}\nRespiration: ${respiration}\nBlood Pressure: ${bp}\n\`\`\``, inline: false },
+        { name: "> Level of Consciousness", value: consciousness.map(c => `\`${c}\``).join(', '), inline: false },
+        { name: "> Treatment Provided", value: treatment.map(t => `\`${t}\``).join(', '), inline: false },
+        { name: "> Transported To", value: `\`\`\`\n${hospital}\n\`\`\``, inline: true },
+        { name: "> Condition During Transport", value: `\`\`\`\n${condition}\n\`\`\``, inline: true }
+      ];
+
+      const generatedID = randomID();
+      const formattedDateTime = data.datetime.replace('T', ' ');
+      const datetimeInput = document.getElementById('datetime');
+      const originalInput = datetimeInput.cloneNode(true);
+      const span = document.createElement('div');
+      span.textContent = formattedDateTime;
+      span.style = datetimeInput.style.cssText;
+      datetimeInput.parentNode.replaceChild(span, datetimeInput);
+
+      const elementsToHide = document.querySelectorAll('.hide-for-screenshot');
+      elementsToHide.forEach(el => el.style.display = 'none');
+      const toHide = [
+        document.querySelector('.button-row'),
+        document.querySelector('.logo')
+      ].filter(Boolean);
+      const originalStyles = toHide.map(el => el.style.display);
+    
+      html2canvas(document.querySelector('.card'), {
+        backgroundColor: null,
+        useCORS: true,
+        scale: 2
+      }).then(canvas => {
+        toHide.forEach((el, i) => el.style.display = originalStyles[i]);
+        const datetimeDisplay = document.getElementById('datetime-display');
+        datetimeDisplay.parentNode.replaceChild(datetimeClone, datetimeDisplay);
+
+        canvas.toBlob(blob => {
+          const embed = {
+            title: "MEDICAL REPORT",
+            description: `**ID:** \`${generatedID}\``,
+            color: 4737096,
+            image: { url: "attachment://report.png" },
+            footer: { text: "Emergency Medical Services" },
+            timestamp: new Date().toISOString()
+          };
+
+          const formData = new FormData();
+          formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
+          formData.append("file", blob, "report.png");
+
+          fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
+            method: "POST",
+            body: formData
+          })
+            .then(() => {
+              showPopup();
+              resetForm();
+            })
+            .catch(() => {
+              showErrorPopup();
+            });
+        });
       });
     }
+
+    document.querySelector('.submit-btn').addEventListener('click', submitForm);
+    document.querySelector('.clear-btn').addEventListener('click', resetForm);
   </script>
 </body>
 </html>
