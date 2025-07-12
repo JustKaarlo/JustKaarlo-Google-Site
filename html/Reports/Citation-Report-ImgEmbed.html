@@ -329,6 +329,9 @@
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
+      const loc = document.getElementById('location');
+      loc.value = '';
+      autoGrow(loc);
     }
 
     function showErrorPopup() {
