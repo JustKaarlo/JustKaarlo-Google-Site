@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Arrest Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     * { font-family: 'Rubik', sans-serif; }
     body {
@@ -281,32 +282,33 @@
   function processSubmission() {
     const data = window.tempSubmissionData;
     const generatedID = randomID();
-    const htmlBlob = buildHTMLFile(generatedID, data);
   
-    // Create a downloadable link after submission
-    const downloadURL = URL.createObjectURL(htmlBlob);
-    const filename = `ArrestReport-${generatedID}.html`;
+    html2canvas(document.querySelector(".card")).then(canvas => {
+      canvas.toBlob(blob => {
+        const embed = {
+          title: "ARREST REPORT",
+          description: `**Report ID:** \`${generatedID}\``,
+          color: 4737096,
+          image: { url: `attachment://report.png` },
+          footer: { text: "Department of Justice" },
+          timestamp: new Date().toISOString()
+        };
   
-    const embed = {
-      title: "ARREST REPORT SUBMITTED",
-      description: `**Report ID:** \`${generatedID}\``,
-      color: 4737096,
-      footer: { text: "Department of Justice" },
-      timestamp: new Date().toISOString()
-    };
+        const formData = new FormData();
+        formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
+        formData.append("file", blob, "report.png");
   
-    fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ embeds: [embed] })
-    })
-    .then(() => {
-      showPopup();
-      resetForm();
-  
-      showDownloadButton(downloadURL, filename);
-    })
-    .catch(() => alert("Failed To Submit Report."));
+        fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
+          method: "POST",
+          body: formData
+        })
+        .then(() => {
+          showPopup();
+          resetForm();
+        })
+        .catch(() => alert("Failed To Submit Report."));
+      });
+    });
   }
 
 function buildHTMLFile(id, data) {
@@ -441,30 +443,6 @@ function buildHTMLFile(id, data) {
     tag.innerHTML = `${text} <span class="remove">&times;</span>`;
     offenseContainer.insertBefore(tag, offenseInput);
     tag.querySelector('.remove').onclick = () => tag.remove();
-  }
-
-  function showDownloadButton(url, filename) {
-    let existing = document.getElementById("download-report-btn");
-    if (existing) existing.remove();
-  
-    const button = document.createElement("a");
-    button.href = url;
-    button.download = filename;
-    button.id = "download-report-btn";
-    button.textContent = "Download Report";
-    button.style = `
-      display: block;
-      margin: 20px auto;
-      padding: 12px 20px;
-      background: #3c78d8;
-      color: white;
-      text-align: center;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 16px;
-      max-width: 300px;
-    `;
-    document.body.appendChild(button);
   }
   </script>
 </body>
