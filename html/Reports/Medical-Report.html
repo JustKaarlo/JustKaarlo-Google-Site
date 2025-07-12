@@ -457,6 +457,7 @@
     function submitForm() {
       const getCheckboxValues = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
       const datetime = document.getElementById('datetime').value;
+      const niceDateTime = datetime.replace('T', ' ');
       const location = document.getElementById('location').value;
       const name = document.getElementById('name').value;
       const gender = document.getElementById('gender').value;
