@@ -478,6 +478,21 @@
         return;
       }
 
+      const fields = [
+        { name: "> Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
+        { name: "> Location", value: `\`\`\`\n${location}\n\`\`\``, inline: false },
+        { name: "> Name", value: `\`\`\`\n${name}\n\`\`\``, inline: true },
+        { name: "> Gender", value: `\`\`\`\n${gender}\n\`\`\``, inline: true },
+        { name: "> DOB", value: `\`\`\`\n${dob}\n\`\`\``, inline: true },
+        { name: "> Primary Condition", value: `\`\`\`\n${primary}\n\`\`\``, inline: true },
+        { name: "> Visible Injuries", value: `\`\`\`\n${injuries}\n\`\`\``, inline: true },
+        { name: "> Vitals", value: `\`\`\`\nPulse: ${pulse}\nRespiration: ${respiration}\nBlood Pressure: ${bp}\n\`\`\``, inline: false },
+        { name: "> Level of Consciousness", value: consciousness.map(c => `\`${c}\``).join(', '), inline: false },
+        { name: "> Treatment Provided", value: treatment.map(t => `\`${t}\``).join(', '), inline: false },
+        { name: "> Transported To", value: `\`\`\`\n${hospital}\n\`\`\``, inline: true },
+        { name: "> Condition During Transport", value: `\`\`\`\n${condition}\n\`\`\``, inline: true }
+      ];
+
       document.getElementById('pin-popup').style.display = 'block';
       document.getElementById('pin-error').style.display = 'none';
     }
@@ -515,7 +530,6 @@
       const condition = document.getElementById('condition').value;
 
       const generatedID = randomID();
-      const formattedDateTime = data.datetime.replace('T', ' ');
       const datetimeInput = document.getElementById('datetime');
       const datetimeClone = datetimeInput.cloneNode(true);
       const datetimeSpan = document.createElement('div');
