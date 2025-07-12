@@ -241,7 +241,7 @@
 </head>
 <body>
   <div class="card">
-    <div class="header">
+    <div class="header hide-for-screenshot">
       <div class="header-title">DEPARTMENT OF JUSTICE</div>
       <div class="header-subtitle">CITATION REPORT</div>
     </div>
@@ -263,12 +263,12 @@
     <div class="row">
       <div class="field-group wide">
         <div id="violation-tags" class="tag-container">
-          <input type="text" id="violationInput" placeholder="Type And Press Enter">
+          <input type="text" id="violationInput" class="hide-for-screenshot" placeholder="Type And Press Enter">
         </div>
       </div>
     </div>
 
-    <div class="button-row">
+    <div class="button-row hide-for-screenshot">
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
@@ -387,12 +387,6 @@
       span.style = datetimeInput.style.cssText;
       datetimeInput.parentNode.replaceChild(span, datetimeInput);
 
-      const toHide = [
-        document.querySelector('.button-row'),
-        document.querySelector('.header'),
-        document.querySelector('#violationInput'),
-        ...document.querySelectorAll('.tag .remove')
-      ];
       const elementsToHide = document.querySelectorAll('.hide-for-screenshot');
       elementsToHide.forEach(el => el.style.display = 'none');
 
