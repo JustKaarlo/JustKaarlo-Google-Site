@@ -300,9 +300,8 @@
         .map(off => `\`${off}\``)
         .join(', ');
       const embed = {
-        title: "ARREST REPORT",
+        title: "ARREST REPORT \`${generatedID}\`",
         color: 4737096,
-        description: `-# > \`${generatedID}\``,
         fields: [
           { name: "> Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
           { name: "> Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
