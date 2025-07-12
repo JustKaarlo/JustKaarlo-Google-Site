@@ -372,6 +372,16 @@
         if (el.type === 'checkbox') el.checked = false;
         else el.value = '';
       });
+
+      const dtDiv = document.getElementById('datetime-display');
+      if (dtDiv) {
+        const newInput = document.createElement('input');
+        newInput.type = 'datetime-local';
+        newInput.id = 'datetime';
+        newInput.className = dtDiv.className;
+        dtDiv.parentNode.replaceChild(newInput, dtDiv);
+      }
+
       const loc = document.getElementById('location');
       loc.value = '';
       autoGrow(loc);
@@ -462,6 +472,7 @@
       }).then(canvas => {
         canvas.toBlob(blob => {
           toHide.forEach(el => el.style.display = '');
+          datetimeDisplay.parentNode.replaceChild(datetimeClone, datetimeDisplay);
 
           const formData = new FormData();
           formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
