@@ -321,7 +321,7 @@
     function addViolationTag(text) {
       const tag = document.createElement('div');
       tag.className = 'tag';
-      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+      tag.innerHTML = `${text} <span class="remove hide-for-screenshot">&times;</span>`;
       violationContainer.insertBefore(tag, violationInput);
       tag.querySelector('.remove').addEventListener('click', () => tag.remove());
     }
@@ -381,15 +381,26 @@
       const generatedID = randomID();
       const formattedDateTime = data.datetime.replace('T', ' ');
       const datetimeInput = document.getElementById('datetime');
-      const originalInput = datetimeInput.cloneNode(true);
-      const span = document.createElement('div');
-      span.textContent = formattedDateTime;
-      span.style = datetimeInput.style.cssText;
-      datetimeInput.parentNode.replaceChild(span, datetimeInput);
+      const datetimeClone = datetimeInput.cloneNode(true);
+      const datetimeSpan = document.createElement('div');
+      datetimeSpan.textContent = formattedDateTime;
+      datetimeSpan.style = datetimeInput.style.cssText;
+      datetimeSpan.className = datetimeInput.className;
+      datetimeSpan.id = 'datetime-display';
+      datetimeInput.parentNode.replaceChild(datetimeSpan, datetimeInput);
+
+      // Replace location textarea with plain div
+      const locationTextarea = document.getElementById('location');
+      const locationClone = locationTextarea.cloneNode(true);
+      const locationDiv = document.createElement('div');
+      locationDiv.textContent = data.location;
+      locationDiv.style = locationTextarea.style.cssText;
+      locationDiv.className = locationTextarea.className;
+      locationDiv.id = 'location-display';
+      locationTextarea.parentNode.replaceChild(locationDiv, locationTextarea);
 
       const elementsToHide = document.querySelectorAll('.hide-for-screenshot');
       elementsToHide.forEach(el => el.style.display = 'none');
-
       html2canvas(document.querySelector(".card"), {
         backgroundColor: null,
         useCORS: true,
@@ -397,6 +408,10 @@
       }).then(canvas => {
         canvas.toBlob(blob => {
           elementsToHide.forEach(el => el.style.display = '');
+          const datetimeDisplay = document.getElementById('datetime-display');
+          datetimeDisplay.parentNode.replaceChild(datetimeClone, datetimeDisplay);
+          const locationDisplay = document.getElementById('location-display');
+          locationDisplay.parentNode.replaceChild(locationClone, locationDisplay);
 
           const embed = {
             title: "CITATION REPORT",
