@@ -182,17 +182,6 @@
       100% { transform: translate(-50%, -50%) translateX(0); }
     }
 
-    textarea {
-      padding: 6px 10px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      font-size: 14px;
-      background: #23272A;
-      color: white;
-      resize: vertical;
-      min-height: 40px;
-      line-height: 1.4;
-    }
     textarea.autogrow {
       padding: 6px 10px;
       border: 1px solid #444;
@@ -214,7 +203,7 @@
       <div class="header-subtitle">ARREST REPORT</div>
     </div>
     <div class="row">
-      <div class="field-group wide"><label>Location</label><textarea id="location" rows="1" class="autogrow"></textarea></div>
+      <div class="field-group wide"><label>Location</label><textarea id="location" class="autogrow"></textarea></div>
       <div class="field-group"><label>Time & Date</label><input type="datetime-local" id="datetime"></div>
     </div>
     <div class="row">
