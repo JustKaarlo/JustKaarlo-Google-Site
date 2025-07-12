@@ -1,103 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Total War ATTILA</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Total War Mods</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      overflow: hidden;
-      margin: 0;
-      padding: 20px;
-      background: transparent;
       font-family: 'Rubik', sans-serif;
-      color: white;
+      background:
+        linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+        linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+        url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/TotalWar_Background.png') center/cover no-repeat fixed;
+      color: #eee;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
     }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
+    /* particle canvas behind everything */
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
-
-    ul {
-      list-style: none;
-      padding: 0;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      width: 100%;
+      max-width: 1000px;
     }
-
-    li {
-      margin: 8px 0;
-      padding: 6px 12px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
     }
-
-    a {
-      color: white;
-      text-decoration: none;
+    .card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.08);
     }
-
-    a:hover {
-      text-decoration: underline;
+    .card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal {
+      position: relative;
+      width: 80vw; max-width: 900px;
+      height: 80vh;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+    .modal iframe {
+      width: 100%; height: 100%; border: 0;
+    }
+    .close-btn {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 40px; height: 40px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      font-size: 2rem;
+      color: #fff;
+      line-height: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
     }
   </style>
 </head>
-
 <body>
-  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Attila"
-      style="height: 24px; vertical-align: middle; margin-right: 8px;">Attila</h1>
-  <ul id="fileList">Loading...</ul>
+  <!-- particle background -->
+  <div id="particles-js"></div>
+
+  <div class="grid">
+    <div id="attila-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Total War Attila">
+    </div>
+    <div id="shogun-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Shogun2.png" alt="Total War Shogun 2">
+    </div>
+    <div id="rome-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_RomeII.png" alt="Total War Rome II">
+    </div>
+    <div id="empire-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Empire2.png" alt="Total War Empire">
+    </div>
+    <div id="napoleon-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Napoleon.png" alt="Total War Napoleon">
+    </div>
+    <div id="britannia-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png" alt="Total War Thrones of Britannia">
+    </div>
+  </div>
+
+  <div id="overlay" class="modal-overlay">
+    <div class="modal">
+      <div class="close-btn">×</div>
+      <iframe id="modal-frame" title="Mods"></iframe>
+    </div>
+  </div>
 
   <script>
-    const folderId = "15r5NfzciWGfClpGvmT5ydfH4fDbScVAl";
-    const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay        = document.getElementById('overlay');
+      const frame          = document.getElementById('modal-frame');
+      const attilaCard     = document.getElementById('attila-card');
+      const shogunCard     = document.getElementById('shogun-card');
+      const romeCard       = document.getElementById('rome-card');
+      const empireCard     = document.getElementById('empire-card');
+      const napoleonCard   = document.getElementById('napoleon-card');
+      const britanniaCard  = document.getElementById('britannia-card');
+      const closeBtn       = document.querySelector('.close-btn');
 
-    async function listFiles() {
-      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
-      const res = await fetch(url);
-      const data = await res.json();
-
-      const list = document.getElementById("fileList");
-      list.innerHTML = "";
-
-      if (!data.files || data.files.length === 0) {
-        list.innerHTML = "<li>No files found.</li>";
-        return;
+      function openModal(file) {
+        frame.src = file;
+        overlay.style.display = 'flex';
       }
 
-      data.files.sort((a, b) => {
-        const extA = a.name.slice(a.name.lastIndexOf('.') + 1).toLowerCase();
-        const extB = b.name.slice(b.name.lastIndexOf('.') + 1).toLowerCase();
-      
-        if (extA < extB) return -1;
-        if (extA > extB) return 1;
-      
-        return a.name.localeCompare(b.name, undefined, {
-          numeric: true,
-          sensitivity: 'base'
-        });
-      });
-      
-      data.files.forEach(file => {
-        const li = document.createElement("li");
-        const link = document.createElement("a");
-        link.href = file.webViewLink;
-        link.target = "_blank";
-        const icon = document.createElement("img");
-        icon.src = file.iconLink;
-        icon.alt = "";
-        icon.style.height = "20px";
-        icon.style.verticalAlign = "middle";
-        icon.style.marginRight = "8px";
+      attilaCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Attila.html'));
+      shogunCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Shogun2.html'));
+      romeCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/RomeII.html'));
+      empireCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Empire.html'));
+      napoleonCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Napoleon.html'));
+      britanniaCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/TotalWar/Thrones.html'));
 
-        link.textContent = ""; // Clear existing text
-        link.appendChild(icon);
-        link.appendChild(document.createTextNode(file.name));
-        li.appendChild(link);
-        list.appendChild(li);
+      overlay.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        frame.src = '';
       });
-    }
 
-    listFiles();
+      closeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        overlay.style.display = 'none';
+        frame.src = '';
+      });
+
+      // init particles
+      particlesJS("particles-js", {
+        particles: {
+          number: {
+            value: 50,
+            density: { enable: true, value_area: 800 }
+          },
+          color: { value: "#ffffff" },
+          shape: { type: "circle" },
+          opacity: { value: 0.5, random: true },
+          size: { value: 3, random: true },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.2,
+            width: 1
+          },
+          move: { enable: true, speed: 1, out_mode: "out" }
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onhover: { enable: true, mode: "grab" },
+            onclick: { enable: true, mode: "push" }
+          },
+          modes: {
+            grab: { distance: 140, line_linked: { opacity: 0.5 } },
+            push: { particles_nb: 4 }
+          }
+        },
+        retina_detect: true
+      });
+    });
   </script>
 </body>
 </html>
