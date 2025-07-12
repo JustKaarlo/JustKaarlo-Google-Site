@@ -294,7 +294,11 @@
     elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
   
     // Take screenshot
-    html2canvas(document.querySelector(".card")).then(canvas => {
+        html2canvas(document.querySelector(".card"), {
+          backgroundColor: null, // transparent outside
+          useCORS: true,
+          scale: 2 // optional: better quality
+        }).then(canvas => {
       // Restore elements
       elementsToHide.forEach(el => { if (el) el.style.display = ''; });
   
