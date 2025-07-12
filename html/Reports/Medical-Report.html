@@ -7,54 +7,251 @@
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    * { font-family: 'Rubik', sans-serif; }
-    body { background: transparent; padding: 30px; max-width: 850px; margin: auto; color: white; }
-    .card { background: #2C2F33; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.5); padding: 0; overflow: hidden; position: relative; }
-    .logo { background: #56585B; padding: 15px; text-align: center; }
-    .logo .main { font-size: 20px; font-weight: bold; color: white; margin: 0; }
-    .logo .sub { font-size: 14px; color: #ccc; margin-top: 4px; }
-    .section-title { font-weight: bold; font-size: 16px; background: #23272A; text-align: center; padding: 8px; margin-top: 20px; border-radius: 6px; }
-    .row { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px; }
-    .field-group { flex: 1; min-width: 150px; display: flex; flex-direction: column; }
-    .field-group label { font-size: 13px; margin-bottom: 4px; color: #ccc; font-weight: bold; text-transform: uppercase; }
-    input[type="text"], input[type="date"], input[type="time"], input[type="datetime-local"], select, textarea {
-      padding: 6px 10px; border: 1px solid #444; border-radius: 6px; font-size: 14px; background: #23272A; color: white;
+    * {
+      font-family: 'Rubik', sans-serif;
     }
-    textarea { resize: vertical; min-height: 50px; }
-    .checkbox-group { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin: 15px 0; }
-    .checkbox-group label { color: #ccc; font-size: 14px; }
-    .checkbox-group input { margin-right: 5px; }
-    .wide { width: 100%; }
-    button { background-color: #3c78d8; color: white; border: none; padding: 12px; border-radius: 6px; font-size: 16px; cursor: pointer; transition: background 0.3s ease; }
-    button:hover { background-color: #5187dc; }
-    .button-row { display: flex; gap: 10px; margin: 15px; }
-    .clear-btn { background-color: #4f545c; color: #c0c0c0; }
-    .clear-btn:hover { background-color: #5d626a; }
-    .submit-btn { flex: 1; }
-    #popup-overlay, #error-popup, #pin-popup {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); background: #23272A; color: white;
-      border-radius: 12px; padding: 25px; box-shadow: 0 4px 20px rgba(0,0,0,0.6); display: none; z-index: 10; max-width: 90%; text-align: center;
+
+    body {
+      background: transparent;
+      padding: 30px;
+      max-width: 850px;
+      margin: auto;
+      color: white;
     }
-    #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
-    #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
-    #pin-popup .header-title { font-size: 18px; margin-bottom: 10px; }
-    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
+
+    .card {
+      background: #2C2F33;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .logo {
+      background: #56585B;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .logo .main {
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      margin: 0;
+    }
+
+    .logo .sub {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 4px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      font-size: 16px;
+      background: #23272A;
+      text-align: center;
+      padding: 8px;
+      margin-top: 20px;
+      border-radius: 6px;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px;
+    }
+
+    .field-group {
+      flex: 1;
+      min-width: 150px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .field-group label {
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: #ccc;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
+    select,
+    textarea {
+      padding: 6px 10px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #23272A;
+      color: white;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 50px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      justify-content: center;
+      margin: 15px 0;
+    }
+
+    .checkbox-group label {
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .checkbox-group input {
+      margin-right: 5px;
+    }
+
+    .wide {
+      width: 100%;
+    }
+
+    button {
+      background-color: #3c78d8;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #5187dc;
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin: 15px;
+    }
+
+    .clear-btn {
+      background-color: #4f545c;
+      color: #c0c0c0;
+    }
+
+    .clear-btn:hover {
+      background-color: #5d626a;
+    }
+
+    .submit-btn {
+      flex: 1;
+    }
+
+    #popup-overlay,
+    #error-popup,
+    #pin-popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #23272A;
+      color: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      display: none;
+      z-index: 10;
+      max-width: 90%;
+      text-align: center;
+    }
+
+    #popup-overlay .header-title {
+      color: #7289da;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #error-popup .header-title {
+      color: #f04747;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #pin-popup .header-title {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+
+    #pin-popup .header-subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 6px;
+    }
+
     #pin-popup input {
-      width: 100%; padding: 10px; font-size: 18px; text-align: center; margin-top: 15px;
-      border-radius: 6px; border: 1px solid #444; background: #2C2F33; color: white;
+      width: 100%;
+      padding: 10px;
+      font-size: 18px;
+      text-align: center;
+      margin-top: 15px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: #2C2F33;
+      color: white;
     }
-    #pin-error { color: #f04747; font-size: 14px; margin-top: 10px; display: none; }
-    .shake { animation: shake 0.4s; }
+
+    #pin-error {
+      color: #f04747;
+      font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .shake {
+      animation: shake 0.4s;
+    }
+
     @keyframes shake {
-      0% { transform: translate(-50%,-50%) translateX(0); }
-      25% { transform: translate(-50%,-50%) translateX(-10px); }
-      50% { transform: translate(-50%,-50%) translateX(10px); }
-      75% { transform: translate(-50%,-50%) translateX(-10px); }
-      100% { transform: translate(-50%,-50%) translateX(0); }
+      0% {
+        transform: translate(-50%, -50%) translateX(0);
+      }
+
+      25% {
+        transform: translate(-50%, -50%) translateX(-10px);
+      }
+
+      50% {
+        transform: translate(-50%, -50%) translateX(10px);
+      }
+
+      75% {
+        transform: translate(-50%, -50%) translateX(-10px);
+      }
+
+      100% {
+        transform: translate(-50%, -50%) translateX(0);
+      }
     }
-    textarea.autogrow { width: 100%; min-height: auto; line-height: 1.4; padding: 6px 10px;
-      border: 1px solid #444; border-radius: 6px; font-size: 14px; background: #23272A; color: white;
-      resize: none; overflow: hidden; box-sizing: border-box;
+
+    textarea.autogrow {
+      width: 100%;
+      min-height: auto;
+      line-height: 1.4;
+      padding: 6px 10px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #23272A;
+      color: white;
+      resize: none;
+      overflow: hidden;
+      box-sizing: border-box;
     }
   </style>
 </head>
@@ -81,7 +278,11 @@
     <div class="row">
       <div class="field-group"><label>Name</label><input type="text" id="name"></div>
       <div class="field-group"><label>Gender</label>
-        <select id="gender"><option value="">Select</option><option>Male</option><option>Female</option></select>
+        <select id="gender">
+          <option value="">Select</option>
+          <option>Male</option>
+          <option>Female</option>
+        </select>
       </div>
       <div class="field-group"><label>Date of Birth</label><input type="date" id="dob"></div>
     </div>
@@ -94,13 +295,39 @@
 
     <div class="row">
       <div class="field-group"><label>Pulse</label>
-        <select id="pulse"><option value="">Select</option><option>NONE</option><option>VERY WEAK</option><option>WEAK STABLE</option><option>NORMAL</option><option>HIGH</option><option>VERY HIGH</option><option>DANGEROUSLY HIGH</option></select>
+        <select id="pulse">
+          <option value="">Select</option>
+          <option>NONE</option>
+          <option>VERY WEAK</option>
+          <option>WEAK STABLE</option>
+          <option>NORMAL</option>
+          <option>HIGH</option>
+          <option>VERY HIGH</option>
+          <option>DANGEROUSLY HIGH</option>
+        </select>
       </div>
       <div class="field-group"><label>Respiration</label>
-        <select id="respiration"><option value="">Select</option><option>NONE</option><option>VERY LIGHT</option><option>LIGHT</option><option>MODERATE</option><option>VIGOROUS</option><option>VERY HARD</option><option>MAX EFFORT</option></select>
+        <select id="respiration">
+          <option value="">Select</option>
+          <option>NONE</option>
+          <option>VERY LIGHT</option>
+          <option>LIGHT</option>
+          <option>MODERATE</option>
+          <option>VIGOROUS</option>
+          <option>VERY HARD</option>
+          <option>MAX EFFORT</option>
+        </select>
       </div>
       <div class="field-group"><label>Blood Pressure</label>
-        <select id="bp"><option value="">Select</option><option>NONE</option><option>NORMAL</option><option>ELEVATED</option><option>STAGE-1</option><option>STAGE-2</option><option>HYPERTENSIVE CRISIS</option></select>
+        <select id="bp">
+          <option value="">Select</option>
+          <option>NONE</option>
+          <option>NORMAL</option>
+          <option>ELEVATED</option>
+          <option>STAGE-1</option>
+          <option>STAGE-2</option>
+          <option>HYPERTENSIVE CRISIS</option>
+        </select>
       </div>
     </div>
 
@@ -197,8 +424,7 @@
 
     function resetForm() {
       document.querySelectorAll('input, textarea, select').forEach(el => {
-        if (el.type === 'checkbox') el.checked = false;
-        else el.value = '';
+        if (el.type === 'checkbox') el.checked = false; else el.value = '';
       });
       const loc = document.getElementById('location');
       loc.value = '';
@@ -218,9 +444,8 @@
     }
 
     function submitForm() {
-      const getCheckboxValues = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
+      const getVals = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
       const datetime = document.getElementById('datetime').value;
-      const niceDateTime = datetime.replace('T', ' ');
       const location = document.getElementById('location').value;
       const name = document.getElementById('name').value;
       const gender = document.getElementById('gender').value;
@@ -230,8 +455,8 @@
       const pulse = document.getElementById('pulse').value;
       const respiration = document.getElementById('respiration').value;
       const bp = document.getElementById('bp').value;
-      const consciousness = getCheckboxValues('consciousness');
-      const treatment = getCheckboxValues('treatment');
+      const consciousness = getVals('consciousness');
+      const treatment = getVals('treatment');
       const hospital = document.getElementById('hospital').value;
       const condition = document.getElementById('condition').value;
 
@@ -242,7 +467,6 @@
         return;
       }
 
-      // only show PIN prompt here
       document.getElementById('pin-popup').style.display = 'block';
       document.getElementById('pin-error').style.display = 'none';
     }
@@ -262,42 +486,10 @@
     }
 
     async function processSubmission() {
-      const getCheckboxValues = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
       const datetime = document.getElementById('datetime').value;
-      const niceDateTime = datetime.replace('T', ' ');
-      const formattedDateTime = niceDateTime;
-      const location = document.getElementById('location').value;
-      const name = document.getElementById('name').value;
-      const gender = document.getElementById('gender').value;
-      const dob = document.getElementById('dob').value;
-      const primary = document.getElementById('primary').value;
-      const injuries = document.getElementById('injuries').value;
-      const pulse = document.getElementById('pulse').value;
-      const respiration = document.getElementById('respiration').value;
-      const bp = document.getElementById('bp').value;
-      const consciousness = getCheckboxValues('consciousness');
-      const treatment = getCheckboxValues('treatment');
-      const hospital = document.getElementById('hospital').value;
-      const condition = document.getElementById('condition').value;
-
-      // build fields here so it's in scope
-      const fields = [
-        { name: "> Date & Time", value: `\`\`\`\n${formattedDateTime}\n\`\`\``, inline: false },
-        { name: "> Location",    value: `\`\`\`\n${location}\n\`\`\``,      inline: false },
-        { name: "> Name",        value: `\`\`\`\n${name}\n\`\`\``,          inline: true  },
-        { name: "> Gender",      value: `\`\`\`\n${gender}\n\`\`\``,        inline: true  },
-        { name: "> DOB",         value: `\`\`\`\n${dob}\n\`\`\``,           inline: true  },
-        { name: "> Primary Condition", value: `\`\`\`\n${primary}\n\`\`\``, inline: true },
-        { name: "> Visible Injuries",  value: `\`\`\`\n${injuries}\n\`\`\``, inline: true },
-        { name: "> Vitals", value: `\`\`\`\nPulse: ${pulse}\nRespiration: ${respiration}\nBlood Pressure: ${bp}\n\`\`\``, inline: false },
-        { name: "> Level of Consciousness", value: consciousness.map(c=>`\`${c}\``).join(', '), inline: false },
-        { name: "> Treatment Provided", value: treatment.map(t=>`\`${t}\``).join(', '), inline: false },
-        { name: "> Transported To", value: `\`\`\`\n${hospital}\n\`\`\``, inline: true },
-        { name: "> Condition During Transport", value: `\`\`\`\n${condition}\n\`\`\``, inline: true }
-      ];
-
+      const formattedDateTime = datetime.replace('T', ' ');
       const generatedID = randomID();
-      // swap out your datetime input for a plain div so it appears in the screenshot
+
       const datetimeInput = document.getElementById('datetime');
       const datetimeClone = datetimeInput.cloneNode(true);
       const datetimeSpan = document.createElement('div');
@@ -306,28 +498,28 @@
       datetimeSpan.id = 'datetime-display';
       datetimeInput.parentNode.replaceChild(datetimeSpan, datetimeInput);
 
-      // hide buttons & logo for clean screenshot
-      const toHide = [ document.querySelector('.button-row'), document.querySelector('.logo') ].filter(Boolean);
+      const toHide = [document.querySelector('.button-row'), document.querySelector('.logo')].filter(Boolean);
       const originalStyles = toHide.map(el => el.style.display);
       toHide.forEach(el => el.style.display = 'none');
 
       html2canvas(document.querySelector('.card'), { backgroundColor: null, useCORS: true, scale: 2 })
         .then(canvas => {
           toHide.forEach((el, i) => el.style.display = originalStyles[i]);
-          // put datetime back
-          const display = document.getElementById('datetime-display');
-          display.parentNode.replaceChild(datetimeClone, display);
+          document.getElementById('datetime-display')
+            .parentNode.replaceChild(datetimeClone, document.getElementById('datetime-display'));
 
           canvas.toBlob(blob => {
             const embed = {
               title: "MEDICAL REPORT",
-              description: `**ID:** \`${generatedID}\``,
               color: 4737096,
+              fields: [
+                { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
+              ],
               image: { url: "attachment://report.png" },
               footer: { text: "Emergency Medical Services" },
-              timestamp: new Date().toISOString(),
-              fields
+              timestamp: new Date().toISOString()
             };
+
             const formData = new FormData();
             formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
             formData.append("file", blob, "report.png");
@@ -335,8 +527,8 @@
             fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
               method: "POST", body: formData
             })
-            .then(() => { showPopup(); resetForm(); })
-            .catch(() => { showErrorPopup(); });
+              .then(() => { showPopup(); resetForm(); })
+              .catch(() => { showErrorPopup(); });
           });
         });
     }
