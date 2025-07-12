@@ -181,7 +181,6 @@
       75% { transform: translate(-50%, -50%) translateX(-10px); }
       100% { transform: translate(-50%, -50%) translateX(0); }
     }
-
     textarea.autogrow {
       width: 100%;
       min-height: auto;
@@ -195,13 +194,6 @@
       resize: none;
       overflow: hidden;
       box-sizing: border-box;
-    }
-    .row .location {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      gap: 10px;
-      margin: 15px;
     }
   </style>
 </head>
@@ -234,29 +226,40 @@
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
-    <div id="popup-overlay"><div class="header-title">✅ Report Submitted</div><div class="header-subtitle">Your Report Has Been Logged</div></div>
-    <div id="error-popup"><div class="header-title">⚠️ Submission Failed</div><div class="header-subtitle">All Fields Are Required</div></div>
+    <div id="popup-overlay">
+      <div class="header-title">✅ Report Submitted</div>
+      <div class="header-subtitle">Your Report Has Been Logged</div>
+    </div>
+    <div id="error-popup">
+      <div class="header-title">⚠️ Submission Failed</div>
+      <div class="header-subtitle">All Fields Are Required</div>
+    </div>
     <div id="pin-popup">
       <div class="header-title">🔒 PIN Required</div>
       <div class="header-subtitle">Please enter your 4-digit authorization code to submit</div>
       <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
       <div id="pin-error">Wrong PIN code</div>
-      <div style="margin-top: 15px;"><button onclick="validatePin()">Confirm</button></div>
+      <div style="margin-top: 15px;">
+        <button onclick="validatePin()">Confirm</button>
+      </div>
     </div>
   </div>
 
   <script>
+    const WEBHOOK_URL = "https://discord.com/api/webhooks/1393653107174408394/Xa0zlUDF77IJ31NwWmFtrNzC6DT8ttg2Fminq-YtPFDxpMLX9IZpROU3PGfPfKaNUKKR";
+    const THREAD_ID   = "1393656493751930971";
+
     function autoGrow(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
     }
-    
+
     document.addEventListener("DOMContentLoaded", () => {
       const locField = document.getElementById("location");
       autoGrow(locField);
       locField.addEventListener("input", () => autoGrow(locField));
     });
-    
+
     function randomID() {
       const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       const numbers = "0123456789";
@@ -291,10 +294,12 @@
       const defendant = document.getElementById('defendant').value.trim();
       const officer = document.getElementById('officer').value.trim();
       const offenses = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
+
       if (!location || !datetime || !defendant || !officer || offenses.length === 0) {
         showErrorPopup();
         return;
       }
+
       window.tempSubmissionData = { location, datetime, defendant, officer, offenses };
       document.getElementById('pin-popup').style.display = 'block';
       document.getElementById('pin-error').style.display = 'none';
@@ -319,6 +324,7 @@
       const generatedID = randomID();
       const formattedDateTime = data.datetime.replace('T', ' ');
 
+      // hide inputs for clean screenshot
       const datetimeInput = document.getElementById('datetime');
       const originalInput = datetimeInput.cloneNode(true);
       const span = document.createElement('div');
@@ -338,10 +344,10 @@
         backgroundColor: null,
         scale: 2
       }).then(canvas => {
-        // Restore UI
+        // restore UI
         span.parentNode.replaceChild(originalInput, span);
         toHide.forEach(el => el && (el.style.display = ''));
-        
+
         canvas.toBlob(blob => {
           const embed = {
             title: "ARREST REPORT",
@@ -353,20 +359,22 @@
             footer: { text: "Department of Justice" },
             timestamp: new Date().toISOString()
           };
-          
+
           const formData = new FormData();
           formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
           formData.append("file", blob, "report.png");
 
-          fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
+          const urlWithThread = `${WEBHOOK_URL}?thread_id=${THREAD_ID}`;
+
+          fetch(urlWithThread, {
             method: "POST",
             body: formData
           })
-            .then(() => {
-              showPopup();
-              resetForm();
-            })
-            .catch(() => alert("Failed to Submit Report."));
+          .then(() => {
+            showPopup();
+            resetForm();
+          })
+          .catch(() => alert("Failed to Submit Report."));
         });
       });
     }
