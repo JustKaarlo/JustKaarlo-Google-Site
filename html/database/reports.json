@@ -1,0 +1,23 @@
+[
+  {
+    "id": "AR-001",
+    "type": "Arrest",
+    "name": "John Doe",
+    "reason": "Unlawful possession of firearms",
+    "date": "2025-07-12T18:44:00Z"
+  },
+  {
+    "id": "EMS-002",
+    "type": "EMS",
+    "name": "John Doe",
+    "reason": "Stab wound treatment",
+    "date": "2025-07-10T13:24:00Z"
+  },
+  {
+    "id": "CR-005",
+    "type": "Coroner",
+    "name": "Jane Smith",
+    "reason": "Overdose at scene",
+    "date": "2025-07-07T08:00:00Z"
+  }
+]
