@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Arrest Report</title>
+  <title>Citation Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
@@ -35,7 +35,6 @@
     }
     .header-subtitle {
       font-size: 15px;
-      font-style: bold;
       color: #ccc;
       margin-top: 4px;
     }
@@ -67,26 +66,17 @@
       font-weight: bold;
       text-transform: uppercase;
     }
-    input[type="text"], input[type="datetime-local"] {
+    input[type="text"], input[type="datetime-local"], textarea.autogrow {
       padding: 6px 10px;
       border: 1px solid #444;
       border-radius: 6px;
       font-size: 14px;
       background: #23272A;
       color: white;
+      resize: none;
+      overflow: hidden;
     }
     .wide { width: 100%; }
-    button {
-      background-color: #3c78d8;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    button:hover { background-color: #5187dc; }
     .tag-container {
       display: flex;
       flex-wrap: wrap;
@@ -130,103 +120,42 @@
       background-color: #4f545c;
       color: #c0c0c0;
     }
-    .clear-btn:hover {
-      background-color: #5d626a;
-    }
-    .submit-btn { flex: 1; }
-    #popup-overlay, #error-popup, #pin-popup {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #23272A;
-      color: white;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-      display: none;
-      z-index: 10;
-      max-width: 90%;
-      text-align: center;
-    }
-    #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
-    #popup-overlay .header-subtitle,
-    #error-popup .header-subtitle,
-    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
-    #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
-    #pin-popup input {
-      width: 100%;
-      padding: 10px;
-      font-size: 18px;
-      text-align: center;
-      margin-top: 15px;
-      border-radius: 6px;
-      border: 1px solid #444;
-      background: #2C2F33;
-      color: white;
-    }
-    #pin-error {
-      color: #f04747;
-      font-size: 14px;
-      margin-top: 10px;
-      display: none;
-    }
-    .shake {
-      animation: shake 0.4s;
-    }
-    @keyframes shake {
-      0% { transform: translate(-50%, -50%) translateX(0); }
-      25% { transform: translate(-50%, -50%) translateX(-10px); }
-      50% { transform: translate(-50%, -50%) translateX(10px); }
-      75% { transform: translate(-50%, -50%) translateX(-10px); }
-      100% { transform: translate(-50%, -50%) translateX(0); }
-    }
-
-    textarea.autogrow {
-      width: 100%;
-      min-height: auto;
-      line-height: 1.4;
-      padding: 6px 10px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      font-size: 14px;
-      background: #23272A;
-      color: white;
-      resize: none;
-      overflow: hidden;
-      box-sizing: border-box;
-    }
-    .row .location {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      gap: 10px;
-      margin: 15px;
-    }
+    .clear-btn:hover { background-color: #5d626a; }
+    .submit-btn { flex: 1; background-color: #3c78d8; color: white; border: none; border-radius: 6px; font-size: 16px; padding: 12px; cursor: pointer; transition: background 0.3s ease; }
+    .submit-btn:hover { background-color: #5187dc; }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="header">
       <div class="header-title">DEPARTMENT OF JUSTICE</div>
-      <div class="header-subtitle">ARREST REPORT</div>
+      <div class="header-subtitle">CITATION REPORT</div>
     </div>
     <div class="row">
       <div class="field-group wide">
         <label>Location</label>
         <textarea id="location" class="autogrow" rows="1"></textarea>
       </div>
-      <div class="field-group"><label>Time & Date</label><input type="datetime-local" id="datetime"></div>
+      <div class="field-group">
+        <label>Time & Date</label>
+        <input type="datetime-local" id="datetime">
+      </div>
     </div>
     <div class="row">
-      <div class="field-group"><label>Defendant</label><input type="text" id="defendant"></div>
-      <div class="field-group"><label>Arresting Officer</label><input type="text" id="officer"></div>
+      <div class="field-group">
+        <label>Name</label>
+        <input type="text" id="name">
+      </div>
+      <div class="field-group">
+        <label>Amount</label>
+        <input type="text" id="amount" placeholder="$">
+      </div>
     </div>
-    <div class="section-title">CRIMINAL OFFENSE(S)</div>
+    <div class="section-title">VIOLATION(S)</div>
     <div class="row">
       <div class="field-group wide">
-        <div id="offense-tags" class="tag-container">
-          <input type="text" id="offenseInput" placeholder="Type And Press Enter">
+        <div id="violation-tags" class="tag-container">
+          <input type="text" id="violationInput" placeholder="Type And Press Enter">
         </div>
       </div>
     </div>
@@ -234,30 +163,19 @@
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
-    <div id="popup-overlay"><div class="header-title">✅ Report Submitted</div><div class="header-subtitle">Your Report Has Been Logged</div></div>
-    <div id="error-popup"><div class="header-title">⚠️ Submission Failed</div><div class="header-subtitle">All Fields Are Required</div></div>
-    <div id="pin-popup">
-      <div class="header-title">🔒 PIN Required</div>
-      <div class="header-subtitle">Please enter your 4-digit authorization code to submit</div>
-      <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
-      <div id="pin-error">Wrong PIN code</div>
-      <div style="margin-top: 15px;"><button onclick="validatePin()">Confirm</button></div>
-    </div>
   </div>
-
   <script>
     function autoGrow(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
     }
-    
     document.addEventListener("DOMContentLoaded", () => {
       const locField = document.getElementById("location");
       autoGrow(locField);
       locField.addEventListener("input", () => autoGrow(locField));
     });
-    
-    function randomID() {
+
+   function randomID() {
       const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       const numbers = "0123456789";
       let id = "";
@@ -267,124 +185,71 @@
       id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
       return id;
     }
-
+    
+    const violationInput = document.getElementById('violationInput');
+    const violationContainer = document.getElementById('violation-tags');
+    violationInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && this.value.trim() !== '') {
+        e.preventDefault();
+        addViolationTag(this.value.trim());
+        this.value = '';
+      }
+    });
+    function addViolationTag(text) {
+      const tag = document.createElement('div');
+      tag.className = 'tag';
+      tag.innerHTML = `${text} <span class="remove">×</span>`;
+      violationContainer.insertBefore(tag, violationInput);
+      tag.querySelector('.remove').addEventListener('click', () => tag.remove());
+    }
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
+      document.getElementById('location').value = '';
     }
-
-    function showErrorPopup() {
-      const popup = document.getElementById('error-popup');
-      popup.style.display = 'block';
-      setTimeout(() => popup.style.display = 'none', 3000);
-    }
-
-    function showPopup() {
-      const popup = document.getElementById('popup-overlay');
-      popup.style.display = 'block';
-      setTimeout(() => popup.style.display = 'none', 3000);
-    }
-
     function submitForm() {
       const location = document.getElementById('location').value.trim();
       const datetime = document.getElementById('datetime').value.trim();
-      const defendant = document.getElementById('defendant').value.trim();
-      const officer = document.getElementById('officer').value.trim();
-      const offenses = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
-      if (!location || !datetime || !defendant || !officer || offenses.length === 0) {
-        showErrorPopup();
+      const generatedID = randomID();
+      const name = document.getElementById('name').value.trim();
+      const amount = document.getElementById('amount').value.trim();
+      const violations = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
+      if (!location || !datetime || !name || !amount || violations.length === 0) {
+        alert('All fields are required.');
         return;
       }
-      window.tempSubmissionData = { location, datetime, defendant, officer, offenses };
-      document.getElementById('pin-popup').style.display = 'block';
-      document.getElementById('pin-error').style.display = 'none';
-    }
-
-    function validatePin() {
-      const pin = document.getElementById('pin-input').value.trim();
-      if (pin === '2118') {
-        document.getElementById('pin-popup').style.display = 'none';
-        processSubmission();
-      } else {
-        const err = document.getElementById('pin-error');
-        err.style.display = 'block';
-        const popup = document.getElementById('pin-popup');
-        popup.classList.add('shake');
-        setTimeout(() => popup.classList.remove('shake'), 400);
-      }
-    }
-
-    function processSubmission() {
-      const data = window.tempSubmissionData;
-      const generatedID = randomID();
-      const formattedDateTime = data.datetime.replace('T', ' ');
-
-      const datetimeInput = document.getElementById('datetime');
-      const originalInput = datetimeInput.cloneNode(true);
-      const span = document.createElement('div');
-      span.textContent = formattedDateTime;
-      span.style = datetimeInput.style.cssText;
-      datetimeInput.parentNode.replaceChild(span, datetimeInput);
-
-      const toHide = [
-        document.querySelector('.button-row'),
-        document.querySelector('.header'),
-        document.querySelector('#offenseInput'),
-        ...document.querySelectorAll('.tag .remove')
-      ];
+      const dtField = document.getElementById("datetime");
+      const originalInput = dtField.cloneNode(true);
+      const span = document.createElement("div");
+      span.textContent = datetime.replace("T", " ");
+      span.style = dtField.style.cssText;
+      dtField.parentNode.replaceChild(span, dtField);
+      const toHide = [document.querySelector('.button-row'), document.querySelector('#violationInput'), ...document.querySelectorAll('.tag .remove')];
       toHide.forEach(el => el && (el.style.display = 'none'));
-
-      html2canvas(document.querySelector(".card"), {
-        backgroundColor: null,
-        scale: 2
-      }).then(canvas => {
-        // Restore UI
+      html2canvas(document.querySelector(".card"), { backgroundColor: null, scale: 2 }).then(canvas => {
         span.parentNode.replaceChild(originalInput, span);
         toHide.forEach(el => el && (el.style.display = ''));
-        
         canvas.toBlob(blob => {
           const embed = {
-            title: "ARREST REPORT",
+            title: "CITATION REPORT",
             description: `**ID:** \`${generatedID}\``,
             color: 4737096,
             image: { url: "attachment://report.png" },
             footer: { text: "Department of Justice" },
             timestamp: new Date().toISOString()
           };
-
           const formData = new FormData();
           formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
           formData.append("file", blob, "report.png");
-
           fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
             method: "POST",
             body: formData
-          })
-          .then(() => {
-            showPopup();
+          }).then(() => {
+            alert('Report Submitted Successfully.');
             resetForm();
-          })
-          .catch(() => alert("Failed To Submit Report."));
+          }).catch(() => alert("Failed To Submit Report."));
         });
       });
-    }
-
-    const offenseInput = document.getElementById('offenseInput');
-    const offenseContainer = document.getElementById('offense-tags');
-    offenseInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && this.value.trim()) {
-        e.preventDefault();
-        addOffenseTag(this.value.trim());
-        this.value = '';
-      }
-    });
-
-    function addOffenseTag(text) {
-      const tag = document.createElement('div');
-      tag.className = 'tag';
-      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
-      offenseContainer.insertBefore(tag, offenseInput);
-      tag.querySelector('.remove').onclick = () => tag.remove();
     }
   </script>
 </body>
