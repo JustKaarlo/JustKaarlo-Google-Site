@@ -392,16 +392,6 @@
       datetimeSpan.id = 'datetime-display';
       datetimeInput.parentNode.replaceChild(datetimeSpan, datetimeInput);
 
-      // Replace location textarea with plain div
-      const locationTextarea = document.getElementById('location');
-      const locationClone = locationTextarea.cloneNode(true);
-      const locationDiv = document.createElement('div');
-      locationDiv.textContent = data.location;
-      locationDiv.style = locationTextarea.style.cssText;
-      locationDiv.className = locationTextarea.className;
-      locationDiv.id = 'location-display';
-      locationTextarea.parentNode.replaceChild(locationDiv, locationTextarea);
-
       const elementsToHide = document.querySelectorAll('.hide-for-screenshot');
       elementsToHide.forEach(el => el.style.display = 'none');
       html2canvas(document.querySelector(".card"), {
@@ -413,8 +403,6 @@
           elementsToHide.forEach(el => el.style.display = '');
           const datetimeDisplay = document.getElementById('datetime-display');
           datetimeDisplay.parentNode.replaceChild(datetimeClone, datetimeDisplay);
-          const locationDisplay = document.getElementById('location-display');
-          locationDisplay.parentNode.replaceChild(locationClone, locationDisplay);
 
           const embed = {
             title: "CITATION REPORT",
