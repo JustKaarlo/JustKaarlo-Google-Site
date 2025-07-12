@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <title>Coroner Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
     * {
       font-family: 'Rubik', sans-serif;
@@ -236,12 +237,35 @@
       background: #2C2F33;
       cursor: not-allowed;
     }
+
+    textarea.autogrow {
+      width: 100%;
+      min-height: auto;
+      line-height: 1.4;
+      padding: 6px 10px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #23272A;
+      color: white;
+      resize: none;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+    
+    .row .location {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 15px;
+    }
   </style>
 </head>
 
 <body>
   <div class="card">
-    <div class="header">
+    <div class="header hide-for-screenshot">
       <div class="header-title">MEDICAL EXAMINER-CORONER</div>
       <div class="sub-header">CORONER REPORT</div>
     </div>
@@ -270,7 +294,7 @@
       </div>
       <div class="field-group wide">
         <label>Location</label>
-        <input type="text" id="location">
+        <textarea id="location" class="autogrow" rows="1"></textarea>
       </div>
     </div>
 
@@ -288,7 +312,7 @@
       <label><input type="checkbox" id="cpr"> CPR attempted?</label>
     </div>
 
-    <div class="button-row">
+    <div class="button-row hide-for-screenshot">
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
@@ -313,11 +337,33 @@
   </div>
 
   <script>
+    function autoGrow(el) {
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const locField = document.getElementById("location");
+      autoGrow(locField);
+      locField.addEventListener("input", () => autoGrow(locField));
+    });
+
     window.addEventListener('DOMContentLoaded', () => {
       const examInput = document.getElementById('exam_date');
       const today = new Date().toISOString().split('T')[0];
       examInput.value = today;
     });
+
+    function randomID() {
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const numbers = "0123456789";
+      let id = "";
+      for (let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
+      id += "-";
+      for (let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
+      id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
+      return id;
+    }
 
     function resetForm() {
       const fields = document.querySelectorAll('input:not(#exam_date), textarea');
@@ -379,37 +425,47 @@
       }
     }
 
-    function sendWebhook() {
-      const data = window.tempSubmissionData;
-      const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
-      const niceDateTime = data.datetime.replace('T', ' ');
-      const embed = {
-        title: "CORONER REPORT",
-        color: 4737096,
-        fields: [
-          { name: "> Date of Examination", value: `\`\`\`\n${data.exam_date}\n\`\`\``, inline: false },
-          { name: "> Name", value: `\`\`\`\n${data.name}\n\`\`\``, inline: true },
-          { name: "> Date of Birth", value: `\`\`\`\n${data.dob}\n\`\`\``, inline: true },
-          { name: "> Pronounced Dead (Time & Date)", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
-          { name: "> Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
-          { name: "> Cause of Death", value: `\`\`\`\n${data.cause}\n\`\`\``, inline: false },
-          { name: "> Observations", value: `\`\`\`\nFoul Play: ${data.foul}\nMedications: ${data.meds}\nDefibrillation: ${data.defib}\nCPR: ${data.cpr}\n\`\`\``, inline: false }
-        ],
-        footer: { text: "Medical Examiner Office" },
-        timestamp: new Date().toISOString()
-      };
+  function sendWebhook() {
+    const data = window.tempSubmissionData;
+    const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
+    const niceDateTime = data.datetime.replace('T', ' ');
 
-      fetch(webhookURL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ embeds: [embed] })
-      }).then(() => {
-        showPopup();
-        resetForm();
-      }).catch(() => {
-        alert("Failed to Submit Report.");
+    const embed = {
+      title: "CORONER REPORT",
+      description: `**ID:** \`${generatedID}\``,
+      color: 4737096,
+      footer: { text: "Medical Examiner Office" },
+      timestamp: new Date().toISOString(),
+      image: { url: "attachment://report.png" }
+    };
+
+    const toHide = document.querySelectorAll('.hide-for-screenshot');
+    toHide.forEach(el => el.style.display = 'none');
+
+    html2canvas(document.querySelector(".card"), {
+      backgroundColor: null,
+      scale: 2,
+      useCORS: true
+    }).then(canvas => {
+      canvas.toBlob(blob => {
+        toHide.forEach(el => el.style.display = '');
+
+        const formData = new FormData();
+        formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
+        formData.append("file", blob, "report.png");
+
+        fetch(webhookURL, {
+          method: 'POST',
+          body: formData
+        }).then(() => {
+          showPopup();
+          resetForm();
+        }).catch(() => {
+          alert("Failed to Submit Report.");
+        });
       });
-    }
+    });
+  }
   </script>
 </body>
 </html>
