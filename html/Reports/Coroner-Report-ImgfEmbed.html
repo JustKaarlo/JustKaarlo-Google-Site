@@ -432,7 +432,15 @@
     function sendWebhook() {
       const data = window.tempSubmissionData;
       const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
-      const niceDateTime = data.datetime.replace('T', ' ');
+      const formattedDateTime = data.datetime.replace('T', ' ');
+      const datetimeInput = document.getElementById('datetime');
+      const datetimeClone = datetimeInput.cloneNode(true);
+      const datetimeSpan = document.createElement('div');
+      datetimeSpan.textContent = formattedDateTime;
+      datetimeSpan.style = datetimeInput.style.cssText;
+      datetimeSpan.className = datetimeInput.className;
+      datetimeSpan.id = 'datetime-display';
+      datetimeInput.parentNode.replaceChild(datetimeSpan, datetimeInput);
       const generatedID = randomID();
 
       const embed = {
