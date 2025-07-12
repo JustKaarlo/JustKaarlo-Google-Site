@@ -1,402 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Arrest Report</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Discord Embed Demo</title>
   <style>
-    * { font-family: 'Rubik', sans-serif; }
     body {
-      background: transparent;
-      padding: 30px;
-      max-width: 750px;
-      margin: auto;
-      color: white;
-    }
-    .card {
-      background: #2C2F33;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-      padding: 0;
-      overflow: hidden;
-      position: relative;
-    }
-    .header {
-      background: #56585B;
-      padding: 15px;
-      text-align: center;
-    }
-    .header-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: white;
+      font-family: Arial, sans-serif;
       margin: 0;
+      padding: 1rem;
+      background: #f4f4f4;
+      color: #333;
     }
-    .header-subtitle {
-      font-size: 15px;
-      font-style: bold;
-      color: #ccc;
-      margin-top: 4px;
-    }
-    .section-title {
-      font-weight: bold;
-      font-size: 16px;
-      background: #23272A;
+    h1 {
       text-align: center;
-      padding: 8px;
-      margin-top: 20px;
-      border-radius: 6px;
+      margin-bottom: 1rem;
     }
-    .row {
+    .widgets {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin: 15px;
+      justify-content: center;
+      gap: 2rem;
     }
-    .field-group {
-      flex: 1;
-      min-width: 150px;
-      display: flex;
-      flex-direction: column;
+    .widget {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    .field-group label {
-      font-size: 13px;
-      margin-bottom: 4px;
-      color: #ccc;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-    input[type="text"], input[type="datetime-local"] {
-      padding: 6px 10px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      font-size: 14px;
-      background: #23272A;
-      color: white;
-    }
-    .wide { width: 100%; }
-    button {
-      background-color: #3c78d8;
-      color: white;
+    .widget iframe, .widget widgetbot {
+      display: block;
+      margin: 0 auto;
       border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-    button:hover { background-color: #5187dc; }
-    .tag-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 6px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      background: #23272A;
-    }
-    .tag-container input {
-      border: none;
-      flex: 1;
-      min-width: 120px;
-      padding: 6px 8px;
-      font-size: 14px;
-      background: transparent;
-      color: white;
-      outline: none;
-    }
-    .tag {
-      background-color: #99aab5;
-      color: #2C2F33;
-      padding: 5px 10px;
-      border-radius: 12px;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-    }
-    .tag .remove {
-      margin-left: 8px;
-      color: #2C2F33;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    .button-row {
-      display: flex;
-      gap: 10px;
-      margin: 15px;
-    }
-    .clear-btn {
-      background-color: #4f545c;
-      color: #c0c0c0;
-    }
-    .clear-btn:hover {
-      background-color: #5d626a;
-    }
-    .submit-btn { flex: 1; }
-    #popup-overlay, #error-popup, #pin-popup {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #23272A;
-      color: white;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-      display: none;
-      z-index: 10;
-      max-width: 90%;
-      text-align: center;
-    }
-    #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
-    #popup-overlay .header-subtitle,
-    #error-popup .header-subtitle,
-    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
-    #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
-    #pin-popup input {
-      width: 100%;
-      padding: 10px;
-      font-size: 18px;
-      text-align: center;
-      margin-top: 15px;
-      border-radius: 6px;
-      border: 1px solid #444;
-      background: #2C2F33;
-      color: white;
-    }
-    #pin-error {
-      color: #f04747;
-      font-size: 14px;
-      margin-top: 10px;
-      display: none;
-    }
-    .shake {
-      animation: shake 0.4s;
-    }
-    @keyframes shake {
-      0% { transform: translate(-50%, -50%) translateX(0); }
-      25% { transform: translate(-50%, -50%) translateX(-10px); }
-      50% { transform: translate(-50%, -50%) translateX(10px); }
-      75% { transform: translate(-50%, -50%) translateX(-10px); }
-      100% { transform: translate(-50%, -50%) translateX(0); }
-    }
-    textarea.autogrow {
-      width: 100%;
-      min-height: auto;
-      line-height: 1.4;
-      padding: 6px 10px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      font-size: 14px;
-      background: #23272A;
-      color: white;
-      resize: none;
-      overflow: hidden;
-      box-sizing: border-box;
+      border-radius: 4px;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="header">
-      <div class="header-title">DEPARTMENT OF JUSTICE</div>
-      <div class="header-subtitle">ARREST REPORT</div>
+  <h1>Discord Embeds</h1>
+
+  <div class="widgets">
+    <!-- 1. Official “Join” Widget -->
+    <div class="widget">
+      <h2>Join Widget</h2>
+      <iframe
+        src="https://discord.com/widget?id=1272710971743404053&theme=dark"
+        width="350"
+        height="500"
+        allowtransparency="true"
+        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+      ></iframe>
     </div>
-    <div class="row">
-      <div class="field-group wide">
-        <label>Location</label>
-        <textarea id="location" class="autogrow" rows="1"></textarea>
-      </div>
-      <div class="field-group"><label>Time & Date</label><input type="datetime-local" id="datetime"></div>
-    </div>
-    <div class="row">
-      <div class="field-group"><label>Defendant</label><input type="text" id="defendant"></div>
-      <div class="field-group"><label>Arresting Officer</label><input type="text" id="officer"></div>
-    </div>
-    <div class="section-title">CRIMINAL OFFENSE(S)</div>
-    <div class="row">
-      <div class="field-group wide">
-        <div id="offense-tags" class="tag-container">
-          <input type="text" id="offenseInput" placeholder="Type And Press Enter">
-        </div>
-      </div>
-    </div>
-    <div class="button-row">
-      <button class="clear-btn" onclick="resetForm()">Clear</button>
-      <button class="submit-btn" onclick="submitForm()">Submit</button>
-    </div>
-    <div id="popup-overlay">
-      <div class="header-title">✅ Report Submitted</div>
-      <div class="header-subtitle">Your Report Has Been Logged</div>
-    </div>
-    <div id="error-popup">
-      <div class="header-title">⚠️ Submission Failed</div>
-      <div class="header-subtitle">All Fields Are Required</div>
-    </div>
-    <div id="pin-popup">
-      <div class="header-title">🔒 PIN Required</div>
-      <div class="header-subtitle">Please enter your 4-digit authorization code to submit</div>
-      <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
-      <div id="pin-error">Wrong PIN code</div>
-      <div style="margin-top: 15px;">
-        <button onclick="validatePin()">Confirm</button>
-      </div>
+
+    <!-- 2. Full Chat via WidgetBot -->
+    <div class="widget">
+      <h2>Live Chat</h2>
+      <widgetbot
+        server="1272710971743404053"
+        channel="1393650820943188059"
+        width="350"
+        height="500"
+      ></widgetbot>
     </div>
   </div>
 
-  <script>
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1393653107174408394/Xa0zlUDF77IJ31NwWmFtrNzC6DT8ttg2Fminq-YtPFDxpMLX9IZpROU3PGfPfKaNUKKR";
-    const THREAD_ID   = "1393656493751930971";
-
-    function autoGrow(el) {
-      el.style.height = 'auto';
-      el.style.height = el.scrollHeight + 'px';
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const locField = document.getElementById("location");
-      autoGrow(locField);
-      locField.addEventListener("input", () => autoGrow(locField));
-    });
-
-    function randomID() {
-      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      const numbers = "0123456789";
-      let id = "";
-      for(let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
-      id += "-";
-      for(let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
-      id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
-      return id;
-    }
-
-    function resetForm() {
-      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
-      document.querySelectorAll('.tag').forEach(tag => tag.remove());
-    }
-
-    function showErrorPopup() {
-      const popup = document.getElementById('error-popup');
-      popup.style.display = 'block';
-      setTimeout(() => popup.style.display = 'none', 3000);
-    }
-
-    function showPopup() {
-      const popup = document.getElementById('popup-overlay');
-      popup.style.display = 'block';
-      setTimeout(() => popup.style.display = 'none', 3000);
-    }
-
-    function submitForm() {
-      const location = document.getElementById('location').value.trim();
-      const datetime = document.getElementById('datetime').value.trim();
-      const defendant = document.getElementById('defendant').value.trim();
-      const officer = document.getElementById('officer').value.trim();
-      const offenses = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
-
-      if (!location || !datetime || !defendant || !officer || offenses.length === 0) {
-        showErrorPopup();
-        return;
-      }
-
-      window.tempSubmissionData = { location, datetime, defendant, officer, offenses };
-      document.getElementById('pin-popup').style.display = 'block';
-      document.getElementById('pin-error').style.display = 'none';
-    }
-
-    function validatePin() {
-      const pin = document.getElementById('pin-input').value.trim();
-      if (pin === '2118') {
-        document.getElementById('pin-popup').style.display = 'none';
-        processSubmission();
-      } else {
-        const err = document.getElementById('pin-error');
-        err.style.display = 'block';
-        const popup = document.getElementById('pin-popup');
-        popup.classList.add('shake');
-        setTimeout(() => popup.classList.remove('shake'), 400);
-      }
-    }
-
-    function processSubmission() {
-      const data = window.tempSubmissionData;
-      const generatedID = randomID();
-      const formattedDateTime = data.datetime.replace('T', ' ');
-
-      // hide inputs for clean screenshot
-      const datetimeInput = document.getElementById('datetime');
-      const originalInput = datetimeInput.cloneNode(true);
-      const span = document.createElement('div');
-      span.textContent = formattedDateTime;
-      span.style = datetimeInput.style.cssText;
-      datetimeInput.parentNode.replaceChild(span, datetimeInput);
-
-      const toHide = [
-        document.querySelector('.button-row'),
-        document.querySelector('.header'),
-        document.querySelector('#offenseInput'),
-        ...document.querySelectorAll('.tag .remove')
-      ];
-      toHide.forEach(el => el && (el.style.display = 'none'));
-
-      html2canvas(document.querySelector(".card"), {
-        backgroundColor: null,
-        scale: 2
-      }).then(canvas => {
-        // restore UI
-        span.parentNode.replaceChild(originalInput, span);
-        toHide.forEach(el => el && (el.style.display = ''));
-
-        canvas.toBlob(blob => {
-          const embed = {
-            title: "ARREST REPORT",
-            color: 4737096,
-            fields: [
-              { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
-            ],
-            image: { url: "attachment://report.png" },
-            footer: { text: "Department of Justice" },
-            timestamp: new Date().toISOString()
-          };
-
-          const formData = new FormData();
-          formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
-          formData.append("file", blob, "report.png");
-
-          // attach thread_id query param
-          const urlWithThread = `${WEBHOOK_URL}?thread_id=${THREAD_ID}`;
-
-          fetch(urlWithThread, {
-            method: "POST",
-            body: formData
-          })
-          .then(() => {
-            showPopup();
-            resetForm();
-          })
-          .catch(() => alert("Failed to Submit Report."));
-        });
-      });
-    }
-
-    const offenseInput = document.getElementById('offenseInput');
-    const offenseContainer = document.getElementById('offense-tags');
-    offenseInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && this.value.trim()) {
-        e.preventDefault();
-        addOffenseTag(this.value.trim());
-        this.value = '';
-      }
-    });
-
-    function addOffenseTag(text) {
-      const tag = document.createElement('div');
-      tag.className = 'tag';
-      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
-      offenseContainer.insertBefore(tag, offenseInput);
-      tag.querySelector('.remove').onclick = () => tag.remove();
-    }
-  </script>
+  <!-- WidgetBot script (needed for the <widgetbot> tag) -->
+  <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
 </body>
 </html>
