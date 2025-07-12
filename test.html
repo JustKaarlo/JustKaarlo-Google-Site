@@ -282,30 +282,28 @@
   function processSubmission() {
     const data = window.tempSubmissionData;
     const generatedID = randomID();
-  
-    // Elements to temporarily hide
+    const formattedDateTime = data.datetime.replace('T', ' ');
     const elementsToHide = [
-      document.querySelector('.button-row'),
-      document.querySelector('.header'),
-      document.querySelector('#offenseInput')
+      document.querySelector('.button-row'),         // Hide buttons
+      document.querySelector('.header'),             // Hide title + subtitle
+      document.querySelector('#offenseInput'),       // Hide offense input
+      ...document.querySelectorAll('.tag .remove')   // Hide X buttons on tags
     ];
-  
-    // Hide elements
+    const datetimeInput = document.getElementById('datetime');
+    const originalDatetimeValue = datetimeInput.value;
+    datetimeInput.value = formattedDateTime;
     elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
-  
-    // Take screenshot
-        html2canvas(document.querySelector(".card"), {
-          backgroundColor: null, // transparent outside
-          useCORS: true,
-          scale: 2 // optional: better quality
-        }).then(canvas => {
-      // Restore elements
+    html2canvas(document.querySelector(".card"), {
+      backgroundColor: null,
+      useCORS: true,
+      scale: 2
+    }).then(canvas => {
       elementsToHide.forEach(el => { if (el) el.style.display = ''; });
-  
+      datetimeInput.value = originalDatetimeValue;
       canvas.toBlob(blob => {
         const embed = {
           title: "ARREST REPORT",
-          description: `**Report ID:** \`${generatedID}\``,
+          description: `**ID:** \`${generatedID}\``,
           color: 4737096,
           image: { url: `attachment://report.png` },
           footer: { text: "Department of Justice" },
@@ -328,133 +326,6 @@
       });
     });
   }
-
-function buildHTMLFile(id, data) {
-  const html = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Arrest Report - ${id}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
-  <style>
-    * { font-family: 'Rubik', sans-serif; }
-    body {
-      background: transparent;
-      padding: 30px;
-      max-width: 750px;
-      margin: auto;
-      color: white;
-    }
-    .card {
-      background: #2C2F33;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-      overflow: hidden;
-    }
-    .header {
-      background: #56585B;
-      padding: 15px;
-      text-align: center;
-    }
-    .header-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: white;
-      margin: 0;
-    }
-    .header-subtitle {
-      font-size: 15px;
-      font-style: bold;
-      color: #ccc;
-      margin-top: 4px;
-    }
-    .section-title {
-      font-weight: bold;
-      font-size: 16px;
-      background: #23272A;
-      text-align: center;
-      padding: 8px;
-      margin-top: 20px;
-      border-radius: 6px;
-    }
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 15px;
-    }
-    .field-group {
-      flex: 1;
-      min-width: 150px;
-      display: flex;
-      flex-direction: column;
-    }
-    .field-group label {
-      font-size: 13px;
-      margin-bottom: 4px;
-      color: #ccc;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-    .value {
-      font-size: 14px;
-      padding: 6px 10px;
-      background: #23272A;
-      border-radius: 6px;
-    }
-    .wide { width: 100%; }
-    .tag {
-      background-color: #99aab5;
-      color: #2C2F33;
-      padding: 5px 10px;
-      border-radius: 12px;
-      font-size: 13px;
-      display: inline-block;
-      margin: 2px 4px 2px 0;
-    }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <div class="header">
-      <div class="header-title">DEPARTMENT OF JUSTICE</div>
-      <div class="header-subtitle">ARREST REPORT</div>
-    </div>
-    <div class="row">
-      <div class="field-group wide"><label>Report ID</label><div class="value">${id}</div></div>
-    </div>
-    <div class="row">
-      <div class="field-group wide"><label>Location</label><div class="value">${data.location}</div></div>
-      <div class="field-group"><label>Time & Date</label><div class="value">${data.datetime.replace("T", " ")}</div></div>
-    </div>
-    <div class="row">
-      <div class="field-group"><label>Defendant</label><div class="value">${data.defendant}</div></div>
-      <div class="field-group"><label>Arresting Officer</label><div class="value">${data.officer}</div></div>
-    </div>
-    <div class="section-title">CRIMINAL OFFENSE(S)</div>
-    <div class="row">
-      <div class="field-group wide">
-        ${data.offenses.map(off => `<span class="tag">${off}</span>`).join('')}
-      </div>
-    </div>
-  </div>
-</body>
-</html>
-`;
-  return new Blob([html], { type: "text/html" });
-}
-  
-  const offenseInput = document.getElementById('offenseInput');
-  const offenseContainer = document.getElementById('offense-tags');
-  offenseInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && this.value.trim() !== '') {
-      e.preventDefault();
-      addOffenseTag(this.value.trim());
-      this.value = '';
-    }
-  });
-  
   function addOffenseTag(text) {
     const tag = document.createElement('div');
     tag.className = 'tag';
