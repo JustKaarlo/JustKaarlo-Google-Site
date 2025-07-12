@@ -371,6 +371,9 @@
         if (el.type === 'checkbox') el.checked = false;
         else el.value = '';
       });
+      const loc = document.getElementById('location');
+      loc.value = '';
+      autoGrow(loc);
     }
 
     function showErrorPopup() {
