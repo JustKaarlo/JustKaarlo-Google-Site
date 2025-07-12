@@ -2,73 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Webhook Trigger with Thread ID</title>
-  <style>
-    body { font-family: sans-serif; padding: 2rem; }
-    input, button { font-size: 1rem; padding: .5rem; margin: .5rem 0; }
-  </style>
+  <title>Test Webhook</title>
 </head>
 <body>
-  <!-- Thread ID field -->
-  <label for="thread-id">Thread ID (optional):</label><br>
-  <input type="text" id="thread-id" placeholder="Enter thread ID here"><br>
-
-  <!-- Your on-page button -->
+  <label for="thread-id">Thread ID (opt):</label><br>
+  <input id="thread-id" placeholder="Thread ID"><br>
   <button id="trigger-btn">Send Embed 🚀</button>
-
   <script>
-    // ← put your webhook base URL here (without any query params)
-    const webhookBase = 'https://discord.com/api/webhooks/1393653107174408394/Xa0zlUDF77IJ31NwWmFtrNzC6DT8ttg2Fminq-YtPFDxpMLX9IZpROU3PGfPfKaNUKKR';
-
-    document.getElementById('trigger-btn').addEventListener('click', () => {
-      // grab the thread ID if given
-      const threadId = document.getElementById('thread-id').value.trim();
-      // build the full URL
-      const url = threadId
-        ? `${webhookBase}?thread_id=${encodeURIComponent(threadId)}`
-        : webhookBase;
-
-      const payload = {
-        username: 'My Webhook Bot',
-        avatar_url: '',
-        embeds: [
-          {
-            title: 'Hey there!',
-            description: 'Click the button below',
-            color: 0x3498db
-          }
-        ],
-        components: [
-          {
-            type: 1,
-            components: [
-              {
-                type: 2,
-                style: 5,
-                label: 'Go to Link',
-                url: 'https://example.com'
-              }
-            ]
-          }
-        ]
-      };
-
-      fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-      .then(res => {
-        if (res.ok) {
-          alert('Embed sent successfully!');
-        } else {
-          alert('Failed to send: ' + res.status);
-        }
-      })
-      .catch(err => {
-        alert('Error sending webhook: ' + err);
+    const base = 'https://discord.com/api/webhooks/ID/TOKEN';
+    document.getElementById('trigger-btn')
+      .addEventListener('click', () => {
+        const t = document.getElementById('thread-id').value.trim();
+        const url = t ? `${base}?thread_id=${t}` : base;
+        fetch(url, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            embeds:[{
+              title:'Embed with Button',
+              description:'You should see a button below'
+            }],
+            components:[{
+              type:1,
+              components:[{
+                type:2, style:5,
+                label:'Go to Link',
+                url:'https://example.com'
+              }]
+            }]
+          })
+        })
+        .then(r=>r.ok?alert('Sent! Check Discord'):alert('ERR:'+r.status));
       });
-    });
   </script>
 </body>
 </html>
