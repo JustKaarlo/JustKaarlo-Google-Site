@@ -7,7 +7,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* make room for particles layer */
     body {
+      position: relative;
       font-family: 'Rubik', sans-serif;
       background:
         linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
@@ -20,6 +23,26 @@
       justify-content: center;
       padding: 2rem;
     }
+
+    /* particles canvas */
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* lift content above particles */
+    .grid,
+    .modal-overlay,
+    .modal {
+      position: relative;
+      z-index: 1;
+    }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -27,6 +50,7 @@
       width: 100%;
       max-width: 1000px;
     }
+
     .card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -91,6 +115,9 @@
   </style>
 </head>
 <body>
+  <!-- particles layer -->
+  <div id="particles-js"></div>
+
   <div class="grid">
     <div id="attila-card" class="card">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Total War Attila">
@@ -119,6 +146,8 @@
     </div>
   </div>
 
+  <!-- particles.js lib -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const overlay        = document.getElementById('overlay');
@@ -152,6 +181,49 @@
         e.stopPropagation();
         overlay.style.display = 'none';
         frame.src = '';
+      });
+
+      /* init fire-like particles */
+      particlesJS('particles-js', {
+        particles: {
+          number: {
+            value: 90,
+            density: { enable: true, value_area: 700 }
+          },
+          color: { value: ['#ff4500','#ff8c00','#ffd700'] },
+          shape: { type: 'circle' },
+          opacity: {
+            value: 0.6,
+            random: true,
+            anim: { enable: true, speed: 1.2, opacity_min: 0.2, sync: false }
+          },
+          size: {
+            value: 4,
+            random: true,
+            anim: { enable: true, speed: 4, size_min: 1, sync: false }
+          },
+          line_linked: {
+            enable: false
+          },
+          move: {
+            enable: true,
+            speed: 2,
+            direction: 'top',
+            random: true,
+            straight: false,
+            out_mode: 'out',
+            bounce: false
+          }
+        },
+        interactivity: {
+          detect_on: 'canvas',
+          events: {
+            onhover: { enable: false },
+            onclick: { enable: false },
+            resize: true
+          }
+        },
+        retina_detect: true
       });
     });
   </script>
