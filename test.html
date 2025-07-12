@@ -1,256 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Citation Report</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <title>Reports</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
-    * { font-family: 'Rubik', sans-serif; }
-    body {
-      background: transparent;
-      padding: 30px;
-      max-width: 750px;
-      margin: auto;
-      color: white;
-    }
-    .card {
-      background: #2C2F33;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-      padding: 0;
-      overflow: hidden;
-      position: relative;
-    }
-    .header {
-      background: #56585B;
-      padding: 15px;
-      text-align: center;
-    }
-    .header-title {
-      font-size: 20px;
-      font-weight: bold;
-      color: white;
+    * {
+      box-sizing: border-box;
+      font-family: 'Rubik', sans-serif;
       margin: 0;
+      padding: 0;
     }
-    .header-subtitle {
-      font-size: 15px;
-      color: #ccc;
-      margin-top: 4px;
-    }
-    .section-title {
-      font-weight: bold;
-      font-size: 16px;
-      background: #23272A;
-      text-align: center;
-      padding: 8px;
-      margin-top: 20px;
-      border-radius: 6px;
-    }
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 15px;
-    }
-    .field-group {
-      flex: 1;
-      min-width: 150px;
-      display: flex;
-      flex-direction: column;
-    }
-    .field-group label {
-      font-size: 13px;
-      margin-bottom: 4px;
-      color: #ccc;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-    input[type="text"], input[type="datetime-local"], textarea.autogrow {
-      padding: 6px 10px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      font-size: 14px;
-      background: #23272A;
-      color: white;
-      resize: none;
+
+    html,
+    body {
+      height: 100%;
       overflow: hidden;
-    }
-    .wide { width: 100%; }
-    .tag-container {
+      background: none;
       display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 6px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      background: #23272A;
-    }
-    .tag-container input {
-      border: none;
-      flex: 1;
-      min-width: 120px;
-      padding: 6px 8px;
-      font-size: 14px;
-      background: transparent;
-      color: white;
-      outline: none;
-    }
-    .tag {
-      background-color: #99aab5;
-      color: #2C2F33;
-      padding: 5px 10px;
-      border-radius: 12px;
-      font-size: 13px;
-      display: flex;
+      justify-content: center;
       align-items: center;
     }
-    .tag .remove {
-      margin-left: 8px;
-      color: #2C2F33;
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center/cover;
+      filter: blur(8px);
+      transform: scale(1.05);
+      z-index: -2;
+    }
+
+    #particle-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .container {
+      position: relative;
+      grid-auto-flow: row dense;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      max-width: 1200px;
+      width: 100%;
+      padding: 20px 50px 50px;
+      margin: 0 auto;
+    }
+
+    .title {
+      grid-column: 1 / -1;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .title h1 {
+      font-size: 64px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.9);
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    }
+
+    .report-btn {
+      background: rgba(44, 47, 51, 0.15);
+      color: white;
+      font-weight: 800;
+      font-size: 34px;
+      letter-spacing: 2px;
+      padding: 30px 25px;
+      /*defualt: padding: 40px 30px; */
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+      width: 100%;
+      text-align: center;
+    }
+
+    .report-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    }
+
+    .report-btn.center-align {
+      grid-column: 2 / 3;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      z-index: 3;
+    }
+
+    .modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 850px;
+      background: transparent;
+      overflow: hidden;
+      display: none;
+      z-index: 4;
+      transition: height 0.2s ease;
+    }
+
+    .iframe-wrapper {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      position: relative;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .iframe-wrapper::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+      background: transparent;
+    }
+
+    .iframe-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: -17px;
+      width: calc(100% + 17px);
+      height: 100%;
+      border: none;
+      background: transparent;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: #f04747;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 10px;
       cursor: pointer;
       font-weight: bold;
+      z-index: 5;
     }
-    .button-row {
-      display: flex;
-      gap: 10px;
-      margin: 15px;
-    }
-    .clear-btn {
-      background-color: #4f545c;
-      color: #c0c0c0;
-    }
-    .clear-btn:hover { background-color: #5d626a; }
-    .submit-btn { flex: 1; background-color: #3c78d8; color: white; border: none; border-radius: 6px; font-size: 16px; padding: 12px; cursor: pointer; transition: background 0.3s ease; }
-    .submit-btn:hover { background-color: #5187dc; }
   </style>
 </head>
+
 <body>
-  <div class="card">
-    <div class="header">
-      <div class="header-title">DEPARTMENT OF JUSTICE</div>
-      <div class="header-subtitle">CITATION REPORT</div>
+  <canvas id="particle-canvas"></canvas>
+  <div class="container">
+    <div class="title">
+      <h1>FILE A REPORT</h1>
     </div>
-    <div class="row">
-      <div class="field-group wide">
-        <label>Location</label>
-        <textarea id="location" class="autogrow" rows="1"></textarea>
-      </div>
-      <div class="field-group">
-        <label>Time & Date</label>
-        <input type="datetime-local" id="datetime">
-      </div>
-    </div>
-    <div class="row">
-      <div class="field-group">
-        <label>Name</label>
-        <input type="text" id="name">
-      </div>
-      <div class="field-group">
-        <label>Amount</label>
-        <input type="text" id="amount" placeholder="$">
-      </div>
-    </div>
-    <div class="section-title">VIOLATION(S)</div>
-    <div class="row">
-      <div class="field-group wide">
-        <div id="violation-tags" class="tag-container">
-          <input type="text" id="violationInput" placeholder="Type And Press Enter">
-        </div>
-      </div>
-    </div>
-    <div class="button-row">
-      <button class="clear-btn" onclick="resetForm()">Clear</button>
-      <button class="submit-btn" onclick="submitForm()">Submit</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html')">ARREST</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Citation-Report.html')">CITATION</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Coroner-Report.html')">CORONER</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Medical-Report.html')">MEDICAL</button>
+    <button class="report-btn center-align"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Fire-Incident-Report.html')">FIRE
+      INCIDENT</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/TOW-Report.html')">TOW</button>
+    <button class="report-btn"
+      onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Prison-Transport.html')">PRISON
+      TRANSPORT</button>
+  </div>
+  <div class="overlay" id="overlay" onclick="closeModal()"></div>
+  <div class="modal" id="modal">
+    <button class="close-btn" onclick="closeModal()">Close</button>
+    <div class="iframe-wrapper">
+      <iframe id="modal-frame"></iframe>
     </div>
   </div>
   <script>
-    function autoGrow(el) {
-      el.style.height = 'auto';
-      el.style.height = el.scrollHeight + 'px';
+    // Particle background
+    const canvas = document.getElementById('particle-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    function resize() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     }
-    document.addEventListener("DOMContentLoaded", () => {
-      const locField = document.getElementById("location");
-      autoGrow(locField);
-      locField.addEventListener("input", () => autoGrow(locField));
-    });
+    window.addEventListener('resize', resize);
 
-   function randomID() {
-      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      const numbers = "0123456789";
-      let id = "";
-      for(let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
-      id += "-";
-      for(let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
-      id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
-      return id;
-    }
-    
-    const violationInput = document.getElementById('violationInput');
-    const violationContainer = document.getElementById('violation-tags');
-    violationInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && this.value.trim() !== '') {
-        e.preventDefault();
-        addViolationTag(this.value.trim());
-        this.value = '';
+    class Particle {
+      constructor() {
+        this.init();
       }
-    });
-    function addViolationTag(text) {
-      const tag = document.createElement('div');
-      tag.className = 'tag';
-      tag.innerHTML = `${text} <span class="remove">×</span>`;
-      violationContainer.insertBefore(tag, violationInput);
-      tag.querySelector('.remove').addEventListener('click', () => tag.remove());
-    }
-    function resetForm() {
-      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
-      document.querySelectorAll('.tag').forEach(tag => tag.remove());
-      document.getElementById('location').value = '';
-    }
-    function submitForm() {
-      const location = document.getElementById('location').value.trim();
-      const datetime = document.getElementById('datetime').value.trim();
-      const generatedID = randomID();
-      const name = document.getElementById('name').value.trim();
-      const amount = document.getElementById('amount').value.trim();
-      const violations = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
-      if (!location || !datetime || !name || !amount || violations.length === 0) {
-        alert('All fields are required.');
-        return;
+      init() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
       }
-      const dtField = document.getElementById("datetime");
-      const originalInput = dtField.cloneNode(true);
-      const span = document.createElement("div");
-      span.textContent = datetime.replace("T", " ");
-      span.style = dtField.style.cssText;
-      dtField.parentNode.replaceChild(span, dtField);
-      const toHide = [document.querySelector('.button-row'), document.querySelector('#violationInput'), ...document.querySelectorAll('.tag .remove')];
-      toHide.forEach(el => el && (el.style.display = 'none'));
-      html2canvas(document.querySelector(".card"), { backgroundColor: null, scale: 2 }).then(canvas => {
-        span.parentNode.replaceChild(originalInput, span);
-        toHide.forEach(el => el && (el.style.display = ''));
-        canvas.toBlob(blob => {
-          const embed = {
-            title: "CITATION REPORT",
-            description: `**ID:** \`${generatedID}\``,
-            color: 4737096,
-            image: { url: "attachment://report.png" },
-            footer: { text: "Department of Justice" },
-            timestamp: new Date().toISOString()
-          };
-          const formData = new FormData();
-          formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
-          formData.append("file", blob, "report.png");
-          fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
-            method: "POST",
-            body: formData
-          }).then(() => {
-            alert('Report Submitted Successfully.');
-            resetForm();
-          }).catch(() => alert("Failed To Submit Report."));
-        });
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+          this.init();
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.08)';
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
       });
+      requestAnimationFrame(animateParticles);
     }
+
+    resize();
+    initParticles();
+    animateParticles();
+
+    // Modal logic
+    const modal = document.getElementById('modal');
+    const iframe = document.getElementById('modal-frame');
+    const overlay = document.getElementById('overlay');
+    function openModal(src) {
+      overlay.style.display = 'block';
+      modal.style.display = 'block';
+      iframe.onload = () => {
+        const maxH = window.innerHeight * 0.95;
+        let h;
+        try {
+          const doc = iframe.contentDocument || iframe.contentWindow.document;
+          h = Math.min(doc.documentElement.scrollHeight, maxH);
+          doc.documentElement.style.scrollbarWidth = 'none';
+          doc.documentElement.style.msOverflowStyle = 'none';
+          doc.body.style.scrollbarWidth = 'none';
+          doc.body.style.msOverflowStyle = 'none';
+          const styleTag = doc.createElement('style');
+          styleTag.textContent = `html::-webkit-scrollbar, body::-webkit-scrollbar {width:0; height:0; background: transparent;}`;
+          doc.head.appendChild(styleTag);
+        } catch {
+          h = maxH;
+        }
+        modal.style.height = h + 'px';
+      };
+      iframe.src = src;
+    }
+
+    function closeModal() {
+      modal.style.display = 'none';
+      overlay.style.display = 'none';
+      iframe.src = '';
+      modal.style.height = '';
+    }
+    window.addEventListener('DOMContentLoaded', () => {
+      openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html');
+    });
   </script>
 </body>
 </html>
