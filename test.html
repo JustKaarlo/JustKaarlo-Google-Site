@@ -294,7 +294,9 @@
       modal.style.height = '';
     }
     window.addEventListener('DOMContentLoaded', () => {
-      openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html');
+      if (window.location.hash === '#arrest-report') {
+        openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html');
+      }
     });
   </script>
 </body>
