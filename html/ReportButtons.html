@@ -293,6 +293,22 @@
       iframe.src = '';
       modal.style.height = '';
     }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const which = params.get('report');
+
+    if (which === 'arrest') {
+      openModal(
+        'https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html'
+      );
+    }
+    else if (which === 'citation') {
+      openModal(
+        'https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Citation-Report.html'
+      );
+    }
+  });
   </script>
 </body>
 </html>
