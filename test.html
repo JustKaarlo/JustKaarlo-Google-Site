@@ -193,6 +193,18 @@
       min-height: 40px;
       line-height: 1.4;
     }
+    textarea.autogrow {
+      padding: 6px 10px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #23272A;
+      color: white;
+      resize: none;
+      overflow: hidden;
+      line-height: 1.4;
+      width: 100%;
+    }
   </style>
 </head>
 <body>
@@ -202,7 +214,7 @@
       <div class="header-subtitle">ARREST REPORT</div>
     </div>
     <div class="row">
-      <div class="field-group wide"><label>Location</label><input type="text" id="location"></div>
+      <div class="field-group wide"><label>Location</label><textarea id="location" rows="1" class="autogrow"></textarea></div>
       <div class="field-group"><label>Time & Date</label><input type="datetime-local" id="datetime"></div>
     </div>
     <div class="row">
@@ -233,6 +245,16 @@
   </div>
 
   <script>
+    function autoGrow(el) {
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
+    }
+    
+    document.addEventListener("DOMContentLoaded", () => {
+      const locationField = document.getElementById("location");
+      locationField.addEventListener("input", () => autoGrow(locationField));
+    });
+    
     function randomID() {
       const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       const numbers = "0123456789";
