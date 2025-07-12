@@ -472,7 +472,10 @@
       }).then(canvas => {
         canvas.toBlob(blob => {
           toHide.forEach(el => el.style.display = '');
-          datetimeDisplay.parentNode.replaceChild(datetimeClone, datetimeDisplay);
+          const datetimeDisplay = document.getElementById('datetime-display');
+          if (datetimeDisplay) {
+            datetimeDisplay.parentNode.replaceChild(datetimeClone, datetimeDisplay);
+          }
 
           const formData = new FormData();
           formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
