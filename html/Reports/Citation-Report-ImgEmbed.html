@@ -387,6 +387,12 @@
       span.style = datetimeInput.style.cssText;
       datetimeInput.parentNode.replaceChild(span, datetimeInput);
 
+      const toHide = [
+        document.querySelector('.button-row'),
+        document.querySelector('.header'),
+        document.querySelector('#violationInput'),
+        ...document.querySelectorAll('.tag .remove')
+      ];
       const elementsToHide = document.querySelectorAll('.hide-for-screenshot');
       elementsToHide.forEach(el => el.style.display = 'none');
 
