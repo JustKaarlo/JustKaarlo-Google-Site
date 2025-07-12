@@ -455,8 +455,10 @@
 
       const embed = {
         title: "CORONER REPORT",
-        description: `**ID:** \`${generatedID}\``,
         color: 4737096,
+        fields: [
+          { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
+        ],
         footer: { text: "Medical Examiner Office" },
         timestamp: new Date().toISOString(),
         image: { url: "attachment://report.png" }
