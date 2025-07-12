@@ -304,11 +304,11 @@
         description: `**ID:** \`${generatedID}\``,
         color: 4737096,
         fields: [
-          { name: "> Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
-          { name: "> Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
-          { name: "> Defendant", value: `\`\`\`\n${data.defendant}\n\`\`\``, inline: true },
-          { name: "> Officer", value: `\`\`\`\n${data.officer}\n\`\`\``, inline: true },
-          { name: "> Offenses", value: offensesInline, inline: false }
+          { name: "> LOCATION", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
+          { name: "> DATE & TIME", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
+          { name: "> DEFENDANT", value: `\`\`\`\n${data.defendant}\n\`\`\``, inline: true },
+          { name: "> OFFICER", value: `\`\`\`\n${data.officer}\n\`\`\``, inline: true },
+          { name: "> OFFENSES", value: offensesInline, inline: false }
         ],
         footer: { text: "Department of Justice" },
         timestamp: new Date().toISOString()
