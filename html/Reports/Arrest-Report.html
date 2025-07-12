@@ -345,8 +345,10 @@
         canvas.toBlob(blob => {
           const embed = {
             title: "ARREST REPORT",
-            description: `**ID:** \`${generatedID}\``,
             color: 4737096,
+            fields: [
+              { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
+            ],
             image: { url: "attachment://report.png" },
             footer: { text: "Department of Justice" },
             timestamp: new Date().toISOString()
