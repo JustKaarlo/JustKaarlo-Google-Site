@@ -279,6 +279,14 @@
     }
   }
 
+  function addOffenseTag(text) {
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+    offenseContainer.insertBefore(tag, offenseInput);
+    tag.querySelector('.remove').onclick = () => tag.remove();
+  }
+
   function processSubmission() {
     const data = window.tempSubmissionData;
     const generatedID = randomID();
@@ -325,13 +333,6 @@
         .catch(() => alert("Failed to submit report."));
       });
     });
-  }
-  function addOffenseTag(text) {
-    const tag = document.createElement('div');
-    tag.className = 'tag';
-    tag.innerHTML = `${text} <span class="remove">&times;</span>`;
-    offenseContainer.insertBefore(tag, offenseInput);
-    tag.querySelector('.remove').onclick = () => tag.remove();
   }
   </script>
 </body>
