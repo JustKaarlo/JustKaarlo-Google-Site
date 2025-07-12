@@ -219,123 +219,131 @@
       <div style="margin-top: 15px;"><button onclick="validatePin()">Confirm</button></div>
     </div>
   </div>
+
   <script>
-  function randomID() {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    const numbers = "0123456789";
-    let id = "";
-    for(let i = 0; i < 3; i++)
-      id += letters.charAt(Math.floor(Math.random() * letters.length));
-    id += "-";
-    for(let i = 0; i < 3; i++)
-      id += numbers.charAt(Math.floor(Math.random() * numbers.length));
-    id += "-" + numbers.charAt(Math.floor(Math.random() * numbers.length));
-    return id;
-  }
-  
-  function resetForm() {
-    document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
-    document.querySelectorAll('.tag').forEach(tag => tag.remove());
-  }
-  
-  function showErrorPopup() {
-    const errorPopup = document.getElementById('error-popup');
-    errorPopup.style.display = 'block';
-    setTimeout(() => errorPopup.style.display = 'none', 3000);
-  }
-  
-  function showPopup() {
-    const popup = document.getElementById('popup-overlay');
-    popup.style.display = 'block';
-    setTimeout(() => popup.style.display = 'none', 3000);
-  }
-  
-  function submitForm() {
-    const location = document.getElementById('location').value.trim();
-    const datetime = document.getElementById('datetime').value.trim();
-    const defendant = document.getElementById('defendant').value.trim();
-    const officer = document.getElementById('officer').value.trim();
-    const offenses = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
-    if (!location || !datetime || !defendant || !officer || offenses.length === 0) {
-      showErrorPopup(); return;
+    function randomID() {
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const numbers = "0123456789";
+      let id = "";
+      for(let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
+      id += "-";
+      for(let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
+      id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
+      return id;
     }
-    window.tempSubmissionData = { location, datetime, defendant, officer, offenses };
-    document.getElementById('pin-popup').style.display = 'block';
-    document.getElementById('pin-error').style.display = 'none';
-  }
-  
-  function validatePin() {
-    const pinInput = document.getElementById('pin-input');
-    const errorText = document.getElementById('pin-error');
-    const enteredPin = pinInput.value.trim();
-    if (enteredPin === '2118') {
-      document.getElementById('pin-popup').style.display = 'none';
-      processSubmission();
-    } else {
-      errorText.style.display = 'block';
-      const popup = document.getElementById('pin-popup');
-      popup.classList.add('shake');
-      setTimeout(() => popup.classList.remove('shake'), 400);
-    }
-  }
 
-  function processSubmission() {
-    const data = window.tempSubmissionData;
-    const generatedID = randomID();
-    const formattedDateTime = data.datetime.replace('T', ' ');
-    const elementsToHide = [
-      document.querySelector('.button-row'),         // Hide buttons
-      document.querySelector('.header'),             // Hide title + subtitle
-      document.querySelector('#offenseInput'),       // Hide offense input
-      ...document.querySelectorAll('.tag .remove')   // Hide X buttons on tags
-    ];
-    const datetimeInput = document.getElementById('datetime');
-    const originalDatetimeValue = datetimeInput.value;
-    datetimeInput.value = formattedDateTime;
-    elementsToHide.forEach(el => { if (el) el.style.display = 'none'; });
-    html2canvas(document.querySelector(".card"), {
-      backgroundColor: null,
-      useCORS: true,
-      scale: 2
-    }).then(canvas => {
-      elementsToHide.forEach(el => { if (el) el.style.display = ''; });
-      datetimeInput.value = originalDatetimeValue;
-      canvas.toBlob(blob => {
-        const embed = {
-          title: "ARREST REPORT",
-          description: `**ID:** \`${generatedID}\``,
-          color: 4737096,
-          image: { url: `attachment://report.png` },
-          footer: { text: "Department of Justice" },
-          timestamp: new Date().toISOString()
-        };
-  
-        const formData = new FormData();
-        formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
-        formData.append("file", blob, "report.png");
-  
-        fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
-          method: "POST",
-          body: formData
-        })
-        .then(() => {
-          showPopup();
-          resetForm();
-        })
-        .catch(() => alert("Failed to submit report."));
+    function resetForm() {
+      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
+      document.querySelectorAll('.tag').forEach(tag => tag.remove());
+    }
+
+    function showErrorPopup() {
+      const popup = document.getElementById('error-popup');
+      popup.style.display = 'block';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
+    function showPopup() {
+      const popup = document.getElementById('popup-overlay');
+      popup.style.display = 'block';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
+    function submitForm() {
+      const location = document.getElementById('location').value.trim();
+      const datetime = document.getElementById('datetime').value.trim();
+      const defendant = document.getElementById('defendant').value.trim();
+      const officer = document.getElementById('officer').value.trim();
+      const offenses = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
+      if (!location || !datetime || !defendant || !officer || offenses.length === 0) {
+        showErrorPopup();
+        return;
+      }
+      window.tempSubmissionData = { location, datetime, defendant, officer, offenses };
+      document.getElementById('pin-popup').style.display = 'block';
+      document.getElementById('pin-error').style.display = 'none';
+    }
+
+    function validatePin() {
+      const pin = document.getElementById('pin-input').value.trim();
+      if (pin === '2118') {
+        document.getElementById('pin-popup').style.display = 'none';
+        processSubmission();
+      } else {
+        const err = document.getElementById('pin-error');
+        err.style.display = 'block';
+        const popup = document.getElementById('pin-popup');
+        popup.classList.add('shake');
+        setTimeout(() => popup.classList.remove('shake'), 400);
+      }
+    }
+
+    function processSubmission() {
+      const data = window.tempSubmissionData;
+      const generatedID = randomID();
+      const formattedDateTime = data.datetime.replace('T', ' ');
+
+      const datetimeInput = document.getElementById('datetime');
+      const originalInput = datetimeInput.cloneNode(true);
+      const span = document.createElement('div');
+      span.textContent = formattedDateTime;
+      span.style = datetimeInput.style.cssText;
+      datetimeInput.parentNode.replaceChild(span, datetimeInput);
+
+      const toHide = [
+        document.querySelector('.button-row'),
+        document.querySelector('.header'),
+        document.querySelector('#offenseInput'),
+        ...document.querySelectorAll('.tag .remove')
+      ];
+      toHide.forEach(el => el && (el.style.display = 'none'));
+
+      html2canvas(document.querySelector(".card"), {
+        backgroundColor: null,
+        scale: 2
+      }).then(canvas => {
+        // Restore UI
+        span.parentNode.replaceChild(originalInput, span);
+        toHide.forEach(el => el && (el.style.display = ''));
+        
+        canvas.toBlob(blob => {
+          const embed = {
+            title: "ARREST REPORT",
+            description: `**ID:** \`${generatedID}\``,
+            color: 4737096,
+            image: { url: "attachment://report.png" },
+            footer: { text: "Department of Justice" },
+            timestamp: new Date().toISOString()
+          };
+
+          const formData = new FormData();
+          formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
+          formData.append("file", blob, "report.png");
+
+          fetch("https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni", {
+            method: "POST",
+            body: formData
+          })
+          .then(() => {
+            showPopup();
+            resetForm();
+          })
+          .catch(() => alert("Failed to submit report."));
+        });
       });
-    });
-  }
+    }
 
+    // Tags input
     const offenseInput = document.getElementById('offenseInput');
     const offenseContainer = document.getElementById('offense-tags');
     offenseInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && this.value.trim() !== '') {
+      if (e.key === 'Enter' && this.value.trim()) {
         e.preventDefault();
         addOffenseTag(this.value.trim());
         this.value = '';
       }
     });
+
     function addOffenseTag(text) {
       const tag = document.createElement('div');
       tag.className = 'tag';
