@@ -72,7 +72,6 @@
       display: block;
       border-radius: 12px;
     }
-
     .modal-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -114,24 +113,28 @@
       background: rgba(255, 255, 255, 0.3);
     }
 
-    /* Managers section */
+    /* — Manager section header — */
     .section-header {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-      padding: 0.75rem 1.5rem;
+      grid-column: 1 / -1;       /* span full width of the grid */
       text-align: center;
-      color: #eee;
+      margin: 2rem 0 1rem;       /* space above & below */
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 16px;
       backdrop-filter: blur(8px);
-      margin: 2rem auto 1rem;
-      max-width: 1000px;
-      font-size: 1.5rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      padding: 1rem;
+      color: #eee;
+      font-size: 1.25rem;
     }
-    .managers-container {
+    
+    /* — Wrapper to center the two manager cards — */
+    .manager-group {
+      grid-column: 1 / -1;       /* span full width */
       display: flex;
-      justify-content: center;
-      gap: 2rem;
-      margin-bottom: 2rem;
+      justify-content: center;   /* center them */
+      gap: 2rem;                 /* space between manager buttons */
+      margin-bottom: 2rem;       /* extra space below if you like */
     }
   </style>
 </head>
@@ -139,7 +142,6 @@
   <!-- particles layer -->
   <div id="particles-js"></div>
 
-  <!-- Main mods grid -->
   <div class="grid">
     <div id="attila-card" class="card">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Total War Attila">
@@ -159,20 +161,21 @@
     <div id="britannia-card" class="card">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png" alt="Total War Thrones of Britannia">
     </div>
+
+    <!-- Managers Section Header -->
+    <div class="section-header">Managers</div>
+
+    <!-- Managers Buttons, centered as a group -->
+    <div class="manager-group">
+      <div id="manager1-card" class="card">
+        <img src="https://via.placeholder.com/260x260?text=Manager+1" alt="Total War Manager" />
+      </div>
+      <div id="manager2-card" class="card">
+        <img src="https://via.placeholder.com/260x260?text=Manager+2" alt="Manager 2" />
+      </div>
+    </div>
   </div>
 
-  <!-- Managers section -->
-  <h2 class="section-header">Managers</h2>
-  <div class="managers-container">
-    <div id="manager1-card" class="card">
-      <img src="https://via.placeholder.com/260x260?text=Manager+1" alt="Manager 1" />
-    </div>
-    <div id="manager2-card" class="card">
-      <img src="https://via.placeholder.com/260x260?text=Manager+2" alt="Manager 2" />
-    </div>
-  </div>
-
-  <!-- Modal overlay -->
   <div id="overlay" class="modal-overlay">
     <div class="modal">
       <div class="close-btn">×</div>
@@ -192,8 +195,6 @@
       const empireCard     = document.getElementById('empire-card');
       const napoleonCard   = document.getElementById('napoleon-card');
       const britanniaCard  = document.getElementById('britannia-card');
-      const manager1Card   = document.getElementById('manager1-card');
-      const manager2Card   = document.getElementById('manager2-card');
       const closeBtn       = document.querySelector('.close-btn');
 
       function openModal(file) {
@@ -208,13 +209,15 @@
       napoleonCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Napoleon.html'));
       britanniaCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Thrones.html'));
 
-      // Manager buttons open external links
+      // New manager buttons
+      const manager1Card = document.getElementById('manager1-card');
       manager1Card.addEventListener('click', () => {
         window.open(
           'https://justkaarlo.github.io/JustKaarlo-Google-Site/files/TotalWar/Attila Mod Manager.exe',
           '_blank'
         );
       });
+      const manager2Card = document.getElementById('manager2-card');
       manager2Card.addEventListener('click', () => {
         window.open('https://example.com/placeholder.exe', '_blank');
       });
@@ -249,7 +252,9 @@
             random: true,
             anim: { enable: true, speed: 4, size_min: 1, sync: false }
           },
-          line_linked: { enable: false },
+          line_linked: {
+            enable: false
+          },
           move: {
             enable: true,
             speed: 2,
@@ -262,7 +267,11 @@
         },
         interactivity: {
           detect_on: 'canvas',
-          events: { onhover: { enable: false }, onclick: { enable: false }, resize: true }
+          events: {
+            onhover: { enable: false },
+            onclick: { enable: false },
+            resize: true
+          }
         },
         retina_detect: true
       });
