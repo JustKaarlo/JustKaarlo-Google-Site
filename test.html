@@ -113,23 +113,21 @@
       background: rgba(255, 255, 255, 0.3);
     }
 
-    /* — Manager section header — */
     .section-header {
-      grid-column: 1 / -1;       /* span full width of the grid */
+      grid-column: 1 / -1;            /* span full width */
       text-align: center;
-      margin: 2rem 0 1rem;       /* space above & below */
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 16px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-      padding: 1rem;
-      color: #eee;
-      font-size: 1.25rem;
+      margin: 1.5rem 0 0.5rem;        /* less vertical padding */
+      font-size: 1rem;                /* smaller text */
+      color: rgba(255,255,255,0.7);   /* softer */
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      padding-bottom: 0.5rem;
+      background: transparent;        /* no backdrop */
+      box-shadow: none;
+      border: none;
     }
     
-    /* — Wrapper to center the two manager cards — */
     .manager-group {
+      flex: 0 0 260px;
       grid-column: 1 / -1;       /* span full width */
       display: flex;
       justify-content: center;   /* center them */
