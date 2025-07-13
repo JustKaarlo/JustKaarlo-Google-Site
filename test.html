@@ -236,7 +236,9 @@
       position: fixed;
       top: 0;
       left: 0;
-      transform: translate(10px, 10px);
+      transform: translateX(-50%) translateY(-100%) scale(0.95);
+      transition: opacity 0.2s ease;
+      opacity: 0;
       pointer-events: none;
       background: rgba(30, 30, 30, 0.9);
       color: #ddd;
@@ -300,8 +302,8 @@
     }
 
     .virustotal-button img {
-      height: 16px;
-      width: 16px;
+      height: 1em;
+      width: 1em;
       filter: brightness(1.2);
     }
   </style>
@@ -390,22 +392,36 @@
   <script>
     document.querySelectorAll('[data-tooltip]').forEach(card => {
       const tooltip = card.querySelector('.custom-tooltip');
+      let mouseX = 0;
+      let mouseY = 0;
+      let tooltipVisible = false;
+
+      // Smooth animation loop
+      const followMouse = () => {
+        if (!tooltipVisible) return;
+        tooltip.style.top = `${mouseY + 15}px`;
+        tooltip.style.left = `${mouseX}px`;
+        tooltip.style.transform = 'translateX(-50%) translateY(-100%) scale(1)';
+        requestAnimationFrame(followMouse);
+      };
 
       card.addEventListener('mousemove', e => {
-        tooltip.style.top = `${e.clientY + 10}px`;
-        tooltip.style.left = `${e.clientX + 10}px`;
+        mouseX = e.clientX;
+        mouseY = e.clientY;
       });
 
       card.addEventListener('mouseenter', () => {
+        tooltipVisible = true;
         tooltip.style.opacity = '1';
         tooltip.style.pointerEvents = 'auto';
-        tooltip.style.transform = 'scale(1)';
+        requestAnimationFrame(followMouse);
       });
 
       card.addEventListener('mouseleave', () => {
+        tooltipVisible = false;
         tooltip.style.opacity = '0';
         tooltip.style.pointerEvents = 'none';
-        tooltip.style.transform = 'scale(0.95)';
+        tooltip.style.transform = 'translateX(-50%) translateY(-100%) scale(0.95)';
       });
     });
 
