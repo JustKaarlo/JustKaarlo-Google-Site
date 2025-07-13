@@ -114,25 +114,37 @@
       background: rgba(255, 255, 255, 0.3);
     }
 
-    .section-header {
+    .section-header-wrapper {
       grid-column: 1 / -1;
-      width: 370px;
-      height: 100px;
-      margin: 2rem auto 1rem;
       display: flex;
-      align-items: center;    /* vertical centering */
-      justify-content: center;/* horizontal centering */      
-      padding: 0.75rem 0;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0 1rem;
+    }
+    
+    /* The actual frame with the "Managers" text */
+    .section-header {
+      width: calc(260px + 20px);
+      padding: 1.5rem 0;
       font-family: 'Montserrat', sans-serif;
       font-weight: 700;
-      font-size: 32px;
-      text-align: center;
+      font-size: 1.25rem;
       color: #fff;
+      text-align: center;
       background: rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(16px) saturate(180%);
       border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* The horizontal lines to left and right */
+    .section-divider {
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      margin-top: 1px;
     }
 
     .manager-group {
@@ -212,7 +224,11 @@
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png" alt="Total War Thrones of Britannia">
     </div>
 
-    <div class="section-header">MANAGERS</div>
+    <div class="section-header-wrapper">
+      <div class="section-divider"></div>
+      <div class="section-header">MANAGERS</div>
+      <div class="section-divider"></div>
+    </div>
     <div class="manager-group">
       <div id="manager1-card" class="card">
         <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalModManager.png" alt="Total Mod Manager" />
