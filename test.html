@@ -123,10 +123,15 @@
       margin: 2rem 0 1rem;
     }
     
-    /* The actual frame with the "Managers" text */
     .section-header {
       width: 370px;
       height: 100px;
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0 1rem;
       padding: 1.5rem 0;
       font-family: 'Montserrat', sans-serif;
       font-weight: 700;
@@ -134,7 +139,7 @@
       color: #fff;
       text-align: center;
       background: rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(16px) saturate(180%);
+      backdrop-filter: blur(16px) saturate(140%);
       border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
