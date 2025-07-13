@@ -398,35 +398,34 @@
   <script>
     document.querySelectorAll('[data-tooltip]').forEach(card => {
       const tooltip = card.querySelector('.custom-tooltip');
-      let mouseX = 0;
-      let mouseY = 0;
-      let tooltipVisible = false;
-
-      const followMouse = () => {
-        if (!tooltipVisible) return;
-        tooltip.style.top = `${mouseY + 12}px`;
-        tooltip.style.left = `${mouseX + 12}px`;
-        tooltip.style.transform = 'scale(1)';
-        requestAnimationFrame(followMouse);
+      let mouseX = 0, mouseY = 0, visible = false;
+    
+      const follow = () => {
+        if (!visible) return;
+        // offset a bit so the tip isn’t lost under your pointer
+        tooltip.style.top  = (mouseY + 12) + 'px';
+        tooltip.style.left = (mouseX + 12) + 'px';
+        tooltip.style.transform = 'translate(-50%, -100%) scale(1)';
+        requestAnimationFrame(follow);
       };
-
+    
       card.addEventListener('mousemove', e => {
         mouseX = e.clientX;
         mouseY = e.clientY;
       });
-
+    
       card.addEventListener('mouseenter', () => {
-        tooltipVisible = true;
+        visible = true;
         tooltip.style.opacity = '1';
         tooltip.style.pointerEvents = 'auto';
-        requestAnimationFrame(followMouse);
+        requestAnimationFrame(follow);
       });
-
+    
       card.addEventListener('mouseleave', () => {
-        tooltipVisible = false;
+        visible = false;
         tooltip.style.opacity = '0';
         tooltip.style.pointerEvents = 'none';
-        tooltip.style.transform = 'translateX(-50%) translateY(-100%) scale(0.95)';
+        tooltip.style.transform = 'translate(-50%, -100%) scale(0.95)';
       });
     });
 
