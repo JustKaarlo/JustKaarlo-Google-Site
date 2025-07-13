@@ -261,16 +261,25 @@
       text-transform: uppercase;
     }
     .tooltip-file-name {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      font-family: 'Montserrat', sans-serif;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       padding: 0.4rem 0.6rem;
       border-radius: 6px;
-      font-size: 13px;
       margin-bottom: 0.6rem;
-      color: #ccc;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    }
+    .tooltip-file-name .label {
+      color: #888;
+      font-weight: 400;
+    }
+    .tooltip-file-name .filename {
+      color: #66c0f4;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
     }
     .virustotal-button {
       display: flex;
@@ -338,8 +347,10 @@
         <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalModManager.png"
           alt="Total Mod Manager" />
         <div class="custom-tooltip">
-          <div class="tooltip-title">File</div>
-          <div class="tooltip-file-name">Total Mod Manager.exe</div>
+          <div class="tooltip-file-name">
+            <span class="label">File</span>
+            <span class="filename">Total Mod Manager.exe</span>
+          </div>
           <div class="virustotal-button">
             <img src="https://images.icon-icons.com/2699/PNG/512/virustotal_logo_icon_171247.png" alt="VirusTotal Icon" />VirusTotal</div>
         </div>
@@ -348,9 +359,10 @@
         <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/AttilaModManager.png"
           alt="Attila Mod Manager" />
         <div class="custom-tooltip">
-          <div class="tooltip-title">File</div>
-          <div class="tooltip-file-name">Attila Mod Manager.exe</div>
-          <div class="virustotal-button">
+          <div class="tooltip-file-name">
+            <span class="label">File</span>
+            <span class="filename">Attila Mod Manager.exe</span>
+          </div>
             <img src="https://images.icon-icons.com/2699/PNG/512/virustotal_logo_icon_171247.png" alt="VT Icon" />VirusTotal</div>
         </div>
       </div>
