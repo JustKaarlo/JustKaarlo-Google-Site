@@ -127,13 +127,18 @@
       box-shadow: none;                    /* no heavy drop shadow */
     }
     
-    .manager-group {
-      flex: 0 0 260px;
-      grid-column: 1 / -1;       /* span full width */
-      display: flex;
-      justify-content: center;   /* center them */
-      gap: 2rem;                 /* space between manager buttons */
-      margin-bottom: 2rem;       /* extra space below if you like */
+    .manager-disclaimer {
+      grid-column: 1 / -1;                   /* span full width of grid */
+      max-width: 260px;                      /* same width as each card */
+      margin: 1rem auto;                     /* center it, with a bit of top/bottom space */
+      padding: 0.5rem;                       /* some breathing room inside */
+      background: rgba(30, 30, 30, 0.5);     /* dark semi-transparent glass */
+      backdrop-filter: blur(10px);           /* keep that blur effect */
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;                    /* matches your header’s rounding */
+      text-align: center;
+      font-size: 0.875rem;                   /* slightly smaller than button text */
+      color: rgba(255, 255, 255, 0.7);       /* soft white */
     }
   </style>
 </head>
@@ -161,10 +166,7 @@
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png" alt="Total War Thrones of Britannia">
     </div>
 
-    <!-- Managers Section Header -->
     <div class="section-header">Managers</div>
-
-    <!-- Managers Buttons, centered as a group -->
     <div class="manager-group">
       <div id="manager1-card" class="card">
         <img src="https://via.placeholder.com/260x260?text=Manager+1" alt="Total War Manager" />
@@ -172,6 +174,9 @@
       <div id="manager2-card" class="card">
         <img src="https://via.placeholder.com/260x260?text=Manager+2" alt="Manager 2" />
       </div>
+    </div>
+    <div class="manager-disclaimer">
+      Disclaimer: I did not make these mod managers.
     </div>
   </div>
 
