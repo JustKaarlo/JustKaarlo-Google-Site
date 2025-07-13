@@ -235,16 +235,13 @@
     .card[data-tooltip] {
       position: relative;
     }
-  
-    .card[data-tooltip]:hover {
-      z-index: 1000;
-    }
-  
+
     .custom-tooltip {
       position: absolute;
-      top: 0;
-      left: 100%;
-      margin-left: 5px;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      margin-top: 8px;
       background: rgba(30, 30, 30, 0.9);
       color: #ddd;
       padding: 1rem;
@@ -255,12 +252,18 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(10px);
       box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
-      pointer-events: auto;
+      pointer-events: none;
       opacity: 0;
-      transition: all 0.2s ease;
+      transition: transform 0.2s ease, opacity 0.2s ease;
       z-index: 999;
     }
-  
+
+    .card[data-tooltip]:hover .custom-tooltip {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) scale(1);
+    }
+
     .tooltip-file-name {
       display: flex;
       justify-content: space-between;
@@ -273,7 +276,7 @@
       border-radius: 6px;
       margin-bottom: 0.6rem;
     }
-  
+
     .tooltip-file-name .title {
       font-family: 'Montserrat', sans-serif;
       font-weight: 400;
@@ -281,13 +284,14 @@
       color: #666;
       text-transform: uppercase;
     }
-  
+
     .tooltip-file-name .filename {
       color: #66c0f4;
       font-weight: 700;
       font-family: 'Montserrat', sans-serif;
     }
-  
+
+    /* custom CSS-shape icon for VT button */
     .virustotal-button {
       display: inline-flex;
       align-items: center;
@@ -304,14 +308,38 @@
       transition: background 0.2s;
       text-decoration: none;
     }
-  
+
     .virustotal-button:hover {
       background: rgba(255, 255, 255, 0.12);
     }
-  
-    .virustotal-button img {
-      height: 16px;
+
+    .vt-icon {
+      position: relative;
       width: 16px;
+      height: 16px;
+      display: inline-block;
+    }
+
+    .vt-icon::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #66c0f4;
+      border-radius: 4px;
+    }
+
+    .vt-icon::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
     }
   </style>
 </head>
@@ -351,35 +379,41 @@
       <div class="section-header">MANAGERS</div>
       <div class="section-divider"></div>
     </div>
+
     <div class="manager-group">
       <div id="manager1-card" class="card" data-tooltip>
-        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalModManager.png" alt="Total Mod Manager" />
+        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalModManager.png"
+          alt="Total Mod Manager" />
         <div class="custom-tooltip">
           <div class="tooltip-file-name">
             <span class="title">File</span>
             <span class="filename">Total Mod Manager.exe</span>
           </div>
-          <a href="https://www.virustotal.com/gui/url/e5e71f0b50fb9614d793fb7b59f77b830a93fee99331f8c07096d2385e031776?nocache=1" target="_blank" class="virustotal-button">
-            <img src="https://images.icon-icons.com/2699/PNG/512/virustotal_logo_icon_171247.png" alt="VT Icon" />
+          <a href="https://www.virustotal.com/gui/url/e5e71f0b50fb9614d793fb7b59f77b830a93fee99331f8c07096d2385e031776?nocache=1"
+            target="_blank" class="virustotal-button">
+            <span class="vt-icon"></span>
             VirusTotal
           </a>
         </div>
       </div>
-      
+
       <div id="manager2-card" class="card" data-tooltip>
-        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/AttilaModManager.png" alt="Attila Mod Manager" />
+        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/AttilaModManager.png"
+          alt="Attila Mod Manager" />
         <div class="custom-tooltip">
           <div class="tooltip-file-name">
             <span class="title">File</span>
             <span class="filename">Attila Mod Manager.exe</span>
           </div>
-          <a href="https://www.virustotal.com/gui/url/083fdea83e5c5110ee0288a800dccf0cc5fb2b63f0adfda645d126d16aa94fe8?nocache=1" target="_blank" class="virustotal-button">
-            <img src="https://images.icon-icons.com/2699/PNG/512/virustotal_logo_icon_171247.png" alt="VT Icon" />
+          <a href="https://www.virustotal.com/gui/url/083fdea83e5c5110ee0288a800dccf0cc5fb2b63f0adfda645d126d16aa94fe8?nocache=1"
+            target="_blank" class="virustotal-button">
+            <span class="vt-icon"></span>
             VirusTotal
           </a>
         </div>
       </div>
     </div>
+
     <div class="manager-disclaimer">
       <div class="manager-disclaimer-icon-custom">!</div>
       <div>
@@ -401,47 +435,35 @@
     document.querySelectorAll('[data-tooltip]').forEach(card => {
       const tooltip = card.querySelector('.custom-tooltip');
       let insideTooltip = false;
-  
-      const positionTooltip = (e) => {
-        const tooltipWidth = tooltip.offsetWidth;
-        const tooltipHeight = tooltip.offsetHeight;
-        let top = e.clientY - tooltipHeight / 2;
-        let left = e.clientX + 5;
-        tooltip.style.top = top + 'px';
-        tooltip.style.left = left + 'px';
-      };
-  
-      card.addEventListener('mousemove', positionTooltip);
-  
-      card.addEventListener('mouseenter', (e) => {
+
+      card.addEventListener('mouseenter', () => {
         tooltip.style.opacity = '1';
         tooltip.style.pointerEvents = 'auto';
-        tooltip.style.transform = 'scale(1)';
-        positionTooltip(e);
+        tooltip.style.transform = 'translateX(-50%) scale(1)';
       });
-  
+
       card.addEventListener('mouseleave', () => {
         setTimeout(() => {
           if (!insideTooltip) {
             tooltip.style.opacity = '0';
             tooltip.style.pointerEvents = 'none';
-            tooltip.style.transform = 'scale(0.95)';
+            tooltip.style.transform = 'translateX(-50%) scale(0.95)';
           }
         }, 150);
       });
-  
+
       tooltip.addEventListener('mouseenter', () => {
         insideTooltip = true;
         tooltip.style.opacity = '1';
         tooltip.style.pointerEvents = 'auto';
-        tooltip.style.transform = 'scale(1)';
+        tooltip.style.transform = 'translateX(-50%) scale(1)';
       });
-  
+
       tooltip.addEventListener('mouseleave', () => {
         insideTooltip = false;
         tooltip.style.opacity = '0';
         tooltip.style.pointerEvents = 'none';
-        tooltip.style.transform = 'scale(0.95)';
+        tooltip.style.transform = 'translateX(-50%) scale(0.95)';
       });
     });
     
