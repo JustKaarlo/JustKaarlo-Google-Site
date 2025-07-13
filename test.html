@@ -227,44 +227,73 @@
     .card[data-tooltip] {
       position: relative;
     }
-
-    .card[data-tooltip]::after {
-      content: attr(data-tooltip);
+    .card[data-tooltip]:hover .custom-tooltip {
+      opacity: 1;
+      transform: translate(-50%, -100%) scale(1);
+      pointer-events: auto;
+    }
+    .custom-tooltip {
       position: absolute;
-      bottom: calc(100% + 10px);
       left: 50%;
-      transform: translateX(-50%);
-      background: rgba(30, 30, 30, 0.8);
-      color: #ccc;
-      padding: 6px 10px;
-      font-size: 12px;
-      white-space: nowrap;
-      border-radius: 8px;
+      bottom: 0;
+      transform: translate(-50%, -80%) scale(0.95);
+      background: rgba(30, 30, 30, 0.9);
+      color: #ddd;
+      padding: 1rem;
+      width: 240px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: 'Rubik', sans-serif;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.2s ease, transform 0.2s ease;
-      backdrop-filter: blur(6px);
+      transition: all 0.2s ease;
+      z-index: 999;
+    }
+    .tooltip-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+    }
+    .tooltip-file-name {
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      z-index: 10;
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 0.6rem;
+      color: #ccc;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-
-    .card[data-tooltip]::before {
-      content: "";
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 6px;
-      border-style: solid;
-      border-color: transparent transparent rgba(30, 30, 30, 0.8) transparent;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-      z-index: 9;
+    .virustotal-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      padding: 0.4rem 0.8rem;
+      font-size: 13px;
+      color: #bbb;
+      cursor: pointer;
+      transition: background 0.2s;
     }
-
-    .card[data-tooltip]:hover::after,
-    .card[data-tooltip]:hover::before {
-      opacity: 1;
+    .virustotal-button:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+    .virustotal-button img {
+      height: 16px;
+      width: 16px;
     }
   </style>
 </head>
@@ -305,15 +334,26 @@
       <div class="section-divider"></div>
     </div>
     <div class="manager-group">
-      <div id="manager1-card" class="card" data-tooltip="Total Mod Manager.exe">
+      <div id="manager1-card" class="card" data-tooltip>
         <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalModManager.png"
           alt="Total Mod Manager" />
+        <div class="custom-tooltip">
+          <div class="tooltip-title">File</div>
+          <div class="tooltip-file-name">Total Mod Manager.exe</div>
+          <div class="virustotal-button">
+            <img src="https://images.icon-icons.com/2699/PNG/512/virustotal_logo_icon_171247.png" alt="VirusTotal Icon" />VirusTotal</div>
+        </div>
       </div>
-      <div id="manager2-card" class="card" data-tooltip="Attila Mod Manager.exe">
+      <div id="manager2-card" class="card" data-tooltip>
         <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/AttilaModManager.png"
           alt="Attila Mod Manager" />
+        <div class="custom-tooltip">
+          <div class="tooltip-title">File</div>
+          <div class="tooltip-file-name">Attila Mod Manager.exe</div>
+          <div class="virustotal-button">
+            <img src="https://images.icon-icons.com/2699/PNG/512/virustotal_logo_icon_171247.png" alt="VT Icon" />VirusTotal</div>
+        </div>
       </div>
-    </div>
     <div class="manager-disclaimer">
       <div class="manager-disclaimer-icon-custom">!</div>
       <div>
