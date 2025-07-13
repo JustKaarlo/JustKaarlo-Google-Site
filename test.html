@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,15 +8,19 @@
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
     /* make room for particles layer */
     body {
       position: relative;
       font-family: 'Rubik', sans-serif;
       background:
-        linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
-        linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
         url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/TotalWar_Background.png') center/cover no-repeat fixed;
       color: #eee;
       min-height: 100vh;
@@ -63,29 +68,36 @@
       cursor: pointer;
       transition: transform 0.2s, background 0.2s;
     }
+
     .card:hover {
       transform: translateY(-4px);
       background: rgba(255, 255, 255, 0.08);
     }
+
     .card img {
       width: 100%;
       height: auto;
       display: block;
       border-radius: 12px;
     }
+
     .modal-overlay {
       position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       background: rgba(0, 0, 0, 0.5);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 100;
     }
+
     .modal {
       position: relative;
-      width: 80vw; max-width: 900px;
+      width: 80vw;
+      max-width: 900px;
       height: 80vh;
       background: rgba(255, 255, 255, 0.10);
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -94,13 +106,19 @@
       box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
       overflow: hidden;
     }
+
     .modal iframe {
-      width: 100%; height: 100%; border: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
     }
+
     .close-btn {
       position: absolute;
-      top: 12px; right: 12px;
-      width: 40px; height: 40px;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
       background: rgba(255, 255, 255, 0.2);
       border-radius: 50%;
       font-size: 2rem;
@@ -110,6 +128,7 @@
       cursor: pointer;
       transition: background 0.2s;
     }
+
     .close-btn:hover {
       background: rgba(255, 255, 255, 0.3);
     }
@@ -122,10 +141,10 @@
       gap: 1rem;
       margin: 2rem 0 1rem;
     }
-    
+
     .section-header {
       width: 370px;
-      height: 100px;
+      height: fit-content;
       grid-column: 1 / -1;
       display: flex;
       align-items: center;
@@ -143,7 +162,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
-    
+
     .section-divider {
       flex: 1;
       height: 1px;
@@ -152,44 +171,43 @@
     }
 
     .manager-group {
-      grid-column: 1 / -1;      
+      grid-column: 1 / -1;
       display: flex;
-      justify-content: center;  
-      gap: 2rem;               
-      margin-bottom: 2rem;       
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
     }
 
     .manager-disclaimer {
       display: flex;
       align-items: center;
       max-width: 340px;
-      width: auto-fit;
+      width: fit-content;
       margin: 1rem auto;
       padding: 0.75rem 1rem;
       background: rgba(173, 173, 173, 0.1);
       backdrop-filter: blur(4px);
       border: none;
       border-radius: 12px;
-      font-size: 11;
-      color: #cccccc;
+      font-size: 6px;
+      color: #636466;
       line-height: 1.2;
       text-align: left;
       gap: 0.75rem;
     }
-    
+
     .manager-disclaimer-icon {
       flex: none;
       width: 32px;
       height: 32px;
-      background: url('https://cdn4.iconfinder.com/data/icons/information-symbol-essential-lineal-color/24/About-512.png')
-        no-repeat center center;
+      background: url('https://cdn4.iconfinder.com/data/icons/information-symbol-essential-lineal-color/24/About-512.png') no-repeat center center;
       background-size: contain;
     }
 
     .manager-group .card {
       flex: 0 0 260px;
     }
-    
+
     .manager-group .card img {
       width: 100%;
       height: auto;
@@ -198,28 +216,35 @@
     }
   </style>
 </head>
+
 <body>
   <!-- particles layer -->
   <div id="particles-js"></div>
 
   <div class="grid">
     <div id="attila-card" class="card">
-      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Total War Attila">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png"
+        alt="Total War Attila">
     </div>
     <div id="shogun-card" class="card">
-      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Shogun2.png" alt="Total War Shogun 2">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Shogun2.png"
+        alt="Total War Shogun 2">
     </div>
     <div id="rome-card" class="card">
-      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_RomeII.png" alt="Total War Rome II">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_RomeII.png"
+        alt="Total War Rome II">
     </div>
     <div id="empire-card" class="card">
-      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Empire2.png" alt="Total War Empire">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Empire2.png"
+        alt="Total War Empire">
     </div>
     <div id="napoleon-card" class="card">
-      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Napoleon.png" alt="Total War Napoleon">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Napoleon.png"
+        alt="Total War Napoleon">
     </div>
     <div id="britannia-card" class="card">
-      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png" alt="Total War Thrones of Britannia">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png"
+        alt="Total War Thrones of Britannia">
     </div>
 
     <div class="section-header-wrapper">
@@ -229,15 +254,17 @@
     </div>
     <div class="manager-group">
       <div id="manager1-card" class="card">
-        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalModManager.png" alt="Total Mod Manager" />
+        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalModManager.png"
+          alt="Total Mod Manager" />
       </div>
       <div id="manager2-card" class="card">
-        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/AttilaModManager.png" alt="Attila Mod Manager" />
+        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/AttilaModManager.png"
+          alt="Attila Mod Manager" />
       </div>
     </div>
     <div class="manager-disclaimer">
       <div class="manager-disclaimer-icon"></div>
-        I haven’t developed any of the content listed here. They are created and owned by third parties.
+      I haven't developed any of the content listed here.<b> They are created and owned by third parties.
     </div>
   </div>
 
@@ -252,15 +279,15 @@
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const overlay        = document.getElementById('overlay');
-      const frame          = document.getElementById('modal-frame');
-      const attilaCard     = document.getElementById('attila-card');
-      const shogunCard     = document.getElementById('shogun-card');
-      const romeCard       = document.getElementById('rome-card');
-      const empireCard     = document.getElementById('empire-card');
-      const napoleonCard   = document.getElementById('napoleon-card');
-      const britanniaCard  = document.getElementById('britannia-card');
-      const closeBtn       = document.querySelector('.close-btn');
+      const overlay = document.getElementById('overlay');
+      const frame = document.getElementById('modal-frame');
+      const attilaCard = document.getElementById('attila-card');
+      const shogunCard = document.getElementById('shogun-card');
+      const romeCard = document.getElementById('rome-card');
+      const empireCard = document.getElementById('empire-card');
+      const napoleonCard = document.getElementById('napoleon-card');
+      const britanniaCard = document.getElementById('britannia-card');
+      const closeBtn = document.querySelector('.close-btn');
 
       function openModal(file) {
         frame.src = file;
@@ -277,7 +304,7 @@
       // New manager buttons
       const manager1Card = document.getElementById('manager1-card');
       manager1Card.addEventListener('click', () => {
-        window.open( 'https://justkaarlo.github.io/JustKaarlo-Google-Site/files/TotalWar/Total%20Mod%20Manager.exe', '_blank');
+        window.open('https://justkaarlo.github.io/JustKaarlo-Google-Site/files/TotalWar/Total%20Mod%20Manager.exe', '_blank');
       });
       const manager2Card = document.getElementById('manager2-card');
       manager2Card.addEventListener('click', () => {
@@ -302,7 +329,7 @@
             value: 90,
             density: { enable: true, value_area: 700 }
           },
-          color: { value: ['#ff4500','#ff8c00','#ffd700'] },
+          color: { value: ['#ff4500', '#ff8c00', '#ffd700'] },
           shape: { type: 'circle' },
           opacity: {
             value: 0.6,
