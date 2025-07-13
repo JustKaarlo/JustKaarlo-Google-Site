@@ -233,18 +233,16 @@
     .card[data-tooltip] {
       position: relative;
     }
-    .card[data-tooltip]:hover .custom-tooltip {
-      opacity: 1;
-      pointer-events: auto;
+  
+    .card[data-tooltip]:hover {
+      z-index: 1000;
     }
+  
     .custom-tooltip {
-      position: fixed;
+      position: absolute;
       top: 0;
-      left: 0;
-      transform: scale(0.95);
-      transition: all 0.2s ease;
-      opacity: 0;
-      pointer-events: none;
+      left: 100%;
+      margin-left: 5px;
       background: rgba(30, 30, 30, 0.9);
       color: #ddd;
       padding: 1rem;
@@ -255,8 +253,12 @@
       border: 1px solid rgba(255, 255, 255, 0.08);
       backdrop-filter: blur(10px);
       box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+      pointer-events: auto;
+      opacity: 0;
+      transition: all 0.2s ease;
       z-index: 999;
     }
+  
     .tooltip-file-name {
       display: flex;
       justify-content: space-between;
@@ -269,45 +271,45 @@
       border-radius: 6px;
       margin-bottom: 0.6rem;
     }
+  
     .tooltip-file-name .title {
       font-family: 'Montserrat', sans-serif;
       font-weight: 400;
       font-size: 11px;
-      color: #aaa;
-      margin-bottom: 0.25rem;
+      color: #666;
       text-transform: uppercase;
     }
+  
     .tooltip-file-name .filename {
       color: #66c0f4;
       font-weight: 700;
       font-family: 'Montserrat', sans-serif;
     }
-
-    /* VirusTotal button styled in fitting green */
+  
     .virustotal-button {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: #4CAF50;
-      border: none;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       font-family: 'Montserrat', sans-serif;
       font-weight: 700;
       padding: 0.4rem 0.8rem;
       font-size: 13px;
-      color: #ffffff;
+      color: #bbb;
       cursor: pointer;
       transition: background 0.2s;
+      text-decoration: none;
     }
+  
     .virustotal-button:hover {
-      background: #45A045;
+      background: rgba(255, 255, 255, 0.12);
     }
+  
     .virustotal-button img {
-      height: 18px;
-      width: 18px;
-      object-fit: contain;
-      display: inline-block;
-      margin-right: 4px;
+      height: 16px;
+      width: 16px;
     }
   </style>
 </head>
@@ -352,30 +354,27 @@
         <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalModManager.png" alt="Total Mod Manager" />
         <div class="custom-tooltip">
           <div class="tooltip-file-name">
-            <span class="title">File&nbsp;</span>
+            <span class="title">File</span>
             <span class="filename">Total Mod Manager.exe</span>
           </div>
-          <button type="button"
-                  class="virustotal-button"
-                  onclick="window.open('https://www.virustotal.com/gui/url/e5e71f0b50fb9614d793fb7b59f77b830a93fee99331f8c07096d2385e031776?nocache=1','_blank')">
+          <a href="https://www.virustotal.com/gui/url/e5e71f0b50fb9614d793fb7b59f77b830a93fee99331f8c07096d2385e031776?nocache=1" target="_blank" class="virustotal-button">
             <img src="https://images.icon-icons.com/2699/PNG/512/virustotal_logo_icon_171247.png" alt="VT Icon" />
             VirusTotal
-          </button>
+          </a>
         </div>
       </div>
+      
       <div id="manager2-card" class="card" data-tooltip>
         <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/AttilaModManager.png" alt="Attila Mod Manager" />
         <div class="custom-tooltip">
           <div class="tooltip-file-name">
-            <span class="title">File&nbsp;</span>
+            <span class="title">File</span>
             <span class="filename">Attila Mod Manager.exe</span>
           </div>
-          <button type="button"
-                  class="virustotal-button"
-                  onclick="window.open('https://www.virustotal.com/gui/url/083fdea83e5c5110ee0288a800dccf0cc5fb2b63f0adfda645d126d16aa94fe8?nocache=1','_blank')">
+          <a href="https://www.virustotal.com/gui/url/083fdea83e5c5110ee0288a800dccf0cc5fb2b63f0adfda645d126d16aa94fe8?nocache=1" target="_blank" class="virustotal-button">
             <img src="https://images.icon-icons.com/2699/PNG/512/virustotal_logo_icon_171247.png" alt="VT Icon" />
             VirusTotal
-          </button>
+          </a>
         </div>
       </div>
     </div>
@@ -397,45 +396,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    document.querySelectorAll('[data-tooltip]').forEach(card => {
-      const tooltip = card.querySelector('.custom-tooltip');
-      let mouseX = 0, mouseY = 0, visible = false;
-    
-      const followMouse = () => {
-        if (!visible) return;
-        const ttW = tooltip.offsetWidth;
-        const ttH = tooltip.offsetHeight;
-        // Center above cursor, with an 8px gap
-        let left = mouseX - ttW / 2;
-        let top  = mouseY - ttH - 8;
-        // Clamp inside viewport
-        left = Math.max(8, Math.min(left, window.innerWidth - ttW - 8));
-        tooltip.style.left  = left + 'px';
-        tooltip.style.top   = top  + 'px';
-        tooltip.style.transform = 'scale(1)';
-        requestAnimationFrame(followMouse);
-      };
-    
-      card.addEventListener('mousemove', e => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      });
-    
-      card.addEventListener('mouseenter', () => {
-        visible = true;
-        tooltip.style.opacity = '1';
-        tooltip.style.pointerEvents = 'auto';
-        requestAnimationFrame(followMouse);
-      });
-    
-      card.addEventListener('mouseleave', () => {
-        visible = false;
-        tooltip.style.opacity = '0';
-        tooltip.style.pointerEvents = 'none';
-        tooltip.style.transform = 'scale(0.95)';
-      });
-    });
-
     document.addEventListener('DOMContentLoaded', () => {
       const overlay = document.getElementById('overlay');
       const frame = document.getElementById('modal-frame');
