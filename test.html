@@ -153,6 +153,31 @@
       font-size: 0.875rem;
       color: #ddd;
     }
+
+    .manager-disclaimer {
+      grid-column: 1 / -1;
+      max-width: 260px;
+      margin: 1rem auto;
+      padding: 0.5rem;
+      background: rgba(68, 68, 68, 0.3);
+      backdrop-filter: blur(14px);
+      border-radius: 8px;
+    
+      border: 2px solid transparent;
+      border-image: radial-gradient(
+        circle at top left,
+        rgba(255, 255, 255, 0.8),
+        rgba(255, 255, 255, 0.2) 70%
+      ) 1;
+      
+      box-shadow:
+        inset 0 1px 2px rgba(255, 255, 255, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.3);
+    
+      text-align: center;
+      font-size: 0.875rem;
+      color: #ddd;
+    }
   </style>
 </head>
 <body>
