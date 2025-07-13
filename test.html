@@ -159,22 +159,26 @@
       max-width: 260px;
       margin: 1rem auto;
       padding: 0.5rem;
-      background: rgba(68, 68, 68, 0.3);
-      backdrop-filter: blur(14px);
-      border-radius: 8px;
     
+      /* glassy background + droplet border */
+      background: rgba(68, 68, 68, 0.6);
+      backdrop-filter: blur(8px);
+      border-radius: 8px;
       border: 2px solid transparent;
       border-image: radial-gradient(
         circle at top left,
         rgba(255, 255, 255, 0.8),
         rgba(255, 255, 255, 0.2) 70%
       ) 1;
-      
       box-shadow:
         inset 0 1px 2px rgba(255, 255, 255, 0.3),
         0 2px 4px rgba(0, 0, 0, 0.3);
     
-      text-align: center;
+      /* centre the text perfectly */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    
       font-size: 0.875rem;
       color: #ddd;
     }
@@ -204,7 +208,7 @@
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png" alt="Total War Thrones of Britannia">
     </div>
 
-    <div class="section-header">Managers</div>
+    <div class="section-header">MANAGERS</div>
     <div class="manager-group">
       <div id="manager1-card" class="card">
         <img src="https://via.placeholder.com/260x260?text=Manager+1" alt="Total Mod Manager" />
