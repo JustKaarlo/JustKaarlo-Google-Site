@@ -115,20 +115,21 @@
     }
 
     .section-header {
+      grid-column: 1 / -1;
+      width: 370px;
+      margin: 2rem auto 1rem;
+      
+      padding: 0.75rem 0;
       font-family: 'Montserrat', sans-serif;
       font-weight: 700;
-      grid-column: 1 / -1;
-      width: calc(280px + 20px);
-      margin: 2rem auto 1rem;
-      text-align: center;
-      padding: 1rem 0;
       font-size: 1.25rem;
-      color: rgba(255, 255, 255, 0.9);
-      background: rgba(30, 30, 30, 0.5);
-      backdrop-filter: blur(10px);
-      border-radius: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: none;
+      text-align: center;
+      color: #fff;
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
 
     .manager-group {
@@ -140,17 +141,16 @@
     }
     
     .manager-disclaimer {
-      grid-column: 1 / -1;                   /* span full width of grid */
-      max-width: 260px;                      /* same width as each card */
-      margin: 1rem auto;                     /* center it, with a bit of top/bottom space */
-      padding: 0.5rem;                       /* some breathing room inside */
-      background: rgba(30, 30, 30, 0.5);     /* dark semi-transparent glass */
-      backdrop-filter: blur(10px);           /* keep that blur effect */
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;                    /* matches your header’s rounding */
+      grid-column: 1 / -1;
+      max-width: 260px;
+      margin: 1rem auto;
+      padding: 0.5rem;
+      background: #444;
+      border: 1px solid #555;
+      border-radius: 8px;
       text-align: center;
-      font-size: 0.875rem;                   /* slightly smaller than button text */
-      color: rgba(255, 255, 255, 0.7);       /* soft white */
+      font-size: 0.875rem;
+      color: #ddd;
     }
   </style>
 </head>
