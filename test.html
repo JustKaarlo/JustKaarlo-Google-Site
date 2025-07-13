@@ -405,10 +405,11 @@
             <span class="filename">Total Mod Manager</span>
           </div>
           <a href="https://www.virustotal.com/gui/url/e5e71f0b50fb9614d793fb7b59f77b830a93fee99331f8c07096d2385e031776?nocache=1"
-            target="_blank" class="virustotal-button">
+            target="_blank"
+            class="virustotal-button"
+            onclick="event.stopPropagation()">
             <span class="vt-icon"></span>
-            VirusTotal
-          </a>
+            VirusTotal</a>
         </div>
       </div>
 
@@ -421,10 +422,11 @@
             <span class="filename">Attila Mod Manager</span>
           </div>
           <a href="https://www.virustotal.com/gui/url/083fdea83e5c5110ee0288a800dccf0cc5fb2b63f0adfda645d126d16aa94fe8?nocache=1"
-            target="_blank" class="virustotal-button">
+            target="_blank"
+            class="virustotal-button"
+            onclick="event.stopPropagation()">
             <span class="vt-icon"></span>
-            VirusTotal
-          </a>
+            VirusTotal</a>
         </div>
       </div>
     </div>
@@ -447,6 +449,12 @@
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
+    document.querySelectorAll('.virustotal-button').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+      });
+    });
+ 
     document.querySelectorAll('[data-tooltip]').forEach(card => {
       const tooltip = card.querySelector('.custom-tooltip');
       let insideTooltip = false;
