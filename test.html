@@ -144,6 +144,7 @@
     }
 
     .manager-disclaimer {
+      display: flex;
       grid-column: 1 / -1;
       max-width: 300px;
       margin: 1rem auto;
@@ -162,6 +163,17 @@
       overflow-wrap: break-word;    /* break long words if needed */
       font-size: 0.875rem;
       color: #666666;
+    }
+
+    .manager-disclaimer::before {
+      content: "";
+      flex: none;
+      width: 20px;
+      height: 20px;
+      margin-right: 0.5rem;
+      background: url('https://cdn4.iconfinder.com/data/icons/information-symbol-essential-lineal-color/24/About-512.png')
+        no-repeat center center;
+      background-size: contain;
     }
 
     .manager-group .card {
@@ -210,8 +222,7 @@
       </div>
     </div>
     <div class="manager-disclaimer">
-      Disclaimer<br>
-      I haven’t developed or had any part in creating the mods or mod managers listed here. They’re all made by independent third parties, so I can’t take responsibility for their content, functionality, or legality.</p>
+      I haven’t developed any of the content listed here. They are created and owned by third parties.
     </div>
   </div>
 
