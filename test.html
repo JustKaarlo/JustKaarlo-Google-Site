@@ -99,7 +99,7 @@
       width: 80vw;
       max-width: 900px;
       height: 80vh;
-      background: rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 16px;
       backdrop-filter: blur(7px);
@@ -185,7 +185,7 @@
       max-width: fit-content;
       margin: 1rem auto 0 auto;
       padding: 0.75rem 1rem;
-      background: rgba(173, 173, 173, 0.05);
+      background: rgba(173, 173, 173, 0.10);
       backdrop-filter: blur(2px);
       border: none;
       border-radius: 12px;
@@ -205,6 +205,23 @@
       background-size: contain;
       opacity: 0.5;
       filter: blur(0.75px) brightness(0.8);
+    }
+
+    .manager-disclaimer-icon-custom {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: 2px solid rgba(120, 120, 120, 0.5);
+      border-radius: 50%;
+      color: rgba(140, 140, 140, 0.7);
+      font-weight: bold;
+      font-size: 18px;
+      opacity: 0.5;
+      filter: blur(0.3px);
+      backdrop-filter: blur(2px);
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
     }
 
     .manager-group .card {
@@ -266,7 +283,7 @@
       </div>
     </div>
     <div class="manager-disclaimer">
-      <div class="manager-disclaimer-icon"></div>
+      <div class="manager-disclaimer-icon-custom">!</div>
       <div>
         I haven't developed any of the content listed here.<br>
         They are created and owned by third parties.
@@ -308,10 +325,8 @@
       britanniaCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Thrones.html'));
 
       // New manager buttons
-      const manager1Card = document.getElementById('manager1-card');
-      manager1Card.addEventListener('click', () => {
-        window.open('https://justkaarlo.github.io/JustKaarlo-Google-Site/files/TotalWar/Total%20Mod%20Manager.exe', '_blank');
-      });
+      manager1Card.addEventListener('click', () => { window.open('https://justkaarlo.github.io/JustKaarlo-Google-Site/files/TotalWar/Total%20Mod%20Manager.exe', '_blank');});
+      
       const manager2Card = document.getElementById('manager2-card');
       manager2Card.addEventListener('click', () => {
         window.open('https://justkaarlo.github.io/JustKaarlo-Google-Site/files/TotalWar/Attila%20Mod%20Manager.exe', '_blank');
