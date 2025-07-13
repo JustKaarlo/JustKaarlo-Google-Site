@@ -152,12 +152,24 @@
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 16px;
 
-      display: flex;
       align-items: center;
       text-align: center;
       justify-content: center;
       font-size: 0.875rem;
       color: #666666;
+    }
+
+    /* give each manager-card the same 260px box-sizing width */
+    .manager-group .card {
+      flex: 0 0 260px;
+    }
+    
+    /* make the images fill that box just like the other buttons */
+    .manager-group .card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;  /* match the rounding on your other buttons */
     }
   </style>
 </head>
@@ -195,8 +207,8 @@
       </div>
     </div>
     <div class="manager-disclaimer">
-      <p>Disclaimer</p>
-      <p>I haven’t developed or had any part in creating the mods or mod managers listed here. They’re all made by independent third parties, so I can’t take responsibility for their content, functionality, or legality.</p>
+      Disclaimer<br>
+      I haven’t developed or had any part in creating the mods or mod managers listed here. They’re all made by independent third parties, so I can’t take responsibility for their content, functionality, or legality.</p>
     </div>
   </div>
 
