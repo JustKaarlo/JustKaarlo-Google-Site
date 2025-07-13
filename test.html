@@ -401,13 +401,19 @@
       const tooltip = card.querySelector('.custom-tooltip');
       let mouseX = 0, mouseY = 0, visible = false;
     
-      const follow = () => {
+      const followMouse = () => {
         if (!visible) return;
-        // offset a bit so the tip isn’t lost under your pointer
-        tooltip.style.top  = (mouseY + 12) + 'px';
-        tooltip.style.left = (mouseX + 12) + 'px';
-        tooltip.style.transform = 'translate(-50%, -100%) scale(1)';
-        requestAnimationFrame(follow);
+        const ttW = tooltip.offsetWidth;
+        const ttH = tooltip.offsetHeight;
+        // Center above cursor, with an 8px gap
+        let left = mouseX - ttW / 2;
+        let top  = mouseY - ttH - 8;
+        // Clamp inside viewport
+        left = Math.max(8, Math.min(left, window.innerWidth - ttW - 8));
+        tooltip.style.left  = left + 'px';
+        tooltip.style.top   = top  + 'px';
+        tooltip.style.transform = 'scale(1)';
+        requestAnimationFrame(followMouse);
       };
     
       card.addEventListener('mousemove', e => {
@@ -419,14 +425,14 @@
         visible = true;
         tooltip.style.opacity = '1';
         tooltip.style.pointerEvents = 'auto';
-        requestAnimationFrame(follow);
+        requestAnimationFrame(followMouse);
       });
     
       card.addEventListener('mouseleave', () => {
         visible = false;
         tooltip.style.opacity = '0';
         tooltip.style.pointerEvents = 'none';
-        tooltip.style.transform = 'translate(-50%, -100%) scale(0.95)';
+        tooltip.style.transform = 'scale(0.95)';
       });
     });
 
