@@ -236,7 +236,7 @@
       position: fixed;
       top: 0;
       left: 0;
-      transform: translateX(-50%) translateY(-100%) scale(0.95);
+      transform: scale(0.95);
       transition: opacity 0.2s ease;
       opacity: 0;
       pointer-events: none;
@@ -296,11 +296,9 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-
     .virustotal-button:hover {
       background: rgba(255, 255, 255, 0.12);
     }
-
     .virustotal-button img {
       height: 1em;
       width: 1em;
@@ -371,6 +369,7 @@
             </a>
         </div>
       </div>
+    </div>
     <div class="manager-disclaimer">
       <div class="manager-disclaimer-icon-custom">!</div>
       <div>
@@ -387,7 +386,6 @@
     </div>
   </div>
 
-  <!-- particles.js lib -->
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     document.querySelectorAll('[data-tooltip]').forEach(card => {
@@ -396,12 +394,15 @@
       let mouseY = 0;
       let tooltipVisible = false;
 
-      // Smooth animation loop
+      const tooltipWidth = tooltip.offsetWidth;
+      const maxX = window.innerWidth - tooltipWidth - 20;
+      tooltip.style.left = `${Math.min(mouseX + 12, maxX)}px`;
+
       const followMouse = () => {
         if (!tooltipVisible) return;
-        tooltip.style.top = `${mouseY + 15}px`;
-        tooltip.style.left = `${mouseX}px`;
-        tooltip.style.transform = 'translateX(-50%) translateY(-100%) scale(1)';
+        tooltip.style.top = `${mouseY + 12}px`;
+        tooltip.style.left = `${mouseX + 12}px`;
+        tooltip.style.transform = 'scale(1)';
         requestAnimationFrame(followMouse);
       };
 
