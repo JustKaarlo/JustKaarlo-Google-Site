@@ -396,6 +396,53 @@
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
+    document.querySelectorAll('[data-tooltip]').forEach(card => {
+      const tooltip = card.querySelector('.custom-tooltip');
+      let insideTooltip = false;
+  
+      const positionTooltip = (e) => {
+        const tooltipWidth = tooltip.offsetWidth;
+        const tooltipHeight = tooltip.offsetHeight;
+        let top = e.clientY - tooltipHeight / 2;
+        let left = e.clientX + 5;
+        tooltip.style.top = top + 'px';
+        tooltip.style.left = left + 'px';
+      };
+  
+      card.addEventListener('mousemove', positionTooltip);
+  
+      card.addEventListener('mouseenter', (e) => {
+        tooltip.style.opacity = '1';
+        tooltip.style.pointerEvents = 'auto';
+        tooltip.style.transform = 'scale(1)';
+        positionTooltip(e);
+      });
+  
+      card.addEventListener('mouseleave', () => {
+        setTimeout(() => {
+          if (!insideTooltip) {
+            tooltip.style.opacity = '0';
+            tooltip.style.pointerEvents = 'none';
+            tooltip.style.transform = 'scale(0.95)';
+          }
+        }, 150);
+      });
+  
+      tooltip.addEventListener('mouseenter', () => {
+        insideTooltip = true;
+        tooltip.style.opacity = '1';
+        tooltip.style.pointerEvents = 'auto';
+        tooltip.style.transform = 'scale(1)';
+      });
+  
+      tooltip.addEventListener('mouseleave', () => {
+        insideTooltip = false;
+        tooltip.style.opacity = '0';
+        tooltip.style.pointerEvents = 'none';
+        tooltip.style.transform = 'scale(0.95)';
+      });
+    });
+    
     document.addEventListener('DOMContentLoaded', () => {
       const overlay = document.getElementById('overlay');
       const frame = document.getElementById('modal-frame');
