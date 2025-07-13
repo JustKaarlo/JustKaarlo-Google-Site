@@ -1,10 +1,259 @@
-<widgetbot
-  server="1272710971743404053"
-  channel="1393650820943188059"
-  thread="1393656493751930971"
-  username="Guest"
-  id="embed"
-  width="100%"
-  height="auto"
-></widgetbot>
-<script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Total War Mods</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* make room for particles layer */
+    body {
+      position: relative;
+      font-family: 'Rubik', sans-serif;
+      background:
+        linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+        linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+        url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/TotalWar_Background.png') center/cover no-repeat fixed;
+      color: #eee;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    /* particles canvas */
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* lift content above particles */
+    .grid,
+    .modal-overlay,
+    .modal {
+      position: relative;
+      z-index: 1;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 12px;
+    }
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+    .modal {
+      position: relative;
+      width: 80vw; max-width: 900px;
+      height: 80vh;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      backdrop-filter: blur(7px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+    .modal iframe {
+      width: 100%; height: 100%; border: 0;
+    }
+    .close-btn {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 40px; height: 40px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      font-size: 2rem;
+      color: #fff;
+      line-height: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <!-- particles layer -->
+  <div id="particles-js"></div>
+
+  <div class="grid">
+    <div id="attila-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Total War Attila">
+    </div>
+    <div id="shogun-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Shogun2.png" alt="Total War Shogun 2">
+    </div>
+    <div id="rome-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_RomeII.png" alt="Total War Rome II">
+    </div>
+    <div id="empire-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Empire2.png" alt="Total War Empire">
+    </div>
+    <div id="napoleon-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Napoleon.png" alt="Total War Napoleon">
+    </div>
+    <div id="britannia-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png" alt="Total War Thrones of Britannia">
+    </div>
+
+    <!-- ——— New buttons section ——— -->
+    <div id="manager1-card" class="card">
+      <img
+        src="https://via.placeholder.com/260x260?text=Manager+1"
+        alt="Manager 1"
+      />
+    </div>
+    <div id="manager2-card" class="card">
+      <img
+        src="https://via.placeholder.com/260x260?text=Manager+2"
+        alt="Manager 2"
+      />
+    </div>
+    <!-- ———————————————————————— -->
+  </div>
+
+  <div id="overlay" class="modal-overlay">
+    <div class="modal">
+      <div class="close-btn">×</div>
+      <iframe id="modal-frame" title="Mods"></iframe>
+    </div>
+  </div>
+
+  <!-- particles.js lib -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay        = document.getElementById('overlay');
+      const frame          = document.getElementById('modal-frame');
+      const attilaCard     = document.getElementById('attila-card');
+      const shogunCard     = document.getElementById('shogun-card');
+      const romeCard       = document.getElementById('rome-card');
+      const empireCard     = document.getElementById('empire-card');
+      const napoleonCard   = document.getElementById('napoleon-card');
+      const britanniaCard  = document.getElementById('britannia-card');
+      const closeBtn       = document.querySelector('.close-btn');
+
+      function openModal(file) {
+        frame.src = file;
+        overlay.style.display = 'flex';
+      }
+
+      attilaCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Attila.html'));
+      shogunCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Shogun2.html'));
+      romeCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/RomeII.html'));
+      empireCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Empire.html'));
+      napoleonCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Napoleon.html'));
+      britanniaCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Thrones.html'));
+
+      // New manager buttons
+      const manager1Card = document.getElementById('manager1-card');
+      manager1Card.addEventListener('click', () => {
+        window.open(
+          'https://justkaarlo.github.io/JustKaarlo-Google-Site/files/TotalWar/Attila Mod Manager.exe',
+          '_blank'
+        );
+      });
+      const manager2Card = document.getElementById('manager2-card');
+      manager2Card.addEventListener('click', () => {
+        window.open('https://example.com/placeholder.exe', '_blank');
+      });
+
+      overlay.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        frame.src = '';
+      });
+
+      closeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        overlay.style.display = 'none';
+        frame.src = '';
+      });
+
+      /* init fire-like particles */
+      particlesJS('particles-js', {
+        particles: {
+          number: {
+            value: 90,
+            density: { enable: true, value_area: 700 }
+          },
+          color: { value: ['#ff4500','#ff8c00','#ffd700'] },
+          shape: { type: 'circle' },
+          opacity: {
+            value: 0.6,
+            random: true,
+            anim: { enable: true, speed: 1.2, opacity_min: 0.2, sync: false }
+          },
+          size: {
+            value: 4,
+            random: true,
+            anim: { enable: true, speed: 4, size_min: 1, sync: false }
+          },
+          line_linked: {
+            enable: false
+          },
+          move: {
+            enable: true,
+            speed: 2,
+            direction: 'top',
+            random: true,
+            straight: false,
+            out_mode: 'out',
+            bounce: false
+          }
+        },
+        interactivity: {
+          detect_on: 'canvas',
+          events: {
+            onhover: { enable: false },
+            onclick: { enable: false },
+            resize: true
+          }
+        },
+        retina_detect: true
+      });
+    });
+  </script>
+</body>
+</html>
