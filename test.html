@@ -114,8 +114,11 @@
     }
 
     .section-header {
-      grid-column: 1 / -1;                 /* full-width row */
+      /* grid-column: 1 / -1; */
+      justify-self: center;
+      width: calc(260px + 20px);
       text-align: center;
+      
       margin: 2rem 0 1rem;                 /* space above and below */
       padding: 1rem 0;                     /* vertical padding */
       font-size: 1.25rem;                  /* same as your cards */
@@ -125,6 +128,14 @@
       border-radius: 8px;                  /* subtler rounding than cards */
       border: 1px solid rgba(255, 255, 255, 0.1);
       box-shadow: none;                    /* no heavy drop shadow */
+    }
+
+    .manager-group {
+      grid-column: 1 / -1;       /* span full width */
+      display: flex;
+      justify-content: center;   /* center them */
+      gap: 2rem;                 /* space between manager buttons */
+      margin-bottom: 2rem;       /* extra space below if you like */
     }
     
     .manager-disclaimer {
