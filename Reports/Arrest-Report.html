@@ -311,9 +311,9 @@
         ],
         footer: { text: "Department of Justice" },
         timestamp: new Date().toISOString()
-        const webhookURL = '{{REPORT_WEBHOOK_URL}}';
+        const webhookURL = '{{ARREST_WEBHOOK_URL}}';
         const THREAD_ID   = "1393656493751930971";
-        const urlWithThread = `${WEBHOOK_URL}?thread_id=${THREAD_ID}`;
+        const urlWithThread = `${ARREST_WEBHOOK_URL}?thread_id=${THREAD_ID}`;
       };
       fetch(urlWithThread, {
         method: "POST",
