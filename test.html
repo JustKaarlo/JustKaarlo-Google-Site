@@ -195,6 +195,18 @@
       overflow: hidden;
       box-sizing: border-box;
     }
+    .overlay-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(44, 47, 51, 0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9;
+    }
   </style>
 </head>
 <body>
@@ -226,29 +238,34 @@
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
-    <div id="popup-overlay">
-      <div class="header-title">✅ Report Submitted</div>
-      <div class="header-subtitle">Your Report Has Been Logged</div>
-    </div>
-    <div id="error-popup">
-      <div class="header-title">⚠️ Submission Failed</div>
-      <div class="header-subtitle">All Fields Are Required</div>
-    </div>
-    <div id="pin-popup">
-      <div class="header-title">🔐 Webhook Required</div>
-      <div class="header-subtitle">Please Enter Webhook URL and Optional Thread ID</div>
-      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL">
-      <datalist id="webhook-history"></datalist>
-      <input type="text" id="thread-name" list="thread-name-history" placeholder="Thread Name (Optional)" style="margin-top: 10px">
-      <datalist id="thread-name-history"></datalist>
-      <input type="text" id="thread-id" list="thread-history" placeholder="Select Thread Name (Optional)" style="margin-top: 10px">
-      <datalist id="thread-history"></datalist>
-      <div id="pin-error">Webhook URL Is Required</div>
-      <div style="margin-top: 15px;">
-        <button onclick="validateWebhook()">Confirm</button>
+    <div id="popup-overlay-wrapper" class="overlay-wrapper">
+      <div id="popup-overlay">
+        <div class="header-title">✅ Report Submitted</div>
+        <div class="header-subtitle">Your Report Has Been Logged</div>
       </div>
     </div>
-  </div>
+    <div id="error-popup-wrapper" class="overlay-wrapper">
+      <div id="error-popup">
+        <div class="header-title">⚠️ Submission Failed</div>
+        <div class="header-subtitle">All Fields Are Required</div>
+      </div>
+    </div>
+    <div id="pin-popup-wrapper" class="overlay-wrapper">
+      <div id="pin-popup">
+        <div class="header-title">🔐 Webhook Required</div>
+        <div class="header-subtitle">Please Enter Webhook URL and Optional Thread ID</div>
+        <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL">
+        <datalist id="webhook-history"></datalist>
+        <input type="text" id="thread-name" list="thread-name-history" placeholder="Thread Name (Optional)" style="margin-top: 10px">
+        <datalist id="thread-name-history"></datalist>
+        <input type="text" id="thread-id" list="thread-history" placeholder="Select Thread Name (Optional)" style="margin-top: 10px">
+        <datalist id="thread-history"></datalist>
+        <div id="pin-error">Webhook URL Is Required</div>
+        <div style="margin-top: 15px;">
+          <button onclick="validateWebhook()">Confirm</button>
+        </div>
+      </div>
+    </div>
 
   <script>
     function autoGrow(el) {
@@ -280,15 +297,15 @@
     }
 
     function showErrorPopup() {
-      const popup = document.getElementById('error-popup');
-      popup.style.display = 'block';
-      setTimeout(() => popup.style.display = 'none', 3000);
+      const wrapper = document.getElementById('error-popup-wrapper');
+      wrapper.style.display = 'flex';
+      setTimeout(() => wrapper.style.display = 'none', 3000);
     }
-
+    
     function showPopup() {
-      const popup = document.getElementById('popup-overlay');
-      popup.style.display = 'block';
-      setTimeout(() => popup.style.display = 'none', 3000);
+      const wrapper = document.getElementById('popup-overlay-wrapper');
+      wrapper.style.display = 'flex';
+      setTimeout(() => wrapper.style.display = 'none', 3000);
     }
 
     function submitForm() {
@@ -304,7 +321,7 @@
       }
 
       window.tempSubmissionData = { location, datetime, defendant, officer, offenses };
-      document.getElementById('pin-popup').style.display = 'block';
+      document.getElementById('pin-popup-wrapper').style.display = 'flex';
       document.getElementById('pin-error').style.display = 'none';
     }
 
@@ -328,7 +345,7 @@
         saveThreadNamedHistory(threadName, actualThreadId);
       }
     
-      document.getElementById('pin-popup').style.display = 'none';
+      document.getElementById('pin-popup-wrapper').style.display = 'none';
       window.tempSubmissionData.webhook = webhook;
       window.tempSubmissionData.thread = actualThreadId;
       processSubmission();
@@ -451,6 +468,18 @@
     document.addEventListener('DOMContentLoaded', () => {
       populateDatalist('webhook-history', 'webhookHistory');
       populateThreadNameDatalist();
+    });
+    document.addEventListener('click', function (e) {
+      // Close popup if clicking outside of popup
+      ['popup-overlay', 'error-popup', 'pin-popup'].forEach(id => {
+        const wrapper = document.getElementById(id + '-wrapper');
+        const popup = document.getElementById(id);
+        if (wrapper && popup && wrapper.style.display === 'flex') {
+          if (!popup.contains(e.target)) {
+            wrapper.style.display = 'none';
+          }
+        }
+      });
     });
   </script>
 </body>
