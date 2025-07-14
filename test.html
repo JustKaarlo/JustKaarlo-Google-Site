@@ -239,10 +239,10 @@
       <div class="header-subtitle">Please Enter Webhook URL and Optional Thread ID</div>
       <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL">
       <datalist id="webhook-history"></datalist>
-      <input type="text" id="thread-name" list="thread-name-history" placeholder="Thread Name" style="margin-top: 10px">
-      <datalist id="thread-name-history"></datalist>
       <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top: 10px">
       <datalist id="thread-history"></datalist>
+      <input type="text" id="thread-name" list="thread-name-history" placeholder="Thread Name" style="margin-top: 10px">
+      <datalist id="thread-name-history"></datalist>
       <div id="pin-error">Webhook URL Is Required</div>
       <div style="margin-top: 15px;">
         <button onclick="validateWebhook()">Confirm</button>
@@ -457,6 +457,18 @@
         const popup = document.getElementById(id);
         if (popup && popup.style.display === 'block' && !popup.contains(e.target)) {
           popup.style.display = 'none';
+        }
+      });
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      const threadIdInput = document.getElementById('thread-id');
+      const threadNameInput = document.getElementById('thread-name');
+      threadNameInput.style.display = 'none';
+      threadIdInput.addEventListener('input', () => {
+        if (threadIdInput.value.length > 1) {
+          threadNameInput.style.display = '';
+        } else {
+          threadNameInput.style.display = 'none';
         }
       });
     });
