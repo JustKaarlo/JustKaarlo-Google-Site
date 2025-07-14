@@ -2,12 +2,14 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Coroner Report</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <title>Medical Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    * { font-family: 'Rubik', sans-serif; }
+    * {
+      font-family: 'Rubik', sans-serif;
+    }
 
     body {
       background: transparent;
@@ -26,20 +28,20 @@
       position: relative;
     }
 
-    .header {
+    .logo {
       background: #56585B;
       padding: 15px;
       text-align: center;
     }
 
-    .header-title {
+    .logo .main {
       font-size: 20px;
       font-weight: bold;
       color: white;
       margin: 0;
     }
 
-    .sub-header {
+    .logo .sub {
       font-size: 14px;
       color: #ccc;
       margin-top: 4px;
@@ -81,6 +83,7 @@
     input[type="date"],
     input[type="time"],
     input[type="datetime-local"],
+    select,
     textarea {
       padding: 6px 10px;
       border: 1px solid #444;
@@ -99,13 +102,13 @@
       display: flex;
       flex-wrap: wrap;
       gap: 15px;
-      margin: 15px;
       justify-content: center;
+      margin: 15px 0;
     }
 
     .checkbox-group label {
-      font-size: 14px;
       color: #ccc;
+      font-size: 14px;
     }
 
     .checkbox-group input {
@@ -200,12 +203,6 @@
     }
     /* --------------------------------------------- */
 
-    input[readonly] {
-      color: #888;
-      background: #2C2F33;
-      cursor: not-allowed;
-    }
-
     textarea.autogrow {
       width: 100%;
       min-height: auto;
@@ -220,64 +217,128 @@
       overflow: hidden;
       box-sizing: border-box;
     }
-
-    .row .location {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      gap: 10px;
-      margin: 15px;
-    }
   </style>
 </head>
 
 <body>
   <div class="card">
-    <div class="header">
-      <div class="header-title">MEDICAL EXAMINER-CORONER</div>
-      <div class="sub-header">CORONER REPORT</div>
+    <div class="logo">
+      <div class="main">EMERGENCY MEDICAL RESPONSE</div>
+      <div class="sub">MEDICAL REPORT</div>
     </div>
 
-    <div class="section-title">DECEDENT'S INFORMATION</div>
-    <div class="row">
-      <div class="field-group">
-        <label>Date of Examination</label>
-        <input type="date" id="exam_date" readonly>
-      </div>
-      <div class="field-group">
-        <label>Name</label>
-        <input type="text" id="name">
-      </div>
-      <div class="field-group">
-        <label>Date of Birth</label>
-        <input type="date" id="dob">
-      </div>
-    </div>
-
-    <div class="section-title">PRONOUNCEMENT OF DEATH</div>
     <div class="row">
       <div class="field-group">
         <label>Time & Date</label>
         <input type="datetime-local" id="datetime">
       </div>
       <div class="field-group wide">
-        <label>Location</label>
+        <label>Location of Incident</label>
         <textarea id="location" class="autogrow" rows="1"></textarea>
       </div>
     </div>
 
+    <div class="section-title">PATIENT INFORMATION</div>
     <div class="row">
-      <div class="field-group wide">
-        <label>Cause of Death</label>
-        <textarea id="cause"></textarea>
+      <div class="field-group"><label>Name</label><input type="text" id="name"></div>
+      <div class="field-group"><label>Gender</label>
+        <select id="gender">
+          <option value="">Select</option>
+          <option>Male</option>
+          <option>Female</option>
+        </select>
+      </div>
+      <div class="field-group"><label>Date of Birth</label><input type="date" id="dob"></div>
+    </div>
+
+    <div class="section-title">ASSESSMENT</div>
+    <div class="row">
+      <div class="field-group wide"><label>Primary Injury/Condition</label><textarea id="primary"></textarea></div>
+      <div class="field-group wide"><label>Visible Injuries</label><textarea id="injuries"></textarea></div>
+    </div>
+
+    <div class="row">
+      <div class="field-group"><label>Pulse</label>
+        <select id="pulse">
+          <option value="">Select</option>
+          <option>NONE</option>
+          <option>VERY WEAK</option>
+          <option>WEAK STABLE</option>
+          <option>NORMAL</option>
+          <option>HIGH</option>
+          <option>VERY HIGH</option>
+          <option>DANGEROUSLY HIGH</option>
+        </select>
+      </div>
+      <div class="field-group"><label>Respiration</label>
+        <select id="respiration">
+          <option value="">Select</option>
+          <option>NONE</option>
+          <option>VERY LIGHT</option>
+          <option>LIGHT</option>
+          <option>MODERATE</option>
+          <option>VIGOROUS</option>
+          <option>VERY HARD</option>
+          <option>MAX EFFORT</option>
+        </select>
+      </div>
+      <div class="field-group"><label>Blood Pressure</label>
+        <select id="bp">
+          <option value="">Select</option>
+          <option>NONE</option>
+          <option>NORMAL</option>
+          <option>ELEVATED</option>
+          <option>STAGE-1</option>
+          <option>STAGE-2</option>
+          <option>HYPERTENSIVE CRISIS</option>
+        </select>
       </div>
     </div>
 
-    <div class="checkbox-group">
-      <label><input type="checkbox" id="foul"> Signs of foul play/crime scene?</label>
-      <label><input type="checkbox" id="meds"> Medications administered?</label>
-      <label><input type="checkbox" id="defib"> Defibrillation attempted?</label>
-      <label><input type="checkbox" id="cpr"> CPR attempted?</label>
+    <div class="section-title">LEVEL OF CONSCIOUSNESS</div>
+    <div class="checkbox-group" id="consciousness">
+      <label><input type="checkbox" value="Alert"> Alert</label>
+      <label><input type="checkbox" value="Voice"> Voice</label>
+      <label><input type="checkbox" value="Pain"> Pain</label>
+      <label><input type="checkbox" value="Unresponsive"> Unresponsive</label>
+    </div>
+
+    <div class="section-title">TREATMENT PROVIDED</div>
+    <div class="checkbox-group" id="treatment">
+      <label><input type="checkbox" value="Basic First Aid"> Basic First Aid</label>
+      <label><input type="checkbox" value="Tourniquet Applied"> Tourniquet Applied</label>
+      <label><input type="checkbox" value="Wound Dressing / Bandaging"> Wound Dressing / Bandaging</label>
+      <label><input type="checkbox" value="Transport to Hospital"> Transport to Hospital</label>
+      <label><input type="checkbox" value="Pain Relief Administered"> Pain Relief Administered</label>
+      <label><input type="checkbox" value="CPR"> CPR</label>
+    </div>
+
+    <div class="row">
+      <div class="field-group wide">
+        <label>Transported To</label>
+        <select id="hospital">
+          <option value="">Select</option>
+          <option>CENTRAL LOS SANTOS MEDICAL CENTER</option>
+          <option>MOUNT ZONAH MEDICAL CENTER</option>
+          <option>PILLBOX HILL MEDICAL CENTER</option>
+          <option>ST. FIACRE HOSPITAL</option>
+          <option>ECLIPSE MEDICAL TOWER</option>
+          <option>PORTOLA TRINITY MEDICAL CENTER</option>
+          <option>THE BAY CARE CENTER</option>
+          <option>SANDY SHORES MEDICAL CENTER</option>
+        </select>
+      </div>
+      <div class="field-group wide">
+        <label>Condition During Transport</label>
+        <select id="condition">
+          <option value="">Select</option>
+          <option>STABLE</option>
+          <option>CRITICAL</option>
+          <option>DETERIORATING</option>
+          <option>IMPROVED</option>
+          <option>DECEASED</option>
+        </select>
+      </div>
     </div>
 
     <div class="button-row">
@@ -285,10 +346,10 @@
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
 
-    <!-- ----- Popup HTML from Arrest-Report.html ----- -->
+    <!-- Popup HTML from Arrest-Report.html -->
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
-      <div class="header-subtitle">Your Coroner Report Has Been Logged</div>
+      <div class="header-subtitle">Your Report Has Been Logged</div>
     </div>
     <div id="error-popup">
       <div class="header-title">⚠️ Submission Failed</div>
@@ -310,11 +371,9 @@
         <button onclick="deletePreset()" class="clear-btn" style="margin-left:10px;">Delete Preset</button>
       </div>
     </div>
-    <!-- --------------------------------------------- -->
   </div>
 
   <script>
-    // ----- Popup JS from Arrest-Report.html -----
     function showAlert(message, title = '🔔 Notice') {
       const existing = document.getElementById('custom-alert');
       if (existing) existing.remove();
@@ -335,13 +394,11 @@
         text-align: center;
         max-width: 90%;
       `;
-
       popup.innerHTML = `
         <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #7289da;">${title}</div>
         <div style="font-size: 15px; color: #ccc;">${message}</div>
         <button style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;" onclick="document.getElementById('custom-alert').remove()">Close</button>
       `;
-
       document.body.appendChild(popup);
     }
 
@@ -445,20 +502,13 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      // populate webhook preset/history lists
       populatePresetHistory();
       populateDatalist('webhook-history', 'webhookHistory');
       populateThreadNameDatalist();
 
-      // autogrow for location
       const locField = document.getElementById("location");
       autoGrow(locField);
       locField.addEventListener("input", () => autoGrow(locField));
-
-      // set exam date to today
-      const examInput = document.getElementById('exam_date');
-      const today = new Date().toISOString().split('T')[0];
-      examInput.value = today;
     });
 
     function savePreset(name, webhook, threadId) {
@@ -542,51 +592,48 @@
       });
       const threadInput = document.getElementById('thread-id');
       threadInput.addEventListener('change', () => {
-        const selectedName = threadInput.value;
-        const matchedOption = Array.from(datalist.options).find(opt => opt.value === selectedName);
-        if (matchedOption) {
-          threadInput.setAttribute('data-thread-id', matchedOption.dataset.id);
-        }
+        const sel = threadInput.value;
+        const opt = Array.from(datalist.options).find(o => o.value === sel);
+        if (opt) threadInput.setAttribute('data-thread-id', opt.dataset.id);
       });
     }
 
     function validateWebhook() {
       const preset = document.getElementById('preset-name').value.trim();
       const webhook = document.getElementById('webhook-url').value.trim();
-      const threadId = document.getElementById('thread-id').value.trim();
+      const thread   = document.getElementById('thread-id').value.trim();
 
       if (!webhook) {
         const err = document.getElementById('pin-error');
         err.style.display = 'block';
-        const popup = document.getElementById('pin-popup');
-        popup.classList.add('shake');
-        setTimeout(() => popup.classList.remove('shake'), 400);
+        const pop = document.getElementById('pin-popup');
+        pop.classList.add('shake');
+        setTimeout(() => pop.classList.remove('shake'), 400);
         return;
       }
-
       saveToHistory('webhookHistory', webhook);
-      saveToHistory('threadHistory', threadId);
-      savePreset(preset, webhook, threadId);
+      saveToHistory('threadHistory', thread);
+      savePreset(preset, webhook, thread);
 
       document.getElementById('pin-popup').style.display = 'none';
       window.tempSubmissionData.webhook = webhook;
-      window.tempSubmissionData.thread = threadId;
+      window.tempSubmissionData.thread   = thread;
       processSubmission();
     }
 
     function randomID() {
       const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       const numbers = "0123456789";
-      let part1 = "", part2 = "", part3 = "";
-      for (let i = 0; i < 3; i++) part1 += numbers[Math.floor(Math.random() * numbers.length)];
-      for (let i = 0; i < 2; i++) part2 += letters[Math.floor(Math.random() * letters.length)];
-      part3 = letters[Math.floor(Math.random() * letters.length)];
-      return `${part1}-${part2}-${part3}`;
+      let id = "";
+      for (let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
+      id += "-";
+      for (let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
+      id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
+      return id;
     }
 
     function resetForm() {
-      const fields = document.querySelectorAll('input:not(#exam_date), textarea');
-      fields.forEach(el => {
+      document.querySelectorAll('input, textarea, select').forEach(el => {
         if (el.type === 'checkbox') el.checked = false;
         else el.value = '';
       });
@@ -595,24 +642,37 @@
     }
 
     function submitForm() {
-      const name = document.getElementById('name').value.trim();
-      const dob = document.getElementById('dob').value;
-      const exam_date = document.getElementById('exam_date').value;
-      const datetime = document.getElementById('datetime').value;
-      const location = document.getElementById('location').value.trim();
-      const cause = document.getElementById('cause').value.trim();
-      const foul = document.getElementById('foul').checked ? '✅ Yes' : '❌ No';
-      const meds = document.getElementById('meds').checked ? '✅ Yes' : '❌ No';
-      const defib = document.getElementById('defib').checked ? '✅ Yes' : '❌ No';
-      const cpr = document.getElementById('cpr').checked ? '✅ Yes' : '❌ No';
+      const getVals = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
+      const datetime    = document.getElementById('datetime').value;
+      const location    = document.getElementById('location').value.trim();
+      const name        = document.getElementById('name').value.trim();
+      const gender      = document.getElementById('gender').value;
+      const dob         = document.getElementById('dob').value;
+      const primary     = document.getElementById('primary').value.trim();
+      const injuries    = document.getElementById('injuries').value.trim();
+      const pulse       = document.getElementById('pulse').value;
+      const respiration = document.getElementById('respiration').value;
+      const bp          = document.getElementById('bp').value;
+      const consciousness = getVals('consciousness');
+      const treatment     = getVals('treatment');
+      const hospital      = document.getElementById('hospital').value;
+      const condition     = document.getElementById('condition').value;
 
-      if (!name || !dob || !exam_date || !datetime || !location || !cause) {
+      if (!datetime || !location || !name || !gender || !dob
+        || !primary || !injuries || !pulse || !respiration
+        || !bp || consciousness.length === 0
+        || treatment.length === 0 || !hospital
+        || !condition) {
         document.getElementById('error-popup').style.display = 'block';
         setTimeout(() => document.getElementById('error-popup').style.display = 'none', 3000);
         return;
       }
 
-      window.tempSubmissionData = { name, dob, exam_date, datetime, location, cause, foul, meds, defib, cpr };
+      window.tempSubmissionData = {
+        datetime, location, name, gender, dob,
+        primary, injuries, pulse, respiration, bp,
+        consciousness, treatment, hospital, condition
+      };
       document.getElementById('pin-popup').style.display = 'block';
       document.getElementById('pin-error').style.display = 'none';
     }
@@ -620,22 +680,21 @@
     function processSubmission() {
       const data = window.tempSubmissionData;
       const generatedID = randomID();
-      const formattedDateTime = data.datetime.replace('T', ' ');
-      const datetimeInput = document.getElementById('datetime');
-      const originalInput = datetimeInput.cloneNode(true);
+      const formattedDT = data.datetime.replace('T', ' ');
+      const dtInput = document.getElementById('datetime');
+      const originalInput = dtInput.cloneNode(true);
       const span = document.createElement('div');
-      span.textContent = formattedDateTime;
-      span.style = datetimeInput.style.cssText;
-      span.className = datetimeInput.className;
-      datetimeInput.parentNode.replaceChild(span, datetimeInput);
+      span.textContent = formattedDT;
+      span.style = dtInput.style.cssText;
+      dtInput.parentNode.replaceChild(span, dtInput);
 
       const toHide = [
         document.querySelector('.button-row'),
-        document.querySelector('.header'),
+        document.querySelector('.logo')
       ];
       toHide.forEach(el => el && (el.style.display = 'none'));
 
-      html2canvas(document.querySelector(".card"), {
+      html2canvas(document.querySelector('.card'), {
         backgroundColor: null,
         scale: 2,
         useCORS: true
@@ -645,33 +704,29 @@
 
         canvas.toBlob(blob => {
           const embed = {
-            title: "CORONER REPORT",
+            title: "MEDICAL REPORT",
             color: 4737096,
             fields: [
               { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
             ],
-            footer: { text: "Medical Examiner Office" },
-            timestamp: new Date().toISOString(),
-            image: { url: "attachment://report.png" }
+            image: { url: "attachment://report.png" },
+            footer: { text: "Emergency Medical Services" },
+            timestamp: new Date().toISOString()
           };
-
           const formData = new FormData();
           formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
           formData.append("file", blob, "report.png");
-          
+
           const threadQuery = data.thread ? `?thread_id=${data.thread}` : '';
           const finalURL = `${data.webhook}${threadQuery}`;
-
-          fetch(finalURL, {
-            method: "POST",
-            body: formData
-          })
-          .then(() => {
-            document.getElementById('popup-overlay').style.display = 'block';
-            setTimeout(() => document.getElementById('popup-overlay').style.display = 'none', 3000);
-            resetForm();
-          })
-          .catch(() => showAlert("Failed to Submit Report.", "❌ Error"));
+          
+          fetch(finalURL, { method: "POST", body: formData })
+            .then(() => {
+              document.getElementById('popup-overlay').style.display = 'block';
+              setTimeout(() => document.getElementById('popup-overlay').style.display = 'none', 3000);
+              resetForm();
+            })
+            .catch(() => showAlert("Failed to Submit Report.", "❌ Error"));
         });
       });
     }
