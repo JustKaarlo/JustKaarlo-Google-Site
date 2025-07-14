@@ -241,7 +241,8 @@
       <datalist id="webhook-history"></datalist>
       <input type="text" id="thread-name" list="thread-name-history" placeholder="Thread Name (Optional)" style="margin-top: 10px">
       <datalist id="thread-name-history"></datalist>
-      <input type="text" id="thread-id" placeholder="Thread ID (Optional)" style="margin-top: 10px">
+      <input type="text" id="thread-id" list="thread-history" placeholder="Select Thread Name (Optional)" style="margin-top: 10px">
+      <datalist id="thread-history"></datalist>
       <div id="pin-error">Webhook URL Is Required</div>
       <div style="margin-top: 15px;">
         <button onclick="validateWebhook()">Confirm</button>
@@ -309,8 +310,9 @@
 
     function validateWebhook() {
       const webhook = document.getElementById('webhook-url').value.trim();
-      const threadName = document.getElementById('thread-name').value.trim();
-      const threadId = document.getElementById('thread-id').value.trim();
+      const threadInput = document.getElementById('thread-id');
+      const threadName = threadInput.value.trim();
+      const actualThreadId = getThreadIdByName(threadName);
     
       if (!webhook) {
         const err = document.getElementById('pin-error');
@@ -322,13 +324,13 @@
       }
     
       saveToHistory('webhookHistory', webhook);
-      if (threadName && threadId) {
-        saveThreadNamedHistory(threadName, threadId);
+      if (threadName && actualThreadId) {
+        saveThreadNamedHistory(threadName, actualThreadId);
       }
     
       document.getElementById('pin-popup').style.display = 'none';
       window.tempSubmissionData.webhook = webhook;
-      window.tempSubmissionData.thread = threadId;
+      window.tempSubmissionData.thread = actualThreadId;
       processSubmission();
     }
 
@@ -431,14 +433,20 @@
       });
     }
     function populateThreadNameDatalist() {
-      const datalist = document.getElementById('thread-name-history');
+      const datalist = document.getElementById('thread-history');
       datalist.innerHTML = '';
       const history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
       history.forEach(entry => {
         const option = document.createElement('option');
         option.value = entry.name;
+        option.dataset.id = entry.id;
         datalist.appendChild(option);
       });
+    }
+    function getThreadIdByName(name) {
+      const history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
+      const entry = history.find(item => item.name === name);
+      return entry ? entry.id : name; // fallback in case it's a raw ID
     }
     document.addEventListener('DOMContentLoaded', () => {
       populateDatalist('webhook-history', 'webhookHistory');
