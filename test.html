@@ -1,410 +1,401 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <title>Reports</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;800&display=swap" rel="stylesheet">
+  <title>Arrest Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Rubik', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-
-    html,
+    * { font-family: 'Rubik', sans-serif; }
     body {
-      height: 100%;
-      overflow: hidden;
-      background: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/ProfileTheme_BackgroundWithoutGrid.png') no-repeat center/cover;
-      filter: blur(8px);
-      transform: scale(1.05);
-      z-index: -2;
-    }
-
-    #particle-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
-
-    .container {
-      position: relative;
-      grid-auto-flow: row dense;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 40px;
-      max-width: 1200px;
-      width: 100%;
-      padding: 20px 50px 50px;
-      margin: 0 auto;
-    }
-
-    .title {
-      grid-column: 1 / -1;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border-radius: 12px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
-
-    .title h1 {
-      font-size: 64px;
-      font-weight: 800;
-      color: rgba(255, 255, 255, 0.9);
-      text-transform: uppercase;
-      letter-spacing: 4px;
-      text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
-    }
-
-    .report-btn {
-      background: rgba(44, 47, 51, 0.15);
+      background: transparent;
+      padding: 30px;
+      max-width: 750px;
+      margin: auto;
       color: white;
-      font-weight: 800;
-      font-size: 34px;
-      letter-spacing: 2px;
-      padding: 30px 25px;
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: all 0.2s ease;
-      width: 100%;
+    }
+    .card {
+      background: #2C2F33;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .header {
+      background: #56585B;
+      padding: 15px;
       text-align: center;
     }
-
-    .report-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    .header-title {
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      margin: 0;
     }
-
-    .report-btn.center-align {
-      grid-column: 2 / 3;
+    .header-subtitle {
+      font-size: 15px;
+      font-style: bold;
+      color: #ccc;
+      margin-top: 4px;
     }
-
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      z-index: 3;
+    .section-title {
+      font-weight: bold;
+      font-size: 16px;
+      background: #23272A;
+      text-align: center;
+      padding: 8px;
+      margin-top: 20px;
+      border-radius: 6px;
     }
-
-    .modal {
-      position: fixed;
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 15px;
+    }
+    .field-group {
+      flex: 1;
+      min-width: 150px;
+      display: flex;
+      flex-direction: column;
+    }
+    .field-group label {
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: #ccc;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    input[type="text"], input[type="datetime-local"] {
+      padding: 6px 10px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #23272A;
+      color: white;
+    }
+    .wide { width: 100%; }
+    button {
+      background-color: #3c78d8;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover { background-color: #5187dc; }
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #23272A;
+    }
+    .tag-container input {
+      border: none;
+      flex: 1;
+      min-width: 120px;
+      padding: 6px 8px;
+      font-size: 14px;
+      background: transparent;
+      color: white;
+      outline: none;
+    }
+    .tag {
+      background-color: #99aab5;
+      color: #2C2F33;
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+    }
+    .tag .remove {
+      margin-left: 8px;
+      color: #2C2F33;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .button-row {
+      display: flex;
+      gap: 10px;
+      margin: 15px;
+    }
+    .clear-btn {
+      background-color: #4f545c;
+      color: #c0c0c0;
+    }
+    .clear-btn:hover {
+      background-color: #5d626a;
+    }
+    .submit-btn { flex: 1; }
+    #popup-overlay, #error-popup, #pin-popup {
+      position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 850px;
-      background: transparent;
-      overflow: hidden;
+      background: #23272A;
+      color: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
       display: none;
-      z-index: 4;
-      transition: height 0.2s ease;
+      z-index: 10;
+      max-width: 90%;
+      text-align: center;
     }
-
-    .iframe-wrapper {
+    #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
+    #popup-overlay .header-subtitle,
+    #error-popup .header-subtitle,
+    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
+    #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
+    #pin-popup input {
       width: 100%;
-      height: 100%;
-      overflow: auto;
-      position: relative;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
-
-    .iframe-wrapper::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-      background: transparent;
-    }
-
-    .iframe-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: -17px;
-      width: calc(100% + 17px);
-      height: 100%;
-      border: none;
-      background: transparent;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 12px;
-      right: 16px;
-      background: #f04747;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-weight: bold;
-      z-index: 5;
-    }
-
-    /* new share button */
-    .share-btn {
-      position: absolute;
-      top: 12px;
-      right: 60px;
-      background: #0084ff;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-weight: bold;
-      z-index: 5;
-      font-size: 16px;
-    }
-
-    .share-popup {
-      position: absolute;
-      top: 40px;
-      right: 60px;
-      background: white;
-      color: black;
       padding: 10px;
+      font-size: 18px;
+      text-align: center;
+      margin-top: 15px;
       border-radius: 6px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      display: none;
-      width: 250px;
-      z-index: 6;
-    }
-
-    .share-popup input {
-      width: 100%;
-      padding: 5px;
-      margin-bottom: 8px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
-    .share-popup button {
-      background: #0084ff;
+      border: 1px solid #444;
+      background: #2C2F33;
       color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
+    }
+    #pin-error {
+      color: #f04747;
       font-size: 14px;
+      margin-top: 10px;
+      display: none;
+    }
+    .shake {
+      animation: shake 0.4s;
+    }
+    @keyframes shake {
+      0% { transform: translate(-50%, -50%) translateX(0); }
+      25% { transform: translate(-50%, -50%) translateX(-10px); }
+      50% { transform: translate(-50%, -50%) translateX(10px); }
+      75% { transform: translate(-50%, -50%) translateX(-10px); }
+      100% { transform: translate(-50%, -50%) translateX(0); }
+    }
+    textarea.autogrow {
+      width: 100%;
+      min-height: auto;
+      line-height: 1.4;
+      padding: 6px 10px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      font-size: 14px;
+      background: #23272A;
+      color: white;
+      resize: none;
+      overflow: hidden;
+      box-sizing: border-box;
     }
   </style>
 </head>
-
 <body>
-  <canvas id="particle-canvas"></canvas>
-  <div class="container">
-    <div class="title">
-      <h1>FILE A REPORT</h1>
+  <div class="card">
+    <div class="header">
+      <div class="header-title">DEPARTMENT OF JUSTICE</div>
+      <div class="header-subtitle">ARREST REPORT</div>
     </div>
-    <button class="report-btn"
-      onclick="openModal(this.getAttribute('data-link'))"
-      data-link="https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html">
-      ARREST
-    </button>
-    <button class="report-btn"
-      onclick="openModal(this.getAttribute('data-link'))"
-      data-link="https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Citation-Report.html">
-      CITATION
-    </button>
-    <button class="report-btn"
-      onclick="openModal(this.getAttribute('data-link'))"
-      data-link="https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Coroner-Report.html">
-      CORONER
-    </button>
-    <button class="report-btn"
-      onclick="openModal(this.getAttribute('data-link'))"
-      data-link="https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Medical-Report.html">
-      MEDICAL
-    </button>
-    <button class="report-btn center-align"
-      onclick="openModal(this.getAttribute('data-link'))"
-      data-link="https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Fire-Incident-Report.html">
-      FIRE INCIDENT
-    </button>
-    <button class="report-btn"
-      onclick="openModal(this.getAttribute('data-link'))"
-      data-link="https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/TOW-Report.html">
-      TOW
-    </button>
-    <button class="report-btn"
-      onclick="openModal(this.getAttribute('data-link'))"
-      data-link="https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Prison-Transport.html">
-      PRISON TRANSPORT
-    </button>
-  </div>
-  <div class="overlay" id="overlay" onclick="closeModal()"></div>
-  <div class="modal" id="modal">
-    <button class="close-btn" onclick="closeModal()">Close</button>
-    <button class="share-btn" id="share-btn" title="Share">🔗</button>
-    <div class="share-popup" id="share-popup">
-      <input type="text" id="share-link" readonly>
-      <button id="copy-link-btn">Copy link</button>
+    <div class="row">
+      <div class="field-group wide">
+        <label>Location</label>
+        <textarea id="location" class="autogrow" rows="1"></textarea>
+      </div>
+      <div class="field-group"><label>Time & Date</label><input type="datetime-local" id="datetime"></div>
     </div>
-    <div class="iframe-wrapper">
-      <iframe id="modal-frame"></iframe>
+    <div class="row">
+      <div class="field-group"><label>Defendant</label><input type="text" id="defendant"></div>
+      <div class="field-group"><label>Arresting Officer</label><input type="text" id="officer"></div>
+    </div>
+    <div class="section-title">CRIMINAL OFFENSE(S)</div>
+    <div class="row">
+      <div class="field-group wide">
+        <div id="offense-tags" class="tag-container">
+          <input type="text" id="offenseInput" placeholder="Type And Press Enter">
+        </div>
+      </div>
+    </div>
+    <div class="button-row">
+      <button class="clear-btn" onclick="resetForm()">Clear</button>
+      <button class="submit-btn" onclick="submitForm()">Submit</button>
+    </div>
+    <div id="popup-overlay">
+      <div class="header-title">✅ Report Submitted</div>
+      <div class="header-subtitle">Your Report Has Been Logged</div>
+    </div>
+    <div id="error-popup">
+      <div class="header-title">⚠️ Submission Failed</div>
+      <div class="header-subtitle">All Fields Are Required</div>
+    </div>
+    <div id="pin-popup">
+      <div class="header-title">🔐 Webhook Required</div>
+      <div class="header-subtitle">Please Enter Webhook URL and Optional Thread ID</div>
+      <input type="text" id="webhook-url" placeholder="Enter Webhook URL">
+      <input type="text" id="thread-id" placeholder="Optional Thread ID" style="margin-top: 10px">
+      <div id="pin-error">Webhook URL Is Required</div>
+      <div style="margin-top: 15px;">
+        <button onclick="validateWebhook()">Confirm</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // Particle background
-    const canvas = document.getElementById('particle-canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resize);
-
-    class Particle {
-      constructor() {
-        this.init();
-      }
-      init() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 3 + 1;
-        this.vx = (Math.random() - 0.5) * 0.5;
-        this.vy = (Math.random() - 0.5) * 0.5;
-      }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-          this.init();
-        }
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255,255,255,0.08)';
-        ctx.fill();
-      }
+    function autoGrow(el) {
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
     }
 
-    function initParticles() {
-      particles = [];
-      for (let i = 0; i < 100; i++) {
-        particles.push(new Particle());
-      }
+    document.addEventListener("DOMContentLoaded", () => {
+      const locField = document.getElementById("location");
+      autoGrow(locField);
+      locField.addEventListener("input", () => autoGrow(locField));
+    });
+
+    function randomID() {
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const numbers = "0123456789";
+      let id = "";
+      for(let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
+      id += "-";
+      for(let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
+      id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
+      return id;
     }
 
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        p.update();
-        p.draw();
+    function resetForm() {
+      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
+      document.querySelectorAll('.tag').forEach(tag => tag.remove());
+    }
+
+    function showErrorPopup() {
+      const popup = document.getElementById('error-popup');
+      popup.style.display = 'block';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
+    function showPopup() {
+      const popup = document.getElementById('popup-overlay');
+      popup.style.display = 'block';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
+    function submitForm() {
+      const location = document.getElementById('location').value.trim();
+      const datetime = document.getElementById('datetime').value.trim();
+      const defendant = document.getElementById('defendant').value.trim();
+      const officer = document.getElementById('officer').value.trim();
+      const offenses = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
+
+      if (!location || !datetime || !defendant || !officer || offenses.length === 0) {
+        showErrorPopup();
+        return;
+      }
+
+      window.tempSubmissionData = { location, datetime, defendant, officer, offenses };
+      document.getElementById('pin-popup').style.display = 'block';
+      document.getElementById('pin-error').style.display = 'none';
+    }
+
+    function validateWebhook() {
+      const webhook = document.getElementById('webhook-url').value.trim();
+      const thread = document.getElementById('thread-id').value.trim();
+    
+      if (!webhook) {
+        const err = document.getElementById('pin-error');
+        err.style.display = 'block';
+        const popup = document.getElementById('pin-popup');
+        popup.classList.add('shake');
+        setTimeout(() => popup.classList.remove('shake'), 400);
+        return;
+      }
+    
+      document.getElementById('pin-popup').style.display = 'none';
+      window.tempSubmissionData.webhook = webhook;
+      window.tempSubmissionData.thread = thread;
+      processSubmission();
+    }
+
+    function processSubmission() {
+      const data = window.tempSubmissionData;
+      const generatedID = randomID();
+      const formattedDateTime = data.datetime.replace('T', ' ');
+    
+      const datetimeInput = document.getElementById('datetime');
+      const originalInput = datetimeInput.cloneNode(true);
+      const span = document.createElement('div');
+      span.textContent = formattedDateTime;
+      span.style = datetimeInput.style.cssText;
+      datetimeInput.parentNode.replaceChild(span, datetimeInput);
+    
+      const toHide = [
+        document.querySelector('.button-row'),
+        document.querySelector('.header'),
+        document.querySelector('#offenseInput'),
+        ...document.querySelectorAll('.tag .remove')
+      ];
+      toHide.forEach(el => el && (el.style.display = 'none'));
+    
+      html2canvas(document.querySelector(".card"), {
+        backgroundColor: null,
+        scale: 2
+      }).then(canvas => {
+        span.parentNode.replaceChild(originalInput, span);
+        toHide.forEach(el => el && (el.style.display = ''));
+    
+        canvas.toBlob(blob => {
+          const embed = {
+            title: "ARREST REPORT",
+            color: 4737096,
+            fields: [
+              { name: "> ID", value: `\u0060\u0060\u0060\n${generatedID}\n\u0060\u0060\u0060`, inline: false },
+            ],
+            image: { url: "attachment://report.png" },
+            footer: { text: "Department of Justice" },
+            timestamp: new Date().toISOString()
+          };
+    
+          const formData = new FormData();
+          formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
+          formData.append("file", blob, "report.png");
+    
+          const threadQuery = data.thread ? `?thread_id=${data.thread}` : '';
+          const finalURL = `${data.webhook}${threadQuery}`;
+    
+          fetch(finalURL, {
+            method: "POST",
+            body: formData
+          })
+          .then(() => {
+            showPopup();
+            resetForm();
+          })
+          .catch(() => alert("Failed to Submit Report."));
+        });
       });
-      requestAnimationFrame(animateParticles);
     }
-
-    resize();
-    initParticles();
-    animateParticles();
-
-    // Modal logic
-    const modal = document.getElementById('modal');
-    const iframe = document.getElementById('modal-frame');
-    const overlay = document.getElementById('overlay');
-    const shareBtn = document.getElementById('share-btn');
-    const sharePopup = document.getElementById('share-popup');
-    const shareLinkInput = document.getElementById('share-link');
-    const copyLinkBtn = document.getElementById('copy-link-btn');
-
-    function openModal(src) {
-      overlay.style.display = 'block';
-      modal.style.display = 'block';
-      shareLinkInput.value = src;
-      sharePopup.style.display = 'none';
-
-      iframe.onload = () => {
-        const maxH = window.innerHeight * 0.95;
-        let h;
-        try {
-          const doc = iframe.contentDocument || iframe.contentWindow.document;
-          h = Math.min(doc.documentElement.scrollHeight, maxH);
-          const styleTag = doc.createElement('style');
-          styleTag.textContent = `html::-webkit-scrollbar, body::-webkit-scrollbar {width:0; height:0;}`;
-          doc.head.appendChild(styleTag);
-        } catch {
-          h = maxH;
-        }
-        modal.style.height = h + 'px';
-      };
-      iframe.src = src;
-    }
-
-    function closeModal() {
-      modal.style.display = 'none';
-      overlay.style.display = 'none';
-      iframe.src = '';
-      modal.style.height = '';
-      sharePopup.style.display = 'none';
-    }
-
-    // share button toggles popup
-    shareBtn.addEventListener('click', e => {
-      e.stopPropagation();
-      sharePopup.style.display = sharePopup.style.display === 'block' ? 'none' : 'block';
-    });
-
-    // copy to clipboard
-    copyLinkBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText(shareLinkInput.value);
-    });
-
-    // click outside share popup to close it
-    document.addEventListener('click', e => {
-      if (!sharePopup.contains(e.target) && e.target !== shareBtn) {
-        sharePopup.style.display = 'none';
+    const offenseInput = document.getElementById('offenseInput');
+    const offenseContainer = document.getElementById('offense-tags');
+    offenseInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && this.value.trim()) {
+        e.preventDefault();
+        addOffenseTag(this.value.trim());
+        this.value = '';
       }
     });
-
-    // hash links
-    window.addEventListener('DOMContentLoaded', () => {
-      const hashMap = {
-        '#arrest-report': 'https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html',
-        '#citation-report': 'https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Citation-Report.html',
-        '#coroner-report': 'https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Coroner-Report.html',
-        '#medical-report': 'https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Medical-Report.html',
-        '#fire-incident': 'https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Fire-Incident-Report.html',
-        '#tow-report': 'https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/TOW-Report.html',
-        '#prison-transport': 'https://justkaarlo.github.io/JustKaarlo-Google-Site/Reports/Prison-Transport.html'
-      };
-
-      const url = hashMap[window.location.hash];
-      if (url) openModal(url);
-    });
+    function addOffenseTag(text) {
+      const tag = document.createElement('div');
+      tag.className = 'tag';
+      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+      offenseContainer.insertBefore(tag, offenseInput);
+      tag.querySelector('.remove').onclick = () => tag.remove();
+    }
   </script>
 </body>
 </html>
