@@ -327,22 +327,18 @@
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
     }
-
     document.addEventListener("DOMContentLoaded", () => {
       const locField = document.getElementById("location");
       autoGrow(locField);
       locField.addEventListener("input", () => autoGrow(locField));
     });
-
     document.addEventListener("DOMContentLoaded", () => {
       populatePresetHistory();
       document.getElementById("preset-name").addEventListener("change", e => {
         fillFieldsFromPreset(e.target.value);
       });
-    
       const unitInput = document.getElementById('unitInput');
       const unitContainer = document.getElementById('unit-tags');
-    
       unitInput.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' && this.value.trim()) {
           e.preventDefault();
@@ -374,6 +370,9 @@
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
       document.querySelectorAll('select').forEach(sel => sel.selectedIndex = 0);
       document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      const loc = document.getElementById('location');
+      loc.value = '';
+      autoGrow(loc);
     }
     function submitForm() {
       const datetime = document.getElementById('datetime').value.trim();
