@@ -258,7 +258,6 @@
   function showAlert(message, title = '🔔 Notice') {
     const existing = document.getElementById('custom-alert');
     if (existing) existing.remove();
-  
     const popup = document.createElement('div');
     popup.id = 'custom-alert';
     popup.style = `
@@ -281,7 +280,6 @@
       <div style="font-size: 15px; color: #ccc;">${message}</div>
       <button style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;" onclick="document.getElementById('custom-alert').remove()">Close</button>
     `;
-  
     document.body.appendChild(popup);
   }
   function confirmClearFields() {
@@ -323,11 +321,9 @@
       document.getElementById('pin-popup').style.display = 'none';
     };
   }
-  
   function deletePreset() {
     const name = document.getElementById('preset-name').value.trim();
     if (!name) return showAlert("Preset Name Required to Delete.");
-  
     const confirmBox = document.createElement('div');
     confirmBox.style = `
       position: fixed;
@@ -403,7 +399,9 @@
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
-      document.getElementById('location').value = '';
+      const loc = document.getElementById('location');
+      loc.value = '';
+      autoGrow(loc);
     }
 
     function showErrorPopup() {
