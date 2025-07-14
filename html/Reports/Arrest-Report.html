@@ -248,6 +248,24 @@
   <script>
     const THREAD_ID   = "1393656493751930971";
 
+    const offenseInput = document.getElementById('offenseInput');
+    const offenseContainer = document.getElementById('offense-tags');
+    offenseInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && this.value.trim()) {
+        e.preventDefault();
+        addOffenseTag(this.value.trim());
+        this.value = '';
+      }
+    });
+
+    function addOffenseTag(text) {
+      const tag = document.createElement('div');
+      tag.className = 'tag';
+      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+      offenseContainer.insertBefore(tag, offenseInput);
+      tag.querySelector('.remove').onclick = () => tag.remove();
+    }
+    
     function autoGrow(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
@@ -383,24 +401,6 @@
           });
         });
       }
-
-    const offenseInput = document.getElementById('offenseInput');
-    const offenseContainer = document.getElementById('offense-tags');
-    offenseInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && this.value.trim()) {
-        e.preventDefault();
-        addOffenseTag(this.value.trim());
-        this.value = '';
-      }
-    });
-
-    function addOffenseTag(text) {
-      const tag = document.createElement('div');
-      tag.className = 'tag';
-      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
-      offenseContainer.insertBefore(tag, offenseInput);
-      tag.querySelector('.remove').onclick = () => tag.remove();
-    }
   </script>
 </body>
 </html>
