@@ -453,9 +453,11 @@
       populateThreadNameDatalist();
     });
     document.addEventListener('click', function (e) {
-      ['popup-overlay', 'error-popup', 'pin-popup'].forEach(id => {
+      // if click was on any button inside the card, bail out
+      if (e.target.closest('.button-row, #pin-popup button')) return;
+      ['popup-overlay','error-popup','pin-popup'].forEach(id => {
         const popup = document.getElementById(id);
-        if (popup && popup.style.display === 'block' && !popup.contains(e.target)) {
+        if (popup.style.display === 'block' && !popup.contains(e.target)) {
           popup.style.display = 'none';
         }
       });
