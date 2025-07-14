@@ -152,6 +152,12 @@
     .clear-btn {
       background-color: #4f545c;
       color: #c0c0c0;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
     }
 
     .clear-btn:hover {
@@ -222,8 +228,6 @@
       75% { transform: translate(-50%, -50%) translateX(-10px); }
       100% { transform: translate(-50%, -50%) translateX(0); }
     }
-    /* --------------------------------------------- */
-
     textarea.autogrow {
       width: 100%;
       min-height: auto;
@@ -247,7 +251,6 @@
       <div class="header-title">FIRE RESCUE</div>
       <div class="header-subtitle">FIRE INCIDENT REPORT</div>
     </div>
-
     <div class="row">
       <div class="field-group wide">
         <label>Time & Date</label>
@@ -258,7 +261,6 @@
         <textarea id="location" class="autogrow" rows="1"></textarea>
       </div>
     </div>
-
     <div class="row">
       <div class="field-group wide">
         <label>Fire Unit(s) on Scene</label>
@@ -267,7 +269,6 @@
         </div>
       </div>
     </div>
-
     <div class="section-title">SCENE DETAILS</div>
     <div class="row">
       <div class="field-group wide">
@@ -306,8 +307,6 @@
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
-
-    <!-- Popup elements -->
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Report Has Been Logged</div>
@@ -335,7 +334,6 @@
   </div>
 
   <script>
-    // ----- Popup JS from Arrest-Report.html -----
     function showAlert(message, title = '🔔 Notice') {
       const existing = document.getElementById('custom-alert');
       if (existing) existing.remove();
@@ -442,10 +440,16 @@
       document.getElementById('cancel-delete-preset').onclick = ()=>{ document.body.removeChild(confirmBox); document.getElementById('pin-popup').style.display='block'; };
     }
 
-    function autoGrow(el) {
-      el.style.height = 'auto';
-      el.style.height = el.scrollHeight + 'px';
-    }
+      function autoGrow(el) {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const locField = document.getElementById("location");
+        autoGrow(locField);
+        locField.addEventListener("input", () => autoGrow(locField));
+      });
 
     function savePreset(name, webhook, threadId) {
       if (!name||!webhook) return;
@@ -545,7 +549,6 @@
       processSubmission();
     }
 
-    // ----- Form logic -----
     document.addEventListener("DOMContentLoaded", () => {
       autoGrow(document.getElementById("location"));
       populatePresetHistory();
