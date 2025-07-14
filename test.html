@@ -248,14 +248,14 @@
         <button onclick="validateWebhook()">Confirm</button>
       </div>
       <div style="margin-top: 10px;">
-        <button onclick="confirmClearFields()" class="clear-btn">Clear Fields</button>
+        <button onclick="confirmClearFields()" class="clear-btn">Delete All Data</button>
         <button onclick="deletePreset()" class="clear-btn" style="margin-left: 10px;">Delete Preset</button>
       </div>
     </div>
   </div>
 
   <script>
-  function confirmClearFields() {
+   function confirmClearFields() {
     const confirmBox = document.createElement('div');
     confirmBox.style = `
       position: fixed;
@@ -271,17 +271,27 @@
       text-align: center;
     `;
     confirmBox.innerHTML = `
-      <div style="margin-bottom: 10px;">Clear Webhook URL and Thread ID?</div>
-      <button id="confirm-yes" style="margin: 5px; padding: 8px 14px;">YES</button>
-      <button id="confirm-no" style="margin: 5px; padding: 8px 14px;">NO</button>
+      <div style="margin-bottom: 10px;">⚠️ This will delete all saved presets, history and input fields. Are you sure?</div>
+      <button id="confirm-delete-all" style="margin: 5px; padding: 8px 14px;">YES</button>
+      <button id="cancel-delete-all" style="margin: 5px; padding: 8px 14px;">NO</button>
     `;
     document.body.appendChild(confirmBox);
-    document.getElementById('confirm-yes').onclick = () => {
-      document.getElementById('webhook-url').value = '';
-      document.getElementById('thread-id').value = '';
+  
+    document.getElementById('confirm-delete-all').onclick = () => {
+      localStorage.removeItem("webhookPresets");
+      localStorage.removeItem("webhookHistory");
+      localStorage.removeItem("threadHistory");
+      localStorage.removeItem("threadNamedHistory");
+      document.getElementById("preset-name").value = '';
+      document.getElementById("webhook-url").value = '';
+      document.getElementById("thread-id").value = '';
+      populatePresetHistory();
+      populateDatalist('webhook-history', 'webhookHistory');
+      populateThreadNameDatalist();
       document.body.removeChild(confirmBox);
     };
-    document.getElementById('confirm-no').onclick = () => {
+  
+    document.getElementById('cancel-delete-all').onclick = () => {
       document.body.removeChild(confirmBox);
     };
   }
@@ -289,14 +299,30 @@
   function deletePreset() {
     const name = document.getElementById('preset-name').value.trim();
     if (!name) return alert("Preset name required to delete.");
+  
+    // Remove from webhookPresets
     let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
     presets = presets.filter(p => p.name !== name);
     localStorage.setItem("webhookPresets", JSON.stringify(presets));
+  
+    // Remove matching webhook from webhookHistory
+    const matched = presets.find(p => p.name === name);
+    if (matched) {
+      removeFromHistory('webhookHistory', matched.webhook);
+      if (matched.thread) {
+        removeFromHistory('threadHistory', matched.thread);
+        removeFromNamedThreadHistory(matched.thread);
+      }
+    }
+  
     document.getElementById("preset-name").value = '';
     document.getElementById("webhook-url").value = '';
     document.getElementById("thread-id").value = '';
     populatePresetHistory();
-    alert(`Preset '${name}' deleted.`);
+    populateDatalist('webhook-history', 'webhookHistory');
+    populateThreadNameDatalist();
+  
+    alert(`Preset '${name}' and its data were deleted.`);
   }
 
     
@@ -502,6 +528,17 @@
         history.push(value);
         localStorage.setItem(key, JSON.stringify(history));
       }
+    }
+    function removeFromHistory(key, value) {
+      let history = JSON.parse(localStorage.getItem(key)) || [];
+      history = history.filter(item => item !== value);
+      localStorage.setItem(key, JSON.stringify(history));
+    }
+    
+    function removeFromNamedThreadHistory(threadId) {
+      let history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
+      history = history.filter(item => item.id !== threadId);
+      localStorage.setItem('threadNamedHistory', JSON.stringify(history));
     }
     function saveThreadNamedHistory(name, id) {
       let history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
