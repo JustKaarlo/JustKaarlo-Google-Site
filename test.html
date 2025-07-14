@@ -389,26 +389,7 @@
       window.tempSubmissionData.thread = threadId;
       processSubmission();
     }
-    function processSubmission() {
-      const data = window.tempSubmissionData;
-      const generatedID = randomID();
-      const formattedDateTime = data.datetime.replace('T', ' ');
-      const embed = {
-        title: "FIRE INCIDENT REPORT",
-        color: 16734003,
-        fields: [
-          { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
-          { name: "> Time & Date", value: `\`\`\`\n${formattedDateTime}\n\`\`\``, inline: false },
-          { name: "> Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
-          { name: "> Fire Units", value: data.units.map(u => `\`${u}\``).join(', '), inline: false },
-          { name: "> Incident Type", value: `\`\`\`\n${data.incidentType}\n\`\`\``, inline: true },
-          { name: "> Fire Spread Level", value: `\`\`\`\n${data.spreadLevel}\n\`\`\``, inline: true },
-          { name: "> Methods Used", value: data.methods.map(m => `\`${m}\``).join(', '), inline: false }
-        ],
-        footer: { text: "Fire Rescue" },
-        timestamp: new Date().toISOString()
-      };
-  
+    
       function processSubmission() {
         const data = window.tempSubmissionData;
         const generatedID = randomID();
