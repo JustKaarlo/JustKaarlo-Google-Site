@@ -255,6 +255,35 @@
   </div>
 
   <script>
+  function showAlert(message, title = '🔔 Notice') {
+    const existing = document.getElementById('custom-alert');
+    if (existing) existing.remove();
+  
+    const popup = document.createElement('div');
+    popup.id = 'custom-alert';
+    popup.style = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #23272A;
+      color: white;
+      padding: 20px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      z-index: 1000;
+      text-align: center;
+      max-width: 90%;
+    `;
+  
+    popup.innerHTML = `
+      <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #7289da;">${title}</div>
+      <div style="font-size: 15px; color: #ccc;">${message}</div>
+      <button style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;" onclick="document.getElementById('custom-alert').remove()">Close</button>
+    `;
+  
+    document.body.appendChild(popup);
+  }
    function confirmClearFields() {
     const confirmBox = document.createElement('div');
     confirmBox.style = `
@@ -288,24 +317,18 @@
       populatePresetHistory();
       populateDatalist('webhook-history', 'webhookHistory');
       populateThreadNameDatalist();
-      document.body.removeChild(confirmBox);
-    };
-  
-    document.getElementById('cancel-delete-all').onclick = () => {
+      // keep pin-popup visible
+      document.getElementById("pin-popup").style.display = "block";
       document.body.removeChild(confirmBox);
     };
   }
   
   function deletePreset() {
     const name = document.getElementById('preset-name').value.trim();
-    if (!name) return alert("Preset name required to delete.");
-  
-    // Remove from webhookPresets
+if (!name) return showAlert("Preset Name Required to Delete.");
     let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
     presets = presets.filter(p => p.name !== name);
     localStorage.setItem("webhookPresets", JSON.stringify(presets));
-  
-    // Remove matching webhook from webhookHistory
     const matched = presets.find(p => p.name === name);
     if (matched) {
       removeFromHistory('webhookHistory', matched.webhook);
@@ -321,8 +344,8 @@
     populatePresetHistory();
     populateDatalist('webhook-history', 'webhookHistory');
     populateThreadNameDatalist();
-  
-    alert(`Preset '${name}' and its data were deleted.`);
+    document.getElementById("pin-popup").style.display = "block";
+    showAlert(`Preset '${name}' and its data were deleted.`, '✅ Deleted');
   }
 
     
@@ -502,7 +525,7 @@
             showPopup();
             resetForm();
           })
-          .catch(() => alert("Failed to Submit Report."));
+          .catch(() => showAlert("Failed to Submit Report.", "❌ Error"));
         });
       });
     }
@@ -587,9 +610,9 @@
     });
     document.addEventListener('click', function (e) {
       if (e.target.closest('.button-row, #pin-popup button')) return;
-      ['popup-overlay','error-popup','pin-popup'].forEach(id => {
+      ['popup-overlay', 'error-popup', 'pin-popup', 'custom-alert'].forEach(id => {
         const popup = document.getElementById(id);
-        if (popup.style.display === 'block' && !popup.contains(e.target)) {
+        if (popup && popup.style.display === 'block' && !popup.contains(e.target)) {
           popup.style.display = 'none';
         }
       });
