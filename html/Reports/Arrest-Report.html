@@ -235,17 +235,132 @@
       <div class="header-subtitle">All Fields Are Required</div>
     </div>
     <div id="pin-popup">
-      <div class="header-title">🔒 PIN Required</div>
-      <div class="header-subtitle">Please enter your 4-digit authorization code to submit</div>
-      <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
-      <div id="pin-error">Wrong PIN code</div>
+      <div class="header-title">🔐 Webhook Required</div>
+      <div class="header-subtitle">Select or Create a Preset</div>
+      <input type="text" id="preset-name" list="preset-history" placeholder="Preset Name">
+      <datalist id="preset-history"></datalist>
+      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL" style="margin-top: 10px;">
+      <datalist id="webhook-history"></datalist>
+      <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top: 10px;">
+      <datalist id="thread-history"></datalist>
+      <div id="pin-error">Webhook URL Is Required</div>
       <div style="margin-top: 15px;">
-        <button onclick="validatePin()">Confirm</button>
+        <button onclick="validateWebhook()">Confirm</button>
+      </div>
+      <div style="margin-top: 10px;">
+        <button onclick="confirmClearFields()" class="clear-btn">Delete All Data</button>
+        <button onclick="deletePreset()" class="clear-btn" style="margin-left: 10px;">Delete Preset</button>
       </div>
     </div>
   </div>
 
   <script>
+  function showAlert(message, title = '🔔 Notice') {
+    const existing = document.getElementById('custom-alert');
+    if (existing) existing.remove();
+  
+    const popup = document.createElement('div');
+    popup.id = 'custom-alert';
+    popup.style = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #23272A;
+      color: white;
+      padding: 20px 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      z-index: 1000;
+      text-align: center;
+      max-width: 90%;
+    `;
+  
+    popup.innerHTML = `
+      <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #7289da;">${title}</div>
+      <div style="font-size: 15px; color: #ccc;">${message}</div>
+      <button style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;" onclick="document.getElementById('custom-alert').remove()">Close</button>
+    `;
+  
+    document.body.appendChild(popup);
+  }
+  function confirmClearFields() {
+    const confirmBox = document.createElement('div');
+    confirmBox.id = 'confirm-delete-popup';
+    confirmBox.style = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #2C2F33;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      z-index: 1000;
+      text-align: center;
+    `;
+    confirmBox.innerHTML = `
+      <div style="margin-bottom: 10px;">⚠️ This will delete all saved presets, history and input fields. Are you sure?</div>
+      <button id="confirm-delete-all" style="margin: 5px; padding: 8px 14px;">YES</button>
+      <button id="cancel-delete-all" style="margin: 5px; padding: 8px 14px;">NO</button>
+    `;
+    document.body.appendChild(confirmBox);
+  
+    const keepPinVisible = () => {
+      document.getElementById("pin-popup").style.display = "block";
+      const confirmBox = document.getElementById("confirm-delete-popup");
+      if (confirmBox) document.body.removeChild(confirmBox);
+    };
+  
+    document.getElementById('confirm-delete-all').onclick = () => {
+      localStorage.removeItem("webhookPresets");
+      localStorage.removeItem("webhookHistory");
+      localStorage.removeItem("threadHistory");
+      localStorage.removeItem("threadNamedHistory");
+  
+      document.getElementById("preset-name").value = '';
+      document.getElementById("webhook-url").value = '';
+      document.getElementById("thread-id").value = '';
+  
+      populatePresetHistory();
+      populateDatalist('webhook-history', 'webhookHistory');
+      populateThreadNameDatalist();
+  
+      keepPinVisible();
+    };
+  
+    document.getElementById('cancel-delete-all').onclick = () => {
+      keepPinVisible();
+    };
+  }
+  
+  function deletePreset() {
+    const name = document.getElementById('preset-name').value.trim();
+if (!name) return showAlert("Preset Name Required to Delete.");
+    let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+    presets = presets.filter(p => p.name !== name);
+    localStorage.setItem("webhookPresets", JSON.stringify(presets));
+    const matched = presets.find(p => p.name === name);
+    if (matched) {
+      removeFromHistory('webhookHistory', matched.webhook);
+      if (matched.thread) {
+        removeFromHistory('threadHistory', matched.thread);
+        removeFromNamedThreadHistory(matched.thread);
+      }
+    }
+  
+    document.getElementById("preset-name").value = '';
+    document.getElementById("webhook-url").value = '';
+    document.getElementById("thread-id").value = '';
+    populatePresetHistory();
+    populateDatalist('webhook-history', 'webhookHistory');
+    populateThreadNameDatalist();
+    document.getElementById("pin-popup").style.display = "block";
+    showAlert(`Preset '${name}' and its data were deleted.`, '✅ Deleted');
+  }
+
+    
     function autoGrow(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
@@ -271,6 +386,7 @@
     function resetForm() {
       document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
       document.querySelectorAll('.tag').forEach(tag => tag.remove());
+      document.getElementById('location').value = '';
     }
 
     function showErrorPopup() {
@@ -302,18 +418,69 @@
       document.getElementById('pin-error').style.display = 'none';
     }
 
-    function validatePin() {
-      const pin = document.getElementById('pin-input').value.trim();
-      if (pin === '2118') {
-        document.getElementById('pin-popup').style.display = 'none';
-        processSubmission();
+    function savePreset(name, webhook, threadId) {
+      if (!name || !webhook) return;
+      let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      const existing = presets.find(p => p.name === name);
+      if (existing) {
+        existing.webhook = webhook;
+        existing.thread = threadId;
       } else {
+        presets.push({ name, webhook, thread: threadId });
+      }
+      localStorage.setItem("webhookPresets", JSON.stringify(presets));
+      populatePresetHistory();
+    }
+  
+    function populatePresetHistory() {
+      const list = document.getElementById("preset-history");
+      list.innerHTML = "";
+      const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      presets.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p.name;
+        list.appendChild(option);
+      });
+    }
+  
+    function fillFieldsFromPreset(name) {
+      const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      const match = presets.find(p => p.name === name);
+      if (match) {
+        document.getElementById("webhook-url").value = match.webhook;
+        document.getElementById("thread-id").value = match.thread || "";
+      }
+    }
+  
+    document.addEventListener("DOMContentLoaded", () => {
+      populatePresetHistory();
+      document.getElementById("preset-name").addEventListener("change", e => {
+        fillFieldsFromPreset(e.target.value);
+      });
+    });
+    
+    function validateWebhook() {
+      const preset = document.getElementById('preset-name').value.trim();
+      const webhook = document.getElementById('webhook-url').value.trim();
+      const threadId = document.getElementById('thread-id').value.trim();
+  
+      if (!webhook) {
         const err = document.getElementById('pin-error');
         err.style.display = 'block';
         const popup = document.getElementById('pin-popup');
         popup.classList.add('shake');
         setTimeout(() => popup.classList.remove('shake'), 400);
+        return;
       }
+  
+      saveToHistory('webhookHistory', webhook);
+      saveToHistory('threadHistory', threadId);
+      savePreset(preset, webhook, threadId);
+  
+      document.getElementById('pin-popup').style.display = 'none';
+      window.tempSubmissionData.webhook = webhook;
+      window.tempSubmissionData.thread = threadId;
+      processSubmission();
     }
 
     function processSubmission() {
@@ -321,7 +488,6 @@
       const generatedID = randomID();
       const formattedDateTime = data.datetime.replace('T', ' ');
 
-      // hide inputs for clean screenshot
       const datetimeInput = document.getElementById('datetime');
       const originalInput = datetimeInput.cloneNode(true);
       const span = document.createElement('div');
@@ -349,7 +515,7 @@
             title: "ARREST REPORT",
             color: 4737096,
             fields: [
-              { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
+              { name: "> ID", value: `\u0060\u0060\u0060\n${generatedID}\n\u0060\u0060\u0060`, inline: false },
             ],
             image: { url: "attachment://report.png" },
             footer: { text: "Department of Justice" },
@@ -360,11 +526,10 @@
           formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
           formData.append("file", blob, "report.png");
 
-          const WEBHOOK_URL = "https://discord.com/api/webhooks/1393653107174408394/Xa0zlUDF77IJ31NwWmFtrNzC6DT8ttg2Fminq-YtPFDxpMLX9IZpROU3PGfPfKaNUKKR";
-          const THREAD_ID   = "1393656493751930971";
-          const urlWithThread = `${WEBHOOK_URL}?thread_id=${THREAD_ID}`;
+          const threadQuery = data.thread ? `?thread_id=${data.thread}` : '';
+          const finalURL = `${data.webhook}${threadQuery}`;
 
-          fetch(urlWithThread, {
+          fetch(finalURL, {
             method: "POST",
             body: formData
           })
@@ -372,7 +537,7 @@
             showPopup();
             resetForm();
           })
-          .catch(() => alert("Failed to Submit Report."));
+          .catch(() => showAlert("Failed to Submit Report.", "❌ Error"));
         });
       });
     }
@@ -392,6 +557,97 @@
       offenseContainer.insertBefore(tag, offenseInput);
       tag.querySelector('.remove').onclick = () => tag.remove();
     }
+    function saveToHistory(key, value) {
+      let history = JSON.parse(localStorage.getItem(key)) || [];
+      if (!history.includes(value)) {
+        history.push(value);
+        localStorage.setItem(key, JSON.stringify(history));
+      }
+    }
+    function removeFromHistory(key, value) {
+      let history = JSON.parse(localStorage.getItem(key)) || [];
+      history = history.filter(item => item !== value);
+      localStorage.setItem(key, JSON.stringify(history));
+    }
+    
+    function removeFromNamedThreadHistory(threadId) {
+      let history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
+      history = history.filter(item => item.id !== threadId);
+      localStorage.setItem('threadNamedHistory', JSON.stringify(history));
+    }
+    function saveThreadNamedHistory(name, id) {
+      let history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
+      if (!history.find(entry => entry.name === name && entry.id === id)) {
+        history.push({ name, id });
+        localStorage.setItem('threadNamedHistory', JSON.stringify(history));
+      }
+    }
+    function populateDatalist(id, key) {
+      const datalist = document.getElementById(id);
+      datalist.innerHTML = '';
+      const history = JSON.parse(localStorage.getItem(key)) || [];
+      history.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        datalist.appendChild(option);
+      });
+    }
+    function populateThreadNameDatalist() {
+      const datalist = document.getElementById('thread-history');
+      datalist.innerHTML = '';
+      const history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
+      history.forEach(entry => {
+        const option = document.createElement('option');
+        option.value = entry.name;
+        option.dataset.id = entry.id;
+        datalist.appendChild(option);
+      });
+      const threadInput = document.getElementById('thread-id');
+      threadInput.addEventListener('change', () => {
+        const selectedName = threadInput.value;
+        const matchedOption = Array.from(datalist.options).find(opt => opt.value === selectedName);
+        if (matchedOption) {
+          threadInput.setAttribute('data-thread-id', matchedOption.dataset.id);
+        }
+      });
+    }
+    function getThreadIdByName(name) {
+      const history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
+      const entry = history.find(item => item.name === name);
+      return entry ? entry.id : name;
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      populateDatalist('webhook-history', 'webhookHistory');
+      populateThreadNameDatalist();
+    });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('.button-row, #pin-popup button, #confirm-delete-popup')) return;
+    const confirmBoxOpen = document.getElementById('confirm-delete-popup') !== null;
+    ['popup-overlay', 'error-popup', 'custom-alert'].forEach(id => {
+      const popup = document.getElementById(id);
+      if (popup && popup.style.display === 'block' && !popup.contains(e.target)) {
+        popup.style.display = 'none';
+      }
+    });
+    if (!confirmBoxOpen) {
+      const pinPopup = document.getElementById('pin-popup');
+      if (pinPopup && pinPopup.style.display === 'block' && !pinPopup.contains(e.target)) {
+        pinPopup.style.display = 'none';
+      }
+    }
+  });
+    document.addEventListener('DOMContentLoaded', () => {
+      const threadIdInput = document.getElementById('thread-id');
+      const threadNameInput = document.getElementById('thread-name');
+      threadNameInput.style.display = 'none';
+      threadIdInput.addEventListener('input', () => {
+        if (threadIdInput.value.length > 1) {
+          threadNameInput.style.display = '';
+        } else {
+          threadNameInput.style.display = 'none';
+        }
+      });
+    });
   </script>
 </body>
 </html>
