@@ -1,0 +1,15 @@
+[build]
+  publish   = "html"               
+  functions = "netlify/functions"
+  
+[[redirects]]
+  from   = "/Reports/Arrest-Report.html"
+  to     = "/Reports/Arrest-Report.html"
+  status = 200
+  force  = true
+
+[[redirects]]
+  from   = "/*"
+  to     = "/"
+  status = 404
+  force  = true
