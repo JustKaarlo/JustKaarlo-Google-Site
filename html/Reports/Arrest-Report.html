@@ -284,7 +284,7 @@
   
     document.body.appendChild(popup);
   }
-  function confirmClearFields() {
+   function confirmClearFields() {
     const confirmBox = document.createElement('div');
     confirmBox.style = `
       position: fixed;
@@ -311,19 +311,13 @@
       localStorage.removeItem("webhookHistory");
       localStorage.removeItem("threadHistory");
       localStorage.removeItem("threadNamedHistory");
-  
       document.getElementById("preset-name").value = '';
       document.getElementById("webhook-url").value = '';
       document.getElementById("thread-id").value = '';
       populatePresetHistory();
       populateDatalist('webhook-history', 'webhookHistory');
       populateThreadNameDatalist();
-  
-      document.getElementById("pin-popup").style.display = "block";
-      document.body.removeChild(confirmBox);
-    };
-  
-    document.getElementById('cancel-delete-all').onclick = () => {
+      // keep pin-popup visible
       document.getElementById("pin-popup").style.display = "block";
       document.body.removeChild(confirmBox);
     };
@@ -331,30 +325,27 @@
   
   function deletePreset() {
     const name = document.getElementById('preset-name').value.trim();
-    if (!name) return showAlert("Preset Name Required to Delete.");
-  
+if (!name) return showAlert("Preset Name Required to Delete.");
     let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
-    const match = presets.find(p => p.name === name);
-  
-    if (match) {
-      presets = presets.filter(p => p.name !== name);
-      localStorage.setItem("webhookPresets", JSON.stringify(presets));
-      removeFromHistory('webhookHistory', match.webhook);
-      if (match.thread) {
-        removeFromHistory('threadHistory', match.thread);
-        removeFromNamedThreadHistory(match.thread);
+    presets = presets.filter(p => p.name !== name);
+    localStorage.setItem("webhookPresets", JSON.stringify(presets));
+    const matched = presets.find(p => p.name === name);
+    if (matched) {
+      removeFromHistory('webhookHistory', matched.webhook);
+      if (matched.thread) {
+        removeFromHistory('threadHistory', matched.thread);
+        removeFromNamedThreadHistory(matched.thread);
       }
-      document.getElementById("preset-name").value = '';
-      document.getElementById("webhook-url").value = '';
-      document.getElementById("thread-id").value = '';
-      populatePresetHistory();
-      populateDatalist('webhook-history', 'webhookHistory');
-      populateThreadNameDatalist();
-      document.getElementById("pin-popup").style.display = "block";
-      showAlert(`Preset '${name}' and its data were deleted.`, '✅ Deleted');
-    } else {
-      showAlert(`Preset '${name}' not found.`, '⚠️ Not Found');
     }
+  
+    document.getElementById("preset-name").value = '';
+    document.getElementById("webhook-url").value = '';
+    document.getElementById("thread-id").value = '';
+    populatePresetHistory();
+    populateDatalist('webhook-history', 'webhookHistory');
+    populateThreadNameDatalist();
+    document.getElementById("pin-popup").style.display = "block";
+    showAlert(`Preset '${name}' and its data were deleted.`, '✅ Deleted');
   }
 
     
