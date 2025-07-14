@@ -246,7 +246,6 @@
   </div>
 
   <script>
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1393653107174408394/Xa0zlUDF77IJ31NwWmFtrNzC6DT8ttg2Fminq-YtPFDxpMLX9IZpROU3PGfPfKaNUKKR";
     const THREAD_ID   = "1393656493751930971";
 
     function autoGrow(el) {
@@ -366,18 +365,24 @@
 
           const urlWithThread = `${WEBHOOK_URL}?thread_id=${THREAD_ID}`;
 
-          fetch(urlWithThread, {
-            method: "POST",
+          fetch('/.netlify/functions/report', {
+            method: 'POST',
             body: formData
+          })
+          .then(res => {
+            if (!res.ok) throw new Error('Bad response from function');
+            return res.text();
           })
           .then(() => {
             showPopup();
             resetForm();
           })
-          .catch(() => alert("Failed to Submit Report."));
+          .catch(err => {
+            console.error(err);
+            alert('Failed to Submit Report.');
+          });
         });
-      });
-    }
+      }
 
     const offenseInput = document.getElementById('offenseInput');
     const offenseContainer = document.getElementById('offense-tags');
