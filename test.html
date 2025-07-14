@@ -313,21 +313,30 @@
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
     }
-    const unitInput = document.getElementById('unitInput');
-    const unitContainer = document.getElementById('unit-tags');
-    unitInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && this.value.trim()) {
-        e.preventDefault();
-        addUnitTag(this.value.trim());
-        this.value = '';
-      }
+    document.addEventListener("DOMContentLoaded", () => {
+      populatePresetHistory();
+      document.getElementById("preset-name").addEventListener("change", e => {
+        fillFieldsFromPreset(e.target.value);
+      });
+    
+      const unitInput = document.getElementById('unitInput');
+      const unitContainer = document.getElementById('unit-tags');
+    
+      unitInput.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && this.value.trim()) {
+          e.preventDefault();
+          const text = this.value.trim();
+          addUnitTag(text, unitContainer, this);
+        }
+      });
     });
-    function addUnitTag(text) {
+    function addUnitTag(text, container, inputField) {
       const tag = document.createElement('div');
       tag.className = 'tag';
       tag.innerHTML = `${text} <span class="remove">&times;</span>`;
-      unitContainer.insertBefore(tag, unitInput);
+      container.insertBefore(tag, inputField);
       tag.querySelector('.remove').onclick = () => tag.remove();
+      inputField.value = '';
     }
     function showErrorPopup() {
       const popup = document.getElementById('error-popup');
