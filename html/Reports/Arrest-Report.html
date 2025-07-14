@@ -317,8 +317,6 @@
       populatePresetHistory();
       populateDatalist('webhook-history', 'webhookHistory');
       populateThreadNameDatalist();
-      // keep pin-popup visible
-      document.getElementById("pin-popup").style.display = "block";
       document.body.removeChild(confirmBox);
     };
   }
@@ -344,7 +342,6 @@ if (!name) return showAlert("Preset Name Required to Delete.");
     populatePresetHistory();
     populateDatalist('webhook-history', 'webhookHistory');
     populateThreadNameDatalist();
-    document.getElementById("pin-popup").style.display = "block";
     showAlert(`Preset '${name}' and its data were deleted.`, '✅ Deleted');
   }
 
