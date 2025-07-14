@@ -1,0 +1,22 @@
+name: Inject Webhook into HTML
+
+on:
+  push:
+    branches: [Home]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout your repo
+        uses: actions/checkout@v4
+
+      - name: Replace placeholder with secret
+        run: |
+          find . -name "*.html" -exec sed -i "s|{{REPORT_WEBHOOK_URL}}|${{ secrets.REPORT_WEBHOOK_URL }}|g" {} +
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
