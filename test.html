@@ -237,8 +237,10 @@
     <div id="pin-popup">
       <div class="header-title">🔐 Webhook Required</div>
       <div class="header-subtitle">Please Enter Webhook URL and Optional Thread ID</div>
-      <input type="text" id="webhook-url" placeholder="Enter Webhook URL">
-      <input type="text" id="thread-id" placeholder="Optional Thread ID" style="margin-top: 10px">
+      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL">
+      <datalist id="webhook-history"></datalist>
+      <input type="text" id="thread-id" list="thread-history" placeholder="Optional Thread ID" style="margin-top: 10px">
+      <datalist id="thread-history"></datalist>
       <div id="pin-error">Webhook URL Is Required</div>
       <div style="margin-top: 15px;">
         <button onclick="validateWebhook()">Confirm</button>
@@ -395,6 +397,52 @@
       tag.innerHTML = `${text} <span class="remove">&times;</span>`;
       offenseContainer.insertBefore(tag, offenseInput);
       tag.querySelector('.remove').onclick = () => tag.remove();
+    }
+    function saveToHistory(key, value) {
+      let history = JSON.parse(localStorage.getItem(key)) || [];
+      if (!history.includes(value)) {
+        history.push(value);
+        localStorage.setItem(key, JSON.stringify(history));
+      }
+    }
+  
+    function populateDatalist(id, key) {
+      const datalist = document.getElementById(id);
+      datalist.innerHTML = '';
+      const history = JSON.parse(localStorage.getItem(key)) || [];
+      history.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        datalist.appendChild(option);
+      });
+    }
+  
+    document.addEventListener('DOMContentLoaded', () => {
+      populateDatalist('webhook-history', 'webhookHistory');
+      populateDatalist('thread-history', 'threadHistory');
+    });
+  
+    function validateWebhook() {
+      const webhook = document.getElementById('webhook-url').value.trim();
+      const thread = document.getElementById('thread-id').value.trim();
+  
+      if (!webhook) {
+        const err = document.getElementById('pin-error');
+        err.style.display = 'block';
+        const popup = document.getElementById('pin-popup');
+        popup.classList.add('shake');
+        setTimeout(() => popup.classList.remove('shake'), 400);
+        return;
+      }
+  
+      // Save entries
+      saveToHistory('webhookHistory', webhook);
+      if (thread) saveToHistory('threadHistory', thread);
+  
+      document.getElementById('pin-popup').style.display = 'none';
+      window.tempSubmissionData.webhook = webhook;
+      window.tempSubmissionData.thread = thread;
+      processSubmission();
     }
   </script>
 </body>
