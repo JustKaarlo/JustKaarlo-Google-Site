@@ -161,8 +161,7 @@
     .submit-btn {
       flex: 1;
     }
-
-    /* ----- Popup CSS from Arrest-Report.html ----- */
+    
     #popup-overlay, #error-popup, #pin-popup {
       position: absolute;
       top: 50%;
@@ -287,11 +286,9 @@
         <button onclick="deletePreset()" class="clear-btn" style="margin-left: 10px;">Delete Preset</button>
       </div>
     </div>
-    <!-- --------------------------------------------- -->
   </div>
 
   <script>
-    // ----- Popup JS from Arrest-Report.html -----
     function showAlert(message, title = '🔔 Notice') {
       const existing = document.getElementById('custom-alert');
       if (existing) existing.remove();
@@ -542,10 +539,6 @@
       window.tempSubmissionData.thread = threadId;
       processSubmission();
     }
-
-    // ----- Existing citation logic for ID, violations, etc. -----
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1393653107174408394/Xa0zlUDF77IJ31NwWmFtrNzC6DT8ttg2Fminq-YtPFDxpMLX9IZpROU3PGfPfKaNUKKR";
-    const THREAD_ID   = "1393668782286835832";
 
     function randomID() {
       const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
