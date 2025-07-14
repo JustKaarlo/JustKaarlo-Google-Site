@@ -3,11 +3,13 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Fire Rescue Report</title>
+  <title>Fire Incident Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    * { font-family: 'Rubik', sans-serif; }
+    * {
+      font-family: 'Rubik', sans-serif;
+    }
 
     body {
       background: transparent;
@@ -41,6 +43,7 @@
 
     .header-subtitle {
       font-size: 15px;
+      font-style: bold;
       color: #ccc;
       margin-top: 4px;
     }
@@ -105,6 +108,25 @@
       margin-right: 5px;
     }
 
+    .wide {
+      width: 100%;
+    }
+
+    button {
+      background-color: #3c78d8;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #5187dc;
+    }
+
     .tag-container {
       display: flex;
       flex-wrap: wrap;
@@ -152,12 +174,6 @@
     .clear-btn {
       background-color: #4f545c;
       color: #c0c0c0;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
     }
 
     .clear-btn:hover {
@@ -166,22 +182,11 @@
 
     .submit-btn {
       flex: 1;
-      background-color: #3c78d8;
-      color: white;
-      border: none;
-      padding: 12px;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.3s ease;
     }
 
-    .submit-btn:hover {
-      background-color: #5187dc;
-    }
-
-    /* ----- Popup CSS from Arrest-Report.html ----- */
-    #popup-overlay, #error-popup, #pin-popup {
+    #popup-overlay,
+    #error-popup,
+    #pin-popup {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -190,44 +195,60 @@
       color: white;
       border-radius: 12px;
       padding: 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-      display: none;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
       z-index: 10;
       max-width: 90%;
       text-align: center;
+      display: none;
     }
-    #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
+
+    #popup-overlay .header-title {
+      color: #7289da;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    #error-popup .header-title {
+      color: #f04747;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
     #popup-overlay .header-subtitle,
     #error-popup .header-subtitle,
-    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
-    #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
+    #pin-popup .header-subtitle {
+      font-size: 14px;
+      color: #ccc;
+      margin-top: 6px;
+    }
+
+    #pin-popup[style*="display: block"] {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
     #pin-popup input {
       width: 100%;
       padding: 10px;
       font-size: 18px;
       text-align: center;
-      margin-top: 15px;
+      margin-top: 10px;
       border-radius: 6px;
       border: 1px solid #444;
       background: #2C2F33;
       color: white;
     }
+
     #pin-error {
       color: #f04747;
       font-size: 14px;
       margin-top: 10px;
       display: none;
     }
-    .shake {
-      animation: shake 0.4s;
-    }
-    @keyframes shake {
-      0% { transform: translate(-50%, -50%) translateX(0); }
-      25% { transform: translate(-50%, -50%) translateX(-10px); }
-      50% { transform: translate(-50%, -50%) translateX(10px); }
-      75% { transform: translate(-50%, -50%) translateX(-10px); }
-      100% { transform: translate(-50%, -50%) translateX(0); }
-    }
+
     textarea.autogrow {
       width: 100%;
       min-height: auto;
@@ -244,13 +265,13 @@
     }
   </style>
 </head>
-
 <body>
   <div class="card">
     <div class="header">
       <div class="header-title">FIRE RESCUE</div>
       <div class="header-subtitle">FIRE INCIDENT REPORT</div>
     </div>
+
     <div class="row">
       <div class="field-group wide">
         <label>Time & Date</label>
@@ -261,6 +282,7 @@
         <textarea id="location" class="autogrow" rows="1"></textarea>
       </div>
     </div>
+
     <div class="row">
       <div class="field-group wide">
         <label>Fire Unit(s) on Scene</label>
@@ -269,6 +291,7 @@
         </div>
       </div>
     </div>
+
     <div class="section-title">SCENE DETAILS</div>
     <div class="row">
       <div class="field-group wide">
@@ -302,7 +325,6 @@
       <label><input type="checkbox" value="Foam"> Foam</label>
       <label><input type="checkbox" value="Fire Extinguishers"> Fire Extinguishers</label>
     </div>
-
     <div class="button-row">
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
@@ -320,27 +342,34 @@
       <div class="header-subtitle">Select or Create a Preset</div>
       <input type="text" id="preset-name" list="preset-history" placeholder="Preset Name">
       <datalist id="preset-history"></datalist>
-      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL" style="margin-top:10px;">
+      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL" style="margin-top: 10px;">
       <datalist id="webhook-history"></datalist>
-      <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top:10px;">
+      <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top: 10px;">
       <datalist id="thread-history"></datalist>
       <div id="pin-error">Webhook URL Is Required</div>
-      <div style="margin-top:15px;"><button onclick="validateWebhook()">Confirm</button></div>
-      <div style="margin-top:10px;">
+      <div style="margin-top: 15px;">
+        <button onclick="validateWebhook()" style="width: 80px; margin-right: 20px;">Confirm</button>
+        <button onclick="closePinPopup()"
+          style="width: 80px; margin-left: 20px; background: rgba(175,41,41,1.0);">Close</button>
+      </div>
+      <div style="margin-top: 10px;">
         <button onclick="confirmClearFields()" class="clear-btn">Delete All Data</button>
-        <button onclick="deletePreset()" class="clear-btn" style="margin-left:10px;">Delete Preset</button>
+        <button onclick="deletePreset()" class="clear-btn" style="margin-left: 10px;">Delete Preset</button>
       </div>
     </div>
-  </div>
-
+</body>
   <script>
+    function closePinPopup() {
+      document.getElementById('pin-popup').style.display = 'none';
+    }
     function showAlert(message, title = '🔔 Notice') {
-      const existing = document.getElementById('custom-alert');
-      if (existing) existing.remove();
-      const popup = document.createElement('div');
-      popup.id = 'custom-alert';
-      popup.style = `
-        position: fixed;
+            const existing = document.getElementById('custom-alert');
+            if (existing) existing.remove();
+
+            const popup = document.createElement('div');
+            popup.id = 'custom-alert';
+            popup.style = `
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -353,262 +382,202 @@
         text-align: center;
         max-width: 90%;
       `;
-      popup.innerHTML = `
-        <div style="font-size:18px;font-weight:bold;margin-bottom:10px;color:#7289da;">${title}</div>
-        <div style="font-size:15px;color:#ccc;">${message}</div>
-        <button style="margin-top:15px;padding:8px 16px;font-size:14px;border:none;background:#4f545c;color:white;border-radius:6px;cursor:pointer;" onclick="document.getElementById('custom-alert').remove()">Close</button>
-      `;
-      document.body.appendChild(popup);
-    }
 
-    function confirmClearFields() {
-      const confirmBox = document.createElement('div');
-      confirmBox.style = `
-        position: fixed;
+            popup.innerHTML = `
+        <div style="font-size: 15px; color: #ccc;">${message}</div>
+        <button style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;" onclick="document.getElementById('custom-alert').remove()">Close</button>
+      `;
+
+            document.querySelector('.card').appendChild(popup);
+          }
+
+          function confirmClearFields() {
+            const confirmBox = document.createElement('div');
+            confirmBox.style = `
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: #2C2F33;
+        background: #23272A;
         color: white;
-        padding: 20px;
+        padding: 20px 25px;
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.6);
         z-index: 1000;
         text-align: center;
+        max-width: 90%;
       `;
-      confirmBox.innerHTML = `
-        <div style="margin-bottom:10px;">⚠️ This will delete all saved presets, history and input fields. Are you sure?</div>
-        <button id="confirm-delete-all" style="margin:5px;padding:8px 14px;">YES</button>
-        <button id="cancel-delete-all" style="margin:5px;padding:8px 14px;">NO</button>
+            confirmBox.innerHTML = `
+        <div style="font-size: 15px; color: #ccc;">This will delete preset, webhook & threads data, are you sure?</div>
+        <button id="confirm-delete-all" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">YES</button>
+        <button id="cancel-delete-all" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">NO</button>
       `;
-      document.body.appendChild(confirmBox);
-      document.getElementById('confirm-delete-all').onclick = () => {
-        localStorage.removeItem("webhookPresets");
-        localStorage.removeItem("webhookHistory");
-        localStorage.removeItem("threadHistory");
-        localStorage.removeItem("threadNamedHistory");
-        document.getElementById("preset-name").value = '';
-        document.getElementById("webhook-url").value = '';
-        document.getElementById("thread-id").value = '';
-        populatePresetHistory();
-        populateDatalist('webhook-history', 'webhookHistory');
-        populateThreadNameDatalist();
-        document.body.removeChild(confirmBox);
-      };
-      document.getElementById('cancel-delete-all').onclick = () => {
-        document.body.removeChild(confirmBox);
-        document.getElementById('pin-popup').style.display = 'none';
-      };
-    }
+            document.querySelector('.card').appendChild(confirmBox);
+            document.getElementById('confirm-delete-all').onclick = () => {
+              localStorage.removeItem("webhookPresets");
+              localStorage.removeItem("webhookHistory");
+              localStorage.removeItem("threadHistory");
+              localStorage.removeItem("threadNamedHistory");
+              document.getElementById("preset-name").value = '';
+              document.getElementById("webhook-url").value = '';
+              document.getElementById("thread-id").value = '';
+              populatePresetHistory();
+              populateDatalist('webhook-history', 'webhookHistory');
+              populateThreadNameDatalist();
+              document.querySelector('.card').removeChild(confirmBox);
+            };
+            document.getElementById('cancel-delete-all').onclick = () => {
+              document.querySelector('.card').removeChild(confirmBox);
+            };
+          }
 
-    function deletePreset() {
-      const name = document.getElementById('preset-name').value.trim();
-      if (!name) return showAlert("Preset Name Required to Delete.");
-      const confirmBox = document.createElement('div');
-      confirmBox.style = `
-        position: fixed;
-        top:50%;left:50%;
-        transform:translate(-50%,-50%);
-        background:#2C2F33;color:white;
-        padding:20px;border-radius:12px;
-        box-shadow:0 4px 20px rgba(0,0,0,0.6);
-        z-index:1000;text-align:center;
+          function deletePreset() {
+            const name = document.getElementById('preset-name').value.trim();
+            if (!name) return showAlert("A preset name is required to delete.");
+
+            const confirmBox = document.createElement('div');
+            confirmBox.style = `
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #23272A;
+        color: white;
+        padding: 20px 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        z-index: 1000;
+        text-align: center;
+        max-width: 90%;
       `;
-      confirmBox.innerHTML = `
-        <div style="margin-bottom:10px;">⚠️ Are you sure you want to delete the preset <strong>'${name}'</strong>?</div>
-        <button id="confirm-delete-preset" style="margin:5px;padding:8px 14px;">YES</button>
-        <button id="cancel-delete-preset" style="margin:5px;padding:8px 14px;">NO</button>
+            confirmBox.innerHTML = `
+        <div style="font-size: 15px; color: #ccc;">Do you want to delete <strong>'${name}'</strong> preset?</div>
+        <button id="confirm-delete-preset" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">YES</button>
+        <button id="cancel-delete-preset" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">NO</button>
       `;
-      document.body.appendChild(confirmBox);
-      document.getElementById('confirm-delete-preset').onclick = () => {
-        let presets = JSON.parse(localStorage.getItem("webhookPresets")||"[]");
-        const match = presets.find(p=>p.name===name);
-        if (match) {
-          presets = presets.filter(p=>p.name!==name);
-          localStorage.setItem("webhookPresets", JSON.stringify(presets));
-          removeFromHistory('webhookHistory', match.webhook);
-          if (match.thread) { removeFromHistory('threadHistory', match.thread); removeFromNamedThreadHistory(match.thread); }
-          document.getElementById("preset-name").value='';document.getElementById("webhook-url").value='';document.getElementById("thread-id").value='';
-          populatePresetHistory();populateDatalist('webhook-history','webhookHistory');populateThreadNameDatalist();
-          showAlert(`Preset '${name}' and its data were deleted.`, '✅ Deleted');
-        } else {
-          showAlert(`Preset '${name}' not found.`, '⚠️ Not Found');
+            document.querySelector('.card').appendChild(confirmBox);
+            document.getElementById('confirm-delete-preset').onclick = () => {
+              let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+              const match = presets.find(p => p.name === name);
+              if (match) {
+                presets = presets.filter(p => p.name !== name);
+                localStorage.setItem("webhookPresets", JSON.stringify(presets));
+                removeFromHistory('webhookHistory', match.webhook);
+                if (match.thread) {
+                  removeFromHistory('threadHistory', match.thread);
+                  removeFromNamedThreadHistory(match.thread);
+                }
+                document.getElementById("preset-name").value = '';
+                document.getElementById("webhook-url").value = '';
+                document.getElementById("thread-id").value = '';
+                populatePresetHistory();
+                populateDatalist('webhook-history', 'webhookHistory');
+                populateThreadNameDatalist();
+                showAlert(`Preset '${name}' was deleted.`, '✅ Deleted');
+              } else {
+                showAlert(`Preset '${name}' was not found.`, '⚠️ Not Found');
+              }
+              document.querySelector('.card').removeChild(confirmBox);
+            };
+            document.getElementById('cancel-delete-preset').onclick = () => {
+              document.querySelector('.card').removeChild(confirmBox);
+            };
         }
-        document.body.removeChild(confirmBox);
-        document.getElementById('pin-popup').style.display='block';
-      };
-      document.getElementById('cancel-delete-preset').onclick = ()=>{ document.body.removeChild(confirmBox); document.getElementById('pin-popup').style.display='block'; };
+
+    function autoGrow(el) {
+      el.style.height = 'auto';
+      el.style.height = el.scrollHeight + 'px';
     }
-
-      function autoGrow(el) {
-        el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
-      }
-
-      document.addEventListener("DOMContentLoaded", () => {
-        const locField = document.getElementById("location");
-        autoGrow(locField);
-        locField.addEventListener("input", () => autoGrow(locField));
-      });
-
-    function savePreset(name, webhook, threadId) {
-      if (!name||!webhook) return;
-      let presets = JSON.parse(localStorage.getItem("webhookPresets")||"[]");
-      const existing = presets.find(p=>p.name===name);
-      if (existing) { existing.webhook=webhook; existing.thread=threadId; }
-      else { presets.push({name,webhook,thread:threadId}); }
-      localStorage.setItem("webhookPresets", JSON.stringify(presets));
-      populatePresetHistory();
-    }
-
-    function populatePresetHistory() {
-      const list = document.getElementById("preset-history");
-      list.innerHTML = '';
-      JSON.parse(localStorage.getItem("webhookPresets")||"[]").forEach(p=>{
-        const o=document.createElement('option'); o.value=p.name; list.appendChild(o);
-      });
-    }
-
-    function fillFieldsFromPreset(name) {
-      const match = JSON.parse(localStorage.getItem("webhookPresets")||"[]").find(p=>p.name===name);
-      if (match) {
-        document.getElementById("webhook-url").value = match.webhook;
-        document.getElementById("thread-id").value = match.thread||"";
-      }
-    }
-
-    function saveToHistory(key, value) {
-      if (!value) return;
-      let history = JSON.parse(localStorage.getItem(key))||[];
-      if (!history.includes(value)) {
-        history.push(value);
-        localStorage.setItem(key, JSON.stringify(history));
-      }
-    }
-
-    function removeFromHistory(key, value) {
-      let history = JSON.parse(localStorage.getItem(key))||[];
-      history = history.filter(item=>item!==value);
-      localStorage.setItem(key, JSON.stringify(history));
-    }
-
-    function saveThreadNamedHistory(name, id) {
-      let history = JSON.parse(localStorage.getItem('threadNamedHistory'))||[];
-      if (!history.find(entry=>entry.name===name&&entry.id===id)) {
-        history.push({name,id});
-        localStorage.setItem('threadNamedHistory', JSON.stringify(history));
-      }
-    }
-
-    function removeFromNamedThreadHistory(threadId) {
-      let history = JSON.parse(localStorage.getItem('threadNamedHistory'))||[];
-      history = history.filter(item=>item.id!==threadId);
-      localStorage.setItem('threadNamedHistory', JSON.stringify(history));
-    }
-
-    function populateDatalist(id, key) {
-      const d=document.getElementById(id);
-      d.innerHTML='';
-      JSON.parse(localStorage.getItem(key)||"[]").forEach(val=>{
-        const o=document.createElement('option'); o.value=val; d.appendChild(o);
-      });
-    }
-
-    function populateThreadNameDatalist() {
-      const dlist=document.getElementById('thread-history');
-      dlist.innerHTML='';
-      JSON.parse(localStorage.getItem('threadNamedHistory')||"[]").forEach(e=>{
-        const o=document.createElement('option'); o.value=e.name; o.dataset.id=e.id; dlist.appendChild(o);
-      });
-      const inp=document.getElementById('thread-id');
-      inp.addEventListener('change',()=> {
-        const sel=inp.value;
-        const opt=Array.from(dlist.options).find(o=>o.value===sel);
-        if(opt) inp.setAttribute('data-thread-id', opt.dataset.id);
-      });
-    }
-
-    function validateWebhook() {
-      const preset= document.getElementById('preset-name').value.trim();
-      const webhook= document.getElementById('webhook-url').value.trim();
-      const threadId= document.getElementById('thread-id').value.trim();
-      if (!webhook) {
-        const e=document.getElementById('pin-error');
-        e.style.display='block';
-        const pop=document.getElementById('pin-popup');
-        pop.classList.add('shake');
-        setTimeout(()=>pop.classList.remove('shake'),400);
-        return;
-      }
-      saveToHistory('webhookHistory', webhook);
-      saveToHistory('threadHistory', threadId);
-      savePreset(preset, webhook, threadId);
-      document.getElementById('pin-popup').style.display='none';
-      window.tempSubmissionData.webhook = webhook;
-      window.tempSubmissionData.thread = threadId;
-      processSubmission();
-    }
-
     document.addEventListener("DOMContentLoaded", () => {
-      autoGrow(document.getElementById("location"));
       populatePresetHistory();
-      populateDatalist('webhook-history','webhookHistory');
-      populateThreadNameDatalist();
-      document.getElementById("preset-name").addEventListener("change", e => fillFieldsFromPreset(e.target.value));
-
-      const unitInput = document.getElementById('unitInput');
-      const unitContainer = document.getElementById('unit-tags');
-      unitInput.addEventListener('keydown', e => {
-        if (e.key==='Enter' && unitInput.value.trim()) {
-          e.preventDefault();
-          const text = unitInput.value.trim();
-          const tag = document.createElement('div');
-          tag.className='tag';
-          tag.innerHTML=`${text} <span class="remove">&times;</span>`;
-          unitContainer.insertBefore(tag, unitInput);
-          tag.querySelector('.remove').onclick = ()=>tag.remove();
-          unitInput.value='';
-        }
+      document.getElementById("preset-name").addEventListener("change", e => {
+        fillFieldsFromPreset(e.target.value);
       });
+      const loc = document.getElementById("location");
+      autoGrow(loc);
+      loc.addEventListener("input", () => autoGrow(loc));
     });
 
+    function randomID() {
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const numbers = "0123456789";
+      let id = "";
+      for (let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
+      id += "-";
+      for (let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
+      id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
+      return id;
+    }
+
     function resetForm() {
-      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el=>el.value='');
-      document.querySelectorAll('.tag').forEach(t=>t.remove());
-      document.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
-      document.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
+      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
+      document.querySelectorAll('select').forEach(sel => sel.selectedIndex = 0);
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+      document.querySelectorAll('.tag').forEach(tag => tag.remove());
       const loc = document.getElementById('location');
       loc.value = '';
       autoGrow(loc);
     }
 
+    function showErrorPopup() {
+      const popup = document.getElementById('error-popup');
+      popup.style.display = 'block';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
+    function showPopup() {
+      const popup = document.getElementById('popup-overlay');
+      popup.style.display = 'block';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+
     function submitForm() {
       const datetime = document.getElementById('datetime').value.trim();
       const location = document.getElementById('location').value.trim();
+      const units = [...document.querySelectorAll('#unit-tags .tag')]
+        .map(tag => tag.textContent.replace('×', '').trim());
       const incidentType = document.getElementById('incident-type').value.trim();
       const spreadLevel = document.getElementById('fire-spread-level').value.trim();
-      const units = [...document.querySelectorAll('#unit-tags .tag')].map(t=>t.textContent.replace('×','').trim());
-      const methods = [...document.querySelectorAll('#methods-used input:checked')].map(i=>i.value);
-      if (!datetime||!location||!incidentType||!spreadLevel||units.length===0||methods.length===0) {
-        document.getElementById('error-popup').style.display='block';
-        setTimeout(()=>document.getElementById('error-popup').style.display='none',3000);
+      const methods = [...document.querySelectorAll('#methods-used input:checked')]
+        .map(cb => cb.value.trim());
+
+      if (!datetime || !location || units.length === 0 || !incidentType || !spreadLevel || methods.length === 0) {
+        showErrorPopup();
         return;
       }
-      window.tempSubmissionData = { datetime, location, incidentType, spreadLevel, units, methods };
-      document.getElementById('pin-popup').style.display='block';
-      document.getElementById('pin-error').style.display='none';
+      window.tempSubmissionData = { datetime, location, units, incidentType, spreadLevel, methods };
+      document.getElementById('pin-popup').style.display = 'block';
+      document.getElementById('pin-error').style.display = 'none';
+    }
+
+    function validateWebhook() {
+      const preset = document.getElementById('preset-name').value.trim();
+      const webhook = document.getElementById('webhook-url').value.trim();
+      const threadId = document.getElementById('thread-id').value.trim();
+      if (!webhook) {
+        document.getElementById('pin-error').style.display = 'block';
+        return;
+      }
+      saveToHistory('webhookHistory', webhook);
+      saveToHistory('threadHistory', threadId);
+      savePreset(preset, webhook, threadId);
+      document.getElementById('pin-popup').style.display = 'none';
+      window.tempSubmissionData.webhook = webhook;
+      window.tempSubmissionData.thread = threadId;
+      processSubmission();
     }
 
     function processSubmission() {
       const data = window.tempSubmissionData;
       const generatedID = randomID();
-      const formatted = data.datetime.replace('T',' ');
-      const dtInput = document.getElementById('datetime');
-      const orig = dtInput.cloneNode(true);
+      const formattedDateTime = data.datetime.replace('T', ' ');
+
+      const datetimeInput = document.getElementById('datetime');
+      const originalInput = datetimeInput.cloneNode(true);
       const span = document.createElement('div');
-      span.textContent = formatted;
-      span.style = dtInput.style.cssText;
-      dtInput.parentNode.replaceChild(span, dtInput);
+      span.textContent = formattedDateTime;
+      span.style.cssText = datetimeInput.style.cssText;
+      datetimeInput.parentNode.replaceChild(span, datetimeInput);
 
       const toHide = [
         document.querySelector('.button-row'),
@@ -616,38 +585,163 @@
         document.getElementById('unitInput'),
         ...document.querySelectorAll('.tag .remove')
       ];
-      toHide.forEach(el=>el&&(el.style.display='none'));
+      toHide.forEach(el => el && (el.style.display = 'none'));
 
-      html2canvas(document.querySelector(".card"), { backgroundColor:null, scale:2 }).then(canvas=>{
-        span.parentNode.replaceChild(orig, span);
-        toHide.forEach(el=>el&&(el.style.display=''));
-        canvas.toBlob(blob=>{
+      html2canvas(document.querySelector(".card"), {
+        backgroundColor: null,
+        scale: 2
+      }).then(canvas => {
+        span.parentNode.replaceChild(originalInput, span);
+        toHide.forEach(el => el && (el.style.display = ''));
+
+        canvas.toBlob(blob => {
           const embed = {
             title: "FIRE INCIDENT REPORT",
             color: 16734003,
-            fields: [{ name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline:false }],
+            fields: [
+              { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false }
+            ],
             image: { url: "attachment://report.png" },
             footer: { text: "Fire Rescue" },
             timestamp: new Date().toISOString()
           };
+
           const formData = new FormData();
-          formData.append("payload_json", JSON.stringify({ embeds:[embed] }));
+          formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
           formData.append("file", blob, "report.png");
-          const threadQuery = data.thread?`?thread_id=${data.thread}`:'';
-          fetch(`${data.webhook}${threadQuery}`,{ method:"POST", body: formData })
-            .then(()=>{ document.getElementById('popup-overlay').style.display='block'; setTimeout(()=>document.getElementById('popup-overlay').style.display='none',3000); resetForm(); })
-            .catch(()=> showAlert("Failed to Submit Report.", "❌ Error"));
+
+          const threadQuery = data.thread ? `?thread_id=${data.thread}` : '';
+          const finalURL = `${data.webhook}${threadQuery}`;
+
+          fetch(finalURL, { method: "POST", body: formData })
+            .then(() => { showPopup(); resetForm(); })
+            .catch(() => showAlert("Failed to Submit Report.", "❌ Error"));
         });
       });
     }
 
-    function randomID() {
-      const L="ABCDEFGHIJKLMNOPQRSTUVWXYZ", N="0123456789";
-      let id=""; for(let i=0;i<3;i++) id+=L[Math.floor(Math.random()*L.length)];
-      id+="-"; for(let i=0;i<3;i++) id+=N[Math.floor(Math.random()*N.length)];
-      id+="-"+N[Math.floor(Math.random()*N.length)];
-      return id;
+    const unitInput = document.getElementById('unitInput');
+    const unitContainer = document.getElementById('unit-tags');
+    unitInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && this.value.trim()) {
+        e.preventDefault();
+        addUnitTag(this.value.trim());
+        this.value = '';
+      }
+    });
+    function addUnitTag(text) {
+      const tag = document.createElement('div');
+      tag.className = 'tag';
+      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+      unitContainer.insertBefore(tag, unitInput);
+      tag.querySelector('.remove').onclick = () => tag.remove();
     }
+
+    // storage/preset helpers
+    function savePreset(name, webhook, threadId) {
+      if (!name || !webhook) return;
+      let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      const existing = presets.find(p => p.name === name);
+      if (existing) {
+        existing.webhook = webhook;
+        existing.thread = threadId;
+      } else {
+        presets.push({ name, webhook, thread: threadId });
+      }
+      localStorage.setItem("webhookPresets", JSON.stringify(presets));
+      populatePresetHistory();
+    }
+
+    function populatePresetHistory() {
+      const list = document.getElementById("preset-history");
+      list.innerHTML = "";
+      const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      presets.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p.name;
+        list.appendChild(option);
+      });
+    }
+
+    function fillFieldsFromPreset(name) {
+      const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      const match = presets.find(p => p.name === name);
+      if (match) {
+        document.getElementById("webhook-url").value = match.webhook;
+        document.getElementById("thread-id").value = match.thread || "";
+      }
+    }
+
+    function saveToHistory(key, value) {
+      let history = JSON.parse(localStorage.getItem(key)) || [];
+      if (!history.includes(value)) {
+        history.push(value);
+        localStorage.setItem(key, JSON.stringify(history));
+      }
+    }
+
+    function removeFromHistory(key, value) {
+      let history = JSON.parse(localStorage.getItem(key)) || [];
+      history = history.filter(item => item !== value);
+      localStorage.setItem(key, JSON.stringify(history));
+    }
+
+    function removeFromNamedThreadHistory(threadId) {
+      let history = JSON.parse(localStorage.getItem("threadNamedHistory")) || [];
+      history = history.filter(item => item.id !== threadId);
+      localStorage.setItem("threadNamedHistory", JSON.stringify(history));
+    }
+
+    function saveThreadNamedHistory(name, id) {
+      let history = JSON.parse(localStorage.getItem("threadNamedHistory")) || [];
+      if (!history.find(entry => entry.name === name && entry.id === id)) {
+        history.push({ name, id });
+        localStorage.setItem("threadNamedHistory", JSON.stringify(history));
+      }
+    }
+
+    function populateDatalist(id, key) {
+      const datalist = document.getElementById(id);
+      datalist.innerHTML = "";
+      const history = JSON.parse(localStorage.getItem(key)) || [];
+      history.forEach(item => {
+        const option = document.createElement("option");
+        option.value = item;
+        datalist.appendChild(option);
+      });
+    }
+
+    function populateThreadNameDatalist() {
+      const datalist = document.getElementById("thread-history");
+      datalist.innerHTML = "";
+      const history = JSON.parse(localStorage.getItem("threadNamedHistory")) || [];
+      history.forEach(entry => {
+        const option = document.createElement("option");
+        option.value = entry.name;
+        option.dataset.id = entry.id;
+        datalist.appendChild(option);
+      });
+      const threadInput = document.getElementById("thread-id");
+      threadInput.addEventListener("change", () => {
+        const selected = threadInput.value;
+        const opt = Array.from(datalist.options)
+          .find(o => o.value === selected);
+        if (opt) threadInput.setAttribute("data-thread-id", opt.dataset.id);
+      });
+    }
+
+    function getThreadIdByName(name) {
+      const history = JSON.parse(localStorage.getItem("threadNamedHistory")) || [];
+      const entry = history.find(item => item.name === name);
+      return entry ? entry.id : name;
+    }
+
+    // initial population
+    document.addEventListener("DOMContentLoaded", () => {
+      populatePresetHistory();
+      populateDatalist("webhook-history", "webhookHistory");
+      populateThreadNameDatalist();
+    });
   </script>
-</body>
-</html>
+  </body>
+  </html>

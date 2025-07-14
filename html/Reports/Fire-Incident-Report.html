@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Fire Rescue Report</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         * {
             font-family: 'Rubik', sans-serif;
@@ -185,8 +184,7 @@
         }
 
         #popup-overlay,
-        #error-popup,
-        #pin-popup {
+        #error-popup {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -197,17 +195,9 @@
             padding: 25px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
             display: none;
-            z-index: 1000;
+            z-index: 10;
             max-width: 90%;
             text-align: center;
-        }
-
-        #pin-popup[style*="display: block"] {
-        display: flex !important;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
         }
 
         #popup-overlay .header-title {
@@ -216,34 +206,28 @@
             font-weight: bold;
         }
 
+        #popup-overlay .header-subtitle {
+            font-size: 14px;
+            color: #ccc;
+            margin-top: 6px;
+        }
+
         #error-popup .header-title {
             color: #f04747;
             font-size: 18px;
             font-weight: bold;
         }
 
-        #pin-popup input {
-            width: 100%;
-            padding: 10px;
-            font-size: 18px;
-            text-align: center;
-            margin-top: 10px;
-            border-radius: 6px;
-            border: 1px solid #444;
-            background: #2C2F33;
-            color: white;
-        }
-
-        #pin-error {
-            color: #f04747;
+        #error-popup .header-subtitle {
             font-size: 14px;
-            margin-top: 10px;
-            display: none;
+            color: #ccc;
+            margin-top: 6px;
         }
     </style>
 </head>
 
 <body>
+
     <div class="card">
         <div class="header">
             <div class="header-title">FIRE RESCUE</div>
@@ -271,6 +255,7 @@
         </div>
 
         <div class="section-title">SCENE DETAILS</div>
+
         <div class="row">
             <div class="field-group wide">
                 <label>Incident Type</label>
@@ -318,222 +303,90 @@
             <div class="header-title">⚠️ Submission Failed</div>
             <div class="header-subtitle">All Fields Are Required</div>
         </div>
-
-        <div id="pin-popup">
-            <div class="header-title">🔐 Webhook Required</div>
-            <div class="header-subtitle">Select or Create a Preset</div>
-            <input type="text" id="preset-name" list="preset-history" placeholder="Preset Name">
-            <datalist id="preset-history"></datalist>
-            <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL">
-            <datalist id="webhook-history"></datalist>
-            <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID">
-            <datalist id="thread-history"></datalist>
-            <div id="pin-error">Webhook URL Is Required</div>
-            <div style="margin-top: 15px;">
-                <button onclick="validateWebhook()" style="width: 80px; margin-right: 20px;">Confirm</button>
-                <button onclick="closePinPopup()"
-                    style="width: 80px; margin-left: 20px; background: rgba(175,41,41,1.0);">Close</button>
-            </div>
-        </div>
     </div>
 
     <script>
-        function closePinPopup() {
-            document.getElementById('pin-popup').style.display = 'none';
+        function createTagInput(inputId, containerId) {
+            const input = document.getElementById(inputId);
+            const container = document.getElementById(containerId);
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' && this.value.trim() !== '') {
+                    e.preventDefault();
+                    const text = this.value.trim();
+                    const tag = document.createElement('div');
+                    tag.className = 'tag';
+                    tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+                    container.insertBefore(tag, input);
+                    tag.querySelector('.remove').addEventListener('click', () => tag.remove());
+                    this.value = '';
+                }
+            });
         }
-        function autoGrow(el) {
-            el.style.height = 'auto';
-        el.style.height = el.scrollHeight + 'px';
-        }
 
-        const unitInput = document.getElementById('unitInput');
-        const unitContainer = document.getElementById('unit-tags');
-        unitInput.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' && this.value.trim()) {
-            e.preventDefault();
-        addUnitTag(this.value.trim());
-        this.value = '';
-    }
-  });
-        function addUnitTag(text) {
-    const tag = document.createElement('div');
-        tag.className = 'tag';
-        tag.innerHTML = `${text} <span class="remove">&times;</span>`;
-        unitContainer.insertBefore(tag, unitInput);
-    tag.querySelector('.remove').onclick = () => tag.remove();
-  }
-
-        function showErrorPopup() {
-    const popup = document.getElementById('error-popup');
-        popup.style.display = 'block';
-    setTimeout(() => popup.style.display = 'none', 3000);
-  }
-
-        function showPopup() {
-    const popup = document.getElementById('popup-overlay');
-        popup.style.display = 'block';
-    setTimeout(() => popup.style.display = 'none', 3000);
-  }
+        createTagInput('unitInput', 'unit-tags');
 
         function resetForm() {
             document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
-    document.querySelectorAll('.tag').forEach(tag => tag.remove());
-    document.querySelectorAll('select').forEach(sel => sel.selectedIndex = 0);
-    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
-  }
+            document.querySelectorAll('.tag').forEach(tag => tag.remove());
+            document.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+        }
 
-        function submitForm() {
-    const datetime = document.getElementById('datetime').value.trim();
-        const location = document.getElementById('location').value.trim();
-        const incidentType = document.getElementById('incident-type').value.trim();
-        const spreadLevel = document.getElementById('fire-spread-level').value.trim();
-    const units = [...document.querySelectorAll('#unit-tags .tag')].map(tag => tag.textContent.replace('×', '').trim());
-    const methods = [...document.querySelectorAll('#methods-used input:checked')].map(el => el.value.trim());
+        function showPopup(id) {
+            const popup = document.getElementById(id);
+            popup.style.display = 'block';
+            popup.onclick = () => popup.style.display = 'none';
+            setTimeout(() => popup.style.display = 'none', 3000);
+        }
 
-        if (!datetime || !location || !incidentType || !spreadLevel || units.length === 0 || methods.length === 0) {
-            showErrorPopup();
-        return;
-    }
+        async function submitForm() {
+            const datetime = document.getElementById('datetime').value.trim();
+            const niceDateTime = datetime.replace('T', ' ');
+            const location = document.getElementById('location').value.trim();
+            const units = [...document.querySelectorAll('#unit-tags .tag')].map(t => t.textContent.replace('×', '').trim());
+            const incidentType = document.getElementById('incident-type').value.trim();
+            const spreadLevel = document.getElementById('fire-spread-level').value.trim();
+            const methods = [...document.querySelectorAll('#methods-used input:checked')].map(el => el.value.trim());
 
-        window.tempSubmissionData = {datetime, location, incidentType, spreadLevel, units, methods};
-        document.getElementById('pin-popup').style.display = 'block';
-        document.getElementById('pin-error').style.display = 'none';
-  }
+            if (!datetime || !location || units.length === 0 || !incidentType || !spreadLevel || methods.length === 0) {
+                showPopup('error-popup');
+                return;
+            }
 
-        function validateWebhook() {
-    const preset = document.getElementById('preset-name').value.trim();
-        const webhook = document.getElementById('webhook-url').value.trim();
-        const threadId = document.getElementById('thread-id').value.trim();
+            const unitsInline = units
+                .map(off => `\`${off}\``)
+                .join(', ');
+            const methodsInline = methods
+                .map(off => `\`${off}\``)
+                .join(', ');
+            const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
+            const embed = {
+                title: "FIRE INCIDENT REPORT",
+                color: 4737096,
+                fields: [
+                    { name: "> Date & Time", value: `\`\`\`\n${niceDateTime}\n\`\`\``, inline: false },
+                    { name: "> Location", value: `\`\`\`\n${location}\n\`\`\``, inline: false },
+                    { name: "> Fire Units", value: unitsInline, inline: false },
+                    { name: "> Incident Type", value: `\`\`\`\n${incidentType}\n\`\`\``, inline: true },
+                    { name: "> Fire Spread Level", value: `\`\`\`\n${spreadLevel}\n\`\`\``, inline: true },
+                    { name: "> Methods Used", value: methodsInline, inline: false }
+                ],
+                footer: { text: "Fire Rescue" },
+                timestamp: new Date().toISOString()
+            };
 
-        if (!webhook) {
-      const err = document.getElementById('pin-error');
-        err.style.display = 'block';
-        return;
-    }
-
-        saveToHistory('webhookHistory', webhook);
-        saveToHistory('threadHistory', threadId);
-        savePreset(preset, webhook, threadId);
-
-        document.getElementById('pin-popup').style.display = 'none';
-        window.tempSubmissionData.webhook = webhook;
-        window.tempSubmissionData.thread = threadId;
-        processSubmission();
-  }
-
-        function processSubmission() {
-    const data = window.tempSubmissionData;
-        const generatedID = randomID();
-        const formattedDateTime = data.datetime.replace('T', ' ');
-        const embed = {
-            title: "FIRE INCIDENT REPORT",
-        color: 16734003,
-        fields: [
-        {name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
-        {name: "> Time & Date", value: `\`\`\`\n${formattedDateTime}\n\`\`\``, inline: false },
-        {name: "> Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
-        {name: "> Fire Units", value: data.units.map(u => `\`${u}\``).join(', '), inline: false },
-        {name: "> Incident Type", value: `\`\`\`\n${data.incidentType}\n\`\`\``, inline: true },
-        {name: "> Fire Spread Level", value: `\`\`\`\n${data.spreadLevel}\n\`\`\``, inline: true },
-        {name: "> Methods Used", value: data.methods.map(m => `\`${m}\``).join(', '), inline: false }
-        ],
-        footer: {text: "Fire Rescue" },
-        timestamp: new Date().toISOString()
-    };
-
-        html2canvas(document.querySelector(".card"), {
-            backgroundColor: null,
-        scale: 2
-    }).then(canvas => {
-            canvas.toBlob(blob => {
-                const formData = new FormData();
-                formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
-                formData.append("file", blob, "report.png");
-
-                const finalURL = data.thread ? `${data.webhook}?thread_id=${data.thread}` : data.webhook;
-                fetch(finalURL, {
-                    method: "POST",
-                    body: formData
-                }).then(() => {
-                    showPopup();
-                    resetForm();
-                }).catch(() => {
-                    alert("Failed to Submit Report.");
-                });
+            fetch(webhookURL, {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ embeds: [embed] })
+            }).then(() => {
+                showPopup('popup-overlay');
+                resetForm();
+            }).catch(() => {
+                alert("Failed to Submit Report.");
             });
-    });
-  }
-
-        function randomID() {
-    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const numbers = "0123456789";
-        let id = "";
-        for (let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
-        id += "-";
-        for (let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
-        id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
-        return id;
-  }
-
-        function saveToHistory(key, value) {
-    if (!value) return;
-        let history = JSON.parse(localStorage.getItem(key)) || [];
-        if (!history.includes(value)) {
-            history.push(value);
-        localStorage.setItem(key, JSON.stringify(history));
-    }
-  }
-
-        function savePreset(name, webhook, threadId) {
-    if (!name || !webhook) return;
-        let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
-    const existing = presets.find(p => p.name === name);
-        if (existing) {
-            existing.webhook = webhook;
-        existing.thread = threadId;
-    } else {
-            presets.push({ name, webhook, thread: threadId });
-    }
-        localStorage.setItem("webhookPresets", JSON.stringify(presets));
-        populatePresetHistory();
-  }
-
-        function populatePresetHistory() {
-    const list = document.getElementById("preset-history");
-        list.innerHTML = "";
-        const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
-    presets.forEach(p => {
-      const option = document.createElement("option");
-        option.value = p.name;
-        list.appendChild(option);
-    });
-  }
-
-        function fillFieldsFromPreset(name) {
-    const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
-    const match = presets.find(p => p.name === name);
-        if (match) {
-            document.getElementById("webhook-url").value = match.webhook;
-        document.getElementById("thread-id").value = match.thread || "";
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-            populatePresetHistory();
-    document.getElementById("preset-name").addEventListener("change", e => {
-            fillFieldsFromPreset(e.target.value);
-    });
-  });
-
-        document.addEventListener("click", function (e) {
-    if (e.target.closest('.button-row, #pin-popup button')) return;
-    ['popup-overlay', 'error-popup', 'pin-popup'].forEach(id => {
-      const popup = document.getElementById(id);
-        if (popup && popup.style.display === 'block' && !popup.contains(e.target)) {
-            popup.style.display = 'none';
-      }
-    });
-  });
+        }
     </script>
 </body>
+
 </html>
