@@ -380,8 +380,6 @@
           formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
           formData.append("file", blob, "report.png");
 
-          const urlWithThread = `${WEBHOOK_URL}?thread_id=${THREAD_ID}`;
-
           fetch('/.netlify/functions/report', {
             method: 'POST',
             body: formData
