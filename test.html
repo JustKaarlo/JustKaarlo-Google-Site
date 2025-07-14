@@ -236,14 +236,19 @@
     </div>
     <div id="pin-popup">
       <div class="header-title">🔐 Webhook Required</div>
-      <div class="header-subtitle">Please Enter Webhook URL and Optional Thread ID</div>
-      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL">
+      <div class="header-subtitle">Select or Create a Preset</div>
+    
+      <input type="text" id="preset-name" list="preset-history" placeholder="Preset Name">
+      <datalist id="preset-history"></datalist>
+    
+      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL" style="margin-top: 10px;">
       <datalist id="webhook-history"></datalist>
-      <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top: 10px">
+    
+      <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top: 10px;">
       <datalist id="thread-history"></datalist>
-      <input type="text" id="thread-name" list="thread-name-history" placeholder="Thread Name" style="margin-top: 10px">
-      <datalist id="thread-name-history"></datalist>
+    
       <div id="pin-error">Webhook URL Is Required</div>
+    
       <div style="margin-top: 15px;">
         <button onclick="validateWebhook()">Confirm</button>
       </div>
@@ -308,12 +313,52 @@
       document.getElementById('pin-error').style.display = 'none';
     }
 
+    function savePreset(name, webhook, threadId) {
+      if (!name || !webhook) return;
+      let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      const existing = presets.find(p => p.name === name);
+      if (existing) {
+        existing.webhook = webhook;
+        existing.thread = threadId;
+      } else {
+        presets.push({ name, webhook, thread: threadId });
+      }
+      localStorage.setItem("webhookPresets", JSON.stringify(presets));
+      populatePresetHistory();
+    }
+  
+    function populatePresetHistory() {
+      const list = document.getElementById("preset-history");
+      list.innerHTML = "";
+      const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      presets.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p.name;
+        list.appendChild(option);
+      });
+    }
+  
+    function fillFieldsFromPreset(name) {
+      const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      const match = presets.find(p => p.name === name);
+      if (match) {
+        document.getElementById("webhook-url").value = match.webhook;
+        document.getElementById("thread-id").value = match.thread || "";
+      }
+    }
+  
+    document.addEventListener("DOMContentLoaded", () => {
+      populatePresetHistory();
+      document.getElementById("preset-name").addEventListener("change", e => {
+        fillFieldsFromPreset(e.target.value);
+      });
+    });
+    
     function validateWebhook() {
+      const preset = document.getElementById('preset-name').value.trim();
       const webhook = document.getElementById('webhook-url').value.trim();
-      const threadInput = document.getElementById('thread-id');
-      const threadName = threadInput.value.trim();
-      const actualThreadId = threadInput.getAttribute('data-thread-id') || threadName;
-
+      const threadId = document.getElementById('thread-id').value.trim();
+  
       if (!webhook) {
         const err = document.getElementById('pin-error');
         err.style.display = 'block';
@@ -322,15 +367,14 @@
         setTimeout(() => popup.classList.remove('shake'), 400);
         return;
       }
-
+  
       saveToHistory('webhookHistory', webhook);
-      if (threadName && actualThreadId) {
-        saveThreadNamedHistory(threadName, actualThreadId);
-      }
-
+      saveToHistory('threadHistory', threadId);
+      savePreset(preset, webhook, threadId);
+  
       document.getElementById('pin-popup').style.display = 'none';
       window.tempSubmissionData.webhook = webhook;
-      window.tempSubmissionData.thread = actualThreadId;
+      window.tempSubmissionData.thread = threadId;
       processSubmission();
     }
 
@@ -442,7 +486,6 @@
         option.dataset.id = entry.id;
         datalist.appendChild(option);
       });
-    
       const threadInput = document.getElementById('thread-id');
       threadInput.addEventListener('change', () => {
         const selectedName = threadInput.value;
@@ -462,7 +505,6 @@
       populateThreadNameDatalist();
     });
     document.addEventListener('click', function (e) {
-      // if click was on any button inside the card, bail out
       if (e.target.closest('.button-row, #pin-popup button')) return;
       ['popup-overlay','error-popup','pin-popup'].forEach(id => {
         const popup = document.getElementById(id);
