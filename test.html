@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <title>Medical Report</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <title>Fire Rescue Report</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    * {
-      font-family: 'Rubik', sans-serif;
-    }
+    * { font-family: 'Rubik', sans-serif; }
 
     body {
       background: transparent;
       padding: 30px;
-      max-width: 850px;
+      max-width: 750px;
       margin: auto;
       color: white;
     }
@@ -28,21 +25,22 @@
       position: relative;
     }
 
-    .logo {
+    .header {
       background: #56585B;
       padding: 15px;
       text-align: center;
     }
 
-    .logo .main {
+    .header-title {
       font-size: 20px;
       font-weight: bold;
       color: white;
       margin: 0;
     }
 
-    .logo .sub {
-      font-size: 14px;
+    .header-subtitle {
+      font-size: 15px;
+      font-style: bold;
       color: #ccc;
       margin-top: 4px;
     }
@@ -80,22 +78,14 @@
     }
 
     input[type="text"],
-    input[type="date"],
-    input[type="time"],
     input[type="datetime-local"],
-    select,
-    textarea {
+    select {
       padding: 6px 10px;
       border: 1px solid #444;
       border-radius: 6px;
       font-size: 14px;
       background: #23272A;
       color: white;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 50px;
     }
 
     .checkbox-group {
@@ -115,9 +105,7 @@
       margin-right: 5px;
     }
 
-    .wide {
-      width: 100%;
-    }
+    .wide { width: 100%; }
 
     button {
       background-color: #3c78d8;
@@ -130,8 +118,44 @@
       transition: background 0.3s ease;
     }
 
-    button:hover {
-      background-color: #5187dc;
+    button:hover { background-color: #5187dc; }
+
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid #444;
+      border-radius: 6px;
+      background: #23272A;
+    }
+
+    .tag-container input {
+      border: none;
+      flex: 1;
+      min-width: 120px;
+      padding: 6px 8px;
+      font-size: 14px;
+      background: transparent;
+      color: white;
+      outline: none;
+    }
+
+    .tag {
+      background-color: #99aab5;
+      color: #2C2F33;
+      padding: 5px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+    }
+
+    .tag .remove {
+      margin-left: 8px;
+      color: #2C2F33;
+      cursor: pointer;
+      font-weight: bold;
     }
 
     .button-row {
@@ -149,13 +173,12 @@
       background-color: #5d626a;
     }
 
-    .submit-btn {
-      flex: 1;
-    }
+    .submit-btn { flex: 1; }
 
-    /* ----- Popup CSS from Arrest-Report.html ----- */
-    #popup-overlay, #error-popup, #pin-popup {
-      position: absolute;
+    #popup-overlay,
+    #error-popup,
+    #pin-popup {
+      position: fixed;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
@@ -163,182 +186,95 @@
       color: white;
       border-radius: 12px;
       padding: 25px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
       display: none;
-      z-index: 10;
+      z-index: 1000;
       max-width: 90%;
       text-align: center;
     }
+
     #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
-    #popup-overlay .header-subtitle,
-    #error-popup .header-subtitle,
-    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
     #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
+
     #pin-popup input {
       width: 100%;
       padding: 10px;
       font-size: 18px;
       text-align: center;
-      margin-top: 15px;
+      margin-top: 10px;
       border-radius: 6px;
       border: 1px solid #444;
       background: #2C2F33;
       color: white;
     }
+
     #pin-error {
       color: #f04747;
       font-size: 14px;
       margin-top: 10px;
       display: none;
     }
-    .shake {
-      animation: shake 0.4s;
-    }
-    @keyframes shake {
-      0% { transform: translate(-50%, -50%) translateX(0); }
-      25% { transform: translate(-50%, -50%) translateX(-10px); }
-      50% { transform: translate(-50%, -50%) translateX(10px); }
-      75% { transform: translate(-50%, -50%) translateX(-10px); }
-      100% { transform: translate(-50%, -50%) translateX(0); }
-    }
-    /* --------------------------------------------- */
-
-    textarea.autogrow {
-      width: 100%;
-      min-height: auto;
-      line-height: 1.4;
-      padding: 6px 10px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      font-size: 14px;
-      background: #23272A;
-      color: white;
-      resize: none;
-      overflow: hidden;
-      box-sizing: border-box;
-    }
   </style>
 </head>
-
 <body>
   <div class="card">
-    <div class="logo">
-      <div class="main">EMERGENCY MEDICAL RESPONSE</div>
-      <div class="sub">MEDICAL REPORT</div>
+    <div class="header">
+      <div class="header-title">FIRE RESCUE</div>
+      <div class="header-subtitle">FIRE INCIDENT REPORT</div>
     </div>
 
     <div class="row">
-      <div class="field-group">
+      <div class="field-group wide">
         <label>Time & Date</label>
         <input type="datetime-local" id="datetime">
       </div>
       <div class="field-group wide">
         <label>Location of Incident</label>
-        <textarea id="location" class="autogrow" rows="1"></textarea>
+        <input type="text" id="location">
       </div>
     </div>
 
-    <div class="section-title">PATIENT INFORMATION</div>
     <div class="row">
-      <div class="field-group"><label>Name</label><input type="text" id="name"></div>
-      <div class="field-group"><label>Gender</label>
-        <select id="gender">
+      <div class="field-group wide">
+        <label>Fire Unit(s) on Scene</label>
+        <div id="unit-tags" class="tag-container">
+          <input type="text" id="unitInput" placeholder="Type And Press Enter">
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">SCENE DETAILS</div>
+    <div class="row">
+      <div class="field-group wide">
+        <label>Incident Type</label>
+        <select id="incident-type">
           <option value="">Select</option>
-          <option>Male</option>
-          <option>Female</option>
+          <option>STRUCTURE FIRE</option>
+          <option>VEHICLE FIRE</option>
+          <option>WILDFIRE/BRUSH FIRE</option>
+          <option>ELECTRICAL FIRE</option>
+          <option>KITCHEN FIRE</option>
+          <option>EXPLOSION</option>
+          <option>OTHER</option>
         </select>
       </div>
-      <div class="field-group"><label>Date of Birth</label><input type="date" id="dob"></div>
-    </div>
-
-    <div class="section-title">ASSESSMENT</div>
-    <div class="row">
-      <div class="field-group wide"><label>Primary Injury/Condition</label><textarea id="primary"></textarea></div>
-      <div class="field-group wide"><label>Visible Injuries</label><textarea id="injuries"></textarea></div>
-    </div>
-
-    <div class="row">
-      <div class="field-group"><label>Pulse</label>
-        <select id="pulse">
+      <div class="field-group wide">
+        <label>Fire Spread Level</label>
+        <select id="fire-spread-level">
           <option value="">Select</option>
-          <option>NONE</option>
-          <option>VERY WEAK</option>
-          <option>WEAK STABLE</option>
-          <option>NORMAL</option>
-          <option>HIGH</option>
-          <option>VERY HIGH</option>
-          <option>DANGEROUSLY HIGH</option>
-        </select>
-      </div>
-      <div class="field-group"><label>Respiration</label>
-        <select id="respiration">
-          <option value="">Select</option>
-          <option>NONE</option>
-          <option>VERY LIGHT</option>
-          <option>LIGHT</option>
+          <option>MINOR</option>
           <option>MODERATE</option>
-          <option>VIGOROUS</option>
-          <option>VERY HARD</option>
-          <option>MAX EFFORT</option>
-        </select>
-      </div>
-      <div class="field-group"><label>Blood Pressure</label>
-        <select id="bp">
-          <option value="">Select</option>
-          <option>NONE</option>
-          <option>NORMAL</option>
-          <option>ELEVATED</option>
-          <option>STAGE-1</option>
-          <option>STAGE-2</option>
-          <option>HYPERTENSIVE CRISIS</option>
+          <option>EXTENSIVE</option>
+          <option>OUT OF CONTROL</option>
         </select>
       </div>
     </div>
 
-    <div class="section-title">LEVEL OF CONSCIOUSNESS</div>
-    <div class="checkbox-group" id="consciousness">
-      <label><input type="checkbox" value="Alert"> Alert</label>
-      <label><input type="checkbox" value="Voice"> Voice</label>
-      <label><input type="checkbox" value="Pain"> Pain</label>
-      <label><input type="checkbox" value="Unresponsive"> Unresponsive</label>
-    </div>
-
-    <div class="section-title">TREATMENT PROVIDED</div>
-    <div class="checkbox-group" id="treatment">
-      <label><input type="checkbox" value="Basic First Aid"> Basic First Aid</label>
-      <label><input type="checkbox" value="Tourniquet Applied"> Tourniquet Applied</label>
-      <label><input type="checkbox" value="Wound Dressing / Bandaging"> Wound Dressing / Bandaging</label>
-      <label><input type="checkbox" value="Transport to Hospital"> Transport to Hospital</label>
-      <label><input type="checkbox" value="Pain Relief Administered"> Pain Relief Administered</label>
-      <label><input type="checkbox" value="CPR"> CPR</label>
-    </div>
-
-    <div class="row">
-      <div class="field-group wide">
-        <label>Transported To</label>
-        <select id="hospital">
-          <option value="">Select</option>
-          <option>CENTRAL LOS SANTOS MEDICAL CENTER</option>
-          <option>MOUNT ZONAH MEDICAL CENTER</option>
-          <option>PILLBOX HILL MEDICAL CENTER</option>
-          <option>ST. FIACRE HOSPITAL</option>
-          <option>ECLIPSE MEDICAL TOWER</option>
-          <option>PORTOLA TRINITY MEDICAL CENTER</option>
-          <option>THE BAY CARE CENTER</option>
-          <option>SANDY SHORES MEDICAL CENTER</option>
-        </select>
-      </div>
-      <div class="field-group wide">
-        <label>Condition During Transport</label>
-        <select id="condition">
-          <option value="">Select</option>
-          <option>STABLE</option>
-          <option>CRITICAL</option>
-          <option>DETERIORATING</option>
-          <option>IMPROVED</option>
-          <option>DECEASED</option>
-        </select>
-      </div>
+    <div class="section-title">METHODS USED</div>
+    <div class="checkbox-group" id="methods-used">
+      <label><input type="checkbox" value="Water"> Water</label>
+      <label><input type="checkbox" value="Foam"> Foam</label>
+      <label><input type="checkbox" value="Fire Extinguishers"> Fire Extinguishers</label>
     </div>
 
     <div class="button-row">
@@ -346,171 +282,193 @@
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
 
-    <!-- Popup HTML from Arrest-Report.html -->
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Report Has Been Logged</div>
     </div>
+
     <div id="error-popup">
       <div class="header-title">⚠️ Submission Failed</div>
       <div class="header-subtitle">All Fields Are Required</div>
     </div>
+
     <div id="pin-popup">
       <div class="header-title">🔐 Webhook Required</div>
       <div class="header-subtitle">Select or Create a Preset</div>
       <input type="text" id="preset-name" list="preset-history" placeholder="Preset Name">
       <datalist id="preset-history"></datalist>
-      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL" style="margin-top:10px;">
+      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL">
       <datalist id="webhook-history"></datalist>
-      <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top:10px;">
+      <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID">
       <datalist id="thread-history"></datalist>
       <div id="pin-error">Webhook URL Is Required</div>
-      <div style="margin-top:15px;"><button onclick="validateWebhook()">Confirm</button></div>
-      <div style="margin-top:10px;">
-        <button onclick="confirmClearFields()" class="clear-btn">Delete All Data</button>
-        <button onclick="deletePreset()" class="clear-btn" style="margin-left:10px;">Delete Preset</button>
+      <div style="margin-top: 15px;">
+        <button onclick="validateWebhook()">Confirm</button>
       </div>
     </div>
   </div>
 
   <script>
-    function showAlert(message, title = '🔔 Notice') {
-      const existing = document.getElementById('custom-alert');
-      if (existing) existing.remove();
-
-      const popup = document.createElement('div');
-      popup.id = 'custom-alert';
-      popup.style = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #23272A;
-        color: white;
-        padding: 20px 25px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-        z-index: 1000;
-        text-align: center;
-        max-width: 90%;
-      `;
-      popup.innerHTML = `
-        <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #7289da;">${title}</div>
-        <div style="font-size: 15px; color: #ccc;">${message}</div>
-        <button style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;" onclick="document.getElementById('custom-alert').remove()">Close</button>
-      `;
-      document.body.appendChild(popup);
-    }
-
-    function confirmClearFields() {
-      const confirmBox = document.createElement('div');
-      confirmBox.style = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #2C2F33;
-        color: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-        z-index: 1000;
-        text-align: center;
-      `;
-      confirmBox.innerHTML = `
-        <div style="margin-bottom: 10px;">⚠️ This will delete all saved presets, history and input fields. Are you sure?</div>
-        <button id="confirm-delete-all" style="margin: 5px; padding: 8px 14px;">YES</button>
-        <button id="cancel-delete-all" style="margin: 5px; padding: 8px 14px;">NO</button>
-      `;
-      document.body.appendChild(confirmBox);
-      document.getElementById('confirm-delete-all').onclick = () => {
-        localStorage.removeItem("webhookPresets");
-        localStorage.removeItem("webhookHistory");
-        localStorage.removeItem("threadHistory");
-        localStorage.removeItem("threadNamedHistory");
-        document.getElementById("preset-name").value = '';
-        document.getElementById("webhook-url").value = '';
-        document.getElementById("thread-id").value = '';
-        populatePresetHistory();
-        populateDatalist('webhook-history', 'webhookHistory');
-        populateThreadNameDatalist();
-        document.body.removeChild(confirmBox);
-      };
-      document.getElementById('cancel-delete-all').onclick = () => {
-        document.body.removeChild(confirmBox);
-        document.getElementById('pin-popup').style.display = 'none';
-      };
-    }
-
-    function deletePreset() {
-      const name = document.getElementById('preset-name').value.trim();
-      if (!name) return showAlert("Preset Name Required to Delete.");
-
-      const confirmBox = document.createElement('div');
-      confirmBox.style = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #2C2F33;
-        color: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-        z-index: 1000;
-        text-align: center;
-      `;
-      confirmBox.innerHTML = `
-        <div style="margin-bottom: 10px;">⚠️ Are you sure you want to delete the preset <strong>'${name}'</strong>?</div>
-        <button id="confirm-delete-preset" style="margin: 5px; padding: 8px 14px;">YES</button>
-        <button id="cancel-delete-preset" style="margin: 5px; padding: 8px 14px;">NO</button>
-      `;
-      document.body.appendChild(confirmBox);
-      document.getElementById('confirm-delete-preset').onclick = () => {
-        let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
-        const match = presets.find(p => p.name === name);
-        if (match) {
-          presets = presets.filter(p => p.name !== name);
-          localStorage.setItem("webhookPresets", JSON.stringify(presets));
-          removeFromHistory('webhookHistory', match.webhook);
-          if (match.thread) {
-            removeFromHistory('threadHistory', match.thread);
-            removeFromNamedThreadHistory(match.thread);
-          }
-          document.getElementById("preset-name").value = '';
-          document.getElementById("webhook-url").value = '';
-          document.getElementById("thread-id").value = '';
-          populatePresetHistory();
-          populateDatalist('webhook-history', 'webhookHistory');
-          populateThreadNameDatalist();
-          showAlert(`Preset '${name}' and its data were deleted.`, '✅ Deleted');
-        } else {
-          showAlert(`Preset '${name}' not found.`, '⚠️ Not Found');
-        }
-        document.body.removeChild(confirmBox);
-        document.getElementById('pin-popup').style.display = 'block';
-      };
-      document.getElementById('cancel-delete-preset').onclick = () => {
-        document.body.removeChild(confirmBox);
-        document.getElementById('pin-popup').style.display = 'block';
-      };
-    }
-
     function autoGrow(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
     }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      populatePresetHistory();
-      populateDatalist('webhook-history', 'webhookHistory');
-      populateThreadNameDatalist();
-
-      const locField = document.getElementById("location");
-      autoGrow(locField);
-      locField.addEventListener("input", () => autoGrow(locField));
+    const unitInput = document.getElementById('unitInput');
+    const unitContainer = document.getElementById('unit-tags');
+    unitInput.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && this.value.trim()) {
+        e.preventDefault();
+        addUnitTag(this.value.trim());
+        this.value = '';
+      }
     });
-
+    function addUnitTag(text) {
+      const tag = document.createElement('div');
+      tag.className = 'tag';
+      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+      unitContainer.insertBefore(tag, unitInput);
+      tag.querySelector('.remove').onclick = () => tag.remove();
+    }
+    function showErrorPopup() {
+      const popup = document.getElementById('error-popup');
+      popup.style.display = 'block';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+    function showPopup() {
+      const popup = document.getElementById('popup-overlay');
+      popup.style.display = 'block';
+      setTimeout(() => popup.style.display = 'none', 3000);
+    }
+    function resetForm() {
+      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
+      document.querySelectorAll('.tag').forEach(tag => tag.remove());
+      document.querySelectorAll('select').forEach(sel => sel.selectedIndex = 0);
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    }
+    function submitForm() {
+      const datetime = document.getElementById('datetime').value.trim();
+      const location = document.getElementById('location').value.trim();
+      const incidentType = document.getElementById('incident-type').value.trim();
+      const spreadLevel = document.getElementById('fire-spread-level').value.trim();
+      const units = [...document.querySelectorAll('#unit-tags .tag')].map(tag => tag.textContent.replace('×', '').trim());
+      const methods = [...document.querySelectorAll('#methods-used input:checked')].map(el => el.value.trim());
+  
+      if (!datetime || !location || !incidentType || !spreadLevel || units.length === 0 || methods.length === 0) {
+        showErrorPopup();
+        return;
+      }
+      window.tempSubmissionData = { datetime, location, incidentType, spreadLevel, units, methods };
+      document.getElementById('pin-popup').style.display = 'block';
+      document.getElementById('pin-error').style.display = 'none';
+    }
+    function validateWebhook() {
+      const preset = document.getElementById('preset-name').value.trim();
+      const webhook = document.getElementById('webhook-url').value.trim();
+      const threadId = document.getElementById('thread-id').value.trim();
+  
+      if (!webhook) {
+        const err = document.getElementById('pin-error');
+        err.style.display = 'block';
+        return;
+      }
+      saveToHistory('webhookHistory', webhook);
+      saveToHistory('threadHistory', threadId);
+      savePreset(preset, webhook, threadId);
+  
+      document.getElementById('pin-popup').style.display = 'none';
+      window.tempSubmissionData.webhook = webhook;
+      window.tempSubmissionData.thread = threadId;
+      processSubmission();
+    }
+    function processSubmission() {
+      const data = window.tempSubmissionData;
+      const generatedID = randomID();
+      const formattedDateTime = data.datetime.replace('T', ' ');
+      const embed = {
+        title: "FIRE INCIDENT REPORT",
+        color: 16734003,
+        fields: [
+          { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
+          { name: "> Time & Date", value: `\`\`\`\n${formattedDateTime}\n\`\`\``, inline: false },
+          { name: "> Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
+          { name: "> Fire Units", value: data.units.map(u => `\`${u}\``).join(', '), inline: false },
+          { name: "> Incident Type", value: `\`\`\`\n${data.incidentType}\n\`\`\``, inline: true },
+          { name: "> Fire Spread Level", value: `\`\`\`\n${data.spreadLevel}\n\`\`\``, inline: true },
+          { name: "> Methods Used", value: data.methods.map(m => `\`${m}\``).join(', '), inline: false }
+        ],
+        footer: { text: "Fire Rescue" },
+        timestamp: new Date().toISOString()
+      };
+  
+      function processSubmission() {
+        const data = window.tempSubmissionData;
+        const generatedID = randomID();
+        const formattedDateTime = data.datetime.replace('T', ' ');
+        const datetimeInput = document.getElementById('datetime');
+        const originalInput = datetimeInput.cloneNode(true);
+        const span = document.createElement('div');
+        span.textContent = formattedDateTime;
+        span.style = datetimeInput.style.cssText;
+        datetimeInput.parentNode.replaceChild(span, datetimeInput);
+        const toHide = [
+          document.querySelector('.button-row'),
+          document.querySelector('.header'),
+          document.querySelector('#unitInput'),
+          ...document.querySelectorAll('.tag .remove')
+        ];
+        toHide.forEach(el => el && (el.style.display = 'none'));
+        html2canvas(document.querySelector(".card"), {
+          backgroundColor: null,
+          scale: 2
+        }).then(canvas => {
+          span.parentNode.replaceChild(originalInput, span);
+          toHide.forEach(el => el && (el.style.display = ''));
+          canvas.toBlob(blob => {
+            const embed = {
+              title: "FIRE INCIDENT REPORT",
+              color: 16734003,
+              fields: [
+                { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false }
+              ],
+              image: { url: "attachment://report.png" },
+              footer: { text: "Fire Rescue" },
+              timestamp: new Date().toISOString()
+            };
+            const formData = new FormData();
+            formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
+            formData.append("file", blob, "report.png");
+            const threadQuery = data.thread ? `?thread_id=${data.thread}` : '';
+            const finalURL = `${data.webhook}${threadQuery}`;
+            fetch(finalURL, {
+              method: "POST",
+              body: formData
+            })
+            .then(() => {
+              showPopup();
+              resetForm();
+            })
+            .catch(() => alert("Failed to Submit Report."));
+          });
+        });
+      }
+    function randomID() {
+      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const numbers = "0123456789";
+      let id = "";
+      for (let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
+      id += "-";
+      for (let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
+      id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
+      return id;
+    }
+    function saveToHistory(key, value) {
+      if (!value) return;
+      let history = JSON.parse(localStorage.getItem(key)) || [];
+      if (!history.includes(value)) {
+        history.push(value);
+        localStorage.setItem(key, JSON.stringify(history));
+      }
+    }
     function savePreset(name, webhook, threadId) {
       if (!name || !webhook) return;
       let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
@@ -524,7 +482,6 @@
       localStorage.setItem("webhookPresets", JSON.stringify(presets));
       populatePresetHistory();
     }
-
     function populatePresetHistory() {
       const list = document.getElementById("preset-history");
       list.innerHTML = "";
@@ -535,7 +492,6 @@
         list.appendChild(option);
       });
     }
-
     function fillFieldsFromPreset(name) {
       const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
       const match = presets.find(p => p.name === name);
@@ -544,192 +500,21 @@
         document.getElementById("thread-id").value = match.thread || "";
       }
     }
-
-    function saveToHistory(key, value) {
-      let history = JSON.parse(localStorage.getItem(key)) || [];
-      if (!history.includes(value)) {
-        history.push(value);
-        localStorage.setItem(key, JSON.stringify(history));
-      }
-    }
-    function removeFromHistory(key, value) {
-      let history = JSON.parse(localStorage.getItem(key)) || [];
-      history = history.filter(item => item !== value);
-      localStorage.setItem(key, JSON.stringify(history));
-    }
-    function saveThreadNamedHistory(name, id) {
-      let history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
-      if (!history.find(entry => entry.name === name && entry.id === id)) {
-        history.push({ name, id });
-        localStorage.setItem('threadNamedHistory', JSON.stringify(history));
-      }
-    }
-    function removeFromNamedThreadHistory(threadId) {
-      let history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
-      history = history.filter(item => item.id !== threadId);
-      localStorage.setItem('threadNamedHistory', JSON.stringify(history));
-    }
-
-    function populateDatalist(id, key) {
-      const datalist = document.getElementById(id);
-      datalist.innerHTML = '';
-      const history = JSON.parse(localStorage.getItem(key)) || [];
-      history.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item;
-        datalist.appendChild(option);
+    document.addEventListener("DOMContentLoaded", () => {
+      populatePresetHistory();
+      document.getElementById("preset-name").addEventListener("change", e => {
+        fillFieldsFromPreset(e.target.value);
       });
-    }
-    function populateThreadNameDatalist() {
-      const datalist = document.getElementById('thread-history');
-      datalist.innerHTML = '';
-      const history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
-      history.forEach(entry => {
-        const option = document.createElement('option');
-        option.value = entry.name;
-        option.dataset.id = entry.id;
-        datalist.appendChild(option);
+    });
+    document.addEventListener("click", function (e) {
+      if (e.target.closest('.button-row, #pin-popup button')) return;
+      ['popup-overlay', 'error-popup', 'pin-popup'].forEach(id => {
+        const popup = document.getElementById(id);
+        if (popup && popup.style.display === 'block' && !popup.contains(e.target)) {
+          popup.style.display = 'none';
+        }
       });
-      const threadInput = document.getElementById('thread-id');
-      threadInput.addEventListener('change', () => {
-        const sel = threadInput.value;
-        const opt = Array.from(datalist.options).find(o => o.value === sel);
-        if (opt) threadInput.setAttribute('data-thread-id', opt.dataset.id);
-      });
-    }
-
-    function validateWebhook() {
-      const preset = document.getElementById('preset-name').value.trim();
-      const webhook = document.getElementById('webhook-url').value.trim();
-      const thread   = document.getElementById('thread-id').value.trim();
-
-      if (!webhook) {
-        const err = document.getElementById('pin-error');
-        err.style.display = 'block';
-        const pop = document.getElementById('pin-popup');
-        pop.classList.add('shake');
-        setTimeout(() => pop.classList.remove('shake'), 400);
-        return;
-      }
-      saveToHistory('webhookHistory', webhook);
-      saveToHistory('threadHistory', thread);
-      savePreset(preset, webhook, thread);
-
-      document.getElementById('pin-popup').style.display = 'none';
-      window.tempSubmissionData.webhook = webhook;
-      window.tempSubmissionData.thread   = thread;
-      processSubmission();
-    }
-
-    function randomID() {
-      const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      const numbers = "0123456789";
-      let id = "";
-      for (let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
-      id += "-";
-      for (let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
-      id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
-      return id;
-    }
-
-    function resetForm() {
-      document.querySelectorAll('input, textarea, select').forEach(el => {
-        if (el.type === 'checkbox') el.checked = false;
-        else el.value = '';
-      });
-      const loc = document.getElementById('location');
-      autoGrow(loc);
-    }
-
-    function submitForm() {
-      const getVals = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
-      const datetime    = document.getElementById('datetime').value;
-      const location    = document.getElementById('location').value.trim();
-      const name        = document.getElementById('name').value.trim();
-      const gender      = document.getElementById('gender').value;
-      const dob         = document.getElementById('dob').value;
-      const primary     = document.getElementById('primary').value.trim();
-      const injuries    = document.getElementById('injuries').value.trim();
-      const pulse       = document.getElementById('pulse').value;
-      const respiration = document.getElementById('respiration').value;
-      const bp          = document.getElementById('bp').value;
-      const consciousness = getVals('consciousness');
-      const treatment     = getVals('treatment');
-      const hospital      = document.getElementById('hospital').value;
-      const condition     = document.getElementById('condition').value;
-
-      if (!datetime || !location || !name || !gender || !dob
-        || !primary || !injuries || !pulse || !respiration
-        || !bp || consciousness.length === 0
-        || treatment.length === 0 || !hospital
-        || !condition) {
-        document.getElementById('error-popup').style.display = 'block';
-        setTimeout(() => document.getElementById('error-popup').style.display = 'none', 3000);
-        return;
-      }
-
-      window.tempSubmissionData = {
-        datetime, location, name, gender, dob,
-        primary, injuries, pulse, respiration, bp,
-        consciousness, treatment, hospital, condition
-      };
-      document.getElementById('pin-popup').style.display = 'block';
-      document.getElementById('pin-error').style.display = 'none';
-    }
-
-    function processSubmission() {
-      const data = window.tempSubmissionData;
-      const generatedID = randomID();
-      const formattedDT = data.datetime.replace('T', ' ');
-      const dtInput = document.getElementById('datetime');
-      const originalInput = dtInput.cloneNode(true);
-      const span = document.createElement('div');
-      span.textContent = formattedDT;
-      span.style = dtInput.style.cssText;
-      dtInput.parentNode.replaceChild(span, dtInput);
-
-      const toHide = [
-        document.querySelector('.button-row'),
-        document.querySelector('.logo')
-      ];
-      toHide.forEach(el => el && (el.style.display = 'none'));
-
-      html2canvas(document.querySelector('.card'), {
-        backgroundColor: null,
-        scale: 2,
-        useCORS: true
-      }).then(canvas => {
-        span.parentNode.replaceChild(originalInput, span);
-        toHide.forEach(el => el && (el.style.display = ''));
-
-        canvas.toBlob(blob => {
-          const embed = {
-            title: "MEDICAL REPORT",
-            color: 4737096,
-            fields: [
-              { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
-            ],
-            image: { url: "attachment://report.png" },
-            footer: { text: "Emergency Medical Services" },
-            timestamp: new Date().toISOString()
-          };
-          const formData = new FormData();
-          formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
-          formData.append("file", blob, "report.png");
-
-          const threadQuery = data.thread ? `?thread_id=${data.thread}` : '';
-          const finalURL = `${data.webhook}${threadQuery}`;
-          
-          fetch(finalURL, { method: "POST", body: formData })
-            .then(() => {
-              document.getElementById('popup-overlay').style.display = 'block';
-              setTimeout(() => document.getElementById('popup-overlay').style.display = 'none', 3000);
-              resetForm();
-            })
-            .catch(() => showAlert("Failed to Submit Report.", "❌ Error"));
-        });
-      });
-    }
+    });
   </script>
 </body>
 </html>
