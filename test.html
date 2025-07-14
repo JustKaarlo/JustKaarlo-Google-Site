@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Citation Report</title>
+  <title>Coroner Report</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
@@ -11,7 +12,7 @@
     body {
       background: transparent;
       padding: 30px;
-      max-width: 750px;
+      max-width: 850px;
       margin: auto;
       color: white;
     }
@@ -38,8 +39,8 @@
       margin: 0;
     }
 
-    .header-subtitle {
-      font-size: 15px;
+    .sub-header {
+      font-size: 14px;
       color: #ccc;
       margin-top: 4px;
     }
@@ -77,13 +78,38 @@
     }
 
     input[type="text"],
-    input[type="datetime-local"] {
+    input[type="date"],
+    input[type="time"],
+    input[type="datetime-local"],
+    textarea {
       padding: 6px 10px;
       border: 1px solid #444;
       border-radius: 6px;
       font-size: 14px;
       background: #23272A;
       color: white;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 50px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin: 15px;
+      justify-content: center;
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .checkbox-group input {
+      margin-right: 5px;
     }
 
     .wide {
@@ -103,44 +129,6 @@
 
     button:hover {
       background-color: #5187dc;
-    }
-
-    .tag-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 6px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      background: #23272A;
-    }
-
-    .tag-container input {
-      border: none;
-      flex: 1;
-      min-width: 120px;
-      padding: 6px 8px;
-      font-size: 14px;
-      background: transparent;
-      color: white;
-      outline: none;
-    }
-
-    .tag {
-      background-color: #99aab5;
-      color: #2C2F33;
-      padding: 5px 10px;
-      border-radius: 12px;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-    }
-
-    .tag .remove {
-      margin-left: 8px;
-      color: #2C2F33;
-      cursor: pointer;
-      font-weight: bold;
     }
 
     .button-row {
@@ -211,7 +199,13 @@
       100% { transform: translate(-50%, -50%) translateX(0); }
     }
     /* --------------------------------------------- */
-    
+
+    input[readonly] {
+      color: #888;
+      background: #2C2F33;
+      cursor: not-allowed;
+    }
+
     textarea.autogrow {
       width: 100%;
       min-height: auto;
@@ -226,35 +220,64 @@
       overflow: hidden;
       box-sizing: border-box;
     }
+
+    .row .location {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 15px;
+    }
   </style>
 </head>
+
 <body>
   <div class="card">
     <div class="header">
-      <div class="header-title">DEPARTMENT OF JUSTICE</div>
-      <div class="header-subtitle">CITATION REPORT</div>
+      <div class="header-title">MEDICAL EXAMINER-CORONER</div>
+      <div class="sub-header">CORONER REPORT</div>
     </div>
 
+    <div class="section-title">DECEDENT'S INFORMATION</div>
     <div class="row">
+      <div class="field-group">
+        <label>Date of Examination</label>
+        <input type="date" id="exam_date" readonly>
+      </div>
+      <div class="field-group">
+        <label>Name</label>
+        <input type="text" id="name">
+      </div>
+      <div class="field-group">
+        <label>Date of Birth</label>
+        <input type="date" id="dob">
+      </div>
+    </div>
+
+    <div class="section-title">PRONOUNCEMENT OF DEATH</div>
+    <div class="row">
+      <div class="field-group">
+        <label>Time & Date</label>
+        <input type="datetime-local" id="datetime">
+      </div>
       <div class="field-group wide">
         <label>Location</label>
         <textarea id="location" class="autogrow" rows="1"></textarea>
       </div>
-      <div class="field-group"><label>Time & Date</label><input type="datetime-local" id="datetime"></div>
     </div>
 
-    <div class="row">
-      <div class="field-group"><label>Name</label><input type="text" id="name"></div>
-      <div class="field-group"><label>Amount</label><input type="text" id="amount" placeholder="$"></div>
-    </div>
-
-    <div class="section-title">VIOLATION(S)</div>
     <div class="row">
       <div class="field-group wide">
-        <div id="violation-tags" class="tag-container">
-          <input type="text" id="violationInput" placeholder="Type And Press Enter">
-        </div>
+        <label>Cause of Death</label>
+        <textarea id="cause"></textarea>
       </div>
+    </div>
+
+    <div class="checkbox-group">
+      <label><input type="checkbox" id="foul"> Signs of foul play/crime scene?</label>
+      <label><input type="checkbox" id="meds"> Medications administered?</label>
+      <label><input type="checkbox" id="defib"> Defibrillation attempted?</label>
+      <label><input type="checkbox" id="cpr"> CPR attempted?</label>
     </div>
 
     <div class="button-row">
@@ -265,7 +288,7 @@
     <!-- ----- Popup HTML from Arrest-Report.html ----- -->
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
-      <div class="header-subtitle">Your Report Has Been Logged</div>
+      <div class="header-subtitle">Your Coroner Report Has Been Logged</div>
     </div>
     <div id="error-popup">
       <div class="header-title">⚠️ Submission Failed</div>
@@ -276,15 +299,15 @@
       <div class="header-subtitle">Select or Create a Preset</div>
       <input type="text" id="preset-name" list="preset-history" placeholder="Preset Name">
       <datalist id="preset-history"></datalist>
-      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL" style="margin-top: 10px;">
+      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL" style="margin-top:10px;">
       <datalist id="webhook-history"></datalist>
-      <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top: 10px;">
+      <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top:10px;">
       <datalist id="thread-history"></datalist>
       <div id="pin-error">Webhook URL Is Required</div>
-      <div style="margin-top: 15px;"><button onclick="validateWebhook()">Confirm</button></div>
-      <div style="margin-top: 10px;">
+      <div style="margin-top:15px;"><button onclick="validateWebhook()">Confirm</button></div>
+      <div style="margin-top:10px;">
         <button onclick="confirmClearFields()" class="clear-btn">Delete All Data</button>
-        <button onclick="deletePreset()" class="clear-btn" style="margin-left: 10px;">Delete Preset</button>
+        <button onclick="deletePreset()" class="clear-btn" style="margin-left:10px;">Delete Preset</button>
       </div>
     </div>
     <!-- --------------------------------------------- -->
@@ -422,13 +445,20 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+      // populate webhook preset/history lists
       populatePresetHistory();
       populateDatalist('webhook-history', 'webhookHistory');
       populateThreadNameDatalist();
 
+      // autogrow for location
       const locField = document.getElementById("location");
       autoGrow(locField);
       locField.addEventListener("input", () => autoGrow(locField));
+
+      // set exam date to today
+      const examInput = document.getElementById('exam_date');
+      const today = new Date().toISOString().split('T')[0];
+      examInput.value = today;
     });
 
     function savePreset(name, webhook, threadId) {
@@ -489,6 +519,7 @@
       history = history.filter(item => item.id !== threadId);
       localStorage.setItem('threadNamedHistory', JSON.stringify(history));
     }
+
     function populateDatalist(id, key) {
       const datalist = document.getElementById(id);
       datalist.innerHTML = '';
@@ -543,62 +574,45 @@
       processSubmission();
     }
 
-    // ----- Existing citation logic for ID, violations, etc. -----
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1393653107174408394/Xa0zlUDF77IJ31NwWmFtrNzC6DT8ttg2Fminq-YtPFDxpMLX9IZpROU3PGfPfKaNUKKR";
-    const THREAD_ID   = "1393668782286835832";
-
     function randomID() {
       const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       const numbers = "0123456789";
-      let id = "";
-      for (let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
-      id += "-";
-      for (let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
-      id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
-      return id;
-    }
-
-    const violationInput = document.getElementById('violationInput');
-    const violationContainer = document.getElementById('violation-tags');
-
-    violationInput.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' && this.value.trim() !== '') {
-        e.preventDefault();
-        addViolationTag(this.value.trim());
-        this.value = '';
-      }
-    });
-
-    function addViolationTag(text) {
-      const tag = document.createElement('div');
-      tag.className = 'tag';
-      tag.innerHTML = `${text} <span class="remove">&times;</span>`;
-      violationContainer.insertBefore(tag, violationInput);
-      tag.querySelector('.remove').addEventListener('click', () => tag.remove());
+      let part1 = "", part2 = "", part3 = "";
+      for (let i = 0; i < 3; i++) part1 += numbers[Math.floor(Math.random() * numbers.length)];
+      for (let i = 0; i < 2; i++) part2 += letters[Math.floor(Math.random() * letters.length)];
+      part3 = letters[Math.floor(Math.random() * letters.length)];
+      return `${part1}-${part2}-${part3}`;
     }
 
     function resetForm() {
-      document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
-      document.querySelectorAll('.tag').forEach(tag => tag.remove());
+      const fields = document.querySelectorAll('input:not(#exam_date), textarea');
+      fields.forEach(el => {
+        if (el.type === 'checkbox') el.checked = false;
+        else el.value = '';
+      });
       const loc = document.getElementById('location');
-      loc.value = '';
       autoGrow(loc);
     }
 
     function submitForm() {
-      const location = document.getElementById('location').value.trim();
-      const datetime = document.getElementById('datetime').value.trim();
       const name = document.getElementById('name').value.trim();
-      const amount = document.getElementById('amount').value.trim();
-      const violations = [...document.querySelectorAll('.tag')].map(tag => tag.textContent.replace('×', '').trim());
+      const dob = document.getElementById('dob').value;
+      const exam_date = document.getElementById('exam_date').value;
+      const datetime = document.getElementById('datetime').value;
+      const location = document.getElementById('location').value.trim();
+      const cause = document.getElementById('cause').value.trim();
+      const foul = document.getElementById('foul').checked ? '✅ Yes' : '❌ No';
+      const meds = document.getElementById('meds').checked ? '✅ Yes' : '❌ No';
+      const defib = document.getElementById('defib').checked ? '✅ Yes' : '❌ No';
+      const cpr = document.getElementById('cpr').checked ? '✅ Yes' : '❌ No';
 
-      if (!location || !datetime || !name || !amount || violations.length === 0) {
+      if (!name || !dob || !exam_date || !datetime || !location || !cause) {
         document.getElementById('error-popup').style.display = 'block';
         setTimeout(() => document.getElementById('error-popup').style.display = 'none', 3000);
         return;
       }
 
-      window.tempSubmissionData = { location, datetime, name, amount, violations };
+      window.tempSubmissionData = { name, dob, exam_date, datetime, location, cause, foul, meds, defib, cpr };
       document.getElementById('pin-popup').style.display = 'block';
       document.getElementById('pin-error').style.display = 'none';
     }
@@ -612,39 +626,39 @@
       const span = document.createElement('div');
       span.textContent = formattedDateTime;
       span.style = datetimeInput.style.cssText;
+      span.className = datetimeInput.className;
       datetimeInput.parentNode.replaceChild(span, datetimeInput);
 
-      const elementsToHide = [
+      const toHide = [
         document.querySelector('.button-row'),
         document.querySelector('.header'),
-        document.querySelector('#violationInput'),
-        ...document.querySelectorAll('.remove')
       ];
-      elementsToHide.forEach(el => el && (el.style.display = 'none'));
+      toHide.forEach(el => el && (el.style.display = 'none'));
 
       html2canvas(document.querySelector(".card"), {
         backgroundColor: null,
-        scale: 2
+        scale: 2,
+        useCORS: true
       }).then(canvas => {
         span.parentNode.replaceChild(originalInput, span);
-        elementsToHide.forEach(el => el && (el.style.display = ''));
+        toHide.forEach(el => el && (el.style.display = ''));
 
         canvas.toBlob(blob => {
           const embed = {
-            title: "CITATION REPORT",
+            title: "CORONER REPORT",
             color: 4737096,
             fields: [
               { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
             ],
-            image: { url: "attachment://report.png" },
-            footer: { text: "Department of Justice" },
-            timestamp: new Date().toISOString()
+            footer: { text: "Medical Examiner Office" },
+            timestamp: new Date().toISOString(),
+            image: { url: "attachment://report.png" }
           };
 
           const formData = new FormData();
           formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
           formData.append("file", blob, "report.png");
-
+          
           const threadQuery = data.thread ? `?thread_id=${data.thread}` : '';
           const finalURL = `${data.webhook}${threadQuery}`;
 
@@ -661,16 +675,6 @@
         });
       });
     }
-
-    document.getElementById('amount').addEventListener('input', function () {
-      let raw = this.value.replace(/[^\d]/g, '');
-      if (raw === '') {
-        this.value = '';
-        return;
-      }
-      this.value = '$' + raw;
-    });
-    // ---------------------------------------------
   </script>
 </body>
 </html>
