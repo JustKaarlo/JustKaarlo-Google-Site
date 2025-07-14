@@ -293,7 +293,6 @@
     }
     function sendWebhook() {
       const data = window.tempSubmissionData;
-      const webhookURL = 'https://discord.com/api/webhooks/1391047323395686430/nbQUOQ-VyewlU-HDHITbN_m9JNlM79Gp97ayaT9U2AkPix8wlD7jV8BrLqW2NqC_v2Ni';
       const niceDateTime = data.datetime.replace('T', ' ');
       const generatedID = randomID();
       const offensesInline = data.offenses
@@ -312,8 +311,11 @@
         ],
         footer: { text: "Department of Justice" },
         timestamp: new Date().toISOString()
+        const webhookURL = '{{REPORT_WEBHOOK_URL}}';
+        const THREAD_ID   = "1393656493751930971";
+        const urlWithThread = `${WEBHOOK_URL}?thread_id=${THREAD_ID}`;
       };
-      fetch(webhookURL, {
+      fetch(urlWithThread, {
         method: "POST",
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ embeds: [embed] })
