@@ -7,9 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <style>
-    * {
-      font-family: 'Rubik', sans-serif;
-    }
+    * { font-family: 'Rubik', sans-serif; }
 
     body {
       background: transparent;
@@ -133,16 +131,6 @@
       background-color: #5187dc;
     }
 
-    .tag-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 6px;
-      border: 1px solid #444;
-      border-radius: 6px;
-      background: #23272A;
-    }
-
     .button-row {
       display: flex;
       gap: 10px;
@@ -162,10 +150,8 @@
       flex: 1;
     }
 
-    /* Popups and PIN */
-    #popup-overlay,
-    #error-popup,
-    #pin-popup {
+    /* ----- Popup CSS from Arrest-Report.html ----- */
+    #popup-overlay, #error-popup, #pin-popup {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -174,33 +160,17 @@
       color: white;
       border-radius: 12px;
       padding: 25px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
       display: none;
       z-index: 10;
       max-width: 90%;
       text-align: center;
     }
-
-    #popup-overlay .header-title {
-      color: #7289da;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
+    #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
     #popup-overlay .header-subtitle,
     #error-popup .header-subtitle,
-    #pin-popup .header-subtitle {
-      font-size: 14px;
-      color: #ccc;
-      margin-top: 6px;
-    }
-
-    #error-popup .header-title {
-      color: #f04747;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
+    #pin-popup .header-subtitle { font-size: 14px; color: #ccc; margin-top: 6px; }
+    #error-popup .header-title { color: #f04747; font-size: 18px; font-weight: bold; }
     #pin-popup input {
       width: 100%;
       padding: 10px;
@@ -212,18 +182,15 @@
       background: #2C2F33;
       color: white;
     }
-
     #pin-error {
       color: #f04747;
       font-size: 14px;
       margin-top: 10px;
       display: none;
     }
-
     .shake {
       animation: shake 0.4s;
     }
-
     @keyframes shake {
       0% { transform: translate(-50%, -50%) translateX(0); }
       25% { transform: translate(-50%, -50%) translateX(-10px); }
@@ -231,6 +198,7 @@
       75% { transform: translate(-50%, -50%) translateX(-10px); }
       100% { transform: translate(-50%, -50%) translateX(0); }
     }
+    /* --------------------------------------------- */
 
     input[readonly] {
       color: #888;
@@ -252,7 +220,7 @@
       overflow: hidden;
       box-sizing: border-box;
     }
-    
+
     .row .location {
       display: flex;
       flex-wrap: wrap;
@@ -265,7 +233,7 @@
 
 <body>
   <div class="card">
-    <div class="header hide-for-screenshot">
+    <div class="header">
       <div class="header-title">MEDICAL EXAMINER-CORONER</div>
       <div class="sub-header">CORONER REPORT</div>
     </div>
@@ -312,58 +280,304 @@
       <label><input type="checkbox" id="cpr"> CPR attempted?</label>
     </div>
 
-    <div class="button-row hide-for-screenshot">
+    <div class="button-row">
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
 
+    <!-- ----- Popup HTML from Arrest-Report.html ----- -->
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Coroner Report Has Been Logged</div>
     </div>
-
     <div id="error-popup">
       <div class="header-title">⚠️ Submission Failed</div>
-      <div class="header-subtitle">All Required Fields Must Be Filled</div>
+      <div class="header-subtitle">All Fields Are Required</div>
     </div>
-
     <div id="pin-popup">
-      <div class="header-title">🔒 PIN Required</div>
-      <div class="header-subtitle">Please enter your 4-digit authorization code to submit</div>
-      <input type="password" id="pin-input" maxlength="4" placeholder="Enter PIN">
-      <div id="pin-error">Wrong PIN code</div>
-      <div style="margin-top: 15px;"><button onclick="validatePin()">Confirm</button></div>
+      <div class="header-title">🔐 Webhook Required</div>
+      <div class="header-subtitle">Select or Create a Preset</div>
+      <input type="text" id="preset-name" list="preset-history" placeholder="Preset Name">
+      <datalist id="preset-history"></datalist>
+      <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL" style="margin-top:10px;">
+      <datalist id="webhook-history"></datalist>
+      <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top:10px;">
+      <datalist id="thread-history"></datalist>
+      <div id="pin-error">Webhook URL Is Required</div>
+      <div style="margin-top:15px;"><button onclick="validateWebhook()">Confirm</button></div>
+      <div style="margin-top:10px;">
+        <button onclick="confirmClearFields()" class="clear-btn">Delete All Data</button>
+        <button onclick="deletePreset()" class="clear-btn" style="margin-left:10px;">Delete Preset</button>
+      </div>
     </div>
+    <!-- --------------------------------------------- -->
   </div>
 
   <script>
+    // ----- Popup JS from Arrest-Report.html -----
+    function showAlert(message, title = '🔔 Notice') {
+      const existing = document.getElementById('custom-alert');
+      if (existing) existing.remove();
 
-    const WEBHOOK_URL = "https://discord.com/api/webhooks/1393653107174408394/Xa0zlUDF77IJ31NwWmFtrNzC6DT8ttg2Fminq-YtPFDxpMLX9IZpROU3PGfPfKaNUKKR";
-    const THREAD_ID   = "1393668957738762297";
-    
+      const popup = document.createElement('div');
+      popup.id = 'custom-alert';
+      popup.style = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #23272A;
+        color: white;
+        padding: 20px 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        z-index: 1000;
+        text-align: center;
+        max-width: 90%;
+      `;
+
+      popup.innerHTML = `
+        <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #7289da;">${title}</div>
+        <div style="font-size: 15px; color: #ccc;">${message}</div>
+        <button style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;" onclick="document.getElementById('custom-alert').remove()">Close</button>
+      `;
+
+      document.body.appendChild(popup);
+    }
+
+    function confirmClearFields() {
+      const confirmBox = document.createElement('div');
+      confirmBox.style = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #2C2F33;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        z-index: 1000;
+        text-align: center;
+      `;
+      confirmBox.innerHTML = `
+        <div style="margin-bottom: 10px;">⚠️ This will delete all saved presets, history and input fields. Are you sure?</div>
+        <button id="confirm-delete-all" style="margin: 5px; padding: 8px 14px;">YES</button>
+        <button id="cancel-delete-all" style="margin: 5px; padding: 8px 14px;">NO</button>
+      `;
+      document.body.appendChild(confirmBox);
+      document.getElementById('confirm-delete-all').onclick = () => {
+        localStorage.removeItem("webhookPresets");
+        localStorage.removeItem("webhookHistory");
+        localStorage.removeItem("threadHistory");
+        localStorage.removeItem("threadNamedHistory");
+        document.getElementById("preset-name").value = '';
+        document.getElementById("webhook-url").value = '';
+        document.getElementById("thread-id").value = '';
+        populatePresetHistory();
+        populateDatalist('webhook-history', 'webhookHistory');
+        populateThreadNameDatalist();
+        document.body.removeChild(confirmBox);
+      };
+      document.getElementById('cancel-delete-all').onclick = () => {
+        document.body.removeChild(confirmBox);
+        document.getElementById('pin-popup').style.display = 'none';
+      };
+    }
+
+    function deletePreset() {
+      const name = document.getElementById('preset-name').value.trim();
+      if (!name) return showAlert("Preset Name Required to Delete.");
+
+      const confirmBox = document.createElement('div');
+      confirmBox.style = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #2C2F33;
+        color: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        z-index: 1000;
+        text-align: center;
+      `;
+      confirmBox.innerHTML = `
+        <div style="margin-bottom: 10px;">⚠️ Are you sure you want to delete the preset <strong>'${name}'</strong>?</div>
+        <button id="confirm-delete-preset" style="margin: 5px; padding: 8px 14px;">YES</button>
+        <button id="cancel-delete-preset" style="margin: 5px; padding: 8px 14px;">NO</button>
+      `;
+      document.body.appendChild(confirmBox);
+      document.getElementById('confirm-delete-preset').onclick = () => {
+        let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+        const match = presets.find(p => p.name === name);
+        if (match) {
+          presets = presets.filter(p => p.name !== name);
+          localStorage.setItem("webhookPresets", JSON.stringify(presets));
+          removeFromHistory('webhookHistory', match.webhook);
+          if (match.thread) {
+            removeFromHistory('threadHistory', match.thread);
+            removeFromNamedThreadHistory(match.thread);
+          }
+          document.getElementById("preset-name").value = '';
+          document.getElementById("webhook-url").value = '';
+          document.getElementById("thread-id").value = '';
+          populatePresetHistory();
+          populateDatalist('webhook-history', 'webhookHistory');
+          populateThreadNameDatalist();
+          showAlert(`Preset '${name}' and its data were deleted.`, '✅ Deleted');
+        } else {
+          showAlert(`Preset '${name}' not found.`, '⚠️ Not Found');
+        }
+        document.body.removeChild(confirmBox);
+        document.getElementById('pin-popup').style.display = 'block';
+      };
+      document.getElementById('cancel-delete-preset').onclick = () => {
+        document.body.removeChild(confirmBox);
+        document.getElementById('pin-popup').style.display = 'block';
+      };
+    }
+
     function autoGrow(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
     }
 
     document.addEventListener("DOMContentLoaded", () => {
+      // populate webhook preset/history lists
+      populatePresetHistory();
+      populateDatalist('webhook-history', 'webhookHistory');
+      populateThreadNameDatalist();
+
+      // autogrow for location
       const locField = document.getElementById("location");
       autoGrow(locField);
       locField.addEventListener("input", () => autoGrow(locField));
-    });
 
-    window.addEventListener('DOMContentLoaded', () => {
+      // set exam date to today
       const examInput = document.getElementById('exam_date');
       const today = new Date().toISOString().split('T')[0];
       examInput.value = today;
     });
 
+    function savePreset(name, webhook, threadId) {
+      if (!name || !webhook) return;
+      let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      const existing = presets.find(p => p.name === name);
+      if (existing) {
+        existing.webhook = webhook;
+        existing.thread = threadId;
+      } else {
+        presets.push({ name, webhook, thread: threadId });
+      }
+      localStorage.setItem("webhookPresets", JSON.stringify(presets));
+      populatePresetHistory();
+    }
+
+    function populatePresetHistory() {
+      const list = document.getElementById("preset-history");
+      list.innerHTML = "";
+      const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      presets.forEach(p => {
+        const option = document.createElement("option");
+        option.value = p.name;
+        list.appendChild(option);
+      });
+    }
+
+    function fillFieldsFromPreset(name) {
+      const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+      const match = presets.find(p => p.name === name);
+      if (match) {
+        document.getElementById("webhook-url").value = match.webhook;
+        document.getElementById("thread-id").value = match.thread || "";
+      }
+    }
+
+    function saveToHistory(key, value) {
+      let history = JSON.parse(localStorage.getItem(key)) || [];
+      if (!history.includes(value)) {
+        history.push(value);
+        localStorage.setItem(key, JSON.stringify(history));
+      }
+    }
+    function removeFromHistory(key, value) {
+      let history = JSON.parse(localStorage.getItem(key)) || [];
+      history = history.filter(item => item !== value);
+      localStorage.setItem(key, JSON.stringify(history));
+    }
+    function saveThreadNamedHistory(name, id) {
+      let history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
+      if (!history.find(entry => entry.name === name && entry.id === id)) {
+        history.push({ name, id });
+        localStorage.setItem('threadNamedHistory', JSON.stringify(history));
+      }
+    }
+    function removeFromNamedThreadHistory(threadId) {
+      let history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
+      history = history.filter(item => item.id !== threadId);
+      localStorage.setItem('threadNamedHistory', JSON.stringify(history));
+    }
+
+    function populateDatalist(id, key) {
+      const datalist = document.getElementById(id);
+      datalist.innerHTML = '';
+      const history = JSON.parse(localStorage.getItem(key)) || [];
+      history.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        datalist.appendChild(option);
+      });
+    }
+    function populateThreadNameDatalist() {
+      const datalist = document.getElementById('thread-history');
+      datalist.innerHTML = '';
+      const history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
+      history.forEach(entry => {
+        const option = document.createElement('option');
+        option.value = entry.name;
+        option.dataset.id = entry.id;
+        datalist.appendChild(option);
+      });
+      const threadInput = document.getElementById('thread-id');
+      threadInput.addEventListener('change', () => {
+        const selectedName = threadInput.value;
+        const matchedOption = Array.from(datalist.options).find(opt => opt.value === selectedName);
+        if (matchedOption) {
+          threadInput.setAttribute('data-thread-id', matchedOption.dataset.id);
+        }
+      });
+    }
+
+    function validateWebhook() {
+      const preset = document.getElementById('preset-name').value.trim();
+      const webhook = document.getElementById('webhook-url').value.trim();
+      const threadId = document.getElementById('thread-id').value.trim();
+
+      if (!webhook) {
+        const err = document.getElementById('pin-error');
+        err.style.display = 'block';
+        const popup = document.getElementById('pin-popup');
+        popup.classList.add('shake');
+        setTimeout(() => popup.classList.remove('shake'), 400);
+        return;
+      }
+
+      saveToHistory('webhookHistory', webhook);
+      saveToHistory('threadHistory', threadId);
+      savePreset(preset, webhook, threadId);
+
+      document.getElementById('pin-popup').style.display = 'none';
+      window.tempSubmissionData.webhook = webhook;
+      window.tempSubmissionData.thread = threadId;
+      processSubmission();
+    }
+
     function randomID() {
       const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       const numbers = "0123456789";
-      let part1 = "";
-      let part2 = "";
-      let part3 = "";
+      let part1 = "", part2 = "", part3 = "";
       for (let i = 0; i < 3; i++) part1 += numbers[Math.floor(Math.random() * numbers.length)];
       for (let i = 0; i < 2; i++) part2 += letters[Math.floor(Math.random() * letters.length)];
       part3 = letters[Math.floor(Math.random() * letters.length)];
@@ -376,33 +590,8 @@
         if (el.type === 'checkbox') el.checked = false;
         else el.value = '';
       });
-
-      const dtDiv = document.getElementById('datetime-display');
-      if (dtDiv) {
-        const newInput = document.createElement('input');
-        newInput.type = 'datetime-local';
-        newInput.id = 'datetime';
-        newInput.className = dtDiv.className;
-        dtDiv.parentNode.replaceChild(newInput, dtDiv);
-      }
-
       const loc = document.getElementById('location');
-      loc.value = '';
       autoGrow(loc);
-    }
-
-    function showErrorPopup() {
-      const popup = document.getElementById('error-popup');
-      popup.style.display = 'block';
-      popup.onclick = () => popup.style.display = 'none';
-      setTimeout(() => popup.style.display = 'none', 3000);
-    }
-
-    function showPopup() {
-      const popup = document.getElementById('popup-overlay');
-      popup.style.display = 'block';
-      popup.onclick = () => popup.style.display = 'none';
-      setTimeout(() => popup.style.display = 'none', 3000);
     }
 
     function submitForm() {
@@ -412,14 +601,14 @@
       const datetime = document.getElementById('datetime').value;
       const location = document.getElementById('location').value.trim();
       const cause = document.getElementById('cause').value.trim();
-
       const foul = document.getElementById('foul').checked ? '✅ Yes' : '❌ No';
       const meds = document.getElementById('meds').checked ? '✅ Yes' : '❌ No';
       const defib = document.getElementById('defib').checked ? '✅ Yes' : '❌ No';
       const cpr = document.getElementById('cpr').checked ? '✅ Yes' : '❌ No';
 
       if (!name || !dob || !exam_date || !datetime || !location || !cause) {
-        showErrorPopup();
+        document.getElementById('error-popup').style.display = 'block';
+        setTimeout(() => document.getElementById('error-popup').style.display = 'none', 3000);
         return;
       }
 
@@ -428,76 +617,61 @@
       document.getElementById('pin-error').style.display = 'none';
     }
 
-    function validatePin() {
-      const pinInput = document.getElementById('pin-input');
-      const errorText = document.getElementById('pin-error');
-      const enteredPin = pinInput.value.trim();
-      if (enteredPin === '2118') {
-        document.getElementById('pin-popup').style.display = 'none';
-        sendWebhook();
-      } else {
-        errorText.style.display = 'block';
-        const popup = document.getElementById('pin-popup');
-        popup.classList.add('shake');
-        setTimeout(() => popup.classList.remove('shake'), 400);
-      }
-    }
-
-    function sendWebhook() {
+    function processSubmission() {
       const data = window.tempSubmissionData;
+      const generatedID = randomID();
       const formattedDateTime = data.datetime.replace('T', ' ');
       const datetimeInput = document.getElementById('datetime');
-      const datetimeClone = datetimeInput.cloneNode(true);
-      const datetimeSpan = document.createElement('div');
-      datetimeSpan.textContent = formattedDateTime;
-      datetimeSpan.style = datetimeInput.style.cssText;
-      datetimeSpan.className = datetimeInput.className;
-      datetimeSpan.id = 'datetime-display';
-      datetimeInput.parentNode.replaceChild(datetimeSpan, datetimeInput);
-      const generatedID = randomID();
+      const originalInput = datetimeInput.cloneNode(true);
+      const span = document.createElement('div');
+      span.textContent = formattedDateTime;
+      span.style = datetimeInput.style.cssText;
+      span.className = datetimeInput.className;
+      datetimeInput.parentNode.replaceChild(span, datetimeInput);
 
-      const embed = {
-        title: "CORONER REPORT",
-        color: 4737096,
-        fields: [
-          { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
-        ],
-        footer: { text: "Medical Examiner Office" },
-        timestamp: new Date().toISOString(),
-        image: { url: "attachment://report.png" }
-      };
-
-      const toHide = document.querySelectorAll('.hide-for-screenshot');
-      toHide.forEach(el => el.style.display = 'none');
+      const toHide = [
+        document.querySelector('.button-row'),
+        document.querySelector('.header'),
+      ];
+      toHide.forEach(el => el && (el.style.display = 'none'));
 
       html2canvas(document.querySelector(".card"), {
         backgroundColor: null,
         scale: 2,
         useCORS: true
       }).then(canvas => {
+        span.parentNode.replaceChild(originalInput, span);
+        toHide.forEach(el => el && (el.style.display = ''));
+
         canvas.toBlob(blob => {
-          toHide.forEach(el => el.style.display = '');
-          const datetimeDisplay = document.getElementById('datetime-display');
-          if (datetimeDisplay) {
-            datetimeDisplay.parentNode.replaceChild(datetimeClone, datetimeDisplay);
-          }
+          const embed = {
+            title: "CORONER REPORT",
+            color: 4737096,
+            fields: [
+              { name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
+            ],
+            footer: { text: "Medical Examiner Office" },
+            timestamp: new Date().toISOString(),
+            image: { url: "attachment://report.png" }
+          };
 
           const formData = new FormData();
           formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
           formData.append("file", blob, "report.png");
 
-          const urlWithThread = `${WEBHOOK_URL}?thread_id=${THREAD_ID}`;
+          const threadQuery = data.thread ? `?thread_id=${data.thread}` : '';
+          const finalURL = `${data.webhook}${threadQuery}`;
 
-          fetch(urlWithThread, {
+          fetch(finalURL, {
             method: "POST",
             body: formData
           })
-            .then(() => {
-            showPopup();
+          .then(() => {
+            document.getElementById('popup-overlay').style.display = 'block';
+            setTimeout(() => document.getElementById('popup-overlay').style.display = 'none', 3000);
             resetForm();
-          }).catch(() => {
-            alert("Failed to Submit Report.");
-          });
+          })
+          .catch(() => showAlert("Failed to Submit Report.", "❌ Error"));
         });
       });
     }
