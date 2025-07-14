@@ -5,6 +5,3 @@
 [build.environment]
   SECRETS_SCAN_ENABLED = "false"
   SECRETS_SCAN_OMIT_KEYS = "DISCORD_WEBHOOK"
-
-[functions]
-  binaryMediaTypes = ["multipart/form-data"]
