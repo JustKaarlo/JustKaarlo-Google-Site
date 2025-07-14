@@ -377,9 +377,9 @@
           };
 
           const formData = new FormData();
-          formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
-          formData.append("file", blob, "report.png");
-
+          formData.append('payload_json', JSON.stringify({ embeds: [ embed ] }));
+          formData.append('file', blob, 'report.png');
+          
           fetch('/.netlify/functions/report', {
             method: 'POST',
             body: formData
