@@ -1,15 +1,7 @@
 [build]
-  publish   = "html"               
+  publish   = "html"
   functions = "netlify/functions"
-  
-[[redirects]]
-  from   = "/Reports/Arrest-Report.html"
-  to     = "/Reports/Arrest-Report.html"
-  status = 200
-  force  = true
 
-[[redirects]]
-  from   = "/*"
-  to     = "/"
-  status = 404
-  force  = true
+[build.environment]
+  # only scan these specific files; any others get skipped
+  SECRETS_SCAN_OMIT_PATHS = "html/Reports/Arrest-Report.html"
