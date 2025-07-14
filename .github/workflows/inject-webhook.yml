@@ -13,7 +13,7 @@ jobs:
 
       - name: Replace placeholder with secret
         run: |
-          find . -name "*.html" -exec sed -i "s|{{REPORT_WEBHOOK_URL}}|${{ secrets.REPORT_WEBHOOK_URL }}|g" {} +
+          find . -name "*.html" -exec sed -i "s|{{ARREST_WEBHOOK_URL}}|${{ secrets.ARREST_WEBHOOK_URL }}|g" {} +
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
