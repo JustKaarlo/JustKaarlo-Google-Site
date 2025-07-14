@@ -239,8 +239,9 @@
       <div class="header-subtitle">Please Enter Webhook URL and Optional Thread ID</div>
       <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL">
       <datalist id="webhook-history"></datalist>
-      <input type="text" id="thread-id" list="thread-history" placeholder="Optional Thread ID" style="margin-top: 10px">
-      <datalist id="thread-history"></datalist>
+      <input type="text" id="thread-name" list="thread-name-history" placeholder="Thread Name (Optional)" style="margin-top: 10px">
+      <datalist id="thread-name-history"></datalist>
+      <input type="text" id="thread-id" placeholder="Thread ID (Optional)" style="margin-top: 10px">
       <div id="pin-error">Webhook URL Is Required</div>
       <div style="margin-top: 15px;">
         <button onclick="validateWebhook()">Confirm</button>
@@ -308,7 +309,8 @@
 
     function validateWebhook() {
       const webhook = document.getElementById('webhook-url').value.trim();
-      const thread = document.getElementById('thread-id').value.trim();
+      const threadName = document.getElementById('thread-name').value.trim();
+      const threadId = document.getElementById('thread-id').value.trim();
     
       if (!webhook) {
         const err = document.getElementById('pin-error');
@@ -319,9 +321,14 @@
         return;
       }
     
+      saveToHistory('webhookHistory', webhook);
+      if (threadName && threadId) {
+        saveThreadNamedHistory(threadName, threadId);
+      }
+    
       document.getElementById('pin-popup').style.display = 'none';
       window.tempSubmissionData.webhook = webhook;
-      window.tempSubmissionData.thread = thread;
+      window.tempSubmissionData.thread = threadId;
       processSubmission();
     }
 
@@ -406,7 +413,13 @@
         localStorage.setItem(key, JSON.stringify(history));
       }
     }
-  
+    function saveThreadNamedHistory(name, id) {
+      let history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
+      if (!history.find(entry => entry.name === name && entry.id === id)) {
+        history.push({ name, id });
+        localStorage.setItem('threadNamedHistory', JSON.stringify(history));
+      }
+    }
     function populateDatalist(id, key) {
       const datalist = document.getElementById(id);
       datalist.innerHTML = '';
@@ -417,34 +430,20 @@
         datalist.appendChild(option);
       });
     }
-  
+    function populateThreadNameDatalist() {
+      const datalist = document.getElementById('thread-name-history');
+      datalist.innerHTML = '';
+      const history = JSON.parse(localStorage.getItem('threadNamedHistory')) || [];
+      history.forEach(entry => {
+        const option = document.createElement('option');
+        option.value = entry.name;
+        datalist.appendChild(option);
+      });
+    }
     document.addEventListener('DOMContentLoaded', () => {
       populateDatalist('webhook-history', 'webhookHistory');
-      populateDatalist('thread-history', 'threadHistory');
+      populateThreadNameDatalist();
     });
-  
-    function validateWebhook() {
-      const webhook = document.getElementById('webhook-url').value.trim();
-      const thread = document.getElementById('thread-id').value.trim();
-  
-      if (!webhook) {
-        const err = document.getElementById('pin-error');
-        err.style.display = 'block';
-        const popup = document.getElementById('pin-popup');
-        popup.classList.add('shake');
-        setTimeout(() => popup.classList.remove('shake'), 400);
-        return;
-      }
-  
-      // Save entries
-      saveToHistory('webhookHistory', webhook);
-      if (thread) saveToHistory('threadHistory', thread);
-  
-      document.getElementById('pin-popup').style.display = 'none';
-      window.tempSubmissionData.webhook = webhook;
-      window.tempSubmissionData.thread = thread;
-      processSubmission();
-    }
   </script>
 </body>
 </html>
