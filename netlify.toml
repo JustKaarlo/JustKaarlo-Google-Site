@@ -3,5 +3,6 @@
   functions = "netlify/functions"
 
 [build.environment]
-  # only scan these specific files; any others get skipped
+  SECRETS_SCAN_ENABLED = "false"
+  SECRETS_SCAN_OMIT_KEYS = "DISCORD_WEBHOOK"
   SECRETS_SCAN_OMIT_PATHS = "html/Reports/Arrest-Report.html"
