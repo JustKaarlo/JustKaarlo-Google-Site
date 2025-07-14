@@ -312,7 +312,7 @@
       const webhook = document.getElementById('webhook-url').value.trim();
       const threadInput = document.getElementById('thread-id');
       const threadName = threadInput.value.trim();
-      const actualThreadId = getThreadIdByName(threadName);
+      const actualThreadId = threadInput.getAttribute('data-thread-id') || threadName;
 
       if (!webhook) {
         const err = document.getElementById('pin-error');
@@ -441,6 +441,15 @@
         option.value = entry.name;
         option.dataset.id = entry.id;
         datalist.appendChild(option);
+      });
+    
+      const threadInput = document.getElementById('thread-id');
+      threadInput.addEventListener('change', () => {
+        const selectedName = threadInput.value;
+        const matchedOption = Array.from(datalist.options).find(opt => opt.value === selectedName);
+        if (matchedOption) {
+          threadInput.setAttribute('data-thread-id', matchedOption.dataset.id);
+        }
       });
     }
     function getThreadIdByName(name) {
