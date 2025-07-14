@@ -370,7 +370,7 @@
             body: formData
           })
           .then(res => {
-            if (!res.ok) throw new Error('Bad response from function');
+            if (!res.ok) throw new Error('Bad Response From Function');
             return res.text();
           })
           .then(() => {
