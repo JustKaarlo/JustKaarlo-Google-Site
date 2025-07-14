@@ -177,6 +177,13 @@
       max-width: 90%;
       text-align: center;
     }
+    #pin-popup[style*="display: block"] {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
     #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
     #popup-overlay .header-subtitle,
     #error-popup .header-subtitle,
@@ -209,7 +216,6 @@
       75% { transform: translate(-50%, -50%) translateX(-10px); }
       100% { transform: translate(-50%, -50%) translateX(0); }
     }
-    /* --------------------------------------------- */
     
     textarea.autogrow {
       width: 100%;
@@ -233,7 +239,6 @@
       <div class="header-title">DEPARTMENT OF JUSTICE</div>
       <div class="header-subtitle">CITATION REPORT</div>
     </div>
-
     <div class="row">
       <div class="field-group wide">
         <label>Location</label>
@@ -241,12 +246,10 @@
       </div>
       <div class="field-group"><label>Time & Date</label><input type="datetime-local" id="datetime"></div>
     </div>
-
     <div class="row">
       <div class="field-group"><label>Name</label><input type="text" id="name"></div>
       <div class="field-group"><label>Amount</label><input type="text" id="amount" placeholder="$"></div>
     </div>
-
     <div class="section-title">VIOLATION(S)</div>
     <div class="row">
       <div class="field-group wide">
@@ -255,13 +258,10 @@
         </div>
       </div>
     </div>
-
     <div class="button-row">
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
-
-    <!-- ----- Popup HTML from Arrest-Report.html ----- -->
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Report Has Been Logged</div>
@@ -280,7 +280,11 @@
       <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top: 10px;">
       <datalist id="thread-history"></datalist>
       <div id="pin-error">Webhook URL Is Required</div>
-      <div style="margin-top: 15px;"><button onclick="validateWebhook()">Confirm</button></div>
+      <div style="margin-top: 15px;">
+        <button onclick="validateWebhook()" style="width: 80px; margin-right: 20px;">Confirm</button>
+        <button onclick="closePinPopup()"
+          style="width: 80px; margin-left: 20px; background: rgba(175,41,41,1.0);">Close</button>
+      </div>
       <div style="margin-top: 10px;">
         <button onclick="confirmClearFields()" class="clear-btn">Delete All Data</button>
         <button onclick="deletePreset()" class="clear-btn" style="margin-left: 10px;">Delete Preset</button>
@@ -289,6 +293,9 @@
   </div>
 
   <script>
+    function closePinPopup() {
+      document.getElementById('pin-popup').style.display = 'none';
+    }
     function showAlert(message, title = '🔔 Notice') {
       const existing = document.getElementById('custom-alert');
       if (existing) existing.remove();
@@ -296,7 +303,7 @@
       const popup = document.createElement('div');
       popup.id = 'custom-alert';
       popup.style = `
-        position: fixed;
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -311,35 +318,35 @@
       `;
 
       popup.innerHTML = `
-        <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #7289da;">${title}</div>
         <div style="font-size: 15px; color: #ccc;">${message}</div>
         <button style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;" onclick="document.getElementById('custom-alert').remove()">Close</button>
       `;
 
-      document.body.appendChild(popup);
+      document.querySelector('.card').appendChild(popup);
     }
 
     function confirmClearFields() {
       const confirmBox = document.createElement('div');
       confirmBox.style = `
-        position: fixed;
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: #2C2F33;
+        background: #23272A;
         color: white;
-        padding: 20px;
+        padding: 20px 25px;
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.6);
         z-index: 1000;
         text-align: center;
+        max-width: 90%;
       `;
       confirmBox.innerHTML = `
-        <div style="margin-bottom: 10px;">⚠️ This will delete all saved presets, history and input fields. Are you sure?</div>
-        <button id="confirm-delete-all" style="margin: 5px; padding: 8px 14px;">YES</button>
-        <button id="cancel-delete-all" style="margin: 5px; padding: 8px 14px;">NO</button>
+        <div style="font-size: 15px; color: #ccc;">This will delete preset, webhook & threads data, are you sure?</div>
+        <button id="confirm-delete-all" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">YES</button>
+        <button id="cancel-delete-all" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">NO</button>
       `;
-      document.body.appendChild(confirmBox);
+      document.querySelector('.card').appendChild(confirmBox);
       document.getElementById('confirm-delete-all').onclick = () => {
         localStorage.removeItem("webhookPresets");
         localStorage.removeItem("webhookHistory");
@@ -351,38 +358,38 @@
         populatePresetHistory();
         populateDatalist('webhook-history', 'webhookHistory');
         populateThreadNameDatalist();
-        document.body.removeChild(confirmBox);
+        document.querySelector('.card').removeChild(confirmBox);
       };
       document.getElementById('cancel-delete-all').onclick = () => {
-        document.body.removeChild(confirmBox);
-        document.getElementById('pin-popup').style.display = 'none';
+        document.querySelector('.card').removeChild(confirmBox);
       };
     }
 
     function deletePreset() {
       const name = document.getElementById('preset-name').value.trim();
-      if (!name) return showAlert("Preset Name Required to Delete.");
+      if (!name) return showAlert("A preset name is required to delete.");
 
       const confirmBox = document.createElement('div');
       confirmBox.style = `
-        position: fixed;
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: #2C2F33;
+        background: #23272A;
         color: white;
-        padding: 20px;
+        padding: 20px 25px;
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.6);
         z-index: 1000;
         text-align: center;
+        max-width: 90%;
       `;
       confirmBox.innerHTML = `
-        <div style="margin-bottom: 10px;">⚠️ Are you sure you want to delete the preset <strong>'${name}'</strong>?</div>
-        <button id="confirm-delete-preset" style="margin: 5px; padding: 8px 14px;">YES</button>
-        <button id="cancel-delete-preset" style="margin: 5px; padding: 8px 14px;">NO</button>
+        <div style="font-size: 15px; color: #ccc;">Do you want to delete <strong>'${name}'</strong> preset?</div>
+        <button id="confirm-delete-preset" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">YES</button>
+        <button id="cancel-delete-preset" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">NO</button>
       `;
-      document.body.appendChild(confirmBox);
+      document.querySelector('.card').appendChild(confirmBox);
       document.getElementById('confirm-delete-preset').onclick = () => {
         let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
         const match = presets.find(p => p.name === name);
@@ -400,16 +407,14 @@
           populatePresetHistory();
           populateDatalist('webhook-history', 'webhookHistory');
           populateThreadNameDatalist();
-          showAlert(`Preset '${name}' and its data were deleted.`, '✅ Deleted');
+          showAlert(`Preset '${name}' was deleted.`, '✅ Deleted');
         } else {
-          showAlert(`Preset '${name}' not found.`, '⚠️ Not Found');
+          showAlert(`Preset '${name}' was not found.`, '⚠️ Not Found');
         }
-        document.body.removeChild(confirmBox);
-        document.getElementById('pin-popup').style.display = 'block';
+        document.querySelector('.card').removeChild(confirmBox);
       };
       document.getElementById('cancel-delete-preset').onclick = () => {
-        document.body.removeChild(confirmBox);
-        document.getElementById('pin-popup').style.display = 'block';
+        document.querySelector('.card').removeChild(confirmBox);
       };
     }
 
@@ -422,6 +427,10 @@
       populatePresetHistory();
       populateDatalist('webhook-history', 'webhookHistory');
       populateThreadNameDatalist();
+
+      document.getElementById("preset-name").addEventListener("change", e => {
+        fillFieldsFromPreset(e.target.value);
+      });
 
       const locField = document.getElementById("location");
       autoGrow(locField);
@@ -640,7 +649,6 @@
 
           const threadQuery = data.thread ? `?thread_id=${data.thread}` : '';
           const finalURL = `${data.webhook}${threadQuery}`;
-
           fetch(finalURL, {
             method: "POST",
             body: formData
@@ -654,7 +662,6 @@
         });
       });
     }
-
     document.getElementById('amount').addEventListener('input', function () {
       let raw = this.value.replace(/[^\d]/g, '');
       if (raw === '') {

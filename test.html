@@ -577,7 +577,9 @@
       document.querySelectorAll('.tag').forEach(t=>t.remove());
       document.querySelectorAll('select').forEach(s=>s.selectedIndex=0);
       document.querySelectorAll('input[type="checkbox"]').forEach(cb=>cb.checked=false);
-      autoGrow(document.getElementById("location"));
+      const loc = document.getElementById('location');
+      loc.value = '';
+      autoGrow(loc);
     }
 
     function submitForm() {

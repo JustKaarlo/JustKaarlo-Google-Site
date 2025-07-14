@@ -152,8 +152,6 @@
     .submit-btn {
       flex: 1;
     }
-
-    /* ----- Popup CSS from Arrest-Report.html ----- */
     #popup-overlay, #error-popup, #pin-popup {
       position: absolute;
       top: 50%;
@@ -167,6 +165,13 @@
       display: none;
       z-index: 10;
       max-width: 90%;
+      text-align: center;
+    }
+    #pin-popup[style*="display: block"] {
+      display: flex !important;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
     }
     #popup-overlay .header-title { color: #7289da; font-size: 18px; font-weight: bold; }
@@ -201,8 +206,6 @@
       75% { transform: translate(-50%, -50%) translateX(-10px); }
       100% { transform: translate(-50%, -50%) translateX(0); }
     }
-    /* --------------------------------------------- */
-
     textarea.autogrow {
       width: 100%;
       min-height: auto;
@@ -345,8 +348,6 @@
       <button class="clear-btn" onclick="resetForm()">Clear</button>
       <button class="submit-btn" onclick="submitForm()">Submit</button>
     </div>
-
-    <!-- Popup HTML from Arrest-Report.html -->
     <div id="popup-overlay">
       <div class="header-title">✅ Report Submitted</div>
       <div class="header-subtitle">Your Report Has Been Logged</div>
@@ -365,7 +366,11 @@
       <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top:10px;">
       <datalist id="thread-history"></datalist>
       <div id="pin-error">Webhook URL Is Required</div>
-      <div style="margin-top:15px;"><button onclick="validateWebhook()">Confirm</button></div>
+      <div style="margin-top: 15px;">
+        <button onclick="validateWebhook()" style="width: 80px; margin-right: 20px;">Confirm</button>
+        <button onclick="closePinPopup()"
+          style="width: 80px; margin-left: 20px; background: rgba(175,41,41,1.0);">Close</button>
+      </div>
       <div style="margin-top:10px;">
         <button onclick="confirmClearFields()" class="clear-btn">Delete All Data</button>
         <button onclick="deletePreset()" class="clear-btn" style="margin-left:10px;">Delete Preset</button>
@@ -374,14 +379,17 @@
   </div>
 
   <script>
-    function showAlert(message, title = '🔔 Notice') {
-      const existing = document.getElementById('custom-alert');
-      if (existing) existing.remove();
+      function closePinPopup() {
+        document.getElementById('pin-popup').style.display = 'none';
+      }
+      function showAlert(message, title = '🔔 Notice') {
+        const existing = document.getElementById('custom-alert');
+        if (existing) existing.remove();
 
-      const popup = document.createElement('div');
-      popup.id = 'custom-alert';
-      popup.style = `
-        position: fixed;
+        const popup = document.createElement('div');
+        popup.id = 'custom-alert';
+        popup.style = `
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
@@ -394,107 +402,107 @@
         text-align: center;
         max-width: 90%;
       `;
-      popup.innerHTML = `
-        <div style="font-size: 18px; font-weight: bold; margin-bottom: 10px; color: #7289da;">${title}</div>
+
+        popup.innerHTML = `
         <div style="font-size: 15px; color: #ccc;">${message}</div>
         <button style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;" onclick="document.getElementById('custom-alert').remove()">Close</button>
       `;
-      document.body.appendChild(popup);
-    }
 
-    function confirmClearFields() {
-      const confirmBox = document.createElement('div');
-      confirmBox.style = `
-        position: fixed;
+        document.querySelector('.card').appendChild(popup);
+      }
+
+      function confirmClearFields() {
+        const confirmBox = document.createElement('div');
+        confirmBox.style = `
+        position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background: #2C2F33;
+        background: #23272A;
         color: white;
-        padding: 20px;
+        padding: 20px 25px;
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.6);
         z-index: 1000;
         text-align: center;
+        max-width: 90%;
       `;
-      confirmBox.innerHTML = `
-        <div style="margin-bottom: 10px;">⚠️ This will delete all saved presets, history and input fields. Are you sure?</div>
-        <button id="confirm-delete-all" style="margin: 5px; padding: 8px 14px;">YES</button>
-        <button id="cancel-delete-all" style="margin: 5px; padding: 8px 14px;">NO</button>
+        confirmBox.innerHTML = `
+        <div style="font-size: 15px; color: #ccc;">This will delete preset, webhook & threads data, are you sure?</div>
+        <button id="confirm-delete-all" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">YES</button>
+        <button id="cancel-delete-all" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">NO</button>
       `;
-      document.body.appendChild(confirmBox);
-      document.getElementById('confirm-delete-all').onclick = () => {
-        localStorage.removeItem("webhookPresets");
-        localStorage.removeItem("webhookHistory");
-        localStorage.removeItem("threadHistory");
-        localStorage.removeItem("threadNamedHistory");
-        document.getElementById("preset-name").value = '';
-        document.getElementById("webhook-url").value = '';
-        document.getElementById("thread-id").value = '';
-        populatePresetHistory();
-        populateDatalist('webhook-history', 'webhookHistory');
-        populateThreadNameDatalist();
-        document.body.removeChild(confirmBox);
-      };
-      document.getElementById('cancel-delete-all').onclick = () => {
-        document.body.removeChild(confirmBox);
-        document.getElementById('pin-popup').style.display = 'none';
-      };
-    }
-
-    function deletePreset() {
-      const name = document.getElementById('preset-name').value.trim();
-      if (!name) return showAlert("Preset Name Required to Delete.");
-
-      const confirmBox = document.createElement('div');
-      confirmBox.style = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #2C2F33;
-        color: white;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-        z-index: 1000;
-        text-align: center;
-      `;
-      confirmBox.innerHTML = `
-        <div style="margin-bottom: 10px;">⚠️ Are you sure you want to delete the preset <strong>'${name}'</strong>?</div>
-        <button id="confirm-delete-preset" style="margin: 5px; padding: 8px 14px;">YES</button>
-        <button id="cancel-delete-preset" style="margin: 5px; padding: 8px 14px;">NO</button>
-      `;
-      document.body.appendChild(confirmBox);
-      document.getElementById('confirm-delete-preset').onclick = () => {
-        let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
-        const match = presets.find(p => p.name === name);
-        if (match) {
-          presets = presets.filter(p => p.name !== name);
-          localStorage.setItem("webhookPresets", JSON.stringify(presets));
-          removeFromHistory('webhookHistory', match.webhook);
-          if (match.thread) {
-            removeFromHistory('threadHistory', match.thread);
-            removeFromNamedThreadHistory(match.thread);
-          }
+        document.querySelector('.card').appendChild(confirmBox);
+        document.getElementById('confirm-delete-all').onclick = () => {
+          localStorage.removeItem("webhookPresets");
+          localStorage.removeItem("webhookHistory");
+          localStorage.removeItem("threadHistory");
+          localStorage.removeItem("threadNamedHistory");
           document.getElementById("preset-name").value = '';
           document.getElementById("webhook-url").value = '';
           document.getElementById("thread-id").value = '';
           populatePresetHistory();
           populateDatalist('webhook-history', 'webhookHistory');
           populateThreadNameDatalist();
-          showAlert(`Preset '${name}' and its data were deleted.`, '✅ Deleted');
-        } else {
-          showAlert(`Preset '${name}' not found.`, '⚠️ Not Found');
-        }
-        document.body.removeChild(confirmBox);
-        document.getElementById('pin-popup').style.display = 'block';
-      };
-      document.getElementById('cancel-delete-preset').onclick = () => {
-        document.body.removeChild(confirmBox);
-        document.getElementById('pin-popup').style.display = 'block';
-      };
-    }
+          document.querySelector('.card').removeChild(confirmBox);
+        };
+        document.getElementById('cancel-delete-all').onclick = () => {
+          document.querySelector('.card').removeChild(confirmBox);
+        };
+      }
+
+      function deletePreset() {
+        const name = document.getElementById('preset-name').value.trim();
+        if (!name) return showAlert("A preset name is required to delete.");
+
+        const confirmBox = document.createElement('div');
+        confirmBox.style = `
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #23272A;
+        color: white;
+        padding: 20px 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+        z-index: 1000;
+        text-align: center;
+        max-width: 90%;
+      `;
+        confirmBox.innerHTML = `
+        <div style="font-size: 15px; color: #ccc;">Do you want to delete <strong>'${name}'</strong> preset?</div>
+        <button id="confirm-delete-preset" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">YES</button>
+        <button id="cancel-delete-preset" style="margin-top: 15px; padding: 8px 16px; font-size: 14px; border: none; background: #4f545c; color: white; border-radius: 6px; cursor: pointer;">NO</button>
+      `;
+        document.querySelector('.card').appendChild(confirmBox);
+        document.getElementById('confirm-delete-preset').onclick = () => {
+          let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+          const match = presets.find(p => p.name === name);
+          if (match) {
+            presets = presets.filter(p => p.name !== name);
+            localStorage.setItem("webhookPresets", JSON.stringify(presets));
+            removeFromHistory('webhookHistory', match.webhook);
+            if (match.thread) {
+              removeFromHistory('threadHistory', match.thread);
+              removeFromNamedThreadHistory(match.thread);
+            }
+            document.getElementById("preset-name").value = '';
+            document.getElementById("webhook-url").value = '';
+            document.getElementById("thread-id").value = '';
+            populatePresetHistory();
+            populateDatalist('webhook-history', 'webhookHistory');
+            populateThreadNameDatalist();
+            showAlert(`Preset '${name}' was deleted.`, '✅ Deleted');
+          } else {
+            showAlert(`Preset '${name}' was not found.`, '⚠️ Not Found');
+          }
+          document.querySelector('.card').removeChild(confirmBox);
+        };
+        document.getElementById('cancel-delete-preset').onclick = () => {
+          document.querySelector('.card').removeChild(confirmBox);
+        };
+      }
 
     function autoGrow(el) {
       el.style.height = 'auto';
@@ -509,6 +517,10 @@
       const locField = document.getElementById("location");
       autoGrow(locField);
       locField.addEventListener("input", () => autoGrow(locField));
+
+      document.getElementById("preset-name").addEventListener("change", e => {
+        fillFieldsFromPreset(e.target.value);
+      });
     });
 
     function savePreset(name, webhook, threadId) {
@@ -641,22 +653,45 @@
       autoGrow(loc);
     }
 
+
+    const TEST_BYPASS = true;
     function submitForm() {
+      if (TEST_BYPASS) {
+        window.tempSubmissionData = {
+          datetime: "2025-07-14T12:00",
+          location: "Test Location",
+          name: "Test Name",
+          gender: "Male",
+          dob: "2000-01-01",
+          primary: "Test Primary",
+          injuries: "Test Injuries",
+          pulse: "NORMAL",
+          respiration: "MODERATE",
+          bp: "NORMAL",
+          consciousness: ["Alert"],
+          treatment: ["Basic First Aid"],
+          hospital: "CENTRAL LOS SANTOS MEDICAL CENTER",
+          condition: "STABLE"
+        };
+        document.getElementById('pin-popup').style.display = 'block';
+        document.getElementById('pin-error').style.display = 'none';
+        return;
+      }
       const getVals = id => [...document.getElementById(id).querySelectorAll('input:checked')].map(el => el.value);
-      const datetime    = document.getElementById('datetime').value;
-      const location    = document.getElementById('location').value.trim();
-      const name        = document.getElementById('name').value.trim();
-      const gender      = document.getElementById('gender').value;
-      const dob         = document.getElementById('dob').value;
-      const primary     = document.getElementById('primary').value.trim();
-      const injuries    = document.getElementById('injuries').value.trim();
-      const pulse       = document.getElementById('pulse').value;
+      const datetime = document.getElementById('datetime').value;
+      const location = document.getElementById('location').value.trim();
+      const name = document.getElementById('name').value.trim();
+      const gender = document.getElementById('gender').value;
+      const dob = document.getElementById('dob').value;
+      const primary = document.getElementById('primary').value.trim();
+      const injuries = document.getElementById('injuries').value.trim();
+      const pulse = document.getElementById('pulse').value;
       const respiration = document.getElementById('respiration').value;
-      const bp          = document.getElementById('bp').value;
+      const bp = document.getElementById('bp').value;
       const consciousness = getVals('consciousness');
-      const treatment     = getVals('treatment');
-      const hospital      = document.getElementById('hospital').value;
-      const condition     = document.getElementById('condition').value;
+      const treatment = getVals('treatment');
+      const hospital = document.getElementById('hospital').value;
+      const condition = document.getElementById('condition').value;
 
       if (!datetime || !location || !name || !gender || !dob
         || !primary || !injuries || !pulse || !respiration

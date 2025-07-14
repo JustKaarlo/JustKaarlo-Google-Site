@@ -1,1 +1,539 @@
-WORK IN PROGRESS.....
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Fire Rescue Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        * {
+            font-family: 'Rubik', sans-serif;
+        }
+
+        body {
+            background: transparent;
+            padding: 30px;
+            max-width: 750px;
+            margin: auto;
+            color: white;
+        }
+
+        .card {
+            background: #2C2F33;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background: #56585B;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            margin: 0;
+        }
+
+        .header-subtitle {
+            font-size: 15px;
+            font-style: bold;
+            color: #ccc;
+            margin-top: 4px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-size: 16px;
+            background: #23272A;
+            text-align: center;
+            padding: 8px;
+            margin-top: 20px;
+            border-radius: 6px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px;
+        }
+
+        .field-group {
+            flex: 1;
+            min-width: 150px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field-group label {
+            font-size: 13px;
+            margin-bottom: 4px;
+            color: #ccc;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        input[type="text"],
+        input[type="datetime-local"],
+        select {
+            padding: 6px 10px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #23272A;
+            color: white;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .checkbox-group label {
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .checkbox-group input {
+            margin-right: 5px;
+        }
+
+        .wide {
+            width: 100%;
+        }
+
+        button {
+            background-color: #3c78d8;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #5187dc;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 6px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background: #23272A;
+        }
+
+        .tag-container input {
+            border: none;
+            flex: 1;
+            min-width: 120px;
+            padding: 6px 8px;
+            font-size: 14px;
+            background: transparent;
+            color: white;
+            outline: none;
+        }
+
+        .tag {
+            background-color: #99aab5;
+            color: #2C2F33;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+        }
+
+        .tag .remove {
+            margin-left: 8px;
+            color: #2C2F33;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin: 15px;
+        }
+
+        .clear-btn {
+            background-color: #4f545c;
+            color: #c0c0c0;
+        }
+
+        .clear-btn:hover {
+            background-color: #5d626a;
+        }
+
+        .submit-btn {
+            flex: 1;
+        }
+
+        #popup-overlay,
+        #error-popup,
+        #pin-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #23272A;
+            color: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+            display: none;
+            z-index: 1000;
+            max-width: 90%;
+            text-align: center;
+        }
+
+        #pin-popup[style*="display: block"] {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        }
+
+        #popup-overlay .header-title {
+            color: #7289da;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #error-popup .header-title {
+            color: #f04747;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        #pin-popup input {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            text-align: center;
+            margin-top: 10px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background: #2C2F33;
+            color: white;
+        }
+
+        #pin-error {
+            color: #f04747;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <div class="header">
+            <div class="header-title">FIRE RESCUE</div>
+            <div class="header-subtitle">FIRE INCIDENT REPORT</div>
+        </div>
+
+        <div class="row">
+            <div class="field-group wide">
+                <label>Time & Date</label>
+                <input type="datetime-local" id="datetime">
+            </div>
+            <div class="field-group wide">
+                <label>Location of Incident</label>
+                <input type="text" id="location">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="field-group wide">
+                <label>Fire Unit(s) on Scene</label>
+                <div id="unit-tags" class="tag-container">
+                    <input type="text" id="unitInput" placeholder="Type And Press Enter">
+                </div>
+            </div>
+        </div>
+
+        <div class="section-title">SCENE DETAILS</div>
+        <div class="row">
+            <div class="field-group wide">
+                <label>Incident Type</label>
+                <select id="incident-type">
+                    <option value="">Select</option>
+                    <option>STRUCTURE FIRE</option>
+                    <option>VEHICLE FIRE</option>
+                    <option>WILDFIRE/BRUSH FIRE</option>
+                    <option>ELECTRICAL FIRE</option>
+                    <option>KITCHEN FIRE</option>
+                    <option>EXPLOSION</option>
+                    <option>OTHER</option>
+                </select>
+            </div>
+            <div class="field-group wide">
+                <label>Fire Spread Level</label>
+                <select id="fire-spread-level">
+                    <option value="">Select</option>
+                    <option>MINOR</option>
+                    <option>MODERATE</option>
+                    <option>EXTENSIVE</option>
+                    <option>OUT OF CONTROL</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="section-title">METHODS USED</div>
+        <div class="checkbox-group" id="methods-used">
+            <label><input type="checkbox" value="Water"> Water</label>
+            <label><input type="checkbox" value="Foam"> Foam</label>
+            <label><input type="checkbox" value="Fire Extinguishers"> Fire Extinguishers</label>
+        </div>
+
+        <div class="button-row">
+            <button class="clear-btn" onclick="resetForm()">Clear</button>
+            <button class="submit-btn" onclick="submitForm()">Submit</button>
+        </div>
+
+        <div id="popup-overlay">
+            <div class="header-title">✅ Report Submitted</div>
+            <div class="header-subtitle">Your Report Has Been Logged</div>
+        </div>
+
+        <div id="error-popup">
+            <div class="header-title">⚠️ Submission Failed</div>
+            <div class="header-subtitle">All Fields Are Required</div>
+        </div>
+
+        <div id="pin-popup">
+            <div class="header-title">🔐 Webhook Required</div>
+            <div class="header-subtitle">Select or Create a Preset</div>
+            <input type="text" id="preset-name" list="preset-history" placeholder="Preset Name">
+            <datalist id="preset-history"></datalist>
+            <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL">
+            <datalist id="webhook-history"></datalist>
+            <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID">
+            <datalist id="thread-history"></datalist>
+            <div id="pin-error">Webhook URL Is Required</div>
+            <div style="margin-top: 15px;">
+                <button onclick="validateWebhook()" style="width: 80px; margin-right: 20px;">Confirm</button>
+                <button onclick="closePinPopup()"
+                    style="width: 80px; margin-left: 20px; background: rgba(175,41,41,1.0);">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function closePinPopup() {
+            document.getElementById('pin-popup').style.display = 'none';
+        }
+        function autoGrow(el) {
+            el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+        }
+
+        const unitInput = document.getElementById('unitInput');
+        const unitContainer = document.getElementById('unit-tags');
+        unitInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && this.value.trim()) {
+            e.preventDefault();
+        addUnitTag(this.value.trim());
+        this.value = '';
+    }
+  });
+        function addUnitTag(text) {
+    const tag = document.createElement('div');
+        tag.className = 'tag';
+        tag.innerHTML = `${text} <span class="remove">&times;</span>`;
+        unitContainer.insertBefore(tag, unitInput);
+    tag.querySelector('.remove').onclick = () => tag.remove();
+  }
+
+        function showErrorPopup() {
+    const popup = document.getElementById('error-popup');
+        popup.style.display = 'block';
+    setTimeout(() => popup.style.display = 'none', 3000);
+  }
+
+        function showPopup() {
+    const popup = document.getElementById('popup-overlay');
+        popup.style.display = 'block';
+    setTimeout(() => popup.style.display = 'none', 3000);
+  }
+
+        function resetForm() {
+            document.querySelectorAll('input[type="text"], input[type="datetime-local"]').forEach(el => el.value = '');
+    document.querySelectorAll('.tag').forEach(tag => tag.remove());
+    document.querySelectorAll('select').forEach(sel => sel.selectedIndex = 0);
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+  }
+
+        function submitForm() {
+    const datetime = document.getElementById('datetime').value.trim();
+        const location = document.getElementById('location').value.trim();
+        const incidentType = document.getElementById('incident-type').value.trim();
+        const spreadLevel = document.getElementById('fire-spread-level').value.trim();
+    const units = [...document.querySelectorAll('#unit-tags .tag')].map(tag => tag.textContent.replace('×', '').trim());
+    const methods = [...document.querySelectorAll('#methods-used input:checked')].map(el => el.value.trim());
+
+        if (!datetime || !location || !incidentType || !spreadLevel || units.length === 0 || methods.length === 0) {
+            showErrorPopup();
+        return;
+    }
+
+        window.tempSubmissionData = {datetime, location, incidentType, spreadLevel, units, methods};
+        document.getElementById('pin-popup').style.display = 'block';
+        document.getElementById('pin-error').style.display = 'none';
+  }
+
+        function validateWebhook() {
+    const preset = document.getElementById('preset-name').value.trim();
+        const webhook = document.getElementById('webhook-url').value.trim();
+        const threadId = document.getElementById('thread-id').value.trim();
+
+        if (!webhook) {
+      const err = document.getElementById('pin-error');
+        err.style.display = 'block';
+        return;
+    }
+
+        saveToHistory('webhookHistory', webhook);
+        saveToHistory('threadHistory', threadId);
+        savePreset(preset, webhook, threadId);
+
+        document.getElementById('pin-popup').style.display = 'none';
+        window.tempSubmissionData.webhook = webhook;
+        window.tempSubmissionData.thread = threadId;
+        processSubmission();
+  }
+
+        function processSubmission() {
+    const data = window.tempSubmissionData;
+        const generatedID = randomID();
+        const formattedDateTime = data.datetime.replace('T', ' ');
+        const embed = {
+            title: "FIRE INCIDENT REPORT",
+        color: 16734003,
+        fields: [
+        {name: "> ID", value: `\`\`\`\n${generatedID}\n\`\`\``, inline: false },
+        {name: "> Time & Date", value: `\`\`\`\n${formattedDateTime}\n\`\`\``, inline: false },
+        {name: "> Location", value: `\`\`\`\n${data.location}\n\`\`\``, inline: false },
+        {name: "> Fire Units", value: data.units.map(u => `\`${u}\``).join(', '), inline: false },
+        {name: "> Incident Type", value: `\`\`\`\n${data.incidentType}\n\`\`\``, inline: true },
+        {name: "> Fire Spread Level", value: `\`\`\`\n${data.spreadLevel}\n\`\`\``, inline: true },
+        {name: "> Methods Used", value: data.methods.map(m => `\`${m}\``).join(', '), inline: false }
+        ],
+        footer: {text: "Fire Rescue" },
+        timestamp: new Date().toISOString()
+    };
+
+        html2canvas(document.querySelector(".card"), {
+            backgroundColor: null,
+        scale: 2
+    }).then(canvas => {
+            canvas.toBlob(blob => {
+                const formData = new FormData();
+                formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
+                formData.append("file", blob, "report.png");
+
+                const finalURL = data.thread ? `${data.webhook}?thread_id=${data.thread}` : data.webhook;
+                fetch(finalURL, {
+                    method: "POST",
+                    body: formData
+                }).then(() => {
+                    showPopup();
+                    resetForm();
+                }).catch(() => {
+                    alert("Failed to Submit Report.");
+                });
+            });
+    });
+  }
+
+        function randomID() {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const numbers = "0123456789";
+        let id = "";
+        for (let i = 0; i < 3; i++) id += letters[Math.floor(Math.random() * letters.length)];
+        id += "-";
+        for (let i = 0; i < 3; i++) id += numbers[Math.floor(Math.random() * numbers.length)];
+        id += "-" + numbers[Math.floor(Math.random() * numbers.length)];
+        return id;
+  }
+
+        function saveToHistory(key, value) {
+    if (!value) return;
+        let history = JSON.parse(localStorage.getItem(key)) || [];
+        if (!history.includes(value)) {
+            history.push(value);
+        localStorage.setItem(key, JSON.stringify(history));
+    }
+  }
+
+        function savePreset(name, webhook, threadId) {
+    if (!name || !webhook) return;
+        let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+    const existing = presets.find(p => p.name === name);
+        if (existing) {
+            existing.webhook = webhook;
+        existing.thread = threadId;
+    } else {
+            presets.push({ name, webhook, thread: threadId });
+    }
+        localStorage.setItem("webhookPresets", JSON.stringify(presets));
+        populatePresetHistory();
+  }
+
+        function populatePresetHistory() {
+    const list = document.getElementById("preset-history");
+        list.innerHTML = "";
+        const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+    presets.forEach(p => {
+      const option = document.createElement("option");
+        option.value = p.name;
+        list.appendChild(option);
+    });
+  }
+
+        function fillFieldsFromPreset(name) {
+    const presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+    const match = presets.find(p => p.name === name);
+        if (match) {
+            document.getElementById("webhook-url").value = match.webhook;
+        document.getElementById("thread-id").value = match.thread || "";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+            populatePresetHistory();
+    document.getElementById("preset-name").addEventListener("change", e => {
+            fillFieldsFromPreset(e.target.value);
+    });
+  });
+
+        document.addEventListener("click", function (e) {
+    if (e.target.closest('.button-row, #pin-popup button')) return;
+    ['popup-overlay', 'error-popup', 'pin-popup'].forEach(id => {
+      const popup = document.getElementById(id);
+        if (popup && popup.style.display === 'block' && !popup.contains(e.target)) {
+            popup.style.display = 'none';
+      }
+    });
+  });
+    </script>
+</body>
+</html>
