@@ -645,7 +645,8 @@
           formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
           formData.append("file", blob, "report.png");
 
-          const finalURL = `${data.webhook || WEBHOOK_URL}?thread_id=${data.thread || THREAD_ID}`;
+          const threadQuery = data.thread ? `?thread_id=${data.thread}` : '';
+          const finalURL = `${data.webhook}${threadQuery}`;
 
           fetch(finalURL, {
             method: "POST",
