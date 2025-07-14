@@ -305,7 +305,6 @@
       <button id="cancel-delete-all" style="margin: 5px; padding: 8px 14px;">NO</button>
     `;
     document.body.appendChild(confirmBox);
-  
     document.getElementById('confirm-delete-all').onclick = () => {
       localStorage.removeItem("webhookPresets");
       localStorage.removeItem("webhookHistory");
@@ -321,21 +320,19 @@
     };
   }
   
-  function deletePreset() {
-    const name = document.getElementById('preset-name').value.trim();
-if (!name) return showAlert("Preset Name Required to Delete.");
-    let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+function deletePreset() {
+  const name = document.getElementById('preset-name').value.trim();
+  if (!name) return showAlert("Preset Name Required to Delete.");
+  let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+  const match = presets.find(p => p.name === name);
+  if (match) {
     presets = presets.filter(p => p.name !== name);
     localStorage.setItem("webhookPresets", JSON.stringify(presets));
-    const matched = presets.find(p => p.name === name);
-    if (matched) {
-      removeFromHistory('webhookHistory', matched.webhook);
-      if (matched.thread) {
-        removeFromHistory('threadHistory', matched.thread);
-        removeFromNamedThreadHistory(matched.thread);
-      }
+    removeFromHistory('webhookHistory', match.webhook);
+    if (match.thread) {
+      removeFromHistory('threadHistory', match.thread);
+      removeFromNamedThreadHistory(match.thread);
     }
-  
     document.getElementById("preset-name").value = '';
     document.getElementById("webhook-url").value = '';
     document.getElementById("thread-id").value = '';
@@ -343,9 +340,10 @@ if (!name) return showAlert("Preset Name Required to Delete.");
     populateDatalist('webhook-history', 'webhookHistory');
     populateThreadNameDatalist();
     showAlert(`Preset '${name}' and its data were deleted.`, '✅ Deleted');
+  } else {
+    showAlert(`Preset '${name}' not found.`, '⚠️ Not Found');
   }
 
-    
     function autoGrow(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
