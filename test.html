@@ -237,25 +237,69 @@
     <div id="pin-popup">
       <div class="header-title">🔐 Webhook Required</div>
       <div class="header-subtitle">Select or Create a Preset</div>
-    
       <input type="text" id="preset-name" list="preset-history" placeholder="Preset Name">
       <datalist id="preset-history"></datalist>
-    
       <input type="text" id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL" style="margin-top: 10px;">
       <datalist id="webhook-history"></datalist>
-    
       <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top: 10px;">
       <datalist id="thread-history"></datalist>
-    
       <div id="pin-error">Webhook URL Is Required</div>
-    
       <div style="margin-top: 15px;">
         <button onclick="validateWebhook()">Confirm</button>
+      </div>
+      <div style="margin-top: 10px;">
+        <button onclick="confirmClearFields()" class="clear-btn">Clear Fields</button>
+        <button onclick="deletePreset()" class="clear-btn" style="margin-left: 10px;">Delete Preset</button>
       </div>
     </div>
   </div>
 
   <script>
+  function confirmClearFields() {
+    const confirmBox = document.createElement('div');
+    confirmBox.style = `
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #2C2F33;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      z-index: 1000;
+      text-align: center;
+    `;
+    confirmBox.innerHTML = `
+      <div style="margin-bottom: 10px;">Clear Webhook URL and Thread ID?</div>
+      <button id="confirm-yes" style="margin: 5px; padding: 8px 14px;">YES</button>
+      <button id="confirm-no" style="margin: 5px; padding: 8px 14px;">NO</button>
+    `;
+    document.body.appendChild(confirmBox);
+    document.getElementById('confirm-yes').onclick = () => {
+      document.getElementById('webhook-url').value = '';
+      document.getElementById('thread-id').value = '';
+      document.body.removeChild(confirmBox);
+    };
+    document.getElementById('confirm-no').onclick = () => {
+      document.body.removeChild(confirmBox);
+    };
+  }
+  
+  function deletePreset() {
+    const name = document.getElementById('preset-name').value.trim();
+    if (!name) return alert("Preset name required to delete.");
+    let presets = JSON.parse(localStorage.getItem("webhookPresets") || "[]");
+    presets = presets.filter(p => p.name !== name);
+    localStorage.setItem("webhookPresets", JSON.stringify(presets));
+    document.getElementById("preset-name").value = '';
+    document.getElementById("webhook-url").value = '';
+    document.getElementById("thread-id").value = '';
+    populatePresetHistory();
+    alert(`Preset '${name}' deleted.`);
+  }
+
+    
     function autoGrow(el) {
       el.style.height = 'auto';
       el.style.height = el.scrollHeight + 'px';
