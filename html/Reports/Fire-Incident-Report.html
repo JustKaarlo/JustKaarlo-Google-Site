@@ -247,27 +247,21 @@
     </div>
     <div id="pin-popup">
       <div class="header-title">🔐 Webhook Required</div>
-      <div class="header-subtitle">Select or create a preset</div>
-      <input type="text" id="preset-name" list="preset-history" placeholder="Preset Name">
-      <datalist id="preset-history"></datalist>
-      <input type="text" id="webhook-url" list="webhook-history" placeholder="Webhook URL" style="margin-top:10px;">
+      <div class="header-subtitle">Select or Enter Webhook</div>
+      <input id="webhook-url" list="webhook-history" placeholder="Enter Webhook URL" style="margin-top:10px" type="text" />
       <datalist id="webhook-history"></datalist>
-      <input type="text" id="thread-id" list="thread-history" placeholder="Thread ID" style="margin-top:10px;">
-      <datalist id="thread-history"></datalist>
-      <div id="pin-error">Webhook URL is required</div>
-      <div style="margin-top:15px;">
-        <button style="width:80px;margin-right:20px;" onclick="validateWebhook()">Confirm</button>
-        <button style="width:80px;margin-left:20px;background:rgba(175,41,41,1.0);" onclick="closePinPopup()">Close</button>
+      <div id="pin-error">Webhook URL Is Required</div>
+      <div style="margin-top: 15px;">
+        <button onclick="validateWebhook()" style="width: 80px; margin-right: 20px;">Confirm</button>
+        <button onclick="closePinPopup()"
+          style="width: 80px; margin-left: 20px; background: rgba(175,41,41,1.0);">Close</button>
       </div>
-      <div style="margin-top:10px;">
-        <button class="clear-btn" onclick="confirmClearFields()">Delete All Data</button>
-        <button class="clear-btn" style="margin-left:10px;" onclick="deletePreset()">Delete Preset</button>
-      </div>
+      <button class="clear-btn" onclick="clearWebhookData()"
+        style="margin-top:10px; padding: 6px 12px; font-size: 13px;">CLEAR DATA</button>
     </div>
   </div>
 
   <script>
-    // ========== Popup helpers ==========
     function closePinPopup() {
       document.getElementById('pin-popup').style.display = 'none';
     }
@@ -300,7 +294,6 @@
       document.querySelector('.card').appendChild(popup);
     }
 
-    // ========== Webhook Preset Logic ==========
     function saveToHistory(key, value) {
       let hist = JSON.parse(localStorage.getItem(key)) || [];
       if (!hist.includes(value)) {
@@ -366,14 +359,43 @@
       }
     }
     function confirmClearFields() {
-      if (!confirm("This will delete all presets, webhook & thread history. Continue?")) return;
-      ['presetHistory','webhookHistory','threadHistory','threadNamedHistory']
-        .forEach(k=> localStorage.removeItem(k));
-      document.getElementById('preset-name').value='';
-      document.getElementById('webhook-url').value='';
-      document.getElementById('thread-id').value='';
-      populatePresetHistory(); populateDatalist('webhook-history','webhookHistory');
-      populateThreadNameDatalist();
+      const confirmBox = document.createElement('div');
+      confirmBox.style = `
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: #23272A; color: white; padding: 20px 25px; border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6); z-index: 1000; text-align: center;
+      max-width: 90%;
+    `;
+      confirmBox.innerHTML = `
+      <div style="font-size: 15px; color: #ccc;">This will delete all webhook data. Are you sure?</div>
+      <button id="confirm-clear-yes" style="margin-top: 15px; padding: 8px 16px;">YES</button>
+      <button id="confirm-clear-no" style="margin-top: 15px; padding: 8px 16px; margin-left: 10px;">NO</button>
+    `;
+
+      const card = document.querySelector('.card');
+      card.appendChild(confirmBox);
+
+      document.getElementById('confirm-clear-yes').onclick = () => {
+        try {
+          localStorage.removeItem("webhookPresets");
+          localStorage.removeItem("webhookHistory");
+          localStorage.removeItem("threadHistory");
+          localStorage.removeItem("threadNamedHistory");
+
+          const webhookInput = document.getElementById("webhook-url");
+          if (webhookInput) webhookInput.value = '';
+
+          populateDatalist('webhook-history', 'webhookHistory');
+        } catch (err) {
+          console.error("Error clearing data:", err);
+        } finally {
+          if (card.contains(confirmBox)) card.removeChild(confirmBox);
+        }
+      };
+
+      document.getElementById('confirm-clear-no').onclick = () => {
+        if (card.contains(confirmBox)) card.removeChild(confirmBox);
+      };
     }
     function deletePreset() {
       const name = document.getElementById('preset-name').value.trim();
@@ -387,27 +409,29 @@
     }
 
     function validateWebhook() {
-      const preset = document.getElementById('preset-name').value.trim();
       const webhook = document.getElementById('webhook-url').value.trim();
-      const threadId = document.getElementById('thread-id').value.trim();
+      const threadId = '1394386617686294761'; // Hardcoded as in TOW Report
+
       if (!webhook) {
-        document.getElementById('pin-error').style.display = 'block';
-        document.getElementById('pin-popup').classList.add('shake');
-        return setTimeout(()=> document.getElementById('pin-popup').classList.remove('shake'), 400);
+        const err = document.getElementById('pin-error');
+        err.style.display = 'block';
+        const popup = document.getElementById('pin-popup');
+        popup.classList.add('shake');
+        setTimeout(() => popup.classList.remove('shake'), 400);
+        return;
       }
+
       saveToHistory('webhookHistory', webhook);
-      saveToHistory('threadHistory', threadId);
-      saveThreadNamedHistory(preset, threadId);
-      // keep list of presets
-      let ps = JSON.parse(localStorage.getItem('presetList')||'[]');
-      if (!ps.find(p=>p.name===preset)) {
-        ps.push({name:preset, webhook, thread:threadId});
-        localStorage.setItem('presetList', JSON.stringify(ps));
-      }
-      document.getElementById('pin-popup').style.display='none';
+      populateDatalist('webhook-history', 'webhookHistory');
+
+      document.getElementById('pin-popup').style.display = 'none';
       window.tempSubmissionData.webhook = webhook;
-      window.tempSubmissionData.thread  = threadId;
+      window.tempSubmissionData.thread = threadId;
       processSubmission();
+    }
+
+    function clearWebhookData() {
+      confirmClearFields();
     }
 
     function autoGrow(el) {
