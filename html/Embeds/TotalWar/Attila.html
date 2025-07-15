@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Total War ATTILA</title>
@@ -51,6 +52,15 @@
     const folderId = "15r5NfzciWGfClpGvmT5ydfH4fDbScVAl";
     const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
 
+    const customIcons = {
+      "The Dawnless Days Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
+      "The Dawnless Days Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
+      "The Dawnless Days Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
+      "Nova Attila Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
+      "Nova Attila Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
+      "Seven Kingdoms.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/SevenKingdoms.ico"
+    };
+
     async function listFiles() {
       const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
       const res = await fetch(url);
@@ -67,10 +77,8 @@
       data.files.sort((a, b) => {
         const extA = a.name.slice(a.name.lastIndexOf('.') + 1).toLowerCase();
         const extB = b.name.slice(b.name.lastIndexOf('.') + 1).toLowerCase();
-      
         if (extA < extB) return -1;
         if (extA > extB) return 1;
-      
         return a.name.localeCompare(b.name, undefined, {
           numeric: true,
           sensitivity: 'base'
@@ -82,14 +90,21 @@
         const link = document.createElement("a");
         link.href = file.webViewLink;
         link.target = "_blank";
+
         const icon = document.createElement("img");
-        icon.src = file.iconLink;
+        // Use custom icon if filename matches
+        if (customIcons[file.name]) {
+          icon.src = customIcons[file.name];
+        } else {
+          icon.src = file.iconLink;
+        }
+
         icon.alt = "";
         icon.style.height = "20px";
         icon.style.verticalAlign = "middle";
         icon.style.marginRight = "8px";
 
-        link.textContent = ""; // Clear existing text
+        link.textContent = "";
         link.appendChild(icon);
         link.appendChild(document.createTextNode(file.name));
         li.appendChild(link);
