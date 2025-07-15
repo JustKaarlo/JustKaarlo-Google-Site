@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Total War NAPOLEON</title>
+  <title>Total War NAPOLEON </title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
     body {
@@ -43,13 +44,20 @@
 </head>
 
 <body>
-  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Napoleon.png" alt="Napoleon"
+  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Napoleon.png" alt="Attila"
       style="height: 24px; vertical-align: middle; margin-right: 8px;">Napoleon</h1>
   <ul id="fileList">Loading...</ul>
 
   <script>
     const folderId = "1NiLKxsM1tZUbYjYoquZ2cYVMWh-zAprN";
     const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
+
+    const customIcons = {
+      "ACW2 The American Civil War.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/ACW2.ico",
+      "Field Command Napoleon v8.0.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/FieldCommand.ico",
+      "Grand Battle Mod v2.6.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/GrandBattle.ico",
+      "Napoleonic Total War III.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NapoleonicTotalWar3.ico"
+    };
 
     async function listFiles() {
       const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
@@ -67,36 +75,40 @@
       data.files.sort((a, b) => {
         const extA = a.name.slice(a.name.lastIndexOf('.') + 1).toLowerCase();
         const extB = b.name.slice(b.name.lastIndexOf('.') + 1).toLowerCase();
-      
         if (extA < extB) return -1;
         if (extA > extB) return 1;
-      
         return a.name.localeCompare(b.name, undefined, {
           numeric: true,
           sensitivity: 'base'
         });
       });
-      
+
       data.files.forEach(file => {
         const li = document.createElement("li");
         const link = document.createElement("a");
         link.href = file.webViewLink;
         link.target = "_blank";
+
         const icon = document.createElement("img");
-        icon.src = file.iconLink;
+        // Use custom icon if filename matches
+        if (customIcons[file.name]) {
+          icon.src = customIcons[file.name];
+        } else {
+          icon.src = file.iconLink;
+        }
+
         icon.alt = "";
         icon.style.height = "20px";
         icon.style.verticalAlign = "middle";
         icon.style.marginRight = "8px";
 
-        link.textContent = ""; // Clear existing text
+        link.textContent = "";
         link.appendChild(icon);
         link.appendChild(document.createTextNode(file.name));
         li.appendChild(link);
         list.appendChild(li);
       });
     }
-
     listFiles();
   </script>
 </body>
