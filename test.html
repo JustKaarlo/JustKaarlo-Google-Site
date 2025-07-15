@@ -2,117 +2,598 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Total War ATTILA</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Total War Mods</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <style>
-    body {
-      overflow: hidden;
+    * {
       margin: 0;
-      padding: 20px;
-      background: transparent;
-      font-family: 'Rubik', sans-serif;
-      color: white;
-    }
-
-    h1 {
-      font-size: 24px;
-      margin-bottom: 10px;
-    }
-
-    ul {
-      list-style: none;
       padding: 0;
+      box-sizing: border-box;
     }
 
-    li {
-      margin: 8px 0;
-      padding: 6px 12px;
-      background: rgba(255, 255, 255, 0.1);
+    body {
+      position: relative;
+      font-family: 'Rubik', sans-serif;
+      background:
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+        url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/TotalWar_Background.png') center/cover no-repeat fixed;
+      color: #eee;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    /* particles canvas */
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    /* lift content above particles */
+    .grid,
+    .modal-overlay,
+    .modal {
+      position: relative;
+      z-index: 1;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 260px));
+      gap: 2rem;
+      width: 100%;
+      max-width: 1000px;
+      margin-top: 6rem;
+      justify-content: center;
+    }
+
+    .card {
+      height: 260px;
+      width: 260px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: rgba(191, 186, 186, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .card img {
+      width: auto;
+      height: 200px;
+      display: block;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+    }
+
+    .modal {
+      position: relative;
+      width: 80vw;
+      max-width: 900px;
+      height: 80vh;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 16px;
+      backdrop-filter: blur(7px) brightness(0.8);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+      overflow: hidden;
+    }
+
+    .modal iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      font-size: 2rem;
+      color: #fff;
+      line-height: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .close-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .section-header-wrapper {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0 1rem;
+    }
+
+    .section-header {
+      width: 370px;
+      height: fit-content;
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 2rem auto 1rem;
+      padding: 1.5rem 0;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      font-size: 30px;
+      color: #bfbdbd;
+      text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(16px) saturate(140%);
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .section-divider {
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.2);
+      margin-top: 1px;
+    }
+
+    .manager-group {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .manager-disclaimer {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      max-width: fit-content;
+      margin-top: 3rem;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: 0;
+      padding: 0.75rem 1rem;
+      background: rgba(173, 173, 173, 0.05);
+      backdrop-filter: blur(4px);
+      border: none;
+      border-radius: 12px;
+      font-size: 12px;
+      line-height: 1.3;
+      color: #999999;
+      gap: 0.75rem;
+      z-index: 100;
+    }
+
+    .manager-disclaimer-icon-custom {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      border: 2px solid rgba(120, 120, 120, 0.5);
+      border-radius: 50%;
+      color: rgba(140, 140, 140, 0.7);
+      font-weight: bold;
+      font-size: 18px;
+      opacity: 0.5;
+      filter: blur(0.3px);
+      backdrop-filter: blur(2px);
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+      z-index: 99;
+    }
+
+    .manager-group .card {
+      flex: 0 0 260px;
+      height: 260px;
+    }
+
+    .manager-group .card img {
+      width: 100%;
+      height: 260px;
+      display: block;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .card[data-tooltip] {
+      position: relative;
+      z-index: 999;
+    }
+
+    .custom-tooltip {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%) scale(0.95);
+      margin-top: 8px;
+      background: rgba(30, 30, 30, 0.9);
+      color: #ddd;
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: 'Rubik', sans-serif;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+      pointer-events: none;
+      opacity: 0;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      z-index: 999;
+      heigh: fit-content;
+      width: fit-content;
+      max-with: 260px;
+      max-height: 130px;
+      height: auto;
+      max-width: none;
+      width: fit-content;
+      white-space: nowrap;
+      overflow-x: auto;
+    }
+
+    .card[data-tooltip]:hover .custom-tooltip {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) scale(1);
+      z-index: 999;
+    }
+
+    .tooltip-file-name {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      font-family: 'Montserrat', sans-serif;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.4rem 0.6rem;
       border-radius: 6px;
+      margin-bottom: 0.6rem;
+      z-index: 999;
     }
 
-    a {
-      color: white;
+    .tooltip-file-name .title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      font-size: 10px;
+      color: #666;
+      text-transform: uppercase;
+      align-text: left;
+      z-index: 999;
+    }
+
+    .tooltip-file-name .filename {
+      color: #9a9ea1;
+      font-weight: 700;
+      font-family: 'Montserrat', sans-serif;
+      align-text: right;
+      z-index: 999;
+    }
+
+    .virustotal-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 700;
+      padding: 0.4rem 0.8rem;
+      font-size: 13px;
+      color: #bbb;
+      cursor: pointer;
+      transition: background 0.2s;
       text-decoration: none;
+      z-index: 999;
     }
 
-    a:hover {
-      text-decoration: underline;
+    .virustotal-button:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .vt-icon {
+      position: relative;
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+    }
+
+    .vt-icon::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #66c0f4;
+      border-radius: 4px;
+    }
+
+    .vt-icon::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      border-radius: 50%;
     }
   </style>
 </head>
 
 <body>
-  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Attila"
-      style="height: 24px; vertical-align: middle; margin-right: 8px;">Attila</h1>
-  <ul id="fileList">Loading...</ul>
+  <!-- particles layer -->
+  <div id="particles-js"></div>
+  <iframe id="preloaded-frame" src="https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Attila.html"
+    style="visibility: hidden; position: absolute; width: 0; height: 0; border: 0;"></iframe>
+  <div class="grid">
+    <div id="attila-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png"
+        alt="Total War Attila">
+    </div>
+    <div id="shogun-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Shogun2.png"
+        alt="Total War Shogun 2">
+    </div>
+    <div id="rome-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_RomeII.png"
+        alt="Total War Rome II">
+    </div>
+    <div id="empire-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Empire2.png"
+        alt="Total War Empire">
+    </div>
+    <div id="napoleon-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Napoleon.png"
+        alt="Total War Napoleon">
+    </div>
+    <div id="britannia-card" class="card">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png"
+        alt="Total War Thrones of Britannia">
+    </div>
 
+    <div class="section-header-wrapper">
+      <div class="section-divider"></div>
+      <div class="section-header">MANAGERS</div>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="manager-group">
+      <div id="manager1-card" class="card" data-tooltip>
+        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalModManager.png"
+          alt="Total Mod Manager" />
+        <div class="custom-tooltip">
+          <div class="tooltip-file-name">
+            <span class="title">File&nbsp;</span>
+            <span class="filename">&nbsp;Total Mod Manager</span>
+          </div>
+          <a href="https://www.virustotal.com/gui/url/e5e71f0b50fb9614d793fb7b59f77b830a93fee99331f8c07096d2385e031776?nocache=1"
+            target="_blank" class="virustotal-button" onclick="event.stopPropagation()">
+            <span class="vt-icon"></span>
+            VirusTotal</a>
+        </div>
+      </div>
+
+      <div id="manager2-card" class="card" data-tooltip>
+        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/AttilaModManager.png"
+          alt="Attila Mod Manager" />
+        <div class="custom-tooltip">
+          <div class="tooltip-file-name">
+            <span class="title">File&nbsp;</span>
+            <span class="filename">&nbsp;Attila Mod Manager</span>
+          </div>
+          <a href="https://www.virustotal.com/gui/url/083fdea83e5c5110ee0288a800dccf0cc5fb2b63f0adfda645d126d16aa94fe8?nocache=1"
+            target="_blank" class="virustotal-button" onclick="event.stopPropagation()">
+            <span class="vt-icon"></span>
+            VirusTotal</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="manager-disclaimer">
+      <div class="manager-disclaimer-icon-custom">!</div>
+      <div>
+        I haven't developed any of the content listed here.<br>
+        They are created and owned by third parties.
+      </div>
+    </div>
+  </div>
+
+  <div id="overlay" class="modal-overlay">
+    <div class="modal">
+      <div class="close-btn">×</div>
+      <iframe id="modal-frame" title="Mods"></iframe>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
-    const folderId = "15r5NfzciWGfClpGvmT5ydfH4fDbScVAl";
-    const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
-
-    const customIcons = {
-      "The Dawnless Days Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
-      "The Dawnless Days Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
-      "The Dawnless Days Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
-      "Nova Attila Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
-      "Nova Attila Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
-      "Seven Kingdoms.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/SevenKingdoms.ico"
-    };
-
-    async function listFiles() {
-      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
-      const res = await fetch(url);
-      const data = await res.json();
-
-      const list = document.getElementById("fileList");
-      list.innerHTML = "";
-
-      if (!data.files || data.files.length === 0) {
-        list.innerHTML = "<li>No files found.</li>";
-        return;
+    function pauseParticles() {
+      if (window.pJSDom && pJSDom[0] && pJSDom[0].pJS) {
+        pJSDom[0].pJS.particles.move.enable = false;
+        pJSDom[0].pJS.fn.particlesRefresh();
       }
-
-      data.files.sort((a, b) => {
-        const extA = a.name.slice(a.name.lastIndexOf('.') + 1).toLowerCase();
-        const extB = b.name.slice(b.name.lastIndexOf('.') + 1).toLowerCase();
-        if (extA < extB) return -1;
-        if (extA > extB) return 1;
-        return a.name.localeCompare(b.name, undefined, {
-          numeric: true,
-          sensitivity: 'base'
-        });
-      });
-
-      data.files.forEach(file => {
-        const li = document.createElement("li");
-        const link = document.createElement("a");
-        link.href = file.webViewLink;
-        link.target = "_blank";
-
-        const icon = document.createElement("img");
-        // Use custom icon if filename matches
-        if (customIcons[file.name]) {
-          icon.src = customIcons[file.name];
-        } else {
-          icon.src = file.iconLink;
-        }
-
-        icon.alt = "";
-        icon.style.height = "20px";
-        icon.style.verticalAlign = "middle";
-        icon.style.marginRight = "8px";
-
-        link.textContent = "";
-        link.appendChild(icon);
-        link.appendChild(document.createTextNode(file.name));
-        li.appendChild(link);
-        list.appendChild(li);
-      });
     }
 
-    listFiles();
+    function resumeParticles() {
+      if (window.pJSDom && pJSDom[0] && pJSDom[0].pJS) {
+        pJSDom[0].pJS.particles.move.enable = true;
+        pJSDom[0].pJS.fn.particlesRefresh();
+      }
+    }
+    document.querySelectorAll('.virustotal-button').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+      });
+    });
+
+    document.querySelectorAll('[data-tooltip]').forEach(card => {
+      const tooltip = card.querySelector('.custom-tooltip');
+      let insideTooltip = false;
+
+      card.addEventListener('mouseenter', () => {
+        tooltip.style.opacity = '1';
+        tooltip.style.pointerEvents = 'auto';
+        tooltip.style.transform = 'translateX(-50%) scale(1)';
+      });
+
+      card.addEventListener('mouseleave', () => {
+        setTimeout(() => {
+          if (!insideTooltip) {
+            tooltip.style.opacity = '0';
+            tooltip.style.pointerEvents = 'none';
+            tooltip.style.transform = 'translateX(-50%) scale(0.95)';
+          }
+        }, 150);
+      });
+
+      tooltip.addEventListener('mouseenter', () => {
+        insideTooltip = true;
+        tooltip.style.opacity = '1';
+        tooltip.style.pointerEvents = 'auto';
+        tooltip.style.transform = 'translateX(-50%) scale(1)';
+      });
+
+      tooltip.addEventListener('mouseleave', () => {
+        insideTooltip = false;
+        tooltip.style.opacity = '0';
+        tooltip.style.pointerEvents = 'none';
+        tooltip.style.transform = 'translateX(-50%) scale(0.95)';
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const overlay = document.getElementById('overlay');
+      const frame = document.getElementById('modal-frame');
+      const attilaCard = document.getElementById('attila-card');
+      const shogunCard = document.getElementById('shogun-card');
+      const romeCard = document.getElementById('rome-card');
+      const empireCard = document.getElementById('empire-card');
+      const napoleonCard = document.getElementById('napoleon-card');
+      const britanniaCard = document.getElementById('britannia-card');
+      const closeBtn = document.querySelector('.close-btn');
+
+      function openModal(file) {
+        pauseParticles();
+        frame.src = file;
+        overlay.style.display = 'flex';
+      }
+
+      attilaCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Attila.html'));
+      shogunCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Shogun2.html'));
+      romeCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/RomeII.html'));
+      empireCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Empire.html'));
+      napoleonCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Napoleon.html'));
+      britanniaCard.addEventListener('click', () => openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Thrones.html'));
+
+      const manager1Card = document.getElementById('manager1-card');
+      const manager2Card = document.getElementById('manager2-card');
+      manager1Card.addEventListener('click', () => {
+        window.open('https://justkaarlo.github.io/JustKaarlo-Google-Site/files/TotalWar/Total%20Mod%20Manager.exe', '_blank');
+      });
+      manager2Card.addEventListener('click', () => {
+        window.open('https://justkaarlo.github.io/JustKaarlo-Google-Site/files/TotalWar/Attila%20Mod%20Manager.exe', '_blank');
+      });
+
+      overlay.addEventListener('click', () => {
+        overlay.style.display = 'none';
+        frame.src = '';
+        resumeParticles();
+      });
+
+      closeBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        overlay.style.display = 'none';
+        frame.src = '';
+        resumeParticles();
+      });
+
+      /* init fire-like particles */
+      particlesJS('particles-js', {
+        particles: {
+          number: {
+            value: 90,
+            density: { enable: true, value_area: 700 }
+          },
+          color: { value: ['#ff4500', '#ff8c00', '#ffd700'] },
+          shape: { type: 'circle' },
+          opacity: {
+            value: 0.6,
+            random: true,
+            anim: { enable: true, speed: 1.2, opacity_min: 0.2, sync: false }
+          },
+          size: {
+            value: 4,
+            random: true,
+            anim: { enable: true, speed: 4, size_min: 1, sync: false }
+          },
+          line_linked: {
+            enable: false
+          },
+          move: {
+            enable: true,
+            speed: 2,
+            direction: 'top',
+            random: true,
+            straight: false,
+            out_mode: 'out',
+            bounce: false
+          }
+        },
+        interactivity: {
+          detect_on: 'canvas',
+          events: {
+            onhover: { enable: false },
+            onclick: { enable: false },
+            resize: true
+          }
+        },
+        retina_detect: true
+      });
+    });
   </script>
 </body>
+
 </html>
