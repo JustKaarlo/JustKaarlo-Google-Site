@@ -454,6 +454,19 @@
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
+  function pauseParticles() {
+    if (window.pJSDom && pJSDom[0] && pJSDom[0].pJS) {
+      pJSDom[0].pJS.particles.move.enable = false;
+      pJSDom[0].pJS.fn.particlesRefresh();
+    }
+  }
+
+  function resumeParticles() {
+    if (window.pJSDom && pJSDom[0] && pJSDom[0].pJS) {
+      pJSDom[0].pJS.particles.move.enable = true;
+      pJSDom[0].pJS.fn.particlesRefresh();
+    }
+  }
     document.querySelectorAll('.virustotal-button').forEach(btn => {
       btn.addEventListener('click', e => {
         e.stopPropagation();
@@ -507,6 +520,7 @@
       const closeBtn = document.querySelector('.close-btn');
 
       function openModal(file) {
+        pauseParticles();
         frame.src = file;
         overlay.style.display = 'flex';
       }
@@ -530,12 +544,14 @@
       overlay.addEventListener('click', () => {
         overlay.style.display = 'none';
         frame.src = '';
+        resumeParticles();
       });
 
       closeBtn.addEventListener('click', e => {
         e.stopPropagation();
         overlay.style.display = 'none';
         frame.src = '';
+        resumeParticles();
       });
 
       /* init fire-like particles */
