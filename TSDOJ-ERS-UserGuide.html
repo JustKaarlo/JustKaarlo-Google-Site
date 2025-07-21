@@ -28,17 +28,12 @@
     body {
       height: 100%;
       background: none;
-    }
-
-    body {
-      background: linear-gradient(135deg, #0D0D0D, #1A1A1A);
       color: var(--text-light);
       line-height: 1.6;
       position: relative;
       min-height: 100vh;
     }
 
-    /* Blurred background image */
     body::before {
       content: '';
       position: fixed;
@@ -50,7 +45,6 @@
       z-index: -2;
     }
 
-    /* Particle canvas */
     #particle-canvas {
       position: fixed;
       top: 0;
