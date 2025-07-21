@@ -541,7 +541,8 @@
             title: "ARREST REPORT",
             color: 4737096,
             fields: [
-              { name: "> ID", value: `\u0060\u0060\u0060\n${generatedID}\n\u0060\u0060\u0060`, inline: false },
+              { name: "> ID", value: `\u0060\u0060\u0060\n${generatedID}\n\u0060\u0060\u0060`, inline: true },
+              { name: "> DEFENDANT", value: `\u0060\u0060\u0060\n${data.defendant}\n\u0060\u0060\u0060`, inline: true },
             ],
             image: { url: "attachment://report.png" },
             footer: { text: "Department of Justice" },
