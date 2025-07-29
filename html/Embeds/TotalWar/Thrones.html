@@ -75,6 +75,10 @@
     const folderId = "1vizoQOE_gq9rK9LgrxeNgFoikw75AX2h";
     const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
 
+    const customIcons = {
+      "Thrones Standalone Addons.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Thrones.ico",
+    };
+
     async function listFiles() {
       const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
       const res = await fetch(url);
@@ -107,7 +111,11 @@
         link.href = file.webViewLink;
         link.target = "_blank";
         const icon = document.createElement("img");
-        icon.src = file.iconLink;
+        if (customIcons[file.name]) {
+          icon.src = customIcons[file.name];
+        } else {
+          icon.src = file.iconLink;
+        }
         icon.alt = "";
         icon.style.height = "20px";
         icon.style.verticalAlign = "middle";
