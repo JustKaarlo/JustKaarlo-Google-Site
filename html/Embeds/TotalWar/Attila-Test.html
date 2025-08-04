@@ -60,9 +60,7 @@
         }
 
         #fileList li:hover {
-            /* transform: translateY(-0.5px); */
             background: rgba(255, 255, 255, 0.09);
-            /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); */
         }
     </style>
 </head>
@@ -73,14 +71,6 @@
     <ul id="fileList">Loading...</ul>
 
     <script>
-      function sendHeight() {
-        const height = document.documentElement.scrollHeight;
-        window.parent.postMessage({ iframeHeight: height }, '*');
-      }
-      window.addEventListener('load', sendHeight);
-      window.addEventListener('resize', sendHeight);
-      setInterval(sendHeight, 1000);
-        
         const rootFolderId = "15r5NfzciWGfClpGvmT5ydfH4fDbScVAl";
         const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
 
@@ -197,4 +187,5 @@
 </body>
 
 </html>
+
 
