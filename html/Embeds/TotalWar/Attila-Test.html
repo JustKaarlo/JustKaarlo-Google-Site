@@ -105,10 +105,11 @@
         };
 
         async function listFilesInFolder(folderId, container, path = "") {
+            container.innerHTML = "";
             const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
             const res = await fetch(url);
             const data = await res.json();
-
+            
             if (!data.files || data.files.length === 0) {
                 const li = document.createElement("li");
                 li.textContent = "No files found.";
@@ -186,4 +187,5 @@
         listFilesInFolder(rootFolderId, document.getElementById("fileList"));
     </script>
 </body>
+
 </html>
