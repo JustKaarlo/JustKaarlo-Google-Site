@@ -73,6 +73,18 @@
         #fileList::-webkit-scrollbar {
             display: none;
         }
+
+        #fileList li.highlighted {
+            background: rgba(128, 128, 128, 0.25);
+            color: #d0d0d0;
+            font-weight: 600;
+            border: 1.5px solid #999999;
+            transition: background 0.3s ease;
+        }
+
+        #fileList li.highlighted:hover {
+            background: rgba(160, 160, 160, 0.35);
+        }
     </style>
 </head>
 
@@ -85,7 +97,6 @@
         const rootFolderId = "15r5NfzciWGfClpGvmT5ydfH4fDbScVAl";
         const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
 
-        // Support custom icons for any file (top-level or inside folders)
         const customIcons = {
             "The Dawnless Days Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
             "The Dawnless Days Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
@@ -103,14 +114,13 @@
             "Ancient Empires Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
             "Ancient Empires Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
             "Ancient Empires Part 4.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
-            "Attila Standalone Addons.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Attila.ico",
+            "Attila Extra Modifications.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalWarAttilaExtras.ico",
             
-            // "1v93Bvgr8ysSGK19r3SFezv8b6JHfETrv/TDD Remove Unit Cap v0.8.5.pack": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays-Extras.ico",
-            // "1v93Bvgr8ysSGK19r3SFezv8b6JHfETrv/TDD Remove Unit Cap v0.9.0.pack": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays-Extras.ico"
+            // "FOLDERID/FILENAME": "ICON",
         };
 
         const customFolderIcons = {
-            // "1v93Bvgr8ysSGK19r3SFezv8b6JHfETrv": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Extras.ico"
+            // "FOLDERID": "ICON"
         };
 
         async function listFilesInFolder(folderId, container, path = "") {
@@ -129,11 +139,19 @@
             const files = data.files.filter(f => f.mimeType !== "application/vnd.google-apps.folder");
             const folders = data.files.filter(f => f.mimeType === "application/vnd.google-apps.folder");
 
-            files.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+            files.sort((a, b) => {
+                if (a.name === "Attila Extra Modifications.exe") return -1;
+                if (b.name === "Attila Extra Modifications.exe") return 1;
+                return a.name.localeCompare(b.name, undefined, { numeric: true });
+            });
             folders.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
 
             for (const file of files) {
                 const li = document.createElement("li");
+                if (file.name === "Attila Extra Modifications.exe") {
+                    li.classList.add("highlighted");
+                }
+
                 const link = document.createElement("a");
                 const icon = document.createElement("img");
 
