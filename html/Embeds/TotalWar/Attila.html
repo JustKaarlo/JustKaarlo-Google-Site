@@ -83,6 +83,21 @@
         #fileList li.highlighted:hover {
             background: rgba(160, 160, 160, 0.35);
         }
+
+        .file-size-tag {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        .file-entry {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
     </style>
 </head>
 
@@ -123,9 +138,16 @@
             // "FOLDERID": "ICON"
         };
 
+        function formatBytes(bytes) {
+            const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+            if (bytes === 0) return "0 Bytes";
+            const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+            return parseFloat((bytes / Math.pow(1024, i)).toFixed(1)) + " " + sizes[i];
+        }
+
         async function listFilesInFolder(folderId, container, path = "") {
             container.innerHTML = "";
-            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
+            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink,size)`;
             const res = await fetch(url);
             const data = await res.json();
 
@@ -169,7 +191,18 @@
                 link.appendChild(icon);
                 link.appendChild(document.createTextNode(file.name));
 
-                li.appendChild(link);
+                const fileEntry = document.createElement("div");
+                fileEntry.className = "file-entry";
+                fileEntry.appendChild(link);
+
+                if (file.size) {
+                    const sizeTag = document.createElement("span");
+                    sizeTag.className = "file-size-tag";
+                    sizeTag.textContent = formatBytes(file.size);
+                    fileEntry.appendChild(sizeTag);
+                }
+
+                li.appendChild(fileEntry);
                 container.appendChild(li);
             }
 
