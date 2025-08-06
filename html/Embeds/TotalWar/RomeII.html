@@ -121,7 +121,7 @@
       "Para Bellum Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/ParaBellum.ico",
       "Medieval 1100AD.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Medieval1100AD.ico",
       "Divide et Impera.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/DivideetImpera.ico",
-      "Rome II Standalone Addons.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Rome2.ico",
+      "Rome II Extra Modifications.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalWarRome2Extras.ico",
     };
 
     function formatBytes(bytes) {
@@ -145,8 +145,8 @@
       }
 
       data.files.sort((a, b) => {
-        if (a.name === "Rome II Standalone Addons.exe") return -1;
-        if (b.name === "Rome II Standalone Addons.exe") return 1;
+        if (a.name === "Rome II Extra Modifications.exe") return -1;
+        if (b.name === "Rome II Extra Modifications.exe") return 1;
 
         const extA = a.name.slice(a.name.lastIndexOf('.') + 1).toLowerCase();
         const extB = b.name.slice(b.name.lastIndexOf('.') + 1).toLowerCase();
@@ -162,7 +162,7 @@
 
       data.files.forEach(file => {
         const li = document.createElement("li");
-        if (file.name === "Rome II Standalone Addons.exe") {
+        if (file.name === "Rome II Extra Modifications.exe") {
           li.classList.add("highlighted");
         }
 
