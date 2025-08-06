@@ -122,25 +122,34 @@
         }
 
         .folder-open-button {
-            background: rgba(255, 255, 255, 0.07);
+            background: rgba(255, 255, 255, 0.05); /* very faint white */
             border: none;
-            padding: 4px;
+            padding: 6px;
             margin-left: 10px;
             border-radius: 6px;
             cursor: pointer;
-            transition: background 0.2s ease;
+            transition: background 0.25s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: none;
         }
 
         .folder-open-button:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.12); /* subtle light on hover */
         }
 
         .folder-open-button svg {
             width: 16px;
             height: 16px;
+        }
+
+        .folder-open-button svg path:first-child {
+            fill: rgba(255, 255, 255, 0.15); /* faint folder shape */
+        }
+
+        .folder-open-button svg path.arrow-part {
+            fill: rgba(255, 255, 255, 0.35); /* slightly stronger arrow */
         }
 
         .icon-animated .arrow-part {
@@ -306,11 +315,11 @@
 
                 const folderPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 folderPath.setAttribute("d", "M10 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V8C22 6.9 21.1 6 20 6H12L10 4Z");
-                folderPath.setAttribute("fill", "#2f7bbd");
+                folderPath.setAttribute("fill", "rgba(255, 255, 255, 0.15)");
 
                 const arrowPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 arrowPath.setAttribute("d", "M14 9V11H17.59L11 17.59L12.41 19L19 12.41V16H21V9H14Z");
-                arrowPath.setAttribute("fill", "#ffffff");
+                arrowPath.setAttribute("fill", "rgba(255, 255, 255, 0.35)");
                 arrowPath.setAttribute("class", "arrow-part");
 
                 btnIcon.appendChild(folderPath);
