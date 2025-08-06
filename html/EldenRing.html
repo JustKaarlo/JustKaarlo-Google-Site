@@ -25,7 +25,7 @@
 
         #customIcon {
             height: 30%;
-            width: 30%;
+            width: auto;
             margin-bottom: 15px;
             user-select: none;
             filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.7));
@@ -342,6 +342,7 @@
 
         listFilesInFolder(rootFolderId, document.getElementById("fileList"));
 
+        // Modal + iframe open logic
         document.getElementById("fileList").addEventListener("click", function (e) {
             const target = e.target;
             let link = null;
@@ -379,5 +380,4 @@
         });
     </script>
 </body>
-
 </html>
