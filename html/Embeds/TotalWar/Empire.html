@@ -118,6 +118,49 @@
       justify-content: space-between;
       align-items: center;
       width: 100%;
+      color: #eeebebbe;
+    }
+
+    .folder-open-button {
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      padding: 6px;
+      margin-left: 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: none;
+    }
+
+    .folder-open-button:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .folder-open-button svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .folder-open-button svg path:first-child {
+      fill: rgba(255, 255, 255, 0.15);
+    }
+
+    .folder-open-button svg path.arrow-part {
+      fill: rgba(255, 255, 255, 0.35);
+    }
+
+    .icon-animated .arrow-part {
+      transform: translateX(-2px);
+      opacity: 0.6;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .folder-open-button:hover .arrow-part {
+      transform: translateX(1px);
+      opacity: 1;
     }
   </style>
 </head>
@@ -214,9 +257,9 @@
       for (const folder of folders) {
         const li = document.createElement("li");
 
-        const folderLink = document.createElement("a");
-        folderLink.href = "javascript:void(0)";
+        const folderLink = document.createElement("div");
         folderLink.className = "folder-entry";
+        folderLink.style.cursor = "pointer";
 
         const leftWrapper = document.createElement("div");
         leftWrapper.style.display = "flex";
@@ -237,16 +280,52 @@
         const nameSpan = document.createElement("span");
         nameSpan.textContent = folder.name;
 
+        const folderBtn = document.createElement("button");
+        folderBtn.className = "folder-open-button";
+        folderBtn.title = "Open in Google Drive";
+        folderBtn.onclick = (e) => {
+          e.stopPropagation();
+          window.open(`https://drive.google.com/drive/folders/${folder.id}`, "_blank");
+        };
+
+        const btnIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        btnIcon.setAttribute("width", "16");
+        btnIcon.setAttribute("height", "16");
+        btnIcon.setAttribute("viewBox", "0 0 24 24");
+        btnIcon.setAttribute("fill", "none");
+        btnIcon.classList.add("icon-animated");
+
+        const folderPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        folderPath.setAttribute("d", "M10 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V8C22 6.9 21.1 6 20 6H12L10 4Z");
+        folderPath.setAttribute("fill", "rgba(255, 255, 255, 0.15)");
+
+        const arrowPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        arrowPath.setAttribute("d", "M14 9V11H17.59L11 17.59L12.41 19L19 12.41V16H21V9H14Z");
+        arrowPath.setAttribute("fill", "rgba(255, 255, 255, 0.35)");
+        arrowPath.setAttribute("class", "arrow-part");
+
+        btnIcon.appendChild(folderPath);
+        btnIcon.appendChild(arrowPath);
+        folderBtn.appendChild(btnIcon);
+
         leftWrapper.appendChild(arrow);
         leftWrapper.appendChild(icon);
         leftWrapper.appendChild(nameSpan);
+
+        const rightWrapper = document.createElement("div");
+        rightWrapper.style.display = "flex";
+        rightWrapper.style.alignItems = "center";
+        rightWrapper.style.gap = "1px";
 
         const sizeTag = document.createElement("span");
         sizeTag.className = "file-size-tag";
         sizeTag.textContent = "...";
 
+        rightWrapper.appendChild(sizeTag);
+        rightWrapper.appendChild(folderBtn);
+
         folderLink.appendChild(leftWrapper);
-        folderLink.appendChild(sizeTag);
+        folderLink.appendChild(rightWrapper);
         li.appendChild(folderLink);
 
         const subList = document.createElement("ul");
