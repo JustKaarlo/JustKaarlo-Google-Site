@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Elden Ring</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
   <style>
     body {
       overflow: hidden;
@@ -35,6 +35,7 @@
     a {
       color: #eeebebbe;
       text-decoration: none;
+      cursor: pointer;
     }
 
     a:hover {
@@ -98,22 +99,75 @@
       align-items: center;
       justify-content: space-between;
     }
+
+    #docModal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #docModal>div {
+      position: relative;
+      width: 90%;
+      height: 90%;
+      background: #222;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #000;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #closeModal {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #f33;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      z-index: 10000;
+    }
+
+    #docFrame {
+      flex: 1;
+      border: none;
+      border-radius: 8px;
+    }
   </style>
 </head>
 
 <body>
-  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/EldenRing_Icon.png" alt="Elden Ring"
-      style="height: 24px; vertical-align: middle; margin-right: 8px;">Rlden Ring</h1>
+  <h1>
+    <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/EldenRing_Icon.png" alt="Elden Ring"
+      style="height: 24px; vertical-align: middle; margin-right: 8px;" />
+    Rlden Ring
+  </h1>
   <ul id="fileList">Loading...</ul>
+
+  <div id="docModal">
+    <div>
+      <button id="closeModal">X</button>
+      <iframe id="docFrame" src=""></iframe>
+    </div>
+  </div>
 
   <script>
     const rootFolderId = "1QAOW3qPeIHWinvsQmECyfccTZjavI7mA";
     const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
 
     const customIcons = {
-      "Convergence (2.2.3).zip": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Convergence.ico",
-
-      // "FOLDERID/FILENAME": "ICON",
+      "Convergence (2.2.3).zip":
+        "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Convergence.ico",
     };
 
     const customFolderIcons = {
@@ -140,15 +194,21 @@
         return;
       }
 
-      const files = data.files.filter(f => f.mimeType !== "application/vnd.google-apps.folder");
-      const folders = data.files.filter(f => f.mimeType === "application/vnd.google-apps.folder");
+      const files = data.files.filter(
+        (f) => f.mimeType !== "application/vnd.google-apps.folder"
+      );
+      const folders = data.files.filter(
+        (f) => f.mimeType === "application/vnd.google-apps.folder"
+      );
 
       files.sort((a, b) => {
         if (a.name === "Convergence (2.2.3).zip") return -1;
         if (b.name === "Convergence (2.2.3).zip") return 1;
         return a.name.localeCompare(b.name, undefined, { numeric: true });
       });
-      folders.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+      folders.sort((a, b) =>
+        a.name.localeCompare(b.name, undefined, { numeric: true })
+      );
 
       for (const file of files) {
         const li = document.createElement("li");
@@ -169,7 +229,7 @@
         icon.style.marginRight = "8px";
 
         link.href = file.webViewLink;
-        link.target = "_blank";
+        link.target = "_blank"; // overridden by click handler below
         link.appendChild(icon);
         link.appendChild(document.createTextNode(file.name));
 
@@ -227,6 +287,43 @@
     }
 
     listFilesInFolder(rootFolderId, document.getElementById("fileList"));
+
+    // Modal + iframe open logic
+    document.getElementById("fileList").addEventListener("click", function (e) {
+      const target = e.target;
+      let link = null;
+
+      if (target.tagName === "A") {
+        link = target;
+      } else if (target.closest("a")) {
+        link = target.closest("a");
+      }
+
+      if (link) {
+        e.preventDefault();
+        const url = link.href;
+
+        if (url.includes("docs.google.com/document")) {
+          const fileIdMatch = url.match(/[-\w]{25,}/);
+          const fileId = fileIdMatch ? fileIdMatch[0] : null;
+
+          if (fileId) {
+            const embedUrl = `https://docs.google.com/document/d/${fileId}/preview`;
+            document.getElementById("docFrame").src = embedUrl;
+            document.getElementById("docModal").style.display = "flex";
+          } else {
+            alert("Could not determine Google Doc ID.");
+          }
+        } else {
+          window.open(url, "_blank");
+        }
+      }
+    });
+
+    document.getElementById("closeModal").addEventListener("click", function () {
+      document.getElementById("docModal").style.display = "none";
+      document.getElementById("docFrame").src = "";
+    });
   </script>
 </body>
 
