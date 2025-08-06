@@ -47,6 +47,13 @@
       margin-right: 8px;
     }
 
+    #fileList {
+      height: 600px;
+      overflow-y: auto;
+      padding-right: 10px;
+      scrollbar-width: none;
+    }
+
     #fileList li {
       margin: 8px 0;
       padding: 6px 12px;
@@ -63,6 +70,20 @@
       background: rgba(255, 255, 255, 0.09);
     }
 
+    #fileList::-webkit-scrollbar {
+      display: none;
+    }
+
+    #fileList li.highlighted {
+      background: rgba(128, 128, 128, 0.25);
+      color: #d0d0d0;
+      transition: background 0.3s ease;
+    }
+
+    #fileList li.highlighted:hover {
+      background: rgba(160, 160, 160, 0.35);
+    }
+
     .file-size-tag {
       background: rgba(158, 157, 157, 0.25);
       color: rgb(170, 170, 170);
@@ -71,7 +92,6 @@
       font-size: 12px;
       margin-left: auto;
       white-space: nowrap;
-      color: #ccc;
     }
 
     .file-entry {
@@ -171,4 +191,5 @@
     listFiles();
   </script>
 </body>
+
 </html>
