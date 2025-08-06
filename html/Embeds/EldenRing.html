@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Elden Ring</title>
+  <title>Total War ATTILA</title>
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <style>
     body {
@@ -32,59 +33,201 @@
     }
 
     a {
-      color: white;
+      color: #eeebebbe;
       text-decoration: none;
     }
 
     a:hover {
-      text-decoration: underline;
+      text-decoration: none;
+    }
+
+    li img {
+      height: 20px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    #fileList {
+      height: 600px;
+      overflow-y: auto;
+      padding-right: 10px;
+      scrollbar-width: none;
+    }
+
+    #fileList li {
+      margin: 8px 0;
+      padding: 6px 12px;
+      background: rgba(96, 95, 95, 0.05);
+      border-radius: 6px;
+      backdrop-filter: blur(1px);
+      transition:
+        transform 0.15s ease,
+        background 0.2s ease;
+      will-change: transform;
+    }
+
+    #fileList li:hover {
+      background: rgba(255, 255, 255, 0.09);
+    }
+
+    #fileList::-webkit-scrollbar {
+      display: none;
+    }
+
+    #fileList li.highlighted {
+      background: rgba(128, 128, 128, 0.25);
+      color: #d0d0d0;
+      transition: background 0.3s ease;
+    }
+
+    #fileList li.highlighted:hover {
+      background: rgba(160, 160, 160, 0.35);
+    }
+
+    .file-size-tag {
+      background: rgba(158, 157, 157, 0.25);
+      color: rgb(170, 170, 170);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    .file-entry {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
   </style>
 </head>
 
 <body>
-  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/EldenRing_Icon.png" alt="Elden Ring"
-      style="height: 24px; vertical-align: middle; margin-right: 8px;">Elden Ring</h1>
+  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Attila"
+      style="height: 24px; vertical-align: middle; margin-right: 8px;">Attila</h1>
   <ul id="fileList">Loading...</ul>
 
   <script>
-    const folderId = "1QAOW3qPeIHWinvsQmECyfccTZjavI7mA";
+    const rootFolderId = "1QAOW3qPeIHWinvsQmECyfccTZjavI7mA";
     const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
 
-    async function listFiles() {
-      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
+    const customIcons = {
+      "Convergence (2.2.3).zip": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Convergence.ico",
+
+      // "FOLDERID/FILENAME": "ICON",
+    };
+
+    const customFolderIcons = {
+      // "FOLDERID": "ICON"
+    };
+
+    function formatBytes(bytes) {
+      const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+      if (bytes === 0) return "0 Bytes";
+      const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+      return parseFloat((bytes / Math.pow(1024, i)).toFixed(1)) + " " + sizes[i];
+    }
+
+    async function listFilesInFolder(folderId, container, path = "") {
+      container.innerHTML = "";
+      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink,size)`;
       const res = await fetch(url);
       const data = await res.json();
 
-      const list = document.getElementById("fileList");
-      list.innerHTML = "";
-
       if (!data.files || data.files.length === 0) {
-        list.innerHTML = "<li>No files found.</li>";
+        const li = document.createElement("li");
+        li.textContent = "No files found.";
+        container.appendChild(li);
         return;
       }
 
-      data.files.forEach(file => {
+      const files = data.files.filter(f => f.mimeType !== "application/vnd.google-apps.folder");
+      const folders = data.files.filter(f => f.mimeType === "application/vnd.google-apps.folder");
+
+      files.sort((a, b) => {
+        if (a.name === "Convergence (2.2.3).zip") return -1;
+        if (b.name === "Convergence (2.2.3).zip") return 1;
+        return a.name.localeCompare(b.name, undefined, { numeric: true });
+      });
+      folders.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+
+      for (const file of files) {
         const li = document.createElement("li");
+        if (file.name === "Attila Extra Modifications.exe") {
+          li.classList.add("highlighted");
+        }
+
         const link = document.createElement("a");
-        link.href = file.webViewLink;
-        link.target = "_blank";
         const icon = document.createElement("img");
-        icon.src = file.iconLink;
+
+        const fullPath = path ? `${path}/${file.name}` : file.name;
+        const iconKey = `${folderId}/${file.name}`;
+        icon.src = customIcons[iconKey] || customIcons[file.name] || file.iconLink;
+
         icon.alt = "";
         icon.style.height = "20px";
         icon.style.verticalAlign = "middle";
         icon.style.marginRight = "8px";
 
-        link.textContent = ""; // Clear existing text
+        link.href = file.webViewLink;
+        link.target = "_blank";
         link.appendChild(icon);
         link.appendChild(document.createTextNode(file.name));
-        li.appendChild(link);
-        list.appendChild(li);
-      });
+
+        const fileEntry = document.createElement("div");
+        fileEntry.className = "file-entry";
+        fileEntry.appendChild(link);
+
+        if (file.size) {
+          const sizeTag = document.createElement("span");
+          sizeTag.className = "file-size-tag";
+          sizeTag.textContent = formatBytes(file.size);
+          fileEntry.appendChild(sizeTag);
+        }
+
+        li.appendChild(fileEntry);
+        container.appendChild(li);
+      }
+
+      for (const folder of folders) {
+        const li = document.createElement("li");
+
+        const folderLink = document.createElement("a");
+        folderLink.href = "javascript:void(0)";
+        folderLink.style.display = "flex";
+        folderLink.style.alignItems = "center";
+
+        const icon = document.createElement("img");
+        icon.src = customFolderIcons[folder.id] || folder.iconLink;
+        icon.alt = "";
+        icon.style.height = "20px";
+        icon.style.verticalAlign = "middle";
+        icon.style.marginRight = "8px";
+
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = folder.name;
+
+        folderLink.appendChild(icon);
+        folderLink.appendChild(nameSpan);
+        li.appendChild(folderLink);
+
+        const subList = document.createElement("ul");
+        subList.style.marginLeft = "20px";
+        subList.style.display = "none";
+        li.appendChild(subList);
+
+        folderLink.addEventListener("click", async () => {
+          if (subList.childElementCount === 0) {
+            await listFilesInFolder(folder.id, subList, `${path}${folder.name}/`);
+          }
+          subList.style.display = subList.style.display === "none" ? "block" : "none";
+        });
+
+        container.appendChild(li);
+      }
     }
 
-    listFiles();
+    listFilesInFolder(rootFolderId, document.getElementById("fileList"));
   </script>
 </body>
 </html>
