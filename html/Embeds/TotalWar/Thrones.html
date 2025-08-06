@@ -53,9 +53,7 @@
       background: rgba(96, 95, 95, 0.05);
       border-radius: 6px;
       backdrop-filter: blur(1px);
-      transition:
-        transform 0.15s ease,
-        background 0.2s ease;
+      transition: transform 0.15s ease, background 0.2s ease;
       will-change: transform;
     }
 
@@ -72,12 +70,32 @@
     #fileList li.highlighted:hover {
       background: rgba(130, 130, 130, 0.35);
     }
+
+    .file-size-tag {
+      background: rgba(158, 157, 157, 0.25);
+      color: rgb(170, 170, 170);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-left: 10px;
+      white-space: nowrap;
+      color: #ccc;
+    }
+
+    .file-entry {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
   </style>
 </head>
 
 <body>
-  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png" alt="Thrones"
-      style="height: 24px; vertical-align: middle; margin-right: 8px;">Thrones of Britannia</h1>
+  <h1>
+    <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png" alt="Thrones"
+      style="height: 24px; vertical-align: middle; margin-right: 8px;">
+    Thrones of Britannia
+  </h1>
   <ul id="fileList">Loading...</ul>
 
   <script>
@@ -89,8 +107,15 @@
       "Age of Arthur.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AgeOfArthur.ico",
     };
 
+    function formatBytes(bytes) {
+      const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+      if (bytes === 0) return "0 Bytes";
+      const i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return parseFloat((bytes / Math.pow(1024, i)).toFixed(1)) + " " + sizes[i];
+    }
+
     async function listFiles() {
-      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
+      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink,size)`;
       const res = await fetch(url);
       const data = await res.json();
 
@@ -112,10 +137,7 @@
         if (extA < extB) return -1;
         if (extA > extB) return 1;
 
-        return a.name.localeCompare(b.name, undefined, {
-          numeric: true,
-          sensitivity: 'base'
-        });
+        return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' });
       });
 
       data.files.forEach(file => {
@@ -127,6 +149,7 @@
         const link = document.createElement("a");
         link.href = file.webViewLink;
         link.target = "_blank";
+
         const icon = document.createElement("img");
         icon.src = customIcons[file.name] || file.iconLink;
         icon.alt = "";
@@ -137,10 +160,23 @@
         link.textContent = "";
         link.appendChild(icon);
         link.appendChild(document.createTextNode(file.name));
-        li.appendChild(link);
+
+        const fileEntry = document.createElement("div");
+        fileEntry.className = "file-entry";
+        fileEntry.appendChild(link);
+
+        if (file.size) {
+          const sizeTag = document.createElement("span");
+          sizeTag.className = "file-size-tag";
+          sizeTag.textContent = formatBytes(file.size);
+          fileEntry.appendChild(sizeTag);
+        }
+
+        li.appendChild(fileEntry);
         list.appendChild(li);
       });
     }
+
     listFiles();
   </script>
 </body>

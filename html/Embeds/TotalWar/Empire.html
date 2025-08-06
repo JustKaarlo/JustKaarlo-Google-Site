@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Total War EMPIRE</title>
@@ -52,23 +53,38 @@
       background: rgba(96, 95, 95, 0.05);
       border-radius: 6px;
       backdrop-filter: blur(1px);
-      transition:
-        transform 0.15s ease,
-        background 0.2s ease;
+      transition: transform 0.15s ease, background 0.2s ease;
       will-change: transform;
     }
 
     #fileList li:hover {
-      /* transform: translateY(-0.5px); */
       background: rgba(255, 255, 255, 0.09);
-      /* box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05); */
+    }
+
+    .file-size-tag {
+        background: rgba(158, 157, 157, 0.25);
+        color: rgb(170, 170, 170);
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        margin-left: auto;
+        white-space: nowrap;
+    }
+
+    .file-entry {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
   </style>
 </head>
 
 <body>
-  <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Empire.png" alt="Empire"
-      style="height: 24px; vertical-align: middle; margin-right: 8px;">Empire</h1>
+  <h1>
+    <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Empire.png" alt="Empire"
+      style="height: 24px; vertical-align: middle; margin-right: 8px;">
+    Empire
+  </h1>
   <ul id="fileList">Loading...</ul>
 
   <script>
@@ -82,8 +98,15 @@
       "Empire 2 Generals Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Empire2General.ico",
     };
 
+    function formatBytes(bytes) {
+      const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+      if (bytes === 0) return "0 Bytes";
+      const i = Math.floor(Math.log(bytes) / Math.log(1024));
+      return parseFloat((bytes / Math.pow(1024, i)).toFixed(1)) + " " + sizes[i];
+    }
+
     async function listFiles() {
-      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink)`;
+      const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink,size)`;
       const res = await fetch(url);
       const data = await res.json();
 
@@ -108,18 +131,13 @@
 
       data.files.forEach(file => {
         const li = document.createElement("li");
+
         const link = document.createElement("a");
         link.href = file.webViewLink;
         link.target = "_blank";
 
         const icon = document.createElement("img");
-        // Use custom icon if filename matches
-        if (customIcons[file.name]) {
-          icon.src = customIcons[file.name];
-        } else {
-          icon.src = file.iconLink;
-        }
-
+        icon.src = customIcons[file.name] || file.iconLink;
         icon.alt = "";
         icon.style.height = "20px";
         icon.style.verticalAlign = "middle";
@@ -128,10 +146,23 @@
         link.textContent = "";
         link.appendChild(icon);
         link.appendChild(document.createTextNode(file.name));
-        li.appendChild(link);
+
+        const fileEntry = document.createElement("div");
+        fileEntry.className = "file-entry";
+        fileEntry.appendChild(link);
+
+        if (file.size) {
+          const sizeTag = document.createElement("span");
+          sizeTag.className = "file-size-tag";
+          sizeTag.textContent = formatBytes(file.size);
+          fileEntry.appendChild(sizeTag);
+        }
+
+        li.appendChild(fileEntry);
         list.appendChild(li);
       });
     }
+
     listFiles();
   </script>
 </body>
