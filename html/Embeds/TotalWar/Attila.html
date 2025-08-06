@@ -99,6 +99,24 @@
             align-items: center;
             justify-content: space-between;
         }
+
+        .folder-arrow {
+        width: 12px;
+        height: 12px;
+        margin-right: 6px;
+        transition: transform 0.2s ease;
+        fill: #ccc;
+        flex-shrink: 0;
+        }
+        .folder-arrow.open {
+        transform: rotate(90deg);
+        }
+        .folder-entry {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        }
     </style>
 </head>
 
@@ -117,11 +135,6 @@
             "The Dawnless Days Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
             "Nova Attila Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
             "Nova Attila Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
-            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
-            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
-            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
-            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 4.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
-            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 5.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
             "Ancient Empires v2.0.zip": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
             "Ancient Empires Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
             "Ancient Empires Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
@@ -131,8 +144,12 @@
             "Total War Skyrim.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalWarSkyrim.ico",
             "Northern Kingdoms Remastered.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NorthernKingdomsRemastered.ico",
             "Attila Extra Modifications.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalWarAttilaExtras.ico",
-            
-            // "FOLDERID/FILENAME": "ICON",
+
+            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
+            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
+            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
+            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 4.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
+            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 5.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
         };
 
         const customFolderIcons = {
@@ -212,8 +229,16 @@
 
                 const folderLink = document.createElement("a");
                 folderLink.href = "javascript:void(0)";
-                folderLink.style.display = "flex";
-                folderLink.style.alignItems = "center";
+                folderLink.className = "folder-entry";
+
+                const leftWrapper = document.createElement("div");
+                leftWrapper.style.display = "flex";
+                leftWrapper.style.alignItems = "center";
+
+                const arrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                arrow.setAttribute("viewBox", "0 0 24 24");
+                arrow.setAttribute("class", "folder-arrow");
+                arrow.innerHTML = `<path d="M9 5l7 7-7 7"/>`;
 
                 const icon = document.createElement("img");
                 icon.src = customFolderIcons[folder.id] || folder.iconLink;
@@ -225,8 +250,16 @@
                 const nameSpan = document.createElement("span");
                 nameSpan.textContent = folder.name;
 
-                folderLink.appendChild(icon);
-                folderLink.appendChild(nameSpan);
+                leftWrapper.appendChild(arrow);
+                leftWrapper.appendChild(icon);
+                leftWrapper.appendChild(nameSpan);
+
+                const sizeTag = document.createElement("span");
+                sizeTag.className = "file-size-tag";
+                sizeTag.textContent = "...";
+
+                folderLink.appendChild(leftWrapper);
+                folderLink.appendChild(sizeTag);
                 li.appendChild(folderLink);
 
                 const subList = document.createElement("ul");
@@ -238,8 +271,20 @@
                     if (subList.childElementCount === 0) {
                         await listFilesInFolder(folder.id, subList, `${path}${folder.name}/`);
                     }
-                    subList.style.display = subList.style.display === "none" ? "block" : "none";
+                    const isOpen = subList.style.display === "block";
+                    subList.style.display = isOpen ? "none" : "block";
+                    arrow.classList.toggle("open", !isOpen);
                 });
+
+                fetch(`https://www.googleapis.com/drive/v3/files?q='${folder.id}'+in+parents+and+trashed=false&fields=files(size,mimeType)&key=${apiKey}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.files) return;
+                        const totalSize = data.files
+                            .filter(f => f.size)
+                            .reduce((sum, f) => sum + parseInt(f.size), 0);
+                        sizeTag.textContent = formatBytes(totalSize);
+                    });
 
                 container.appendChild(li);
             }
