@@ -115,7 +115,7 @@
     const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
 
     const customIcons = {
-      "Thrones Standalone Addons.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Thrones.ico",
+      "Thrones Extra Modifications.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalWarThronesExtras.ico",
       "Age of Arthur.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AgeOfArthur.ico",
     };
 
@@ -140,8 +140,8 @@
       }
 
       data.files.sort((a, b) => {
-        if (a.name === "Thrones Standalone Addons.exe") return -1;
-        if (b.name === "Thrones Standalone Addons.exe") return 1;
+        if (a.name === "Thrones Extra Modifications.exe") return -1;
+        if (b.name === "Thrones Extra Modifications.exe") return 1;
 
         const extA = a.name.slice(a.name.lastIndexOf('.') + 1).toLowerCase();
         const extB = b.name.slice(b.name.lastIndexOf('.') + 1).toLowerCase();
@@ -154,7 +154,7 @@
 
       data.files.forEach(file => {
         const li = document.createElement("li");
-        if (file.name === "Thrones Standalone Addons.exe") {
+        if (file.name === "Thrones Extra Modifications.exe") {
           li.classList.add("highlighted");
         }
 
