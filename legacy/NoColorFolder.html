@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Total War ATTILA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            overflow: hidden;
+            margin: 0;
+            padding: 20px;
+            background: transparent;
+            font-family: 'Rubik', sans-serif;
+            color: #eeebebbe;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 8px 0;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+        }
+
+        a {
+            color: #eeebebbe;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: none;
+            color: rgba(253, 255, 255, 0.72);
+        }
+
+        li img {
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        #fileList {
+            height: 600px;
+            overflow-y: auto;
+            padding-right: 10px;
+            scrollbar-width: none;
+        }
+
+        #fileList li {
+            margin: 8px 0;
+            padding: 6px 12px;
+            background: rgba(96, 95, 95, 0.05);
+            border-radius: 6px;
+            backdrop-filter: blur(1px);
+            transition:
+                transform 0.15s ease,
+                background 0.2s ease;
+            will-change: transform;
+            font-weight: 500;
+            font-size: 14px;
+            font-family: 'Poppins', monospace;
+            color: #eeebebbe;
+            cursor: pointer;
+        }
+
+
+        #fileList li.folder-open {
+            background: rgba(255, 255, 255, 0.055);
+        }
+
+        #fileList li:hover:not(:has(.folder-open-button:hover)) {
+            background: rgba(255, 255, 255, 0.055);
+        }
+
+        #fileList::-webkit-scrollbar {
+            display: none;
+        }
+
+        #fileList li.highlighted {
+            background: rgba(128, 128, 128, 0.09);
+            backdrop-filter: blur(50px);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            color: #eeebebbe;
+            transition: background 0.3s ease;
+            backdrop-filter: brightness(-0.5);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #fileList li.highlighted:hover {
+            border: 1.5px solid rgba(128, 128, 128, 0.1);
+            transition:
+                transform 0.15s ease,
+                background 0.1s ease-in,
+                border 0.5s ease;
+            will-change: transform;
+        }
+
+        #fileList li.folder-entry span {
+            display: inline-block;
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease;
+            will-change: transform;
+        }
+
+        #fileList li .file-entry a {
+            display: inline-block;
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease;
+            will-change: transform;
+        }
+
+        .file-size-tag {
+            background: rgba(120, 120, 120, 0.25);
+            color: rgb(170, 170, 170, 0.8);
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-left: auto;
+            white-space: nowrap;
+            font-family: 'Poppins', monospace;
+            font-weight: 600;
+        }
+
+        .file-count-tag {
+            background: rgba(120, 120, 120, 0.25);
+            color: rgb(170, 170, 170, 0.8);
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-left: 6px;
+            white-space: nowrap;
+            font-family: 'Poppins', monospace;
+            font-weight: 600;
+        }
+
+        .file-entry {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-entry:hover a {
+            color: rgba(253, 255, 253, 0.72);
+            cursor: pointer;
+        }
+
+        .file-entry img:hover {
+            filter: brightness(1.2);
+            transform: scale(1.1);
+            transition: transform 0.2s ease, filter 0.2s ease;
+            cursor: pointer;
+        }
+
+        li.folder-open .folder-entry img {
+            filter: brightness(1.3);
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+
+        .folder-arrow {
+            width: 12px;
+            height: 12px;
+            margin-right: 6px;
+            transition: transform 0.2s ease;
+            fill: #9b9b9bc9;
+            flex-shrink: 0;
+        }
+
+        .folder-arrow.open {
+            transform: rotate(90deg);
+        }
+
+        .folder-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            color: #eeebebbe;
+        }
+
+        .folder-entry img:hover {
+            color: rgba(253, 255, 255, 0.75);
+            filter: brightness(1.2);
+            transform: scale(1.1);
+            transition: transform 0.2s ease, filter 0.2s ease;
+            cursor: pointer;
+        }
+
+        .folder-open-button {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            padding: 6px;
+            margin-left: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: none;
+            cursor: pointer;
+        }
+
+        .folder-open-button:hover {
+            background: rgba(255, 255, 255, 0.12);
+            filter: brightness(1.2);
+            transform: scale(1.1);
+            transform: translateX(1px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .folder-open-button:hover .icon-animated {
+            filter: brightness(1);
+            transform: scale(0.8);
+            transform: translateX(0.5px);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .folder-open-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .folder-open-button svg path:first-child {
+            fill: rgba(2, 161, 50, 0.8);
+            opacity: 0.7;
+        }
+
+        .folder-open-button svg path.arrow-part {
+            fill: rgba(2, 161, 50, 0.8);
+            opacity: 0.7;
+        }
+
+        .folder-open-button:hover .arrow-part {
+            fill: rgba(2, 161, 50, 0.8);
+            opacity: 0.7;
+        }
+
+        .custom-tooltip {
+            position: absolute;
+            bottom: 24px;
+            left: -40px;
+            transform: translateX(-50%);
+            background: rgba(50, 50, 50, 0.3);
+            color: #a1a1a179;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            font-weight: 700;
+            font-family: 'Poppins', monospace;
+            transition: opacity 0.4s ease 0.3s;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+            border: 1px solid rgb(255, 255, 255, 0.05);
+        }
+
+        .folder-open-button:hover .custom-tooltip {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Attila"
+            style="height: 27px; vertical-align: middle; margin-right: 10px; margin-bottom: 4px; margin-left: 25px;" />Attila
+    </h1></img>
+    <ul id="fileList" style="margin: 10px 15px 0px 15px;">Loading...</ul>
+
+
+    <script>
+        const rootFolderId = "15r5NfzciWGfClpGvmT5ydfH4fDbScVAl";
+        const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
+
+        const customIcons = {
+            "Nova Attila Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
+            "Nova Attila Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
+            "Seven Kingdoms.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/SevenKingdoms.ico",
+            "Total War Skyrim.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalWarSkyrim.ico",
+            "Northern Kingdoms Remastered.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NorthernKingdomsRemastered.ico",
+            "Attila Extra Modifications.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalWarAttilaExtras.ico",
+
+            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
+            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
+            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
+            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 4.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
+            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv/Medieval Kingdoms 1212AD Part 5.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
+
+            "1Y44ajJaNdEea5QLvUnQr3nLnmLxBHZSv/Ancient Empires Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
+            "1Y44ajJaNdEea5QLvUnQr3nLnmLxBHZSv/Ancient Empires Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
+            "1Y44ajJaNdEea5QLvUnQr3nLnmLxBHZSv/Ancient Empires Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
+            "1Y44ajJaNdEea5QLvUnQr3nLnmLxBHZSv/Ancient Empires Part 4.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
+
+            "1iNfu1THAgULCd3pGUVsQCNlnTHKx-JQY/The Dawnless Days Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
+            "1iNfu1THAgULCd3pGUVsQCNlnTHKx-JQY/The Dawnless Days Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
+            "1iNfu1THAgULCd3pGUVsQCNlnTHKx-JQY/The Dawnless Days Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
+        };
+
+        const customFolderIcons = {
+            "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
+            "1Y44ajJaNdEea5QLvUnQr3nLnmLxBHZSv": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
+            "1iNfu1THAgULCd3pGUVsQCNlnTHKx-JQY": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
+        };
+
+        function formatBytes(bytes) {
+            const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+            if (bytes === 0) return "0 Bytes";
+            const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
+            return parseFloat((bytes / Math.pow(1024, i)).toFixed(1)) + " " + sizes[i];
+        }
+
+        async function listFilesInFolder(folderId, container, path = "") {
+            container.innerHTML = "";
+            const url = `https://www.googleapis.com/drive/v3/files?q='${folderId}'+in+parents+and+trashed=false&key=${apiKey}&fields=files(id,name,mimeType,webViewLink,iconLink,size)`;
+            const res = await fetch(url);
+            const data = await res.json();
+
+            if (!data.files || data.files.length === 0) {
+                const li = document.createElement("li");
+                li.textContent = "No files found.";
+                container.appendChild(li);
+                return;
+            }
+
+            const files = data.files.filter(f => f.mimeType !== "application/vnd.google-apps.folder");
+            const folders = data.files.filter(f => f.mimeType === "application/vnd.google-apps.folder");
+
+            files.sort((a, b) => {
+                if (a.name === "Attila Extra Modifications.exe") return -1;
+                if (b.name === "Attila Extra Modifications.exe") return 1;
+                return a.name.localeCompare(b.name, undefined, { numeric: true });
+            });
+            folders.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+
+            for (const file of files) {
+                const li = document.createElement("li");
+                if (file.name === "Attila Extra Modifications.exe") {
+                    li.classList.add("highlighted");
+                }
+
+                const link = document.createElement("a");
+
+                link.style.display = 'inline-block';
+                link.style.transformStyle = 'preserve-3d';
+                link.style.transition = 'transform 0.2s ease';
+
+                link.addEventListener('mousemove', (e) => {
+                    const rect = link.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const midX = rect.width / 2;
+                    const midY = rect.height / 2;
+
+                    const rotateX = ((y - midY) / midY) * 2;
+                    const rotateY = ((x - midX) / midX) * 2;
+
+                    link.style.transform = `translateX(1.5px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                });
+
+                link.addEventListener('mouseleave', () => {
+                    link.style.transform = 'translateX(0px) rotateX(0deg) rotateY(0deg) scale(1)';
+                });
+
+                const icon = document.createElement("img");
+
+                const fullPath = path ? `${path}/${file.name}` : file.name;
+                const iconKey = `${folderId}/${file.name}`;
+                icon.src = customIcons[iconKey] || customIcons[file.name] || file.iconLink;
+
+                icon.alt = "";
+                icon.style.height = "20px";
+                icon.style.verticalAlign = "middle";
+                icon.style.marginRight = "8px";
+
+                link.href = file.webViewLink;
+                link.target = "_blank";
+                link.appendChild(icon);
+                link.appendChild(document.createTextNode(file.name));
+
+                const fileEntry = document.createElement("div");
+                fileEntry.className = "file-entry";
+                fileEntry.appendChild(link);
+
+                if (file.size) {
+                    const sizeTag = document.createElement("span");
+                    sizeTag.className = "file-size-tag";
+                    sizeTag.textContent = formatBytes(file.size);
+                    fileEntry.appendChild(sizeTag);
+                }
+
+                li.appendChild(fileEntry);
+                container.appendChild(li);
+            }
+
+            for (const folder of folders) {
+                const li = document.createElement("li");
+
+                const folderLink = document.createElement("div");
+                folderLink.className = "folder-entry";
+                folderLink.style.cursor = "pointer";
+
+                const leftWrapper = document.createElement("div");
+                leftWrapper.style.display = "flex";
+                leftWrapper.style.alignItems = "center";
+
+                const arrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                arrow.setAttribute("viewBox", "0 0 24 24");
+                arrow.setAttribute("class", "folder-arrow");
+                arrow.innerHTML = `<path d="M9 5l7 7-7 7"/>`;
+
+                const icon = document.createElement("img");
+                icon.src = customFolderIcons[folder.id] || folder.iconLink;
+                icon.alt = "";
+                icon.style.height = "20px";
+                icon.style.verticalAlign = "middle";
+                icon.style.marginRight = "8px";
+
+                const nameSpan = document.createElement("span");
+                nameSpan.textContent = folder.name;
+
+                const folderBtn = document.createElement("button");
+                const tooltip = document.createElement("span");
+                folderBtn.className = "folder-open-button";
+                tooltip.className = "custom-tooltip";
+                tooltip.textContent = "Download";
+                folderBtn.appendChild(tooltip);
+                folderBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    window.open(`https://drive.google.com/drive/folders/${folder.id}`, "_blank");
+                };
+
+                const btnIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                btnIcon.setAttribute("width", "16");
+                btnIcon.setAttribute("height", "16");
+                btnIcon.setAttribute("viewBox", "0 0 24 24");
+                btnIcon.setAttribute("fill", "none");
+                btnIcon.classList.add("icon-animated");
+
+                const trayPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                trayPath.setAttribute("d", "M5 20h14a1 1 0 0 0 1-1v-3h-2v2H6v-2H4v3a1 1 0 0 0 1 1z");
+                trayPath.setAttribute("fill", "rgba(255, 255, 255, 0.15)");
+
+                const arrowPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                arrowPath.setAttribute("d", "M12 3v10.17l3.59-3.58L17 11l-5 5-5-5 1.41-1.41L11 13.17V3h2z");
+                arrowPath.setAttribute("fill", "rgba(255, 255, 255, 0.35)");
+                arrowPath.setAttribute("class", "arrow-part");
+
+                btnIcon.appendChild(trayPath);
+                btnIcon.appendChild(arrowPath);
+                folderBtn.appendChild(btnIcon);
+
+                leftWrapper.appendChild(arrow);
+                leftWrapper.appendChild(icon);
+                leftWrapper.appendChild(nameSpan);
+
+                const rightWrapper = document.createElement("div");
+                rightWrapper.style.display = "flex";
+                rightWrapper.style.alignItems = "center";
+                rightWrapper.style.gap = "1px";
+
+                const sizeTag = document.createElement("span");
+                sizeTag.className = "file-size-tag";
+                sizeTag.textContent = "...";
+
+                rightWrapper.appendChild(sizeTag);
+                rightWrapper.appendChild(folderBtn);
+
+                folderLink.appendChild(leftWrapper);
+                folderLink.appendChild(rightWrapper);
+                li.appendChild(folderLink);
+
+                const subList = document.createElement("ul");
+                subList.style.marginLeft = "20px";
+                subList.style.display = "none";
+                li.appendChild(subList);
+
+                folderLink.addEventListener("click", async () => {
+                    if (subList.childElementCount === 0) {
+                        await listFilesInFolder(folder.id, subList, `${path}${folder.name}/`);
+                    }
+                    const isOpen = subList.style.display === "block";
+                    subList.style.display = isOpen ? "none" : "block";
+                    arrow.classList.toggle("open", !isOpen);
+
+                    li.classList.toggle("folder-open", !isOpen);
+                });
+
+                nameSpan.style.display = 'inline-block';
+                nameSpan.style.transformStyle = 'preserve-3d';
+                nameSpan.style.transition = 'transform 0.2s ease';
+
+                nameSpan.addEventListener('mousemove', (e) => {
+                    const rect = nameSpan.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const midX = rect.width / 2;
+                    const midY = rect.height / 2;
+
+                    const rotateX = ((y - midY) / midY) * 2;
+                    const rotateY = ((x - midX) / midX) * 2;
+
+                    nameSpan.style.transform = `translateX(1.5px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                });
+
+                nameSpan.addEventListener('mouseleave', () => {
+                    nameSpan.style.transform = 'translateX(0px) rotateX(0deg) rotateY(0deg) scale(1)';
+                });
+
+                fetch(`https://www.googleapis.com/drive/v3/files?q='${folder.id}'+in+parents+and+trashed=false&fields=files(size,mimeType)&key=${apiKey}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.files) return;
+
+                        const fileCount = data.files.filter(f => f.mimeType !== "application/vnd.google-apps.folder").length;
+
+                        const totalSize = data.files
+                            .filter(f => f.size)
+                            .reduce((sum, f) => sum + parseInt(f.size), 0);
+
+                        sizeTag.textContent = formatBytes(totalSize);
+
+                        const countTag = document.createElement("span");
+                        countTag.className = "file-count-tag";
+                        countTag.textContent = `${fileCount} Part${fileCount !== 1 ? "s" : ""}`;
+
+                        rightWrapper.insertBefore(countTag, folderBtn);
+                    });
+                container.appendChild(li);
+            }
+        }
+        listFilesInFolder(rootFolderId, document.getElementById("fileList"));
+    </script>
+</body>
+
+</html>

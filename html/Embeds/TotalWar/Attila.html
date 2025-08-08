@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <title>Total War ATTILA</title>
     <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             overflow: hidden;
@@ -12,12 +13,13 @@
             padding: 20px;
             background: transparent;
             font-family: 'Rubik', sans-serif;
-            color: white;
+            color: #eeebebbe;
         }
 
         h1 {
             font-size: 24px;
             margin-bottom: 10px;
+            color: #ffffff;
         }
 
         ul {
@@ -28,7 +30,8 @@
         li {
             margin: 8px 0;
             padding: 6px 12px;
-            background: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.1);
+            /* switched to background-color */
             border-radius: 6px;
         }
 
@@ -39,6 +42,7 @@
 
         a:hover {
             text-decoration: none;
+            color: rgba(253, 255, 255, 0.72) ! important;
         }
 
         li img {
@@ -57,17 +61,30 @@
         #fileList li {
             margin: 8px 0;
             padding: 6px 12px;
-            background: rgba(96, 95, 95, 0.05);
+            background-color: rgba(96, 95, 95, 0.05);
+            /* switched to background-color */
             border-radius: 6px;
             backdrop-filter: blur(1px);
             transition:
                 transform 0.15s ease,
-                background 0.2s ease;
+                background-color 0.2s ease;
+            /* track color only */
             will-change: transform;
+            font-weight: 500;
+            font-size: 14px;
+            font-family: 'Poppins', monospace;
+            color: #eeebebbe;
+            cursor: pointer;
         }
 
-        #fileList li:hover {
-            background: rgba(255, 255, 255, 0.09);
+        #fileList li.folder-open {
+            background-color: rgba(255, 255, 255, 0.055);
+            /* switched to background-color */
+        }
+
+        #fileList li:hover:not(:has(.folder-open-button:hover)) {
+            background-color: rgba(255, 255, 255, 0.055);
+            /* switched to background-color */
         }
 
         #fileList::-webkit-scrollbar {
@@ -75,33 +92,61 @@
         }
 
         #fileList li.highlighted {
-            background: rgba(128, 128, 128, 0.25);
-            color: #d0d0d0;
+            background: rgba(128, 128, 128, 0.09);
+            backdrop-filter: blur(50px);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            color: #eeebebbe;
             transition: background 0.3s ease;
+            backdrop-filter: brightness(-0.5);
+            font-weight: 600;
+            cursor: pointer;
         }
 
         #fileList li.highlighted:hover {
-            background: rgba(160, 160, 160, 0.35);
+            border: 1.5px solid rgba(128, 128, 128, 0.1);
+            transition:
+                transform 0.15s ease,
+                background 0.1s ease-in,
+                border 0.5s ease;
+            will-change: transform;
+        }
+
+        #fileList li.folder-entry span {
+            display: inline-block;
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease;
+            will-change: transform;
+        }
+
+        #fileList li .file-entry a {
+            display: inline-block;
+            transform-style: preserve-3d;
+            transition: transform 0.2s ease;
+            will-change: transform;
         }
 
         .file-size-tag {
-            background: rgba(158, 157, 157, 0.25);
-            color: rgb(170, 170, 170);
+            background: rgba(120, 120, 120, 0.25);
+            color: rgb(170, 170, 170, 0.8);
             padding: 2px 8px;
-            border-radius: 12px;
+            border-radius: 5px;
             font-size: 12px;
             margin-left: auto;
             white-space: nowrap;
+            font-family: 'Poppins', monospace;
+            font-weight: 600;
         }
 
         .file-count-tag {
             background: rgba(120, 120, 120, 0.25);
-            color: rgb(200, 200, 200);
+            color: rgb(170, 170, 170, 0.8);
             padding: 2px 8px;
-            border-radius: 12px;
+            border-radius: 5px;
             font-size: 12px;
             margin-left: 6px;
             white-space: nowrap;
+            font-family: 'Poppins', monospace;
+            font-weight: 600;
         }
 
         .file-entry {
@@ -110,12 +155,34 @@
             justify-content: space-between;
         }
 
+        .file-entry:hover a {
+            color: rgba(253, 255, 255, 0.72);
+        }
+
+        .file-entry img:hover {
+            filter: brightness(1.2);
+            transform: scale(1.1);
+            transition: transform 0.2s ease, filter 0.2s ease;
+            cursor: pointer;
+        }
+
+        .folder-entry img:hover {
+            filter: brightness(1.2);
+            transform: scale(1.1);
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+
+        li.folder-open .folder-entry img {
+            filter: brightness(1.3);
+            transform: scale(1.1);
+        }
+
         .folder-arrow {
             width: 12px;
             height: 12px;
             margin-right: 6px;
             transition: transform 0.2s ease;
-            fill: #ccc;
+            fill: #9b9b9bc9;
             flex-shrink: 0;
         }
 
@@ -129,11 +196,16 @@
             align-items: center;
             width: 100%;
             color: #eeebebbe;
+            position: relative;
+        }
+
+        .folder-entry:hover {
+            color: rgba(253, 255, 255, 0.75);
+            cursor: pointer;
         }
 
         .folder-open-button {
             background: rgba(255, 255, 255, 0.05);
-            /* very faint white */
             border: none;
             padding: 6px;
             margin-left: 10px;
@@ -144,55 +216,83 @@
             align-items: center;
             justify-content: center;
             box-shadow: none;
+            cursor: pointer;
+            position: relative;
         }
 
         .folder-open-button:hover {
             background: rgba(255, 255, 255, 0.12);
-            /* subtle light on hover */
-        }
-
-        .folder-open-button svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .folder-open-button svg path:first-child {
-            fill: rgba(255, 255, 255, 0.15);
-            /* faint folder shape */
-        }
-
-        .folder-open-button svg path.arrow-part {
-            fill: rgba(255, 255, 255, 0.35);
-            /* slightly stronger arrow */
-        }
-
-        .icon-animated .arrow-part {
-            transform: translateX(-2px);
-            opacity: 0.6;
+            filter: brightness(1.2);
+            transform: translateX(0.5px) scale(1.1);
             transition: transform 0.3s ease, opacity 0.3s ease;
         }
 
+        .folder-open-button:hover .icon-animated {
+            filter: brightness(1);
+            transform: translateX(0.5px) scale(1.2);
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .folder-open-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .folder-open-button svg path:first-child {
+            fill: rgba(2, 161, 50, 0.8);
+            opacity: 0.7;
+        }
+
+        .folder-open-button svg path.arrow-part {
+            fill: rgba(2, 161, 50, 0.8);
+            opacity: 0.7;
+        }
+
         .folder-open-button:hover .arrow-part {
-            transform: translateX(1px);
+            fill: rgba(2, 161, 50, 0.8);
+            opacity: 0.7;
+        }
+
+        .custom-tooltip {
+            position: absolute;
+            bottom: 15px;
+            left: -40px;
+            transform: translateX(-50%);
+            background: rgba(50, 50, 50, 0.6);
+            color: #a1a1a179;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            font-weight: 700;
+            font-family: 'Poppins', monospace;
+            transition: opacity 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+            border: 1px solid rgb(255, 255, 255, 0.05);
+        }
+
+        .folder-open-button:hover .custom-tooltip {
             opacity: 1;
+            pointer-events: auto;
+            transition-delay: 180ms;
         }
     </style>
 </head>
 
 <body>
-    <h1>
-        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Attila"
-            style="height: 24px; vertical-align: middle; margin-right: 8px;" />Attila
-    </h1>
-    <ul id="fileList">Loading...</ul>
+    <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Attila"
+            style="height: 27px; vertical-align: middle; margin-right: 10px; margin-bottom: 4px; margin-left: 25px;" />Attila
+    </h1></img>
+    <ul id="fileList" style="margin: 10px 15px 0px 15px;">Loading...</ul>
 
     <script>
         const rootFolderId = "15r5NfzciWGfClpGvmT5ydfH4fDbScVAl";
         const apiKey = "AIzaSyDqtsRN35V1JnmfIY9hTsn_Ej4aSipsK4M";
 
         const customIcons = {
-            "Nova Attila Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
-            "Nova Attila Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
             "Seven Kingdoms.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/SevenKingdoms.ico",
             "Total War Skyrim.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalWarSkyrim.ico",
             "Northern Kingdoms Remastered.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NorthernKingdomsRemastered.ico",
@@ -212,12 +312,17 @@
             "1iNfu1THAgULCd3pGUVsQCNlnTHKx-JQY/The Dawnless Days Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
             "1iNfu1THAgULCd3pGUVsQCNlnTHKx-JQY/The Dawnless Days Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
             "1iNfu1THAgULCd3pGUVsQCNlnTHKx-JQY/The Dawnless Days Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
+
+            "Nova Attila Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
+            "Nova Attila Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
         };
 
         const customFolderIcons = {
             "1aKdtU4523e-51o_hm7-QeHFVxIFJvzlv": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/MedievelKingdoms1212AD.ico",
             "1Y44ajJaNdEea5QLvUnQr3nLnmLxBHZSv": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AnchientEmpires.ico",
             "1iNfu1THAgULCd3pGUVsQCNlnTHKx-JQY": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
+            "1ElTsIpzKxZHZoMm9rxDfv6-dZoPLPosV": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/SevenKingdoms.ico",
+            "1NHAPD9Si2PM058Vkam_80h-okIFs31S3": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
         };
 
         function formatBytes(bytes) {
@@ -225,6 +330,118 @@
             if (bytes === 0) return "0 Bytes";
             const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)), 10);
             return parseFloat((bytes / Math.pow(1024, i)).toFixed(1)) + " " + sizes[i];
+        }
+
+        function rgbToHsl(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            return { h, s, l };
+        }
+
+        function hslToRgb(h, s, l) {
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1 / 3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1 / 3);
+            }
+            return {
+                r: Math.round(r * 255),
+                g: Math.round(g * 255),
+                b: Math.round(b * 255)
+            };
+        }
+
+        function adjustLightness({ r, g, b }, delta = 0.15) {
+            const { h, s, l } = rgbToHsl(r, g, b);
+            const nl = Math.max(0, Math.min(1, l + delta));
+            return hslToRgb(h, s, nl);
+        }
+
+        function rgbaStr({ r, g, b }, a) {
+            return `rgba(${r}, ${g}, ${b}, ${a})`;
+        }
+
+        function getAverageColorFromImage(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => {
+                    try {
+                        const canvas = document.createElement("canvas");
+                        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+                        const w = 24, h = 24;
+                        canvas.width = w;
+                        canvas.height = h;
+                        ctx.drawImage(img, 0, 0, w, h);
+                        const { data } = ctx.getImageData(0, 0, w, h);
+                        let r = 0, g = 0, b = 0, count = 0;
+
+                        for (let i = 0; i < data.length; i += 4 * 2) {
+                            const a = data[i + 3];
+                            if (a < 64) continue;
+                            r += data[i];
+                            g += data[i + 1];
+                            b += data[i + 2];
+                            count++;
+                        }
+                        if (!count) return reject("no_pixels");
+                        resolve({
+                            r: Math.round(r / count),
+                            g: Math.round(g / count),
+                            b: Math.round(b / count)
+                        });
+                    } catch (e) {
+                        reject(e);
+                    }
+                };
+                img.onerror = () => reject("load_error");
+                img.src = src;
+            });
+        }
+
+        function applyGradientToItemFromSrc(li, src, fallbackKey) {
+            getAverageColorFromImage(src).then(base => {
+                const light = adjustLightness(base, +0.18);
+                const dark = adjustLightness(base, -0.18);
+                li.style.backgroundImage = `linear-gradient(135deg, ${rgbaStr(light, 0.18)} 0%, ${rgbaStr(dark, 0.35)} 100%)`;
+                li.style.border = `1px solid ${rgbaStr(dark, 0.22)}`;
+                li.style.backdropFilter = 'blur(1px)';
+            }).catch(() => {
+                if (fallbackKey && folderGradientFallback[fallbackKey]) {
+                    li.style.backgroundImage = folderGradientFallback[fallbackKey];
+                    li.style.border = `1px solid rgba(255,255,255,0.06)`;
+                } else {
+                    li.style.backgroundImage = `linear-gradient(135deg, rgba(120,120,120,0.12), rgba(60,60,60,0.24))`;
+                    li.style.border = `1px solid rgba(255,255,255,0.05)`;
+                }
+            });
         }
 
         async function listFilesInFolder(folderId, container, path = "") {
@@ -257,8 +474,28 @@
                 }
 
                 const link = document.createElement("a");
-                const icon = document.createElement("img");
+                link.style.display = 'inline-block';
+                link.style.transformStyle = 'preserve-3d';
+                link.style.transition = 'transform 0.2s ease';
 
+                link.addEventListener('mousemove', (e) => {
+                    const rect = link.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const midX = rect.width / 2;
+                    const midY = rect.height / 2;
+
+                    const rotateX = ((y - midY) / midY) * 2;
+                    const rotateY = ((x - midX) / midX) * 2;
+
+                    link.style.transform = `translateX(1.5px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                });
+
+                link.addEventListener('mouseleave', () => {
+                    link.style.transform = 'translateX(0px) rotateX(0deg) rotateY(0deg) scale(1)';
+                });
+
+                const icon = document.createElement("img");
                 const fullPath = path ? `${path}/${file.name}` : file.name;
                 const iconKey = `${folderId}/${file.name}`;
                 icon.src = customIcons[iconKey] || customIcons[file.name] || file.iconLink;
@@ -305,7 +542,9 @@
                 arrow.innerHTML = `<path d="M9 5l7 7-7 7"/>`;
 
                 const icon = document.createElement("img");
-                icon.src = customFolderIcons[folder.id] || folder.iconLink;
+                icon.crossOrigin = "anonymous"; // enable color extraction for CORS-friendly sources
+                const iconSrc = customFolderIcons[folder.id] || folder.iconLink;
+                icon.src = iconSrc;
                 icon.alt = "";
                 icon.style.height = "20px";
                 icon.style.verticalAlign = "middle";
@@ -315,8 +554,11 @@
                 nameSpan.textContent = folder.name;
 
                 const folderBtn = document.createElement("button");
+                const tooltip = document.createElement("span");
                 folderBtn.className = "folder-open-button";
-                folderBtn.title = "Open in Google Drive";
+                tooltip.className = "custom-tooltip";
+                tooltip.textContent = "Download";
+                folderBtn.appendChild(tooltip);
                 folderBtn.onclick = (e) => {
                     e.stopPropagation();
                     window.open(`https://drive.google.com/drive/folders/${folder.id}`, "_blank");
@@ -329,16 +571,16 @@
                 btnIcon.setAttribute("fill", "none");
                 btnIcon.classList.add("icon-animated");
 
-                const folderPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                folderPath.setAttribute("d", "M10 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V8C22 6.9 21.1 6 20 6H12L10 4Z");
-                folderPath.setAttribute("fill", "rgba(255, 255, 255, 0.15)");
+                const trayPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                trayPath.setAttribute("d", "M5 20h14a1 1 0 0 0 1-1v-3h-2v2H6v-2H4v3a1 1 0 0 0 1 1z");
+                trayPath.setAttribute("fill", "rgba(255, 255, 255, 0.15)");
 
                 const arrowPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                arrowPath.setAttribute("d", "M14 9V11H17.59L11 17.59L12.41 19L19 12.41V16H21V9H14Z");
+                arrowPath.setAttribute("d", "M12 3v10.17l3.59-3.58L17 11l-5 5-5-5 1.41-1.41L11 13.17V3h2z");
                 arrowPath.setAttribute("fill", "rgba(255, 255, 255, 0.35)");
                 arrowPath.setAttribute("class", "arrow-part");
 
-                btnIcon.appendChild(folderPath);
+                btnIcon.appendChild(trayPath);
                 btnIcon.appendChild(arrowPath);
                 folderBtn.appendChild(btnIcon);
 
@@ -362,6 +604,9 @@
                 folderLink.appendChild(rightWrapper);
                 li.appendChild(folderLink);
 
+                // Apply gradient based on icon color (with fallback)
+                applyGradientToItemFromSrc(li, iconSrc, folder.id);
+
                 const subList = document.createElement("ul");
                 subList.style.marginLeft = "20px";
                 subList.style.display = "none";
@@ -374,6 +619,29 @@
                     const isOpen = subList.style.display === "block";
                     subList.style.display = isOpen ? "none" : "block";
                     arrow.classList.toggle("open", !isOpen);
+
+                    li.classList.toggle("folder-open", !isOpen);
+                });
+
+                nameSpan.style.display = 'inline-block';
+                nameSpan.style.transformStyle = 'preserve-3d';
+                nameSpan.style.transition = 'transform 0.2s ease';
+
+                nameSpan.addEventListener('mousemove', (e) => {
+                    const rect = nameSpan.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const midX = rect.width / 2;
+                    const midY = rect.height / 2;
+
+                    const rotateX = ((y - midY) / midY) * 2;
+                    const rotateY = ((x - midX) / midX) * 2;
+
+                    nameSpan.style.transform = `translateX(1.5px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                });
+
+                nameSpan.addEventListener('mouseleave', () => {
+                    nameSpan.style.transform = 'translateX(0px) rotateX(0deg) rotateY(0deg) scale(1)';
                 });
 
                 fetch(`https://www.googleapis.com/drive/v3/files?q='${folder.id}'+in+parents+and+trashed=false&fields=files(size,mimeType)&key=${apiKey}`)
