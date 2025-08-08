@@ -1,183 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <title>Home</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700;800&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Rubik', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
+    <style>
+        :root {
+            --bg-1: #0e0f12;
+            --bg-2: #15171c;
+            --text-1: #e6e7eb;
+            --text-2: #b4b8c3;
+            --accent: #6aa9ff;
+            --accent-2: #9e7bff;
+            --glass-bg: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --glass-inner: rgba(255, 255, 255, 0.35);
+            --radius-lg: 18px;
+            --radius-md: 14px;
+            --radius-sm: 10px;
+            --shadow-1: 0 8px 30px rgba(0, 0, 0, 0.45);
+            --shadow-2: 0 16px 60px rgba(0, 0, 0, 0.55);
+            --transition-fast: 140ms cubic-bezier(.2, .8, .2, 1);
+            --transition-slow: 600ms cubic-bezier(.2, .8, .2, 1);
+            --ring: 0 0 0 3px color-mix(in oklab, var(--accent) 40%, transparent);
+        }
 
-    html,
-    body {
-      height: 100%;
-      overflow: hidden;
-      background: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/MainBackground_1_1920x1080.png') no-repeat center/cover;
-      filter: blur(3px);
-      transform: scale(1.05);
-      z-index: -2;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    #particle-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-    }
+        html,
+        body {
+            height: 100%;
+        }
 
-    .container {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 40px;
-      max-width: 800px;
-      width: 100%;
-      padding: 20px 50px 50px;
-      margin: 0 auto;
-    }
+        body {
+            margin: 0;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            color: var(--text-1);
+            background: var(--bg-1);
+            line-height: 1.4;
+            overflow-x: hidden;
+        }
 
-    .title {
-      grid-column: 1 / -1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
+        #particle-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        }
 
-    .header-image {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
+        .bg {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            background-image: url("https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/MainBackground_1_5120x1440.png");
+            background-size: cover;
+            background-position: 50% 50%;
+            filter: blur(7px) brightness(1.7) grayscale(1.5) contrast(1.02);
+        }
 
-    .report-btn {
-      background: rgba(44, 47, 51, 0.15);
-      color: white;
-      font-weight: 800;
-      font-size: 64px;
-      letter-spacing: 2px;
-      padding: 40px 30px;
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      cursor: pointer;
-      text-transform: uppercase;
-      transition: all 0.2s ease;
-      width: 100%;
-      text-align: center;
-      filter: blur(0.5px);
-    }
+        .bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(1200px 600px at 70% 10%, rgba(0, 0, 0, 0.2), transparent 60%),
+                linear-gradient(to bottom, rgba(5, 6, 8, 0.55), rgba(5, 6, 8, 0.85));
+            pointer-events: none;
+        }
 
-    .report-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
-    }
+        @keyframes kenburns {
+            0% {
+                transform: scale(1.07) translate3d(0, 0, 0);
+                background-position: 48% 50%;
+            }
 
-    .overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      display: none;
-      z-index: 3;
-    }
+            100% {
+                transform: scale(1.15) translate3d(0, -1vh, 0);
+                background-position: 52% 46%;
+            }
+        }
 
-    .modal {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 850px;
-      background: transparent;
-      overflow: hidden;
-      display: none;
-      z-index: 4;
-      transition: height 0.2s ease;
-    }
+        @media (prefers-reduced-motion: reduce) {
+            .bg {
+                animation: none;
+            }
+        }
 
-    .iframe-wrapper {
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      position: relative;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-    }
+        .glass {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-1);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(14px) saturate(120%);
+            -webkit-backdrop-filter: blur(14px) saturate(120%);
+            position: relative;
+        }
 
-    .iframe-wrapper::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-      background: transparent;
-    }
+        .glass::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            pointer-events: none;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22);
+        }
 
-    .iframe-wrapper iframe {
-      position: absolute;
-      top: 0;
-      left: -17px;
-      width: calc(100% + 17px);
-      height: 100%;
-      border: none;
-      background: transparent;
-    }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto 64px;
+            padding: 0 16px;
+        }
 
-    .close-btn {
-      position: absolute;
-      top: 12px;
-      right: 16px;
-      background: #f04747;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 5px 10px;
-      cursor: pointer;
-      font-weight: bold;
-      z-index: 5;
-    }
-  </style>
+        .logo-section {
+            margin: 28px auto 18px;
+            padding: 28px;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            box-shadow: var(--shadow-2);
+        }
+
+        .button-section {
+            margin: 12px auto 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .logo-card {
+            --size: clamp(260px, 42vw, 520px);
+            width: var(--size);
+            height: calc(var(--size) * 0.6);
+            padding: 2px;
+            border-radius: 24px;
+            width: 50%;
+            height: 50%;
+            background:
+                url('https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/Header_Image.png') fixed  no-repeat center/cover !important;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 var(--glass-inner);
+            transition: transform 200ms ease;
+            transform: perspective(800px) rotateX(0) rotateY(0) translateY(-2px);
+        }
+
+        .logo-card:hover {
+            transform: perspective(800px) rotateX(0) rotateY(0) translateY(-2px);
+            box-shadow: 0 18px 56px rgba(0, 0, 0, 0.6), inset 0 1px 0 var(--glass-inner);
+        }
+
+        .logo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            user-select: none;
+        }
+
+        .btn {
+            --btn-bg: transparent;
+            --btn-text: var(--text-1);
+            --btn-border: rgba(255, 255, 255, 0.18);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 10px 14px;
+            min-height: 40px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--btn-border);
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            text-decoration: none;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+            transition:
+                transform var(--transition-fast),
+                background var(--transition-fast),
+                border-color var(--transition-fast),
+                color var(--transition-fast),
+                box-shadow var(--transition-fast),
+                filter var(--transition-fast);
+            position: relative;
+            isolation: isolate;
+        }
+
+        .btn::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.15), transparent 40%, transparent 60%, rgba(255, 255, 255, 0.05));
+            opacity: 0;
+            transition: opacity var(--transition-fast);
+            pointer-events: none;
+        }
+
+        .btn:hover::after {
+            opacity: 0.7;
+        }
+
+        .btn:hover {
+            transform: scale(1.03);
+            transition: transform 180ms ease;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn:focus-visible {
+            outline: none;
+            box-shadow: var(--ring);
+        }
+
+        .btn-lg {
+            min-height: 48px;
+            padding: 12px 18px;
+            border-radius: var(--radius-md);
+            font-size: 1.05rem;
+        }
+
+        .btn-primary {
+            --btn-bg: linear-gradient(180deg, color-mix(in oklab, var(--accent) 85%, #000 0%), color-mix(in oklab, var(--accent) 55%, #000 0%));
+            --btn-text: #0b1220;
+            --btn-border: color-mix(in oklab, var(--accent) 55%, #ffffff 0%);
+            color: #08101c;
+            text-shadow: 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-primary:hover {
+            filter: saturate(1.1);
+            box-shadow: 0 10px 28px color-mix(in oklab, var(--accent) 35%, transparent);
+        }
+
+        .btn-secondary {
+            --btn-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.10), rgba(255, 255, 255, 0.06));
+            --btn-border: rgba(255, 255, 255, 0.22);
+            color: var(--text-1);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+            border-color: rgba(255, 255, 255, 0.28);
+        }
+
+        .btn-ghost {
+            --btn-bg: transparent;
+            --btn-border: rgba(255, 255, 255, 0.14);
+            color: var(--text-2);
+        }
+
+        .btn-ghost:hover {
+            color: var(--text-1);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .footer {
+            max-width: 1200px;
+            margin: 32px auto 24px;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--text-2);
+        }
+
+        @media (max-width: 520px) {
+            .button-row a {
+                flex: 1 1 100%;
+            }
+
+            .button-row {
+                width: 100%;
+            }
+        }
+
+        .btn-glass-dark {
+            --btn-bg: linear-gradient(180deg, rgba(45, 45, 55, 0.55), rgba(35, 35, 45, 0.4));
+            --btn-border: rgba(255, 255, 255, 0.12);
+            --btn-text: #e0e0e6;
+            background: var(--btn-bg);
+            color: var(--btn-text);
+            border: 1px solid var(--btn-border);
+            border-radius: 14px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            text-decoration: none;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 4px 14px rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: background 160ms ease, transform 120ms ease;
+        }
+
+        .btn-glass-dark:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(180deg, rgba(55, 55, 65, 0.6), rgba(45, 45, 55, 0.5));
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+        }
+
+        .btn-glass-dark:active {
+            transform: translateY(1px);
+        }
+
+        .btn-glassy {
+        --bg-glass: rgba(255,255,255,0.05);
+        --border-glass: rgba(255,255,255,0.12);
+        --text: #e1e2e7;
+        background: var(--bg-glass);
+        color: var(--text);
+        border: 1px solid var(--border-glass);
+        border-radius: 16px;
+        padding: 16px 24px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        text-decoration: none;
+        transition: transform 160ms ease, background 160ms ease;
+        }
+
+        .btn-glassy:hover {
+        transform: translateY(-2px);
+        background: rgba(255,255,255,0.08);
+        }
+
+        .btn-glassy:active {
+        transform: translateY(1px);
+        }
+    </style>
 </head>
-
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JustKaarlo's</title>
+  <link rel="preload" as="image" href="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/MainBackground_1_5120x1440.png">
+  <link rel="preload" as="image" href="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/Header_Image.png"><link rel="stylesheet" href="styles.css" />
+</head>
 <body>
-  <canvas id="particle-canvas"></canvas>
-  <div class="container">
-    <div class="title">
-      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/Header_Image.png" alt="Header" class="header-image" />
-    </div>
-    <button class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/mods', '_blank')">MODS</button>
-    <button class="report-btn" onclick="window.open('https://sites.google.com/view/justkaarlos/roleplay/Reports', '_blank')">REPORTS</button>
-  </div>
-  <div class="overlay" id="overlay" onclick="closeModal()"></div>
-  <div class="modal" id="modal">
-    <button class="close-btn" onclick="closeModal()">Close</button>
-    <div class="iframe-wrapper">
-      <iframe id="modal-frame"></iframe>
-    </div>
-  </div>
-  <script>
-    // Particle background
+ <canvas id="particle-canvas"></canvas>
+  <div class="bg" aria-hidden="true"></div>
+    <main class="container">
+        <div class="logo-card" style="margin: 50px auto 0 auto; text-align: center;">
+        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/Header_Image.png" alt="Logo Card Image" />
+        </div>
+    </main>
+    <main class="container" style="width: 400px; margin-top: 150px;">
+        <div class="button-row" style="height: 100px; margin-top: -17px; flex-direction: column; gap: 40px;">
+        <a class="btn-glassy" style="font-size: 50px; font-weight: 700; margin-left: -100px; font-display: auto;" href="https://sites.google.com/view/justkaarlos/mods"> MODS </a>
+        <a class="btn-glassy" style="font-size: 50px; font-weight: 700;" href="https://sites.google.com/view/justkaarlos/roleplay/Reports"> REPORTS </a>
+        </div>
+    </main>
+    <script>
     const canvas = document.getElementById('particle-canvas');
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -235,40 +423,25 @@
     initParticles();
     animateParticles();
 
-    // Modal logic
-    const modal = document.getElementById('modal');
-    const iframe = document.getElementById('modal-frame');
-    const overlay = document.getElementById('overlay');
-    function openModal(src) {
-      overlay.style.display = 'block';
-      modal.style.display = 'block';
-      iframe.onload = () => {
-        const maxH = window.innerHeight * 0.95;
-        let h;
-        try {
-          const doc = iframe.contentDocument || iframe.contentWindow.document;
-          h = Math.min(doc.documentElement.scrollHeight, maxH);
-          doc.documentElement.style.scrollbarWidth = 'none';
-          doc.documentElement.style.msOverflowStyle = 'none';
-          doc.body.style.scrollbarWidth = 'none';
-          doc.body.style.msOverflowStyle = 'none';
-          const styleTag = doc.createElement('style');
-          styleTag.textContent = `html::-webkit-scrollbar, body::-webkit-scrollbar {width:0; height:0; background: transparent;}`;
-          doc.head.appendChild(styleTag);
-        } catch {
-          h = maxH;
-        }
-        modal.style.height = h + 'px';
-      };
-      iframe.src = src;
-    }
+    const logoCard = document.querySelector('.logo-card');
 
-    function closeModal() {
-      modal.style.display = 'none';
-      overlay.style.display = 'none';
-      iframe.src = '';
-      modal.style.height = '';
-    }
-  </script>
+    logoCard.addEventListener('mousemove', (e) => {
+        const rect = logoCard.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+
+        const rotateX = -(y - centerY) / 150;
+        const rotateY = (x - centerX) / 150;
+
+        logoCard.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(0.98)`;
+    });
+
+    logoCard.addEventListener('mouseleave', () => {
+        logoCard.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) scale(1)';
+    });
+    </script>
 </body>
 </html>
