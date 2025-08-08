@@ -495,6 +495,39 @@
           fileEntry.appendChild(sizeTag);
         }
 
+        if (!path) {
+          const downloadBtn = document.createElement("button");
+          downloadBtn.className = "folder-open-button";
+          downloadBtn.onclick = () => window.open(file.webViewLink, "_blank");
+
+          const tooltip = document.createElement("span");
+          tooltip.className = "custom-tooltip";
+          tooltip.textContent = "Download";
+          downloadBtn.appendChild(tooltip);
+
+          const btnIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          btnIcon.setAttribute("width", "16");
+          btnIcon.setAttribute("height", "16");
+          btnIcon.setAttribute("viewBox", "0 0 24 24");
+          btnIcon.setAttribute("fill", "none");
+          btnIcon.classList.add("icon-animated");
+
+          const trayPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          trayPath.setAttribute("d", "M5 20h14a1 1 0 0 0 1-1v-3h-2v2H6v-2H4v3a1 1 0 0 0 1 1z");
+          trayPath.setAttribute("fill", "rgba(255, 255, 255, 0.15)");
+
+          const arrowPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          arrowPath.setAttribute("d", "M12 3v10.17l3.59-3.58L17 11l-5 5-5-5 1.41-1.41L11 13.17V3h2z");
+          arrowPath.setAttribute("fill", "rgba(255, 255, 255, 0.35)");
+          arrowPath.setAttribute("class", "arrow-part");
+
+          btnIcon.appendChild(trayPath);
+          btnIcon.appendChild(arrowPath);
+          downloadBtn.appendChild(btnIcon);
+
+          fileEntry.appendChild(downloadBtn);
+        }
+
         li.appendChild(fileEntry);
         container.appendChild(li);
       }
