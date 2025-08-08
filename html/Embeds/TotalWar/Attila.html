@@ -2,9 +2,9 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Total War ATTILA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
     <style>
         body {
             overflow: hidden;
@@ -94,6 +94,16 @@
             white-space: nowrap;
         }
 
+        .file-count-tag {
+            background: rgba(120, 120, 120, 0.25);
+            color: rgb(200, 200, 200);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 6px;
+            white-space: nowrap;
+        }
+
         .file-entry {
             display: flex;
             align-items: center;
@@ -101,16 +111,16 @@
         }
 
         .folder-arrow {
-        width: 12px;
-        height: 12px;
-        margin-right: 6px;
-        transition: transform 0.2s ease;
-        fill: #ccc;
-        flex-shrink: 0;
+            width: 12px;
+            height: 12px;
+            margin-right: 6px;
+            transition: transform 0.2s ease;
+            fill: #ccc;
+            flex-shrink: 0;
         }
-        
+
         .folder-arrow.open {
-        transform: rotate(90deg);
+            transform: rotate(90deg);
         }
 
         .folder-entry {
@@ -122,7 +132,8 @@
         }
 
         .folder-open-button {
-            background: rgba(255, 255, 255, 0.05); /* very faint white */
+            background: rgba(255, 255, 255, 0.05);
+            /* very faint white */
             border: none;
             padding: 6px;
             margin-left: 10px;
@@ -136,7 +147,8 @@
         }
 
         .folder-open-button:hover {
-            background: rgba(255, 255, 255, 0.12); /* subtle light on hover */
+            background: rgba(255, 255, 255, 0.12);
+            /* subtle light on hover */
         }
 
         .folder-open-button svg {
@@ -145,11 +157,13 @@
         }
 
         .folder-open-button svg path:first-child {
-            fill: rgba(255, 255, 255, 0.15); /* faint folder shape */
+            fill: rgba(255, 255, 255, 0.15);
+            /* faint folder shape */
         }
 
         .folder-open-button svg path.arrow-part {
-            fill: rgba(255, 255, 255, 0.35); /* slightly stronger arrow */
+            fill: rgba(255, 255, 255, 0.35);
+            /* slightly stronger arrow */
         }
 
         .icon-animated .arrow-part {
@@ -166,8 +180,10 @@
 </head>
 
 <body>
-    <h1><img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Attila"
-            style="height: 24px; vertical-align: middle; margin-right: 8px;">Attila</h1>
+    <h1>
+        <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png" alt="Attila"
+            style="height: 24px; vertical-align: middle; margin-right: 8px;" />Attila
+    </h1>
     <ul id="fileList">Loading...</ul>
 
     <script>
@@ -364,10 +380,20 @@
                     .then(res => res.json())
                     .then(data => {
                         if (!data.files) return;
+
+                        const fileCount = data.files.filter(f => f.mimeType !== "application/vnd.google-apps.folder").length;
+
                         const totalSize = data.files
                             .filter(f => f.size)
                             .reduce((sum, f) => sum + parseInt(f.size), 0);
+
                         sizeTag.textContent = formatBytes(totalSize);
+
+                        const countTag = document.createElement("span");
+                        countTag.className = "file-count-tag";
+                        countTag.textContent = `${fileCount} Part${fileCount !== 1 ? "s" : ""}`;
+
+                        rightWrapper.insertBefore(countTag, folderBtn);
                     });
 
                 container.appendChild(li);
@@ -377,4 +403,5 @@
         listFilesInFolder(rootFolderId, document.getElementById("fileList"));
     </script>
 </body>
+
 </html>
