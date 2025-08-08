@@ -361,8 +361,8 @@
     </main>
     <main class="container" style="width: 400px; margin-top: 150px;">
         <div class="button-row" style="height: 100px; margin-top: -17px; flex-direction: column; gap: 40px;">
-        <a class="btn-glassy" style="font-size: 50px; font-weight: 700; margin-left: -100px; font-display: auto;" href="https://sites.google.com/view/justkaarlos/mods"> MODS </a>
-        <a class="btn-glassy" style="font-size: 50px; font-weight: 700;" href="https://sites.google.com/view/justkaarlos/roleplay/Reports"> REPORTS </a>
+        <a class="btn-glassy" style="font-size: 50px; font-weight: 700; margin-left: -100px; font-display: auto;" onclick="window.open('https://sites.google.com/view/justkaarlos/mods','_blank')"> MODS </a>
+        <a class="btn-glassy" style="font-size: 50px; font-weight: 700;" onclick="window.open('https://sites.google.com/view/justkaarlos/roleplay/Reports','_blank')"> REPORTS </a>
         </div>
     </main>
     <script>
@@ -385,8 +385,8 @@
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.size = Math.random() * 2 + 1;
-        this.vx = (Math.random() - 0.5) * 0.3;
-        this.vy = (Math.random() - 0.5) * 0.3;
+        this.vx = (Math.random() - 0.5) * 0.13;
+        this.vy = (Math.random() - 0.5) * 0.13;
       }
       update() {
         this.x += this.vx;
@@ -405,7 +405,7 @@
 
     function initParticles() {
       particles = [];
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 25; i++) {
         particles.push(new Particle());
       }
     }
