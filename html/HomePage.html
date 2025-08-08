@@ -315,32 +315,36 @@
         }
 
         .btn-glassy {
-        --bg-glass: rgba(255,255,255,0.05);
-        --border-glass: rgba(255,255,255,0.12);
-        --text: #e1e2e7;
-        background: var(--bg-glass);
-        color: var(--text);
-        border: 1px solid var(--border-glass);
-        border-radius: 16px;
-        padding: 16px 24px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        letter-spacing: 0.4px;
-        display: inline-flex;
-        align-items: center;
-        gap: 10px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-        text-decoration: none;
-        transition: transform 160ms ease, background 160ms ease;
+            --bg-glass: rgba(255,255,255,0.05);
+            --border-glass: rgba(255,255,255,0.12);
+            --text: #e1e2e7;
+            background: var(--bg-glass);
+            color: var(--text);
+            border: 1px solid var(--border-glass);
+            border-radius: 16px;
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            text-decoration: none;
+            transition: transform 160ms ease, background 160ms ease;
         }
 
         .btn-glassy:hover {
-        transform: translateY(-2px);
-        background: rgba(255,255,255,0.08);
+            transform: translateY(-2px);
+            background: rgba(255,255,255,0.08);
         }
 
         .btn-glassy:active {
-        transform: translateY(1px);
+            transform: translateY(1px);
+        }
+        
+        a.btn-glassy {
+            cursor: pointer;
         }
     </style>
 </head>
