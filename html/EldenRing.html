@@ -47,6 +47,7 @@
             margin-bottom: 15px;
             user-select: none;
             filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.7));
+            position: fixed;
         }
 
         h1 {
@@ -83,27 +84,26 @@
         }
 
         #fileList {
-            position: static;
-            width: 80vw;
-            max-width: 900px;
-            height: 80vh;
+            position: sticky;
+            width: 500px;
+            height: auto;
             border: 1px solid rgba(255, 255, 255, 0.15);
             border-radius: 16px;
             backdrop-filter: blur(7px) brightness(0.9);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
             top: 0;
             left: 0;
-            width: 500px;
-            height: fit-content;
             background: rgba(0, 0, 0, 0.25);
             z-index: 95;
             padding-bottom: 5px;
             padding-top: 5px;
             padding-left: 20px;
             padding-right: 20px;
+            scale: 95% 95%;
         }
 
         #fileList li {
+            position: sticky;
             font-size: 15px;
             font-weight: 600;
             z-index: 100;
@@ -422,9 +422,9 @@
 
 <body>
     <div id="particles-js"></div>
-    <img id="customIcon" src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/EldenRing_Logo.png"
+    <img id="customIcon" style="margin-bottom: 570px;" src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/EldenRing_Logo.png"
         alt="Elden Ring Icon" />
-    <ul id="fileList">Loading...</ul>
+    <ul id="fileList" style="margin-top: 290px;">Loading...</ul>
 
     <div id="docModal">
         <div>
@@ -432,7 +432,7 @@
             <iframe id="docFrame" src=""></iframe>
         </div>
     </div>
-    <div class="manager-disclaimer" style="margin-top: 50px;">
+    <div class="manager-disclaimer" style="margin-bottom: 50px;">
         <div class="manager-disclaimer-icon-custom">!</div>
         <div>
             I haven't developed any of the content listed here.<br>
