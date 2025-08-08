@@ -31,7 +31,6 @@
             margin: 8px 0;
             padding: 6px 12px;
             background-color: rgba(255, 255, 255, 0.1);
-            /* switched to background-color */
             border-radius: 6px;
         }
 
@@ -62,13 +61,11 @@
             margin: 8px 0;
             padding: 6px 12px;
             background-color: rgba(96, 95, 95, 0.05);
-            /* switched to background-color */
             border-radius: 6px;
             backdrop-filter: blur(1px);
             transition:
                 transform 0.15s ease,
                 background-color 0.2s ease;
-            /* track color only */
             will-change: transform;
             font-weight: 500;
             font-size: 14px;
@@ -79,12 +76,10 @@
 
         #fileList li.folder-open {
             background-color: rgba(255, 255, 255, 0.055);
-            /* switched to background-color */
         }
 
         #fileList li:hover:not(:has(.folder-open-button:hover)) {
             background-color: rgba(255, 255, 255, 0.055);
-            /* switched to background-color */
         }
 
         #fileList::-webkit-scrollbar {
