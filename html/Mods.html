@@ -374,43 +374,79 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.7);
       z-index: 9999;
       justify-content: center;
       align-items: center;
+      padding: 20px;
     }
+    
     #docModal > div {
       position: relative;
-      width: 50px;
-      height: auto;
-      background: #222;
-      border-radius: 8px;
-      box-shadow: 0 0 15px #000;
+      width: 90vw;
+      max-width: 1200px;
+      height: 85vh;
+      background: rgba(40, 40, 40, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
-      scrollbar-width: none;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
+    
     #closeModal {
       position: absolute;
-      top: 8px;
-      right: 8px;
-      background: #f33;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 51, 51, 0.8);
       border: none;
       color: white;
-      font-size: 16px;
+      font-size: 18px;
+      font-weight: bold;
       cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 4px;
+      padding: 8px 12px;
+      border-radius: 8px;
       z-index: 10000;
+      transition: background 0.2s ease, transform 0.1s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
+    
+    #closeModal:hover {
+      background: rgba(255, 51, 51, 1);
+      transform: scale(1.05);
+    }
+    
     #docFrame {
       flex: 1;
       border: none;
       border-radius: 8px;
+      margin: 10px;
+      margin-top: 50px;
+      background: white;
     }
 
     .elden-custom-size { width: 500px !important; height: auto !important; }
     .spacer { height: 40px; }
+    
+    /* Add some responsive behavior for smaller screens */
+    @media (max-width: 768px) {
+      #docModal > div {
+        width: 95vw;
+        height: 90vh;
+      }
+      
+      #docModal {
+        padding: 10px;
+      }
+      
+      #closeModal {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -451,7 +487,7 @@
 
       <div id="docModal">
         <div>
-          <button id="closeModal">X</button>
+          <button id="closeModal">×</button>
           <iframe id="docFrame" src=""></iframe>
         </div>
       </div>
@@ -995,6 +1031,22 @@
     document.getElementById("closeModal").addEventListener("click", function () {
       document.getElementById("docModal").style.display = "none";
       document.getElementById("docFrame").src = "";
+    });
+
+    // Close modal when clicking outside the modal content
+    document.getElementById("docModal").addEventListener("click", function (e) {
+      if (e.target === this) {
+        document.getElementById("docModal").style.display = "none";
+        document.getElementById("docFrame").src = "";
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && document.getElementById("docModal").style.display === "flex") {
+        document.getElementById("docModal").style.display = "none";
+        document.getElementById("docFrame").src = "";
+      }
     });
 
     (function initializeFileLists() {
