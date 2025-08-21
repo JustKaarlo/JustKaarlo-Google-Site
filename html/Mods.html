@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Mods</title>
+  <title>Total War + Elden Ring (Merged with Smooth Transition)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
@@ -154,7 +154,6 @@
       padding: 6px 12px;
       background-color: rgba(96, 95, 95, 0.05);
       border-radius: 6px;
-      backdrop-filter: blur(1px) contrast(4.9px);
       transition:
           transform 0.15s ease,
           background-color 0.2s ease;
@@ -167,6 +166,9 @@
       height: auto;
       scrollbar-width: none;
       overflow-y: auto;
+      border: none;
+      box-shadow: none;
+      outline: none;
     }
 
     .file-list li.folder-open { background-color: var(--tile-bg-hover); }
@@ -177,17 +179,21 @@
 
     .file-list li.highlighted {
       background: var(--tile-highlight);
-      backdrop-filter: blur(50px);
       color: var(--text-main);
       transition: background 0.3s ease;
-      backdrop-filter: brightness(-0.5);
       font-weight: 600;
       cursor: pointer;
+      border: none;
+      box-shadow: none;
+      outline: none;
     }
 
     .file-list li.highlighted:hover {
+      background: rgba(128, 128, 128, 0.12);
       transition: transform 0.15s ease, background 0.1s ease-in;
       will-change: transform;
+      border: none;
+      box-shadow: none;
     }
 
     .file-entry {
@@ -372,43 +378,79 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.7);
       z-index: 9999;
       justify-content: center;
       align-items: center;
+      padding: 20px;
     }
+    
     #docModal > div {
       position: relative;
-      width: 50px;
-      height: auto;
-      background: #222;
-      border-radius: 8px;
-      box-shadow: 0 0 15px #000;
+      width: 90vw;
+      max-width: 1200px;
+      height: 85vh;
+      background: rgba(40, 40, 40, 0.95);
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
       display: flex;
       flex-direction: column;
-      scrollbar-width: none;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
+    
     #closeModal {
       position: absolute;
       top: 8px;
-      right: 8px;
-      background: #f33;
+      right: 15px;
+      background: rgba(255, 51, 51, 0.8);
       border: none;
       color: white;
-      font-size: 16px;
+      font-size: 18px;
+      font-weight: bold;
       cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 4px;
+      padding: 7px 10px;
+      border-radius: 8px;
       z-index: 10000;
+      transition: background 0.2s ease, transform 0.1s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
+    
+    #closeModal:hover {
+      background: rgba(255, 51, 51, 1);
+      transform: scale(1.05);
+    }
+    
     #docFrame {
       flex: 1;
       border: none;
       border-radius: 8px;
+      margin: 10px;
+      margin-top: 50px;
+      background: white;
     }
 
     .elden-custom-size { width: 500px !important; height: auto !important; }
     .spacer { height: 40px; }
+    
+    /* Add some responsive behavior for smaller screens */
+    @media (max-width: 768px) {
+      #docModal > div {
+        width: 95vw;
+        height: 90vh;
+      }
+      
+      #docModal {
+        padding: 10px;
+      }
+      
+      #closeModal {
+        top: 10px;
+        right: 10px;
+        padding: 6px 10px;
+        font-size: 16px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -449,7 +491,7 @@
 
       <div id="docModal">
         <div>
-          <button id="closeModal">X</button>
+          <button id="closeModal">×</button>
           <iframe id="docFrame" src=""></iframe>
         </div>
       </div>
@@ -710,7 +752,7 @@
         if (highlightFiles.includes(file.name)) li.classList.add("highlighted");
 
         const link = document.createElement("a");
-        link.href = getDownloadUrl(file, apiKey);
+        link.href = file.webViewLink;
         link.target = "_blank";
 
         link.addEventListener('mousemove', (e) => {
@@ -993,6 +1035,22 @@
     document.getElementById("closeModal").addEventListener("click", function () {
       document.getElementById("docModal").style.display = "none";
       document.getElementById("docFrame").src = "";
+    });
+
+    // Close modal when clicking outside the modal content
+    document.getElementById("docModal").addEventListener("click", function (e) {
+      if (e.target === this) {
+        document.getElementById("docModal").style.display = "none";
+        document.getElementById("docFrame").src = "";
+      }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && document.getElementById("docModal").style.display === "flex") {
+        document.getElementById("docModal").style.display = "none";
+        document.getElementById("docFrame").src = "";
+      }
     });
 
     (function initializeFileLists() {
