@@ -1,362 +1,1061 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pages</title>
-  <style>
-    :root {
-      --bg-1: #0e0f12;
-      --bg-2: #15171c;
-      --glass: rgba(255,255,255,0.04);
-      --text-1: #e7e9ee;
-      --text-2: #aeb4c2;
-      --acc: #69a7ff;
-      --ok: #7ee787;
-      --danger: #ff7b72;
-      --muted: #2a2f3a;
-      --shadow: 0 10px 30px rgba(0,0,0,0.35);
-      --radius: 16px;
-    }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0; font: 14px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--text-1); background: radial-gradient(1200px 800px at 20% -10%, #1b2030, #0d0f14) fixed;
-    }
-    .wrap { max-width: 1100px; margin: 40px auto; padding: 0 16px; }
-    header {
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.08);
-      backdrop-filter: blur(8px);
-      border-radius: var(--radius);
-      padding: 18px 20px; box-shadow: var(--shadow);
-      display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center;
-    }
-    header h1 { margin: 0; font-size: 18px; font-weight: 600; color: var(--text-1); }
-    header .meta { color: var(--text-2); font-size: 12px; }
+    <meta charset="UTF-8" />
+    <title>Pages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: url("https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/BackgroundWithoutGrid.png");
+            background-size: cover;
+            font-family: 'Rubik', sans-serif;
+            color: #eeebebbe;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
 
-    .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-    .btn {
-      padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
-      background: var(--glass); color: var(--text-1); cursor: pointer;
-    }
-    .btn:hover { border-color: rgba(255,255,255,0.22); }
-    .input {
-      background: var(--bg-2); color: var(--text-1); border: 1px solid rgba(255,255,255,0.1);
-      padding: 8px 10px; border-radius: 10px; min-width: 160px;
-    }
+        .main-frame {
+            width: 90%;
+            max-width: 800px;
+            min-height: 80vh;
+            max-height: 95vh;
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            overflow: hidden;
+            position: relative;
+            transition: height 0.3s ease, max-height 0.3s ease;
+        }
 
-    nav.breadcrumbs {
-      margin: 18px 0 10px; font-size: 13px; color: var(--text-2);
-    }
-    nav.breadcrumbs a { color: var(--acc); text-decoration: none; }
-    nav.breadcrumbs .sep { color: var(--text-2); margin: 0 6px; }
+        .main-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.05) 0%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.02) 100%);
+            border-radius: 20px;
+            pointer-events: none;
+        }
 
-    .panel {
-      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
+        h1 {
+            font-size: 28px;
+            margin: 0 0 20px 0;
+            color: #ffffff;
+            text-align: center;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
 
-    table {
-      width: 100%; border-collapse: collapse; overflow: hidden;
-    }
-    thead th {
-      text-align: left; font-size: 12px; font-weight: 600; color: var(--text-2);
-      padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.02);
-    }
-    tbody td {
-      padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    tbody tr:hover { background: rgba(255,255,255,0.03); }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
 
-    .nameCell { display: flex; align-items: center; gap: 10px; }
-    .pill { font-size: 11px; padding: 4px 8px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: var(--glass); color: var(--text-2); }
+        li {
+            margin: 8px 0;
+            padding: 6px 12px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+        }
 
-    .status { margin-top: 12px; color: var(--text-2); font-size: 13px; }
-    .error { color: var(--danger); }
+        a {
+            color: #eeebebbe;
+            text-decoration: none;
+        }
 
-    footer { margin: 18px 0 60px; color: var(--text-2); font-size: 12px; text-align: center; }
-    a { color: var(--acc); }
-    .hidden { display: none !important; }
-  </style>
+        a:hover {
+            text-decoration: none;
+            color: rgba(253, 255, 255, 0.72) !important;
+        }
+
+        li img {
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        #fileList {
+            height: calc(80vh - 120px);
+            overflow-y: auto;
+            padding-right: 10px;
+            scrollbar-width: none;
+            margin: 15px 0;
+        }
+
+        #fileList li {
+            margin: 8px 0;
+            padding: 6px 12px;
+            background-color: rgba(96, 95, 95, 0.05);
+            border-radius: 6px;
+            backdrop-filter: blur(1px);
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 14px;
+            font-family: 'Poppins', monospace;
+            color: #eeebebbe;
+            cursor: pointer;
+        }
+
+        #fileList li.folder-open {
+            background-color: rgba(255, 255, 255, 0.055);
+        }
+
+        #fileList li:hover:not(:has(.folder-open-button:hover)):not(:has(.folder-raw-button:hover)) {
+            background-color: rgba(255, 255, 255, 0.055);
+        }
+
+        #fileList::-webkit-scrollbar {
+            display: none;
+        }
+
+        #fileList li.highlighted {
+            background: rgba(128, 128, 128, 0.09);
+            backdrop-filter: blur(50px);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            color: #eeebebbe;
+            transition: background 0.3s ease;
+            backdrop-filter: brightness(-0.5);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        #fileList li.highlighted:hover {
+            border: 1.5px solid rgba(128, 128, 128, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        #fileList li.folder-entry span,
+        #fileList li .file-entry a {
+            display: inline-block;
+            transform-style: preserve-3d;
+            transition: transform 0.15s ease;
+        }
+
+        .file-size-tag {
+            background: rgba(120, 120, 120, 0.25);
+            color: rgba(170, 170, 170, 0.8);
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-left: auto;
+            white-space: nowrap;
+            font-family: 'Poppins', monospace;
+            font-weight: 600;
+        }
+
+        .file-count-tag {
+            background: rgba(120, 120, 120, 0.25);
+            color: rgba(170, 170, 170, 0.8);
+            padding: 2px 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-left: 6px;
+            white-space: nowrap;
+            font-family: 'Poppins', monospace;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .file-entry {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-entry:hover a {
+            color: rgba(253, 255, 255, 0.72);
+        }
+
+        .file-entry img:hover,
+        .folder-entry img:hover {
+            filter: brightness(1.2);
+            transform: scale(1.1);
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+
+        li.folder-open .folder-entry img {
+            filter: brightness(1.3);
+            transform: scale(1.1);
+        }
+
+        .folder-arrow {
+            width: 12px;
+            height: 12px;
+            margin-right: 6px;
+            transition: transform 0.2s ease;
+            fill: #9b9b9bc9;
+            flex-shrink: 0;
+        }
+
+        .folder-arrow.open {
+            transform: rotate(90deg);
+        }
+
+        .folder-entry {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            color: #eeebebbe;
+            position: relative;
+        }
+
+        .folder-entry:hover {
+            color: rgba(253, 255, 255, 0.75);
+            cursor: pointer;
+        }
+
+        .folder-open-button,
+        .folder-raw-button {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            padding: 6px;
+            margin-left: 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .folder-open-button:first-child {
+            margin-left: 10px;
+        }
+
+        .folder-open-button:hover,
+        .folder-raw-button:hover {
+            background: rgba(255, 255, 255, 0.12);
+            filter: brightness(1.2);
+            transform: scale(1.05);
+        }
+
+        .folder-open-button svg,
+        .folder-raw-button svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .folder-open-button svg path,
+        .folder-raw-button svg path {
+            fill: rgba(170, 170, 170, 0.7);
+            transition: fill 0.2s ease;
+        }
+
+        .folder-open-button:hover svg path,
+        .folder-raw-button:hover svg path {
+            fill: rgba(170, 170, 170, 0.9);
+        }
+
+        .button-group {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .custom-tooltip {
+            position: absolute;
+            bottom: 15px;
+            left: -20px;
+            transform: translateX(-50%);
+            background: rgba(50, 50, 50, 0.6);
+            color: rgba(161, 161, 161, 0.79);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            font-weight: 700;
+            font-family: 'Poppins', monospace;
+            transition: opacity 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+            z-index: 10;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .folder-open-button:hover .custom-tooltip,
+        .folder-raw-button:hover .custom-tooltip {
+            opacity: 1;
+            transition-delay: 150ms;
+        }
+
+        .sub-list {
+            margin-left: 20px;
+            margin-top: 8px;
+            border-left: 2px solid rgba(255, 255, 255, 0.1);
+            padding-left: 15px;
+        }
+
+        .sub-list li {
+            margin: 6px 0;
+        }
+
+        .hide-size-tag .file-size-tag {
+            display: none !important;
+        }
+
+        .hide-count-tag .file-count-tag {
+            display: none !important;
+        }
+
+        /* Performance optimizations */
+        * {
+            box-sizing: border-box;
+        }
+
+        .main-frame {
+            contain: layout style;
+        }
+
+        #fileList {
+            contain: layout style;
+        }
+
+        .file-entry, .folder-entry {
+            contain: layout;
+        }
+    </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <header>
-      <div>
-        <h1 id="title">Repo Browser</h1>
-        <div class="meta" id="subtitle">List files and folders from any GitHub repo.</div>
-      </div>
-      <div class="controls">
-        <input class="input" id="ownerInput" placeholder="owner" />
-        <input class="input" id="repoInput" placeholder="repo" />
-        <input class="input" id="branchInput" placeholder="branch (optional)" />
-        <button class="btn" id="goBtn">Load</button>
-        <a class="btn" id="openOnGitHub" href="#" target="_blank" rel="noreferrer">Open on GitHub</a>
-      </div>
-    </header>
-
-    <nav class="breadcrumbs" id="breadcrumbs"></nav>
-
-    <div class="panel">
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Size</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="rows"></tbody>
-      </table>
+    <div class="main-frame">
+        <h1>
+            <img src="https://uxwing.com/wp-content/themes/uxwing/download/brands-and-social-media/github-white-icon.png" alt="Pages"
+                style="height: 32px; vertical-align: middle; margin-right: 12px; margin-bottom: 4px;"/>Pages</h1>
+        <ul id="fileList"></ul>
     </div>
 
-    <div class="status" id="status"></div>
+    <script>
+        const fileStructure = [
+            {
+                type: "file",
+                name: "index.html",
+                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/index.html",
+                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/index.html",
+                size: 0,
+                icon: "https://cdn-icons-png.flaticon.com/256/11133/11133898.png",
+                highlighted: true,
+                showOpenButton: true,
+                showRawButton: true,
+                showSizeTag: false
+            },
+            {
+                type: "file",
+                name: "Home.html",
+                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Home.html",
+                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Home.html",
+                size: 0,
+                icon: "https://cdn-icons-png.flaticon.com/256/11133/11133898.png",
+                highlighted: true,
+                showOpenButton: true,
+                showRawButton: true,
+                showSizeTag: false
+            },
+            {
+                type: "file",
+                name: "Mods.html",
+                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Mods.html",
+                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Mods.html",
+                size: 0,
+                icon: "https://cdn-icons-png.flaticon.com/256/11133/11133898.png",
+                highlighted: true,
+                showOpenButton: true,
+                showRawButton: true,
+                showSizeTag: false
+            },
+            {
+                type: "file",
+                name: "Reports.html",
+                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports.html",
+                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Reports.html",
+                size: 0,
+                icon: "https://cdn-icons-png.flaticon.com/256/11133/11133898.png",
+                highlighted: true,
+                showOpenButton: true,
+                showRawButton: true,
+                showSizeTag: false
+            },
+            {
+                type: "folder",
+                name: "Embeds",
+                icon: "https://www.adenin.com/assets/logos/iframe.svg",
+                openUrl: "https://github.com/JustKaarlo/JustKaarlo-Google-Site/tree/6edc424da73f00e154c1fc637375469d2f432bfe/html/Embeds",
+                rawUrl: "https://your-download-link.com/new-file",
+                highlighted: false,
+                showOpenButton: true,
+                showRawButton: false,
+                showSizeTag: false,
+                showCountTag: true,
+                files: [
+                    {
+                        type: "folder",
+                        name: "Total War",
+                        icon: "https://tobebright.com/wp-content/uploads/edd/2022/01/Charcoal.png",
+                        openUrl: "https://github.com/JustKaarlo/JustKaarlo-Google-Site/tree/6edc424da73f00e154c1fc637375469d2f432bfe/html/Embeds/TotalWar",
+                        highlighted: false,
+                        showOpenButton: true,
+                        showRawButton: false,
+                        showSizeTag: false,
+                        showCountTag: true,
+                        files: [
+                            {
+                                type: "file",
+                                name: "Attila.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Attila.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Embeds/TotalWar/Attila.html",
+                                size: 0,
+                                icon: "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Attila.png",
+                                highlighted: true,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            },
+                            {
+                                type: "file",
+                                name: "Empire.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Empire.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Embeds/TotalWar/Empire.html",
+                                size: 0,
+                                icon: "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Empire.png",
+                                highlighted: true,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            },
+                            {
+                                type: "file",
+                                name: "Napoleon.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Napoleon.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Embeds/TotalWar/Napoleon.html",
+                                size: 0,
+                                icon: "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Napoleon.png",
+                                highlighted: true,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            },
+                            {
+                                type: "file",
+                                name: "RomeII.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/RomeII.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Embeds/TotalWar/RomeII.html",
+                                size: 0,
+                                icon: "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_RomeII.png",
+                                highlighted: true,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            },
+                            {
+                                type: "file",
+                                name: "Shogun2.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Shogun2.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Embeds/TotalWar/Shogun2.html",
+                                size: 0,
+                                icon: "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Shogun2.png",
+                                highlighted: true,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            },
+                            {
+                                type: "file",
+                                name: "Thrones.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Embeds/TotalWar/Thrones.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Embeds/TotalWar/Thrones.html",
+                                size: 0,
+                                icon: "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/TotalWar_Thrones.png",
+                                highlighted: true,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            }
+                        ]
+                    },
+                    {
+                        type: "folder",
+                        name: "Reports",
+                        icon: "https://tobebright.com/wp-content/uploads/edd/2022/01/Charcoal.png",
+                        openUrl: "https://github.com/JustKaarlo/JustKaarlo-Google-Site/tree/6edc424da73f00e154c1fc637375469d2f432bfe/html/Reports",
+                        highlighted: false,
+                        showOpenButton: true,
+                        showRawButton: false,
+                        showSizeTag: false,
+                        showCountTag: true,
+                        files: [
+                            {
+                                type: "file",
+                                name: "Arrest-Report.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Reports/Arrest-Report.html",
+                                size: 0,
+                                icon: "https://cdn-icons-png.flaticon.com/256/11133/11133898.png",
+                                highlighted: false,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            },
+                            {
+                                type: "file",
+                                name: "Citation-Report.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Citation-Report.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Reports/Citation-Report.html",
+                                size: 0,
+                                icon: "https://cdn-icons-png.flaticon.com/256/11133/11133898.png",
+                                highlighted: false,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            },
+                            {
+                                type: "file",
+                                name: "Coroner-Report.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Coroner-Report.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Reports/Coroner-Report.html",
+                                size: 0,
+                                icon: "https://cdn-icons-png.flaticon.com/256/11133/11133898.png",
+                                highlighted: false,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            },
+                            {
+                                type: "file",
+                                name: "Fire-Incident-Report.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Fire-Incident-Report.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Reports/Fire-Incident-Report.html",
+                                size: 0,
+                                icon: "https://cdn-icons-png.flaticon.com/256/11133/11133898.png",
+                                highlighted: false,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            },
+                            {
+                                type: "file",
+                                name: "Medical-Report.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Medical-Report.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Reports/Medical-Report.html",
+                                size: 0,
+                                icon: "https://cdn-icons-png.flaticon.com/256/11133/11133898.png",
+                                highlighted: false,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            },
+                            {
+                                type: "file",
+                                name: "Prison-Transport.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Prison-Transport.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Reports/Prison-Transport.html",
+                                size: 0,
+                                icon: "https://cdn-icons-png.flaticon.com/256/11133/11133898.png",
+                                highlighted: false,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            },
+                            {
+                                type: "file",
+                                name: "Towing-Report.html",
+                                openUrl: "https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Towing-Report.html",
+                                rawUrl: "https://raw.githubusercontent.com/JustKaarlo/JustKaarlo-Google-Site/refs/heads/Home/html/Reports/Towing-Report.html",
+                                size: 0,
+                                icon: "https://cdn-icons-png.flaticon.com/256/11133/11133898.png",
+                                highlighted: false,
+                                showOpenButton: true,
+                                showRawButton: true,
+                                showSizeTag: false
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
 
-    <footer>
-      <div>Tip: you can set <code>?owner=&lt;user&gt;&amp;repo=&lt;name&gt;&amp;branch=&lt;main&gt;&amp;path=&lt;subdir&gt;</code> in the URL. Add <code>&token=ghp_...</code> for higher API limits.</div>
-    </footer>
-  </div>
+        // Utility functions
+        const formatBytes = (() => {
+            const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+            return (bytes) => {
+                if (bytes === 0) return "0 Bytes";
+                const i = Math.floor(Math.log(bytes) / Math.log(1024));
+                return (bytes / Math.pow(1024, i)).toFixed(1) + " " + sizes[i];
+            };
+        })();
 
-<script>
-(() => {
-  // --- Basic config ---
-  const CONFIG = {
-    owner: "JustKaarlo",    // change to your user/org
-    repo: "JustKaarlo-Google-Site", // change to your repo
-    branch: "Home",          // empty means auto-detect default branch
-  };
+        const colorCache = new Map();
 
-  // --- Utilities ---
-  const $ = (sel) => document.querySelector(sel);
-  const qs = new URLSearchParams(location.search);
-  const human = (bytes) => {
-    if (bytes == null || isNaN(bytes)) return "";
-    const units = ["B","KB","MB","GB","TB"]; let i=0; let b=Number(bytes);
-    while (b >= 1024 && i < units.length-1) { b/=1024; i++; }
-    return `${b.toFixed(b < 10 && i>0 ? 1 : 0)} ${units[i]}`;
-  };
-  const iconFor = (item) => {
-    if (item.type === "dir") return "📁";
-    const name = item.name.toLowerCase();
-    if (name.endsWith(".md")) return "📝";
-    if (name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".gif") || name.endsWith(".webp")) return "🖼️";
-    if (name.endsWith(".zip") || name.endsWith(".rar") || name.endsWith(".7z")) return "🗜️";
-    if (name.endsWith(".js")) return "📜";
-    if (name.endsWith(".json")) return "{ }";
-    if (name.endsWith(".html") || name.endsWith(".css")) return "🧩";
-    return "📄";
-  };
+        function rgbToHsl(r, g, b) {
+            const key = `${r},${g},${b}`;
+            if (colorCache.has(key)) return colorCache.get(key);
 
-  // Try to auto-detect owner/repo when hosted on *.github.io/<repo>
-  const autoDetect = () => {
-    const out = { owner: CONFIG.owner, repo: CONFIG.repo };
-    const host = location.hostname.toLowerCase();
-    const parts = location.pathname.split("/").filter(Boolean);
-    if (host.endsWith("github.io") && parts.length) {
-      out.owner = host.split(".")[0];
-      out.repo = parts[0];
-    }
-    return out;
-  };
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
 
-  const state = {
-    owner: qs.get("owner") || autoDetect().owner || CONFIG.owner,
-    repo: qs.get("repo") || autoDetect().repo || CONFIG.repo,
-    branch: qs.get("branch") || CONFIG.branch || "",
-    path: qs.get("path") || "",
-    token: qs.get("token") || "",
-    defaultBranch: "",
-  };
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch (max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
+            }
+            const result = { h, s, l };
+            colorCache.set(key, result);
+            return result;
+        }
 
-  const headers = () => state.token ? { Authorization: `Bearer ${state.token}` } : {};
-  const api = (path) => `https://api.github.com${path}`;
-  const repoUrl = () => `https://github.com/${state.owner}/${state.repo}`;
-  const rawUrl = (p) => `https://raw.githubusercontent.com/${state.owner}/${state.repo}/${state.branch || state.defaultBranch}/${p}`;
+        function hslToRgb(h, s, l) {
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1 / 6) return p + (q - p) * 6 * t;
+                    if (t < 1 / 2) return q;
+                    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1 / 3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1 / 3);
+            }
+            return {
+                r: Math.round(r * 255),
+                g: Math.round(g * 255),
+                b: Math.round(b * 255)
+            };
+        }
 
-  // DOM refs
-  const ownerInput = $("#ownerInput");
-  const repoInput = $("#repoInput");
-  const branchInput = $("#branchInput");
-  const goBtn = $("#goBtn");
-  const rowsEl = $("#rows");
-  const bcEl = $("#breadcrumbs");
-  const statusEl = $("#status");
-  const titleEl = $("#title");
-  const subtitleEl = $("#subtitle");
-  const openOnGitHub = $("#openOnGitHub");
+        function adjustLightness({ r, g, b }, delta = 0.15) {
+            const { h, s, l } = rgbToHsl(r, g, b);
+            const nl = Math.max(0, Math.min(1, l + delta));
+            return hslToRgb(h, s, nl);
+        }
 
-  // Initialize inputs
-  ownerInput.value = state.owner;
-  repoInput.value = state.repo;
-  branchInput.value = state.branch;
+        function rgbaStr({ r, g, b }, a) {
+            return `rgba(${r}, ${g}, ${b}, ${a})`;
+        }
 
-  // Navigation
-  const setStatus = (msg, isError=false) => {
-    statusEl.textContent = msg || "";
-    statusEl.classList.toggle("error", !!isError);
-  };
+        function getAverageColorFromImage(src) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.crossOrigin = "anonymous";
+                img.onload = () => {
+                    try {
+                        const canvas = document.createElement("canvas");
+                        const ctx = canvas.getContext("2d", { willReadFrequently: true });
+                        canvas.width = canvas.height = 24;
+                        ctx.drawImage(img, 0, 0, 24, 24);
+                        const { data } = ctx.getImageData(0, 0, 24, 24);
+                        let r = 0, g = 0, b = 0, count = 0;
 
-  const setBreadcrumbs = () => {
-    const parts = state.path.split("/").filter(Boolean);
-    const segs = [{ name: `${state.owner}/${state.repo}`, path: "" }];
-    parts.forEach((p, i) => {
-      segs.push({ name: p, path: parts.slice(0, i+1).join("/") });
-    });
-    bcEl.innerHTML = segs.map((s, i) => {
-      const isLast = i === segs.length - 1;
-      const link = isLast ? `<span>${s.name}</span>` : `<a href="#" data-path="${s.path}">${s.name}</a>`;
-      return i === 0 ? link : `<span class="sep">/</span>${link}`;
-    }).join("");
-    bcEl.querySelectorAll('a[data-path]').forEach(a => {
-      a.addEventListener('click', (e) => {
-        e.preventDefault();
-        navigateTo(a.getAttribute('data-path'));
-      });
-    });
-  };
+                        for (let i = 0; i < data.length; i += 8) {
+                            if (data[i + 3] < 64) continue;
+                            r += data[i];
+                            g += data[i + 1];
+                            b += data[i + 2];
+                            count++;
+                        }
+                        if (!count) return reject("no_pixels");
+                        resolve({
+                            r: Math.round(r / count),
+                            g: Math.round(g / count),
+                            b: Math.round(b / count)
+                        });
+                    } catch (e) {
+                        reject(e);
+                    }
+                };
+                img.onerror = () => reject("load_error");
+                img.src = src;
+            });
+        }
 
-  const navigateTo = (path) => {
-    state.path = path || "";
-    const url = new URL(location.href);
-    url.searchParams.set('owner', state.owner);
-    url.searchParams.set('repo', state.repo);
-    if (state.branch) url.searchParams.set('branch', state.branch); else url.searchParams.delete('branch');
-    if (state.path) url.searchParams.set('path', state.path); else url.searchParams.delete('path');
-    history.pushState({ path: state.path }, '', url);
-    load();
-  };
+        function applyGradientToItemFromSrc(li, src) {
+            getAverageColorFromImage(src).then(base => {
+                const light = adjustLightness(base, +0.18);
+                const dark = adjustLightness(base, -0.18);
+                li.style.backgroundImage = `linear-gradient(135deg, rgba(${light.r},${light.g},${light.b},0.18) 0%, rgba(${dark.r},${dark.g},${dark.b},0.35) 100%)`;
+                li.style.border = `1px solid rgba(${dark.r},${dark.g},${dark.b},0.22)`;
+            }).catch(() => {
+                li.style.backgroundImage = `linear-gradient(135deg, rgba(120,120,120,0.12), rgba(60,60,60,0.24))`;
+                li.style.border = `1px solid rgba(255,255,255,0.05)`;
+            });
+        }
 
-  window.addEventListener('popstate', (e) => {
-    if (e.state && 'path' in e.state) {
-      state.path = e.state.path;
-      load();
-    }
-  });
+        function calculateFolderStats(folder) {
+            let fileCount = 0;
+            let totalSize = 0;
+            
+            function countItems(items) {
+                items?.forEach(item => {
+                    if (item.type === 'file') {
+                        fileCount++;
+                        totalSize += item.size || 0;
+                    } else if (item.type === 'folder' && item.files) {
+                        countItems(item.files);
+                    }
+                });
+            }
+            
+            countItems(folder.files);
+            return { fileCount, totalSize };
+        }
 
-  // Fetch default branch if needed
-  const ensureBranch = async () => {
-    if (state.branch) return state.branch;
-    const res = await fetch(api(`/repos/${state.owner}/${state.repo}`), { headers: headers() });
-    if (!res.ok) throw new Error(`Repo not found or API error (${res.status})`);
-    const data = await res.json();
-    state.defaultBranch = data.default_branch || 'main';
-    return state.defaultBranch;
-  };
+        function add3DHoverEffect(element) {
+            let animationId;
+            
+            element.addEventListener('mousemove', (e) => {
+                if (animationId) return;
+                
+                animationId = requestAnimationFrame(() => {
+                    const rect = element.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const midX = rect.width / 2;
+                    const midY = rect.height / 2;
 
-  const listDir = async () => {
-    const ref = state.branch || state.defaultBranch || 'main';
-    const path = state.path ? `/${encodeURIComponent(state.path).replaceAll('%2F','/')}` : '';
-    const res = await fetch(api(`/repos/${state.owner}/${state.repo}/contents${path}?ref=${encodeURIComponent(ref)}`), { headers: headers() });
-    if (!res.ok) {
-      const text = await res.text();
-      throw new Error(`Failed to load contents (${res.status}). ${text}`);
-    }
-    return res.json();
-  };
+                    const rotateX = ((y - midY) / midY) * 2;
+                    const rotateY = ((x - midX) / midX) * 2;
 
-  const renderRows = (items) => {
-    rowsEl.innerHTML = '';
-    // sort: dirs first, then files; alphabetical, case-insensitive
-    items.sort((a,b) => (a.type === 'dir' && b.type !== 'dir') ? -1 : (a.type !== 'dir' && b.type === 'dir') ? 1 : a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+                    element.style.transform = `translateX(1.5px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                    animationId = null;
+                });
+            });
 
-    items.forEach(item => {
-      const tr = document.createElement('tr');
-      const isDir = item.type === 'dir';
-      const fullPath = state.path ? `${state.path}/${item.name}` : item.name;
+            element.addEventListener('mouseleave', () => {
+                element.style.transform = 'translateX(0px) rotateX(0deg) rotateY(0deg) scale(1)';
+            });
+        }
 
-      const nameTd = document.createElement('td');
-      nameTd.className = 'nameCell';
-      const icon = document.createElement('span');
-      icon.textContent = iconFor(item);
-      const link = document.createElement('a');
-      link.textContent = item.name;
-      link.href = '#';
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (isDir) navigateTo(fullPath); else window.open(rawUrl(fullPath), '_blank');
-      });
-      nameTd.append(icon, link);
+        function createFileElement(file) {
+            const li = document.createElement("li");
+            
+            if (file.highlighted) li.classList.add("highlighted");
+            if (file.showSizeTag === false) li.classList.add("hide-size-tag");
 
-      const typeTd = document.createElement('td');
-      const pill = document.createElement('span');
-      pill.className = 'pill';
-      pill.textContent = isDir ? 'folder' : 'file';
-      typeTd.appendChild(pill);
+            const link = document.createElement("a");
+            link.href = file.openUrl || "#";
+            if (file.openUrl) link.target = "_blank";
+            else link.onclick = e => e.preventDefault();
 
-      const sizeTd = document.createElement('td');
-      sizeTd.textContent = isDir ? '' : human(item.size);
+            add3DHoverEffect(link);
 
-      const actionsTd = document.createElement('td');
-      if (isDir) {
-        const openBtn = document.createElement('a');
-        openBtn.className = 'btn';
-        openBtn.href = '#';
-        openBtn.textContent = 'Open';
-        openBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo(fullPath); });
-        actionsTd.appendChild(openBtn);
-      } else {
-        const viewBtn = document.createElement('a');
-        viewBtn.className = 'btn'; viewBtn.href = rawUrl(fullPath); viewBtn.target = '_blank'; viewBtn.rel = 'noreferrer';
-        viewBtn.textContent = 'View raw';
-        const dl = document.createElement('a');
-        dl.className = 'btn'; dl.href = rawUrl(fullPath); dl.setAttribute('download', item.name);
-        dl.textContent = 'Download';
-        actionsTd.append(viewBtn, ' ', dl);
-      }
+            const icon = document.createElement("img");
+            icon.src = file.icon || "https://drive-thirdparty.googleusercontent.com/16/type/application/x-msdownload";
+            icon.alt = "";
+            icon.loading = "lazy";
 
-      tr.append(nameTd, typeTd, sizeTd, actionsTd);
-      rowsEl.appendChild(tr);
-    });
-  };
+            link.append(icon, document.createTextNode(file.name));
 
-  const load = async () => {
-    setStatus('');
-    titleEl.textContent = `${state.owner}/${state.repo}`;
-    subtitleEl.textContent = state.path ? `Branch: ${state.branch || state.defaultBranch || '…'} • ${state.path}` : `Branch: ${state.branch || state.defaultBranch || '…'} • /`;
-    openOnGitHub.href = repoUrl() + (state.path ? `/tree/${encodeURIComponent(state.branch || state.defaultBranch || 'main')}/${state.path}` : '');
-    setBreadcrumbs();
+            const fileEntry = document.createElement("div");
+            fileEntry.className = "file-entry";
+            fileEntry.appendChild(link);
 
-    try {
-      await ensureBranch();
-      const items = await listDir();
-      if (!Array.isArray(items)) {
-        // It's a single file (API returns object). Show its parent instead.
-        const parent = state.path.split('/').slice(0,-1).join('/');
-        navigateTo(parent);
-        return;
-      }
-      renderRows(items);
-      setStatus(`Loaded ${items.length} item(s).`);
-    } catch (err) {
-      console.error(err);
-      setStatus(err.message, true);
-      rowsEl.innerHTML = '';
-    }
-  };
+            if (file.showSizeTag !== false && file.size) {
+                const sizeTag = document.createElement("span");
+                sizeTag.className = "file-size-tag";
+                sizeTag.textContent = formatBytes(file.size);
+                fileEntry.appendChild(sizeTag);
+            }
 
-  goBtn.addEventListener('click', () => {
-    state.owner = ownerInput.value.trim();
-    state.repo = repoInput.value.trim();
-    state.branch = branchInput.value.trim();
-    state.path = '';
-    state.defaultBranch = '';
-    const url = new URL(location.href);
-    url.searchParams.set('owner', state.owner);
-    url.searchParams.set('repo', state.repo);
-    if (state.branch) url.searchParams.set('branch', state.branch); else url.searchParams.delete('branch');
-    url.searchParams.delete('path');
-    history.pushState({ path: '' }, '', url);
-    load();
-  });
+            const buttonGroup = document.createElement("div");
+            buttonGroup.className = "button-group";
 
-  // Kickoff
-  load();
-})();
-</script>
+            if (file.showOpenButton && file.openUrl) {
+                const openBtn = document.createElement("button");
+                openBtn.className = "folder-open-button";
+                openBtn.onclick = () => window.open(file.openUrl, "_blank");
+                openBtn.innerHTML = `
+                    <span class="custom-tooltip">View</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM19 19H5V5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7z" fill="rgba(255, 255, 255, 0.35)"/>
+                    </svg>
+                `;
+                buttonGroup.appendChild(openBtn);
+            }
+
+            if (file.showRawButton && file.rawUrl) {
+                const rawBtn = document.createElement("button");
+                rawBtn.className = "folder-raw-button";
+                rawBtn.onclick = () => window.open(file.rawUrl, "_blank");
+                rawBtn.innerHTML = `
+                    <span class="custom-tooltip">Raw Data</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6zm2-8h8v1H8v-1zm0 2h8v1H8v-1zm0 2h5v1H8v-1z" fill="rgba(255, 255, 255, 0.35)"/>
+                    </svg>
+                `;
+                buttonGroup.appendChild(rawBtn);
+            }
+
+            if (buttonGroup.children.length > 0) {
+                fileEntry.appendChild(buttonGroup);
+            }
+
+            li.appendChild(fileEntry);
+
+            if (file.highlighted) {
+                requestIdleCallback(() => applyGradientToItemFromSrc(li, icon.src));
+            }
+
+            return li;
+        }
+
+        function createFolderElement(folder, depth = 0) {
+            const li = document.createElement("li");
+            
+            if (folder.highlighted) {
+                li.classList.add("highlighted");
+            }
+
+            if (folder.showSizeTag === false) {
+                li.classList.add("hide-size-tag");
+            }
+            if (folder.showCountTag === false) {
+                li.classList.add("hide-count-tag");
+            }
+
+            const folderLink = document.createElement("div");
+            folderLink.className = "folder-entry";
+            folderLink.style.cursor = "pointer";
+
+            const leftWrapper = document.createElement("div");
+            leftWrapper.style.display = "flex";
+            leftWrapper.style.alignItems = "center";
+
+            const arrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            arrow.setAttribute("viewBox", "0 0 24 24");
+            arrow.setAttribute("class", "folder-arrow");
+            arrow.innerHTML = `<path d="M9 5l7 7-7 7"/>`;
+
+            const icon = document.createElement("img");
+            icon.src = folder.icon || "https://drive-thirdparty.googleusercontent.com/16/type/application/vnd.google-apps.folder";
+            icon.alt = "";
+            icon.style.height = "20px";
+            icon.style.verticalAlign = "middle";
+            icon.style.marginRight = "8px";
+
+            const nameSpan = document.createElement("span");
+            nameSpan.textContent = folder.name;
+
+            // Add 3D hover effects to folder name
+            nameSpan.style.display = 'inline-block';
+            nameSpan.style.transformStyle = 'preserve-3d';
+            nameSpan.style.transition = 'transform 0.2s ease';
+
+            nameSpan.addEventListener('mousemove', (e) => {
+                const rect = nameSpan.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const midX = rect.width / 2;
+                const midY = rect.height / 2;
+
+                const rotateX = ((y - midY) / midY) * 2;
+                const rotateY = ((x - midX) / midX) * 2;
+
+                nameSpan.style.transform = `translateX(1.5px) rotateX(${-rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+
+            nameSpan.addEventListener('mouseleave', () => {
+                nameSpan.style.transform = 'translateX(0px) rotateX(0deg) rotateY(0deg) scale(1)';
+            });
+
+            leftWrapper.appendChild(arrow);
+            leftWrapper.appendChild(icon);
+            leftWrapper.appendChild(nameSpan);
+
+            const rightWrapper = document.createElement("div");
+            rightWrapper.style.display = "flex";
+            rightWrapper.style.alignItems = "center";
+            rightWrapper.style.gap = "1px";
+
+            // Calculate folder stats
+            const { fileCount, totalSize } = calculateFolderStats(folder);
+
+            // Add count tag if enabled
+            if (folder.showCountTag !== false) {
+                const countTag = document.createElement("span");
+                countTag.className = "file-count-tag";
+                countTag.textContent = `${fileCount} File${fileCount !== 1 ? "s" : ""}`;
+                rightWrapper.appendChild(countTag);
+            }
+
+            // Add size tag if enabled
+            if (folder.showSizeTag !== false) {
+                const sizeTag = document.createElement("span");
+                sizeTag.className = "file-size-tag";
+                sizeTag.textContent = formatBytes(totalSize);
+                rightWrapper.appendChild(sizeTag);
+            }
+
+            // Add button group for folders
+            const buttonGroup = document.createElement("div");
+            buttonGroup.className = "button-group";
+
+            // Add open button if enabled
+            if (folder.showOpenButton && folder.openUrl) {
+                const openBtn = document.createElement("button");
+                openBtn.className = "folder-open-button";
+                openBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    window.open(folder.openUrl, "_blank");
+                };
+
+                const openTooltip = document.createElement("span");
+                openTooltip.className = "custom-tooltip";
+                openTooltip.textContent = "View";
+                openBtn.appendChild(openTooltip);
+
+                const openIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                openIcon.setAttribute("width", "16");
+                openIcon.setAttribute("height", "16");
+                openIcon.setAttribute("viewBox", "0 0 24 24");
+                openIcon.setAttribute("fill", "none");
+                openIcon.classList.add("icon-animated");
+
+                const openPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                openPath.setAttribute("d", "M14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7zM19 19H5V5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7z");
+                openPath.setAttribute("fill", "rgba(255, 255, 255, 0.35)");
+                openPath.setAttribute("class", "open-part");
+
+                openIcon.appendChild(openPath);
+                openBtn.appendChild(openIcon);
+                buttonGroup.appendChild(openBtn);
+            }
+
+            // Add raw button if enabled
+            if (folder.showRawButton && folder.rawUrl) {
+                const rawBtn = document.createElement("button");
+                rawBtn.className = "folder-raw-button";
+                rawBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    window.open(folder.rawUrl, "_blank");
+                };
+
+                const rawTooltip = document.createElement("span");
+                rawTooltip.className = "custom-tooltip";
+                rawTooltip.textContent = "Raw Data";
+                rawBtn.appendChild(rawTooltip);
+
+                const rawIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                rawIcon.setAttribute("width", "16");
+                rawIcon.setAttribute("height", "16");
+                rawIcon.setAttribute("viewBox", "0 0 24 24");
+                rawIcon.setAttribute("fill", "none");
+                rawIcon.classList.add("icon-animated");
+
+                const rawPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                rawPath.setAttribute("d", "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM6 20V4h7v5h5v11H6zm2-8h8v1H8v-1zm0 2h8v1H8v-1zm0 2h5v1H8v-1z");
+                rawPath.setAttribute("fill", "rgba(255, 255, 255, 0.35)");
+                rawPath.setAttribute("class", "raw-part");
+
+                rawIcon.appendChild(rawPath);
+                rawBtn.appendChild(rawIcon);
+                buttonGroup.appendChild(rawBtn);
+            }
+
+            if (buttonGroup.children.length > 0) {
+                rightWrapper.appendChild(buttonGroup);
+            }
+
+            folderLink.appendChild(leftWrapper);
+            folderLink.appendChild(rightWrapper);
+            li.appendChild(folderLink);
+
+            // Apply gradient based on icon color for highlighted folders
+            if (folder.highlighted) {
+                applyGradientToItemFromSrc(li, icon.src);
+            }
+
+            // Create sub-list for folder contents
+            const subList = document.createElement("ul");
+            subList.className = "sub-list";
+            subList.style.display = "none";
+            li.appendChild(subList);
+
+            // Add click handler to toggle folder
+            folderLink.addEventListener("click", () => {
+                if (subList.childElementCount === 0 && folder.files) {
+                    // Populate folder contents recursively
+                    renderItems(folder.files, subList, depth + 1);
+                }
+                const isOpen = subList.style.display === "block";
+                subList.style.display = isOpen ? "none" : "block";
+                arrow.classList.toggle("open", !isOpen);
+                li.classList.toggle("folder-open", !isOpen);
+            });
+
+            return li;
+        }
+
+        function renderItems(items, container, depth = 0) {
+            // Separate files and folders
+            const files = items.filter(item => item.type === "file");
+            const folders = items.filter(item => item.type === "folder");
+
+            // Sort files (highlighted first, then alphabetical)
+            files.sort((a, b) => {
+                if (a.highlighted && !b.highlighted) return -1;
+                if (!a.highlighted && b.highlighted) return 1;
+                return a.name.localeCompare(b.name, undefined, { numeric: true });
+            });
+
+            // Sort folders (highlighted first, then alphabetical)
+            folders.sort((a, b) => {
+                if (a.highlighted && !b.highlighted) return -1;
+                if (!a.highlighted && b.highlighted) return 1;
+                return a.name.localeCompare(b.name, undefined, { numeric: true });
+            });
+
+            // Render files first
+            files.forEach(file => {
+                const fileElement = createFileElement(file, depth);
+                container.appendChild(fileElement);
+            });
+
+            // Then render folders
+            folders.forEach(folder => {
+                const folderElement = createFolderElement(folder, depth);
+                container.appendChild(folderElement);
+            });
+        }
+
+        function renderFileStructure() {
+            const container = document.getElementById("fileList");
+            container.innerHTML = "";
+            renderItems(fileStructure, container, 0);
+        }
+
+        // Initialize the file browser
+        renderFileStructure();
+    </script>
 </body>
+
 </html>
