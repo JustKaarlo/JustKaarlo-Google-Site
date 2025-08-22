@@ -1,2 +1,362 @@
-<H1 style="text-align: center; margin-top: 100px;">Fuck You</H1>
-test
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pages</title>
+  <style>
+    :root {
+      --bg-1: #0e0f12;
+      --bg-2: #15171c;
+      --glass: rgba(255,255,255,0.04);
+      --text-1: #e7e9ee;
+      --text-2: #aeb4c2;
+      --acc: #69a7ff;
+      --ok: #7ee787;
+      --danger: #ff7b72;
+      --muted: #2a2f3a;
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0; font: 14px/1.6 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text-1); background: radial-gradient(1200px 800px at 20% -10%, #1b2030, #0d0f14) fixed;
+    }
+    .wrap { max-width: 1100px; margin: 40px auto; padding: 0 16px; }
+    header {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius);
+      padding: 18px 20px; box-shadow: var(--shadow);
+      display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center;
+    }
+    header h1 { margin: 0; font-size: 18px; font-weight: 600; color: var(--text-1); }
+    header .meta { color: var(--text-2); font-size: 12px; }
+
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .btn {
+      padding: 8px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);
+      background: var(--glass); color: var(--text-1); cursor: pointer;
+    }
+    .btn:hover { border-color: rgba(255,255,255,0.22); }
+    .input {
+      background: var(--bg-2); color: var(--text-1); border: 1px solid rgba(255,255,255,0.1);
+      padding: 8px 10px; border-radius: 10px; min-width: 160px;
+    }
+
+    nav.breadcrumbs {
+      margin: 18px 0 10px; font-size: 13px; color: var(--text-2);
+    }
+    nav.breadcrumbs a { color: var(--acc); text-decoration: none; }
+    nav.breadcrumbs .sep { color: var(--text-2); margin: 0 6px; }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    table {
+      width: 100%; border-collapse: collapse; overflow: hidden;
+    }
+    thead th {
+      text-align: left; font-size: 12px; font-weight: 600; color: var(--text-2);
+      padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.02);
+    }
+    tbody td {
+      padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+
+    .nameCell { display: flex; align-items: center; gap: 10px; }
+    .pill { font-size: 11px; padding: 4px 8px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.12); background: var(--glass); color: var(--text-2); }
+
+    .status { margin-top: 12px; color: var(--text-2); font-size: 13px; }
+    .error { color: var(--danger); }
+
+    footer { margin: 18px 0 60px; color: var(--text-2); font-size: 12px; text-align: center; }
+    a { color: var(--acc); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1 id="title">Repo Browser</h1>
+        <div class="meta" id="subtitle">List files and folders from any GitHub repo.</div>
+      </div>
+      <div class="controls">
+        <input class="input" id="ownerInput" placeholder="owner" />
+        <input class="input" id="repoInput" placeholder="repo" />
+        <input class="input" id="branchInput" placeholder="branch (optional)" />
+        <button class="btn" id="goBtn">Load</button>
+        <a class="btn" id="openOnGitHub" href="#" target="_blank" rel="noreferrer">Open on GitHub</a>
+      </div>
+    </header>
+
+    <nav class="breadcrumbs" id="breadcrumbs"></nav>
+
+    <div class="panel">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Size</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+
+    <div class="status" id="status"></div>
+
+    <footer>
+      <div>Tip: you can set <code>?owner=&lt;user&gt;&amp;repo=&lt;name&gt;&amp;branch=&lt;main&gt;&amp;path=&lt;subdir&gt;</code> in the URL. Add <code>&token=ghp_...</code> for higher API limits.</div>
+    </footer>
+  </div>
+
+<script>
+(() => {
+  // --- Basic config ---
+  const CONFIG = {
+    owner: "JustKaarlo",    // change to your user/org
+    repo: "JustKaarlo-Google-Site", // change to your repo
+    branch: "Home",          // empty means auto-detect default branch
+  };
+
+  // --- Utilities ---
+  const $ = (sel) => document.querySelector(sel);
+  const qs = new URLSearchParams(location.search);
+  const human = (bytes) => {
+    if (bytes == null || isNaN(bytes)) return "";
+    const units = ["B","KB","MB","GB","TB"]; let i=0; let b=Number(bytes);
+    while (b >= 1024 && i < units.length-1) { b/=1024; i++; }
+    return `${b.toFixed(b < 10 && i>0 ? 1 : 0)} ${units[i]}`;
+  };
+  const iconFor = (item) => {
+    if (item.type === "dir") return "📁";
+    const name = item.name.toLowerCase();
+    if (name.endsWith(".md")) return "📝";
+    if (name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".gif") || name.endsWith(".webp")) return "🖼️";
+    if (name.endsWith(".zip") || name.endsWith(".rar") || name.endsWith(".7z")) return "🗜️";
+    if (name.endsWith(".js")) return "📜";
+    if (name.endsWith(".json")) return "{ }";
+    if (name.endsWith(".html") || name.endsWith(".css")) return "🧩";
+    return "📄";
+  };
+
+  // Try to auto-detect owner/repo when hosted on *.github.io/<repo>
+  const autoDetect = () => {
+    const out = { owner: CONFIG.owner, repo: CONFIG.repo };
+    const host = location.hostname.toLowerCase();
+    const parts = location.pathname.split("/").filter(Boolean);
+    if (host.endsWith("github.io") && parts.length) {
+      out.owner = host.split(".")[0];
+      out.repo = parts[0];
+    }
+    return out;
+  };
+
+  const state = {
+    owner: qs.get("owner") || autoDetect().owner || CONFIG.owner,
+    repo: qs.get("repo") || autoDetect().repo || CONFIG.repo,
+    branch: qs.get("branch") || CONFIG.branch || "",
+    path: qs.get("path") || "",
+    token: qs.get("token") || "",
+    defaultBranch: "",
+  };
+
+  const headers = () => state.token ? { Authorization: `Bearer ${state.token}` } : {};
+  const api = (path) => `https://api.github.com${path}`;
+  const repoUrl = () => `https://github.com/${state.owner}/${state.repo}`;
+  const rawUrl = (p) => `https://raw.githubusercontent.com/${state.owner}/${state.repo}/${state.branch || state.defaultBranch}/${p}`;
+
+  // DOM refs
+  const ownerInput = $("#ownerInput");
+  const repoInput = $("#repoInput");
+  const branchInput = $("#branchInput");
+  const goBtn = $("#goBtn");
+  const rowsEl = $("#rows");
+  const bcEl = $("#breadcrumbs");
+  const statusEl = $("#status");
+  const titleEl = $("#title");
+  const subtitleEl = $("#subtitle");
+  const openOnGitHub = $("#openOnGitHub");
+
+  // Initialize inputs
+  ownerInput.value = state.owner;
+  repoInput.value = state.repo;
+  branchInput.value = state.branch;
+
+  // Navigation
+  const setStatus = (msg, isError=false) => {
+    statusEl.textContent = msg || "";
+    statusEl.classList.toggle("error", !!isError);
+  };
+
+  const setBreadcrumbs = () => {
+    const parts = state.path.split("/").filter(Boolean);
+    const segs = [{ name: `${state.owner}/${state.repo}`, path: "" }];
+    parts.forEach((p, i) => {
+      segs.push({ name: p, path: parts.slice(0, i+1).join("/") });
+    });
+    bcEl.innerHTML = segs.map((s, i) => {
+      const isLast = i === segs.length - 1;
+      const link = isLast ? `<span>${s.name}</span>` : `<a href="#" data-path="${s.path}">${s.name}</a>`;
+      return i === 0 ? link : `<span class="sep">/</span>${link}`;
+    }).join("");
+    bcEl.querySelectorAll('a[data-path]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        navigateTo(a.getAttribute('data-path'));
+      });
+    });
+  };
+
+  const navigateTo = (path) => {
+    state.path = path || "";
+    const url = new URL(location.href);
+    url.searchParams.set('owner', state.owner);
+    url.searchParams.set('repo', state.repo);
+    if (state.branch) url.searchParams.set('branch', state.branch); else url.searchParams.delete('branch');
+    if (state.path) url.searchParams.set('path', state.path); else url.searchParams.delete('path');
+    history.pushState({ path: state.path }, '', url);
+    load();
+  };
+
+  window.addEventListener('popstate', (e) => {
+    if (e.state && 'path' in e.state) {
+      state.path = e.state.path;
+      load();
+    }
+  });
+
+  // Fetch default branch if needed
+  const ensureBranch = async () => {
+    if (state.branch) return state.branch;
+    const res = await fetch(api(`/repos/${state.owner}/${state.repo}`), { headers: headers() });
+    if (!res.ok) throw new Error(`Repo not found or API error (${res.status})`);
+    const data = await res.json();
+    state.defaultBranch = data.default_branch || 'main';
+    return state.defaultBranch;
+  };
+
+  const listDir = async () => {
+    const ref = state.branch || state.defaultBranch || 'main';
+    const path = state.path ? `/${encodeURIComponent(state.path).replaceAll('%2F','/')}` : '';
+    const res = await fetch(api(`/repos/${state.owner}/${state.repo}/contents${path}?ref=${encodeURIComponent(ref)}`), { headers: headers() });
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`Failed to load contents (${res.status}). ${text}`);
+    }
+    return res.json();
+  };
+
+  const renderRows = (items) => {
+    rowsEl.innerHTML = '';
+    // sort: dirs first, then files; alphabetical, case-insensitive
+    items.sort((a,b) => (a.type === 'dir' && b.type !== 'dir') ? -1 : (a.type !== 'dir' && b.type === 'dir') ? 1 : a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+
+    items.forEach(item => {
+      const tr = document.createElement('tr');
+      const isDir = item.type === 'dir';
+      const fullPath = state.path ? `${state.path}/${item.name}` : item.name;
+
+      const nameTd = document.createElement('td');
+      nameTd.className = 'nameCell';
+      const icon = document.createElement('span');
+      icon.textContent = iconFor(item);
+      const link = document.createElement('a');
+      link.textContent = item.name;
+      link.href = '#';
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (isDir) navigateTo(fullPath); else window.open(rawUrl(fullPath), '_blank');
+      });
+      nameTd.append(icon, link);
+
+      const typeTd = document.createElement('td');
+      const pill = document.createElement('span');
+      pill.className = 'pill';
+      pill.textContent = isDir ? 'folder' : 'file';
+      typeTd.appendChild(pill);
+
+      const sizeTd = document.createElement('td');
+      sizeTd.textContent = isDir ? '' : human(item.size);
+
+      const actionsTd = document.createElement('td');
+      if (isDir) {
+        const openBtn = document.createElement('a');
+        openBtn.className = 'btn';
+        openBtn.href = '#';
+        openBtn.textContent = 'Open';
+        openBtn.addEventListener('click', (e) => { e.preventDefault(); navigateTo(fullPath); });
+        actionsTd.appendChild(openBtn);
+      } else {
+        const viewBtn = document.createElement('a');
+        viewBtn.className = 'btn'; viewBtn.href = rawUrl(fullPath); viewBtn.target = '_blank'; viewBtn.rel = 'noreferrer';
+        viewBtn.textContent = 'View raw';
+        const dl = document.createElement('a');
+        dl.className = 'btn'; dl.href = rawUrl(fullPath); dl.setAttribute('download', item.name);
+        dl.textContent = 'Download';
+        actionsTd.append(viewBtn, ' ', dl);
+      }
+
+      tr.append(nameTd, typeTd, sizeTd, actionsTd);
+      rowsEl.appendChild(tr);
+    });
+  };
+
+  const load = async () => {
+    setStatus('');
+    titleEl.textContent = `${state.owner}/${state.repo}`;
+    subtitleEl.textContent = state.path ? `Branch: ${state.branch || state.defaultBranch || '…'} • ${state.path}` : `Branch: ${state.branch || state.defaultBranch || '…'} • /`;
+    openOnGitHub.href = repoUrl() + (state.path ? `/tree/${encodeURIComponent(state.branch || state.defaultBranch || 'main')}/${state.path}` : '');
+    setBreadcrumbs();
+
+    try {
+      await ensureBranch();
+      const items = await listDir();
+      if (!Array.isArray(items)) {
+        // It's a single file (API returns object). Show its parent instead.
+        const parent = state.path.split('/').slice(0,-1).join('/');
+        navigateTo(parent);
+        return;
+      }
+      renderRows(items);
+      setStatus(`Loaded ${items.length} item(s).`);
+    } catch (err) {
+      console.error(err);
+      setStatus(err.message, true);
+      rowsEl.innerHTML = '';
+    }
+  };
+
+  goBtn.addEventListener('click', () => {
+    state.owner = ownerInput.value.trim();
+    state.repo = repoInput.value.trim();
+    state.branch = branchInput.value.trim();
+    state.path = '';
+    state.defaultBranch = '';
+    const url = new URL(location.href);
+    url.searchParams.set('owner', state.owner);
+    url.searchParams.set('repo', state.repo);
+    if (state.branch) url.searchParams.set('branch', state.branch); else url.searchParams.delete('branch');
+    url.searchParams.delete('path');
+    history.pushState({ path: '' }, '', url);
+    load();
+  });
+
+  // Kickoff
+  load();
+})();
+</script>
+</body>
+</html>
