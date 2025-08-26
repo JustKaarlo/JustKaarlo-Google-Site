@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Total War + Elden Ring (Merged with Smooth Transition)</title>
+  <title>Mods</title>
+  <link rel="icon" type="image/x-icon" href="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/Favicon-1.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
@@ -433,7 +433,6 @@
     .elden-custom-size { width: 500px !important; height: auto !important; }
     .spacer { height: 40px; }
     
-    /* Add some responsive behavior for smaller screens */
     @media (max-width: 768px) {
       #docModal > div {
         width: 95vw;
@@ -676,15 +675,12 @@
     }
 
     function getDownloadUrl(file, apiKey) {
-      // Prefer webContentLink (if the file is downloadable via Drive)
       if (file.webContentLink) return file.webContentLink;
-      // Fallback: direct media endpoint (works for publicly accessible files)
       return `https://www.googleapis.com/drive/v3/files/${file.id}?alt=media&key=${apiKey}`;
     }
 
     function shouldShowDownloadButtonForFile({ file, folderId, path, includeList }) {
       if (!includeList || includeList.length === 0) return false;
-      // Allow matching by plain name, file id, "path+name", or "folderId/name"
       const keyByPath = path ? `${path}${file.name}` : file.name;
       const keyById = `${folderId}/${file.name}`;
 
@@ -1081,14 +1077,17 @@
             "The Dawnless Days Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TheDawnlessDays.ico",
             "Nova Attila Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
             "Nova Attila Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NovaAttila.ico",
+
             "Empire Total War II v4.5.rar": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/EmpireII.ico",
             "1h__AJylt5ZhfY_iN8d-lGqg-KuReRTdj/Empire 2 Generals Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Empire2General.ico",
             "1h__AJylt5ZhfY_iN8d-lGqg-KuReRTdj/Empire 2 Generals Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Empire2General.ico",
             "1h__AJylt5ZhfY_iN8d-lGqg-KuReRTdj/Empire 2 Generals Part 3.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Empire2General.ico",
+
             "ACW2 The American Civil War.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/ACW2.ico",
             "Field Command Napoleon v8.0.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/FieldCommand.ico",
             "Grand Battle Mod v2.6.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/GrandBattle.ico",
             "Napoleonic Total War III.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/NapoleonicTotalWar3.ico",
+
             "War of the Gods.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/WarofTheGods.ico",
             "Radious Total War.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/RadiousTotalWar.ico",
             "Medieval 1100AD.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Medieval1100AD.ico",
@@ -1096,12 +1095,15 @@
             "Rome II Extra Modifications.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalWarRome2Extras.ico",
             "Para Bellum Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/ParaBellum.ico",
             "Para Bellum Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/ParaBellum.ico",
+
             "Last Alliance v0.5.0.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/LastAlliance.ico",
             "Pike and Shot II v0.9.9.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/PikeAndShotII.ico",
             "Rise of Empires v0.1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/RiseOfEmpires.ico",
-            "Total FotS.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalFotS.ico",
             "Dragon Empire Part 1.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/DragonEmpire.ico",
             "Dragon Empire Part 2.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/DragonEmpire.ico",
+            "1QkAve8DnUDfCRi3EBpFqqXHddXtiTfmX/Carlist Wars.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalFotS.ico",
+            "1QkAve8DnUDfCRi3EBpFqqXHddXtiTfmX/Scramble of the Far East.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalFotS.ico",
+
             "Thrones Extra Modifications.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalWarThronesExtras.ico",
             "Age of Arthur.exe": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/AgeOfArthur.ico",
         },
@@ -1121,6 +1123,7 @@
             "1P9wPHHxDGGt3tUrEyukiYBf-_YIMJayF": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/ParaBellum.ico",
             "1MsU5Q9-uQ23a0anq3ZsH4RdZ-0CkiAiU": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/DragonEmpire.ico",
             "1MsU5Q9-uQ23a0anq3ZsH4RdZ-0CkiAiU": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/DragonEmpire.ico",
+            "1QkAve8DnUDfCRi3EBpFqqXHddXtiTfmX": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/TotalFotS.ico",
         },
         highlightFiles: [
           "Attila Extra Modifications.exe",
@@ -1138,7 +1141,8 @@
           "1NiLKxsM1tZUbYjYoquZ2cYVMWh-zAprN",
           "14p-1KeG4OB5uYIWqH8yRScpyXRj0IaEb",
           "1zYVOwQN--y78iTUnku67DyABh5maAfV_",
-          "1vizoQOE_gq9rK9LgrxeNgFoikw75AX2h"
+          "1vizoQOE_gq9rK9LgrxeNgFoikw75AX2h",
+          "1QkAve8DnUDfCRi3EBpFqqXHddXtiTfmX"
         ],
         folderGradientFallback: {},
         downloadButtonFiles: [
@@ -1162,6 +1166,8 @@
           "Total FotS.exe",
           "Thrones Extra Modifications.exe",
           "Age of Arthur.exe",
+          "Carlist Wars.exe",
+          "Scramble of the Far East.exe"
         ],
         excludeDownloadFiles: [
           "15r5NfzciWGfClpGvmT5ydfH4fDbScVAl",
@@ -1169,7 +1175,8 @@
           "1NiLKxsM1tZUbYjYoquZ2cYVMWh-zAprN",
           "14p-1KeG4OB5uYIWqH8yRScpyXRj0IaEb",
           "1zYVOwQN--y78iTUnku67DyABh5maAfV_",
-          "1vizoQOE_gq9rK9LgrxeNgFoikw75AX2h"
+          "1vizoQOE_gq9rK9LgrxeNgFoikw75AX2h",
+          "1QkAve8DnUDfCRi3EBpFqqXHddXtiTfmX"
         ],
         showDownloadButtonAtRoot: true
       });
@@ -1185,8 +1192,12 @@
           "Convergence (2.2.3).zip": "https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/GoogleDriveIcons/Custom/Convergence.ico"
         },
         customFolderIcons: {},
-        highlightFiles: ["Convergence (2.2.3).zip"],
-        colorizeFiles: ["Convergence (2.2.3).zip"],
+        highlightFiles: [
+          "Convergence (2.2.3).zip"
+        ],
+        colorizeFiles: [
+          "Convergence (2.2.3).zip"
+        ],
         excludePartsFolders: [""],
         folderGradientFallback: {},
         downloadButtonFiles: [],
