@@ -482,11 +482,12 @@
         }
 
         .share-popup {
+            --nav-bg: rgba(255,255,255,0.03);
             position: absolute;
             top: 10px;
             right: -265px;
             width: 260px;
-            background: rgba(20, 20, 20, 0.8);
+            background: var(--nav-bg);
             backdrop-filter: blur(14px) saturate(120%);
             -webkit-backdrop-filter: blur(14px) saturate(120%);
             color: #fff;
@@ -499,6 +500,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
         }
 
         .share-popup input {
@@ -513,24 +515,28 @@
         }
 
         .share-popup button {
-            background: var(--accent);
+            --bg-glass: rgba(255,255,255,0.05);
+            --text: #e1e2e7;
+            background: var(--bg-glass);
+            box-shadow: 0 4px 3px rgba(0,0,0,0.1);
             border: none;
             padding: 8px 16px;
             border-radius: var(--radius-sm);
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
-            color: #383838;
+            color: var(--text);
             margin-bottom: 8px;
             width: fit-content;
             min-width: 100px;
             margin: 0 auto;
             display: block;
-            transition: background 160ms ease;
+            transition: background 160ms ease, transform 120ms ease;
         }
 
         .share-popup button:hover {
-            background: color-mix(in oklab, var(--accent) 85%, #ffffff 15%);
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
         }
 
         .share-popup select {
@@ -545,6 +551,7 @@
             cursor: pointer;
             color: #fff;
             font-weight: bold;
+            font-weight: 500;
         }
 
         .nav-frame {
@@ -579,6 +586,7 @@
             background: var(--bg-glass);
             box-shadow: 0 4px 3px rgba(0,0,0,0.1);
             color: var(--text);
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
             font-weight: 600;
             text-decoration: none;
             padding: 8px 10px;
@@ -594,6 +602,11 @@
 
         .nav-share {
             margin-left: 20px;
+        }
+
+        .nav-btn svg {
+            display: block;
+            margin: 0 auto;
         }
     </style>
 </head>
@@ -613,6 +626,11 @@
   <div class="bg" aria-hidden="true"></div>
   <header class="nav-frame glass">
     <nav class="nav-buttons">
+      <a href="https://sites.google.com/view/justkaarlos" target="_blank" class="nav-btn" aria-label="Home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="20" viewBox="1 0 20 20" fill="currentColor">
+            <path d="M12 3l8 8h-3v8h-10v-8h-3l8-8z"/>
+        </svg>
+      </a>
       <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html')">Arrest</a>
       <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Citation-Report.html')">Citation</a>
       <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Coroner-Report.html')">Coroner</a>
