@@ -2,6 +2,8 @@
 <html lang="en">
 
 <head>
+    <title>Reports</title>
+    <link rel="icon" type="image/x-icon" href="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/icons/Favicon-1.png">
     <style>
         :root {
             --bg-1: #0e0f12;
@@ -380,7 +382,7 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
             display: none;
-            z-index: 3;
+            z-index: 2000 !important;
         }
 
         .modal {
@@ -392,7 +394,7 @@
             max-width: 850px;
             background: transparent;
             display: none;
-            z-index: 4;
+            z-index: 2001 !important;
             transition: height 0.2s ease;
             overflow: hidden;
         }
@@ -544,13 +546,61 @@
             color: #fff;
             font-weight: bold;
         }
+
+        .nav-frame {
+            --nav-bg: rgba(255,255,255,0.03);
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 28px;
+            border-radius: 20px;
+            z-index: 999;
+            background: var(--nav-bg);
+            border: 0px solid var(--glass-border);
+            backdrop-filter: blur(12px) saturate(120%);
+            -webkit-backdrop-filter: blur(12px) saturate(120%);
+            box-shadow: var(--shadow-1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 22px;
+            margin: 0;
+        }
+
+        .nav-btn {
+            --bg-glass: rgba(255,255,255,0.05);
+            --text: #e1e2e7;
+            background: var(--bg-glass);
+            box-shadow: 0 4px 3px rgba(0,0,0,0.1);
+            color: var(--text);
+            font-weight: 600;
+            text-decoration: none;
+            padding: 8px 10px;
+            border-radius: var(--radius-sm);
+            transition: background 160ms ease, transform 120ms ease;
+            width: fit-content;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .nav-share {
+            margin-left: 20px;
+        }
     </style>
 </head>
 
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Reports</title>
     <link rel="preload" as="image"
         href="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/MainBackground_1_5120x1440.png">
     <link rel="preload" as="image"
@@ -559,70 +609,55 @@
 </head>
 
 <body>
-    <canvas id="particle-canvas"></canvas>
-    <div class="bg" aria-hidden="true"></div>
-    <main class="container">
-        <div class="logo-card" style="margin: 50px auto 0 auto; text-align: center;">
-            <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/Header_2_Image.png"
-                alt="Logo Card Image" />
-        </div>
-    </main>
-    <main class="container" style="margin-top: 10px; justify-self: center;">
-        <div class="button-row" id="brStyle">
-            <a class="btn-glassy" id="bgInterface" style="font-display: auto;"
-                onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html')"> ARREST </a>
-            <a class="btn-glassy" id="bgInterface"
-                onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Citation-Report.html')"> CITATION </a>
-            <a class="btn-glassy" id="bgInterface"
-                onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Coroner-Report.html')"> CORONER </a>
-        </div>
-
-        <div class="button-row" id="brStyle">
-            <a class="btn-glassy" id="bgInterface" style="margin-top: 40px;"
-                onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Medical-Report.html')"> MEDICAL </a>
-            <a class="btn-glassy" id="bgInterface" style="margin-top: 40px;"
-                onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Fire-Incident-Report')"> FIRE
-                INCIDENT </a>
-            <a class="btn-glassy" id="bgInterface" style="margin-top: 40px;"
-                onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Towing-Report.html')"> TOW </a>
-        </div>
-
-        <div class="button-row" id="brStyle">
-            <a class="btn-glassy" id="bgInterface" style="font-display: auto; margin-top: 80px;"
-                onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Prison-Transport.html')"> PRISON
-                TRANSPORT </a>
-        </div>
-    </main>
-    <div class="share-container">
-        <button id="shareBtn" class="share-btn">
-            <svg class="share-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="5" r="2" fill="#fff"></circle>
-                <circle cx="6" cy="19" r="2" fill="#fff"></circle>
-                <circle cx="18" cy="19" r="2" fill="#fff"></circle>
-                <line x1="12" y1="7" x2="6" y2="17" stroke="#fff" stroke-width="2"></line>
-                <line x1="12" y1="7" x2="18" y2="17" stroke="#fff" stroke-width="2"></line>
-            </svg>
-        </button>
-        <div id="sharePopup" class="share-popup">
-            <select id="shareSelect">
-                <option value="https://sites.google.com/view/justkaarlos/Reports/arrest-report">Arrest-Report</option>
-                <option value="https://sites.google.com/view/justkaarlos/Reports/citation-report">Citation-Report</option>
-                <option value="https://sites.google.com/view/justkaarlos/Reports/coroner-report">Coroner-Report</option>
-                <option value="https://sites.google.com/view/justkaarlos/Reports/medical-report">Medical-Report</option>
-                <option value="https://sites.google.com/view/justkaarlos/Reports/fire-incident-report">Fire-Incident-Report</option>
-                <option value="https://sites.google.com/view/justkaarlos/Reports/tow-report">Towing-Report</option>
-                <option value="https://sites.google.com/view/justkaarlos/Reports/Prison-Transport-Report">Prison Transport Report</option>
-            </select>
-            <button id="copyLinkBtn">Copy Link</button>
-        </div>
-        <div class="overlay" id="overlay" onclick="closeModal()"></div>
-        <div class="modal" id="modal">
-            <button class="close-btn" onclick="closeModal()">X</button>
-            <div class="iframe-wrapper">
-                <iframe id="modal-frame"></iframe>
-            </div>
-        </div>
+  <canvas id="particle-canvas"></canvas>
+  <div class="bg" aria-hidden="true"></div>
+  <header class="nav-frame glass">
+    <nav class="nav-buttons">
+      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html')">Arrest</a>
+      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Citation-Report.html')">Citation</a>
+      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Coroner-Report.html')">Coroner</a>
+      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Medical-Report.html')">Medical</a>
+      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Fire-Incident-Report.html')">Fire Incident</a>
+      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Towing-Report.html')">Tow</a>
+      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Prison-Transport.html')">Prison Transport</a>
+    </nav>
+    <div class="nav-share">
+      <button id="shareBtn" class="share-btn">
+        <svg class="share-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="5" r="2" fill="#fff"></circle>
+          <circle cx="6" cy="19" r="2" fill="#fff"></circle>
+          <circle cx="18" cy="19" r="2" fill="#fff"></circle>
+          <line x1="12" y1="7" x2="6" y2="17" stroke="#fff" stroke-width="2"></line>
+          <line x1="12" y1="7" x2="18" y2="17" stroke="#fff" stroke-width="2"></line>
+        </svg>
+      </button>
+      <div id="sharePopup" class="share-popup">
+        <select id="shareSelect">
+          <option value="https://sites.google.com/view/justkaarlos/Reports/arrest-report">Arrest-Report</option>
+          <option value="https://sites.google.com/view/justkaarlos/Reports/citation-report">Citation-Report</option>
+          <option value="https://sites.google.com/view/justkaarlos/Reports/coroner-report">Coroner-Report</option>
+          <option value="https://sites.google.com/view/justkaarlos/Reports/medical-report">Medical-Report</option>
+          <option value="https://sites.google.com/view/justkaarlos/Reports/fire-incident-report">Fire-Incident-Report</option>
+          <option value="https://sites.google.com/view/justkaarlos/Reports/tow-report">Towing-Report</option>
+          <option value="https://sites.google.com/view/justkaarlos/Reports/Prison-Transport-Report">Prison Transport Report</option>
+        </select>
+        <button id="copyLinkBtn">Copy Link</button>
+      </div>
     </div>
+  </header>
+  <main class="container">
+    <div class="logo-card" style="margin: 150px auto 0 auto; text-align: center;">
+      <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/Header_2_Image.png"
+           alt="Logo Card Image" />
+    </div>
+  </main>
+  <div class="overlay" id="overlay" onclick="closeModal()"></div>
+  <div class="modal" id="modal">
+    <button class="close-btn" onclick="closeModal()">X</button>
+    <div class="iframe-wrapper">
+      <iframe id="modal-frame"></iframe>
+    </div>
+  </div>
 
     <script>
         const logoCard = document.querySelector('.logo-card');
