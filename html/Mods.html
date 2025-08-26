@@ -38,6 +38,27 @@
       overflow-x: hidden;
     }
 
+    .bg {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background-image: url("https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/MainBackground_1_5120x1440.png");
+        background-size: cover;
+        background-position: 50% 50%;
+        filter: blur(7px) brightness(1.7) grayscale(1.5) contrast(1.02);
+    }
+
+    .bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            radial-gradient(1200px 600px at 70% 10%, rgba(0, 0, 0, 0.2), transparent 60%),
+            linear-gradient(to bottom, rgba(5, 6, 8, 0.55), rgba(5, 6, 8, 0.85));
+        pointer-events: none;
+    }
+
+
     .bg-layer {
       position: fixed;
       inset: 0;
@@ -450,6 +471,59 @@
         font-size: 16px;
       }
     }
+
+    .nav-frame {
+        --nav-bg: rgb(54, 54, 54, 0.7);
+        --shadow-1: 0 8px 30px rgba(0, 0, 0, 0.45);
+        --glass-border: rgba(255, 255, 255, 0.18);
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 10px 24px;
+        border-radius: 20px;
+        z-index: 998;
+        background: var(--nav-bg);
+        border: 0px solid var(--glass-border);
+        backdrop-filter: blur(5px) saturate(120%);
+        -webkit-backdrop-filter: saturate(120%);
+        box-shadow: var(--shadow-1);
+    }
+
+    .nav-buttons {
+        display: flex;
+        gap: 22px;
+    }
+
+    .nav-btn {
+        --bg-glass: rgba(255,255,255,0.05);
+        --text: #e1e2e7;
+        --radius-sm: 10px;
+        background: var(--bg-glass);
+        box-shadow: 0 4px 3px rgba(0,0,0,0.1);
+        color: var(--text);
+        font-weight: 600;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: var(--radius-sm);
+        transition: background 160ms ease, transform 120ms ease;
+    }
+
+    .nav-btn:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-1px);
+    }
+
+    .nav-btn svg {
+        display: block;
+        margin: 0 auto;
+    }
+
+    #SelectedNavBtn {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateY(-1px);
+        cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
@@ -457,7 +531,17 @@
   <div id="bg-er" class="bg-layer" aria-hidden="true"></div>
 
   <div id="particles-js"></div>
-
+  <header class="nav-frame glass">
+    <nav class="nav-buttons">
+        <a href="https://sites.google.com/view/justkaarlos" target="_blank" class="nav-btn" aria-label="Home">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="1 0 20 20" fill="currentColor">
+            <path d="M12 3l8 8h-3v8h-10v-8h-3l8-8z"/>
+        </svg>
+        </a>
+        <a class="nav-btn" id="SelectedNavBtn">Mods</a>
+        <a href="https://sites.google.com/view/justkaarlos/Reports" target="_blank" class="nav-btn">Reports</a>
+    </nav>
+  </header>
   <div class="content">
     <section id="tw-section">
       <img id="tw-customIcon" class="elden-custom-size"

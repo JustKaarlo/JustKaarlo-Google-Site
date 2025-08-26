@@ -554,9 +554,20 @@
             font-weight: 500;
         }
 
+        .nav-container {
+            position: relative;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 300px;
+            z-index: 999;
+            justify-self: center;
+        }
+
         .nav-frame {
             --nav-bg: rgba(255,255,255,0.03);
-            position: fixed;
+            position: static;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
@@ -608,6 +619,12 @@
             display: block;
             margin: 0 auto;
         }
+
+        #SelectedNavBtn {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-1px);
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -624,22 +641,30 @@
 <body>
   <canvas id="particle-canvas"></canvas>
   <div class="bg" aria-hidden="true"></div>
+  <div class="nav-container">
+    <header class="nav-frame glass">
+        <nav class="nav-buttons">
+        <a href="https://sites.google.com/view/justkaarlos" target="_blank" class="nav-btn" aria-label="Home">
+            <svg xmlns="http://www.w3.org/2000/svg" width="27" height="20" viewBox="1 0 20 20" fill="currentColor">
+                <path d="M12 3l8 8h-3v8h-10v-8h-3l8-8z"/>
+            </svg>
+        </a>
+        <a href="https://sites.google.com/view/justkaarlos/mods" target="_blank" class="nav-btn">Mods</a>
+        <a class="nav-btn" id="SelectedNavBtn">Reports</a>
+        </nav>
+    </header>
+
   <header class="nav-frame glass">
-    <nav class="nav-buttons">
-      <a href="https://sites.google.com/view/justkaarlos" target="_blank" class="nav-btn" aria-label="Home">
-        <svg xmlns="http://www.w3.org/2000/svg" width="27" height="20" viewBox="1 0 20 20" fill="currentColor">
-            <path d="M12 3l8 8h-3v8h-10v-8h-3l8-8z"/>
-        </svg>
-      </a>
-      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html')">Arrest</a>
-      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Citation-Report.html')">Citation</a>
-      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Coroner-Report.html')">Coroner</a>
-      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Medical-Report.html')">Medical</a>
-      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Fire-Incident-Report.html')">Fire Incident</a>
-      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Towing-Report.html')">Tow</a>
-      <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Prison-Transport.html')">Prison Transport</a>
-    </nav>
-    <div class="nav-share">
+      <nav class="nav-buttons">
+          <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Arrest-Report.html')">Arrest</a>
+          <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Citation-Report.html')">Citation</a>
+          <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Coroner-Report.html')">Coroner</a>
+          <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Medical-Report.html')">Medical</a>
+          <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Fire-Incident-Report.html')">Fire Incident</a>
+          <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Towing-Report.html')">Tow</a>
+          <a href="javascript:void(0)" class="nav-btn" onclick="openModal('https://justkaarlo.github.io/JustKaarlo-Google-Site/html/Reports/Prison-Transport.html')">Prison Transport</a>
+      </nav>
+      <div class="nav-share">
       <button id="shareBtn" class="share-btn">
         <svg class="share-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <circle cx="12" cy="5" r="2" fill="#fff"></circle>
@@ -661,8 +686,8 @@
         </select>
         <button id="copyLinkBtn">Copy Link</button>
       </div>
-    </div>
-  </header>
+    </header>
+  </div>
   <main class="container">
     <div class="logo-card" style="margin: 150px auto 0 auto; text-align: center;">
       <img src="https://justkaarlo.github.io/JustKaarlo-Google-Site/resources/Header_2_Image.png"
