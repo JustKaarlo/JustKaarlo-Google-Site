@@ -404,6 +404,12 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
+      overflow-y: auto;
+    }
+
+    body.modal-open {
+        overflow: hidden;
+        padding-right: 17px;
     }
     
     #docModal > div {
@@ -488,6 +494,15 @@
         backdrop-filter: blur(5px) saturate(120%);
         -webkit-backdrop-filter: saturate(120%);
         box-shadow: var(--shadow-1);
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    }
+
+    .nav-frame.hidden {
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(-50%) translateY(-20px);
     }
 
     .nav-buttons {
@@ -592,6 +607,36 @@
 
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
+    (function() {
+        const nav = document.querySelector('.nav-frame');
+        let lastScrollTop = 0;
+        let scrollTimeout;
+
+        nav.classList.remove('hidden');
+
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            
+            if (currentScroll < 200) {
+                nav.classList.remove('hidden');
+            } else {
+                nav.classList.add('hidden');
+            }
+
+            lastScrollTop = currentScroll;
+        }, { passive: true });
+
+        document.addEventListener('mousemove', (e) => {
+            if (e.clientY < 100) {
+                nav.classList.remove('hidden');
+            } else if (window.pageYOffset > 200) {
+                nav.classList.add('hidden');
+            }
+        }, { passive: true });
+    })();
+
     const twColors = ['#ffaa00', '#ff6a00', '#8a8a8a'];
     const erColors = ['#9ab97d', '#6c8f5a', '#a1ffe1'];
 
@@ -800,7 +845,8 @@
       showDownloadButtonAtRoot = true,
       excludePartsFolders = [],
       downloadButtonFiles = [],
-      excludeDownloadFiles = []
+      excludeDownloadFiles = [],
+      customDownloadLinks = {}
     }) {
       container.innerHTML = "";
 
@@ -916,8 +962,13 @@
         downloadBtn.appendChild(btnIcon);
 
         downloadBtn.onclick = () => {
-          const dl = getDownloadUrl(file, apiKey);
-          window.open(dl, "_blank");
+            const customLink = customDownloadLinks[file.id] || customDownloadLinks[file.name];
+            if (customLink) {
+                window.open(customLink, "_blank");
+            } else {
+                const dl = getDownloadUrl(file, apiKey);
+                window.open(dl, "_blank");
+            }
         };
 
         fileEntry.appendChild(downloadBtn);
@@ -984,8 +1035,13 @@
         tooltip.textContent = "Download";
         folderBtn.appendChild(tooltip);
         folderBtn.onclick = (e) => {
-          e.stopPropagation();
-          window.open(`https://drive.google.com/drive/folders/${folder.id}`, "_blank");
+            e.stopPropagation();
+            const customLink = customDownloadLinks[folder.id] || customDownloadLinks[folder.name];
+            if (customLink) {
+                window.open(customLink, "_blank");
+            } else {
+                window.open(`https://drive.google.com/drive/folders/${folder.id}`, "_blank");
+            }
         };
 
         const btnIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -1047,7 +1103,8 @@
               showDownloadButtonAtRoot: false,
               excludePartsFolders,
               downloadButtonFiles,
-              excludeDownloadFiles
+              excludeDownloadFiles,
+              customDownloadLinks
             });
           }
           const isOpen = subList.style.display === "block";
@@ -1090,28 +1147,56 @@
       }
     }
 
-    function attachDocPreview(listElement) {
-      if (!listElement) return;
-      listElement.addEventListener("click", function (e) {
-        const target = e.target;
-        let link = target.tagName === "A" ? target : target.closest("a");
-        if (!link) return;
+    const modal = document.getElementById("docModal");
+    const closeBtn = document.getElementById("closeModal");
 
-        const url = link.href;
-        if (url.includes("docs.google.com/document")) {
-          e.preventDefault();
-          const fileIdMatch = url.match(/[-\w]{25,}/);
-          const fileId = fileIdMatch ? fileIdMatch[0] : null;
-          if (fileId) {
-            const embedUrl = `https://docs.google.com/document/d/${fileId}/preview`;
-            document.getElementById("docFrame").src = embedUrl;
-            document.getElementById("docModal").style.display = "flex";
-          } else {
-            alert("Could not determine Google Doc ID.");
-          }
-        }
-      });
+    function openModal(embedUrl) {
+        document.getElementById("docFrame").src = embedUrl;
+        modal.style.display = "flex";
+        document.body.classList.add('modal-open');
     }
+
+    function closeModal() {
+        modal.style.display = "none";
+        document.getElementById("docFrame").src = "";
+        document.body.classList.remove('modal-open');
+    }
+
+    function attachDocPreview(listElement) {
+        if (!listElement) return;
+        listElement.addEventListener("click", function (e) {
+            const target = e.target;
+            let link = target.tagName === "A" ? target : target.closest("a");
+            if (!link) return;
+
+            const url = link.href;
+            if (url.includes("docs.google.com/document")) {
+                e.preventDefault();
+                const fileIdMatch = url.match(/[-\w]{25,}/);
+                const fileId = fileIdMatch ? fileIdMatch[0] : null;
+                if (fileId) {
+                    const embedUrl = `https://docs.google.com/document/d/${fileId}/preview`;
+                    openModal(embedUrl);
+                } else {
+                    alert("Could not determine Google Doc ID.");
+                }
+            }
+        });
+    }
+
+    closeBtn.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", function (e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && modal.style.display === "flex") {
+            closeModal();
+        }
+    });
 
     document.getElementById("closeModal").addEventListener("click", function () {
       document.getElementById("docModal").style.display = "none";
@@ -1267,6 +1352,7 @@
           "1vizoQOE_gq9rK9LgrxeNgFoikw75AX2h",
           "1QkAve8DnUDfCRi3EBpFqqXHddXtiTfmX"
         ],
+        customDownloadLinks: {},
         showDownloadButtonAtRoot: true
       });
       attachDocPreview(twContainer);
@@ -1291,6 +1377,7 @@
         folderGradientFallback: {},
         downloadButtonFiles: [],
         excludeDownloadFiles: [],
+        customDownloadLinks: {},
         showDownloadButtonAtRoot: true
       });
       attachDocPreview(erContainer);
@@ -1298,4 +1385,3 @@
   </script>
 </body>
 </html>
-
